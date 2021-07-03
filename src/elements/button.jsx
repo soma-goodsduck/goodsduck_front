@@ -16,7 +16,6 @@ const Button = (props) => {
   } = props;
 
   const styles = {
-    text: text,
     width: width,
     height: height,
     borderRadius: borderRadius,
@@ -59,8 +58,6 @@ const ElButton = styled.button`
   color: ${(props) => props.color};
   background-image: url("${(props) => props.src}");
   background-size: cover;
-  cursor: pointer;
-  border: none;
 `;
 
 export default Button;
