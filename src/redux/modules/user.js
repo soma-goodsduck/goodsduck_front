@@ -1,7 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-// import axios from "axios";
-import { setCookie, deleteCookie } from "../../shared/cookie";
+import axios from "axios";
+import { setLS, deleteLS } from "../../shared/localStorage";
 
 // actions
 const LOG_IN = "LOG_IN";
@@ -20,59 +20,60 @@ const initialState = {
 };
 
 // middleware actions
-const loginAction = (user) => {
+const signupAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
     history.push("/");
   };
 };
 
-// const kakaoLogin = (code, user) => {
-//   return function (dispatch, getState, { history }) {
-//     axios({
-//       method: "GET",
-//       url: `/oauth/callback/kakao?code=${code}`,
-//     })
-//       .then(async (res) => {
-//         const ACCESS_TOKEN = res.data.accessToken;
-//         const REFRESH_TOKEN = res.data.refreshToken;
+const loginAction = (user) => {
+  return function (dispatch, getState, { history }) {
+    history.push("/signup");
+  };
+};
 
-//         // refresh 토큰 쿠키저장
-//         await setCookie("is_login", REFRESH_TOKEN);
+const kakaoLogin = (code) => {
+  return function (dispatch, getState, { history }) {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/oauth/callback/kakao?code=${code}`,
+    })
+      .then(async (res) => {
+        const ACCESS_TOKEN = res.data.accessToken;
+        const REFRESH_TOKEN = res.data.refreshToken;
 
-//         // access 토큰 로컬에 저장(이전꺼 지우고)
-//         // await localStorage.clear();
-//         await localStorage.setItem("token", ACCESS_TOKEN);
+        await setLS("is_login", REFRESH_TOKEN);
 
-//         // 헤더 설정
-//         axios.defaults.headers.common[
-//           "Authorization"
-//         ] = `Bearer ${ACCESS_TOKEN}`;
+        await setLS("token", ACCESS_TOKEN);
 
-//         dispatch(logIn());
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${ACCESS_TOKEN}`;
 
-//         // 메인화면 이동
-//         await history.push("/main");
-//       })
-//       .catch((err) => {
-//         console.log("소셜로그인 에러", err);
-//         history.replace("/");
-//       });
-//   };
-// };
+        dispatch(logIn());
+
+        await history.push("/main");
+      })
+      .catch((err) => {
+        console.log("Social Login Error", err);
+        history.replace("/");
+      });
+  };
+};
 
 // reducer
 export default handleActions(
   {
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        setCookie("is_login", "success");
+        setLS("is_login", "success");
         draft.user = action.payload.user;
         draft.is_login = true;
       }),
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
-        deleteCookie("is_login");
+        deleteLS("is_login");
         draft.user = null;
         draft.is_login = false;
       }),
@@ -91,7 +92,8 @@ const actionCreators = {
   logOut,
   getUser,
   loginAction,
-  // kakaoLogin,
+  kakaoLogin,
+  signupAction,
 };
 
 export { actionCreators };
