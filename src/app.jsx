@@ -1,5 +1,4 @@
-import React from 'react';
-import './app.css';
+import React from "react";
 
 function App() {
   return <h1>Hello :D</h1>;
