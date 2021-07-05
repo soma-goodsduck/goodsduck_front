@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React from "react";
 
 const Image = (props) => {
-  const { shape, src, size } = props;
+  const { shape, src, size, _className } = props;
 
   const styles = {
     src: src,
@@ -10,11 +10,11 @@ const Image = (props) => {
   };
 
   if (shape === "circle") {
-    return <ImageCircle {...styles}></ImageCircle>;
+    return <ImageCircle {...styles} className={_className}></ImageCircle>;
   }
 
   if (shape === "rectangle") {
-    return <ImageRectangle {...styles}></ImageRectangle>;
+    return <ImageRectangle {...styles} className={_className}></ImageRectangle>;
   }
 
   return <></>;
@@ -24,6 +24,7 @@ Image.defaultProps = {
   shape: "circle",
   src: "https://goodsduck-front.s3.ap-northeast-2.amazonaws.com/logo_sample.png",
   size: 36,
+  _className: "",
 };
 
 const ImageRectangle = styled.div`

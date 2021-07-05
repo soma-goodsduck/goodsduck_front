@@ -12,6 +12,7 @@ const Button = (props) => {
     bg,
     color,
     src,
+    _className,
     _onClick,
   } = props;
 
@@ -28,7 +29,7 @@ const Button = (props) => {
 
   return (
     <>
-      <ElButton {...styles} onClick={_onClick}>
+      <ElButton {...styles} className={_className} onClick={_onClick}>
         {text}
       </ElButton>
     </>
@@ -45,6 +46,7 @@ Button.defaultProps = {
   bg: "black",
   color: "white",
   src: "",
+  _className: "",
   _onClick: () => {},
 };
 
