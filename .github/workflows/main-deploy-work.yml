@@ -4,8 +4,10 @@ name: React build
 on:
   push:
     branches:
-      - main    # main 브랜치에서 push 이벤트가 일어났을 때 실행
-
+      - main
+      - develop
+      - feature/login
+      
 jobs:
   build:
     runs-on: ubuntu-18.04
