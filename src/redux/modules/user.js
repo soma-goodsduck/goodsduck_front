@@ -4,11 +4,13 @@ import axios from "axios";
 import { setLS, deleteLS } from "../../shared/localStorage";
 
 // actions
+const SIGN_UP = "SIGN_UP";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 
 // action creators
+const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
 const logIn = createAction(LOG_IN, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
@@ -16,48 +18,59 @@ const getUser = createAction(GET_USER, (user) => ({ user }));
 // initialState
 const initialState = {
   user: null,
+  id: null,
+  type: null,
   is_login: false,
 };
 
 // middleware actions
-const signupAction = (user) => {
+const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
     history.push("/");
   };
 };
 
-const loginAction = (user) => {
+// 비회원인 경우, 회원가입 페이지로 이동
+const nonUserAction = (id, type) => {
   return function (dispatch, getState, { history }) {
+    dispatch(signUp(id, type));
     history.push("/signup");
   };
 };
 
-const kakaoLogin = (code) => {
+// 최종 회원가입
+const signupAction = (user) => {
+  console.log(user);
+  console.log("test중");
+  const json = {
+    email: user.email,
+    nickName: user.nick,
+    phoneNumber: user.phone,
+    socialAccountId: user.id,
+    socialAccountType: user.type,
+  };
+  console.log(json);
   return function (dispatch, getState, { history }) {
-    axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/oauth/callback/kakao?code=${code}`,
-    })
-      .then(async (res) => {
-        const ACCESS_TOKEN = res.data.accessToken;
-        const REFRESH_TOKEN = res.data.refreshToken;
-
-        await setLS("is_login", REFRESH_TOKEN);
-
-        await setLS("token", ACCESS_TOKEN);
-
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${ACCESS_TOKEN}`;
-
-        dispatch(logIn());
-
-        await history.push("/main");
+    axios
+      .post(
+        `${process.env.REACT_APP_BACK_LOCALHOST_URL_T}/api/v1/signup`,
+        JSON.stringify(json),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+        { withCredentials: true }
+      )
+      .then(function (response) {
+        console.log(response);
+        dispatch(logIn(user.email));
+        history.push("/");
       })
-      .catch((err) => {
-        console.log("Social Login Error", err);
-        history.replace("/");
+      .catch((error) => {
+        console.log("error", error);
+        history.replace("/login");
       });
   };
 };
@@ -65,6 +78,12 @@ const kakaoLogin = (code) => {
 // reducer
 export default handleActions(
   {
+    [SIGN_UP]: (state, action) =>
+      produce(state, (draft) => {
+        console.log(action.payload);
+        draft.id = action.payload.id;
+        draft.type = action.payload.type;
+      }),
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         setLS("is_login", "success");
@@ -88,11 +107,10 @@ export default handleActions(
 
 // action creator export
 const actionCreators = {
-  logIn,
   logOut,
   getUser,
   loginAction,
-  kakaoLogin,
+  nonUserAction,
   signupAction,
 };
 

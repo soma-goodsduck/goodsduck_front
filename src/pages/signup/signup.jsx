@@ -2,16 +2,34 @@ import React, { useState } from "react";
 import { Grid, Text, Input, Button } from "../../elements";
 import IdolGroups from "../../components/idolGroups";
 import { actionCreators as userActions } from "../../redux/modules/user";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const Signup = (props) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [nick, setNick] = useState("");
+  const type = useSelector((state) => state.user.type);
+  const id = useSelector((state) => state.user.id);
+  const user = { email, nick, phone, id, type };
+
+  const emailCheck = (email) => {
+    const regex =
+      /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    return email !== "" && email !== "undefined" && regex.test(email);
+  };
 
   const signup = () => {
-    dispatch(userActions.signupAction({ user_name: nick }));
+    if (email === "" || phone === "" || nick === "") {
+      return;
+    }
+
+    // if (!emailCheck(email)) {
+    //   window.alert("이메일을 확인해주세요");
+    //   return;
+    // }
+
+    dispatch(userActions.signupAction(user));
   };
 
   return (
@@ -23,20 +41,21 @@ const Signup = (props) => {
       </Grid>
       <Grid padding="16px 0px">
         <Input
-          label="Email"
+          type="email"
+          label="이메일"
           placeholder="이메일을 입력하세요."
           value={email}
-          onChange={(e) => {
+          _onChange={(e) => {
             setEmail(e.target.value);
           }}
         />
       </Grid>
       <Grid padding="16px 0px">
         <Input
-          label="Phone Number"
+          label="핸드폰 번호"
           placeholder="핸드폰 번호를 입력하세요."
           value={phone}
-          onChange={(e) => {
+          _onChange={(e) => {
             setPhone(e.target.value);
           }}
         />
@@ -45,16 +64,16 @@ const Signup = (props) => {
         label="닉네임"
         placeholder="닉네임을 입력하세요"
         value={nick}
-        onChange={(e) => {
+        _onChange={(e) => {
           setNick(e.target.value);
         }}
       />
-      <Text size="14px">좋아하는 아이돌</Text>
-      <IdolGroups></IdolGroups>
+      {/* <Text size="14px">좋아하는 아이돌</Text>
+      <IdolGroups></IdolGroups> */}
       <Button
         text="NEXT"
         padding="10px"
-        onClick={() => {
+        _onClick={() => {
           signup();
         }}
       ></Button>

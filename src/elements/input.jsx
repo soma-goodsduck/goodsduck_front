@@ -4,12 +4,13 @@ import styled from "styled-components";
 import { Text, Grid } from "./index";
 
 const Input = (props) => {
-  const { label, placeholder, _className, _onChange } = props;
+  const { type, label, placeholder, _className, _onChange } = props;
   return (
     <React.Fragment>
       <Grid>
         <Text margin="0px">{label}</Text>
         <ElInput
+          type={type}
           placeholder={placeholder}
           className={_className}
           onChange={_onChange}
@@ -20,6 +21,7 @@ const Input = (props) => {
 };
 
 Input.defaultProps = {
+  type: "text",
   label: "텍스트",
   placeholder: "텍스트를 입력해주세요.",
   _className: "",

@@ -1,9 +1,10 @@
 import React from "react";
 import { Grid, Text, Button } from "../elements";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 
-const Header = (props) => {
+const Header = () => {
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
 
@@ -41,6 +42,12 @@ const Header = (props) => {
         </Grid>
 
         <Grid is_flex>
+          {/* <Link to="/login">
+            <Button text="로그인"></Button>
+          </Link>
+          <Link to="/signup">
+            <Button text="회원가입"></Button>
+          </Link> */}
           <Button text="로그인"></Button>
           <Button text="회원가입"></Button>
         </Grid>

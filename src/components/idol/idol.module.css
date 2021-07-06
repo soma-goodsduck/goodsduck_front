@@ -1,0 +1,4 @@
+.input:checked + .label {
+  border: 3px black solid;
+  border-radius: 50%;
+}

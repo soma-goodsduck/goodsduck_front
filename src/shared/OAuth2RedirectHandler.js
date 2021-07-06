@@ -18,10 +18,13 @@ const OAuth2RedirectHandler = (props) => {
           const result = await axios.get(
             `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/oauth2/authorization/kakao?code=${code}`
           );
-          console.log(result.data.kakao_account.profile);
-          // dispatch(
-          //   userActions.loginAction()
-          // );
+          console.log(result.data);
+          if (result.data.isExist) {
+            dispatch(userActions.loginAction(result.data.id));
+          } else {
+            console.log(result.data.id);
+            dispatch(userActions.nonUserAction(result.data.id, "kakao"));
+          }
         } catch (error) {
           console.log("error", error);
         }
@@ -31,12 +34,15 @@ const OAuth2RedirectHandler = (props) => {
       const naver = async () => {
         try {
           const result = await axios.get(
-            `${process.env.REACT_APP_BACK_LOCALHOST_URL_T}/oauth2/authorization/naver?code=${code}&state=${state}`
+            `${process.env.REACT_APP_BACK_LOCALHOST_URL_T}/api/v1/oauth2/authorization/naver?code=${code}&state=${state}`
           );
-          console.log(result.data.response);
-          // dispatch(
-          //   userActions.loginAction()
-          // );
+          console.log(result.data);
+          if (result.data.isExist) {
+            dispatch(userActions.loginAction(result.data.email));
+          } else {
+            console.log(result.data.id);
+            dispatch(userActions.nonUserAction(result.data.id, "naver"));
+          }
         } catch (error) {
           console.log("error", error);
         }
