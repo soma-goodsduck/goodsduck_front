@@ -1,12 +1,7 @@
 # main-deploy-work.yml
 name: React build
 
-on:
-  push:
-    branches:
-      - main
-      - develop
-      - feature/login
+on: push
       
 jobs:
   build:
