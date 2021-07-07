@@ -3,7 +3,7 @@ name: React build
 
 on:
   push:
-    branches: [main, develop, feature/*]
+    branches: [ main, develop, feature/* ]
 
 jobs:
   build:
