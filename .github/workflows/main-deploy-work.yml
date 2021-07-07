@@ -2,8 +2,8 @@
 name: React build
 
 on:
-      push:
-            branches: [main, develop, feature/login]
+  push:
+    branches: [ main, develop, feature/login ]
       
 jobs:
   build:
