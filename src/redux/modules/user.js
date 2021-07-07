@@ -41,8 +41,6 @@ const nonUserAction = (id, type) => {
 
 // 최종 회원가입
 const signupAction = (user) => {
-  console.log(user);
-  console.log("test중");
   const json = {
     email: user.email,
     nickName: user.nick,
@@ -54,7 +52,7 @@ const signupAction = (user) => {
   return function (dispatch, getState, { history }) {
     axios
       .post(
-        `${process.env.REACT_APP_BACK_LOCALHOST_URL_T}/api/v1/signup`,
+        `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/api/v1/signup`,
         JSON.stringify(json),
         {
           headers: {

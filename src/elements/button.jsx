@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { pointColor } from "../shared/color";
 
 const Button = (props) => {
   const {
@@ -43,8 +44,8 @@ Button.defaultProps = {
   borderRadius: "",
   padding: "",
   margin: "",
-  bg: "black",
-  color: "white",
+  bg: `${pointColor}`,
+  color: "black",
   src: "",
   _className: "",
   _onClick: () => {},

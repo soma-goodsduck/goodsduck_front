@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Text, Input, Button } from "../../elements";
-import IdolGroups from "../../components/idolGroups";
+//import IdolGroups from "../../components/idolGroups";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -19,15 +19,26 @@ const Signup = (props) => {
     return email !== "" && email !== "undefined" && regex.test(email);
   };
 
+  const phCheck = (phone) => {
+    const regex = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/;
+    return phone !== "" && phone !== "undefined" && regex.test(phone);
+  };
+
   const signup = () => {
     if (email === "" || phone === "" || nick === "") {
+      window.alert("이메일, 핸드폰 번호, 닉네임을 모두 입력해주세요");
       return;
     }
 
-    // if (!emailCheck(email)) {
-    //   window.alert("이메일을 확인해주세요");
-    //   return;
-    // }
+    if (!emailCheck(email)) {
+      window.alert("이메일을 확인해주세요");
+      return;
+    }
+
+    if (!phCheck(phone)) {
+      window.alert("핸드폰 번호를 확인해주세요");
+      return;
+    }
 
     dispatch(userActions.signupAction(user));
   };

@@ -16,14 +16,14 @@ const OAuth2RedirectHandler = (props) => {
       const kakao = async () => {
         try {
           const result = await axios.get(
-            `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/oauth2/authorization/kakao?code=${code}`
+            `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/api/v1/oauth2/authorization/kakao?code=${code}`
           );
           console.log(result.data);
           if (result.data.isExist) {
             dispatch(userActions.loginAction(result.data.id));
           } else {
             console.log(result.data.id);
-            dispatch(userActions.nonUserAction(result.data.id, "kakao"));
+            dispatch(userActions.nonUserAction(result.data.id, "KAKAO"));
           }
         } catch (error) {
           console.log("error", error);
@@ -41,7 +41,7 @@ const OAuth2RedirectHandler = (props) => {
             dispatch(userActions.loginAction(result.data.email));
           } else {
             console.log(result.data.id);
-            dispatch(userActions.nonUserAction(result.data.id, "naver"));
+            dispatch(userActions.nonUserAction(result.data.id, "NAVER"));
           }
         } catch (error) {
           console.log("error", error);
