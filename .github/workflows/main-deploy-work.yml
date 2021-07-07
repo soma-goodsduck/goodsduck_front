@@ -3,11 +3,14 @@ name: React build
 
 on:
   push:
-    # branches: [ main, develop, feature/login ]
     branches:
       - main
       - develop
-      - feature/login
+      - feature/*
+  pull_request:
+    branches:
+      - main
+      - develop
       
 jobs:
   build:
