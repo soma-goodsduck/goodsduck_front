@@ -22,7 +22,7 @@ const Image = (props) => {
 
 Image.defaultProps = {
   shape: "circle",
-  src: "https://goodsduck-front.s3.ap-northeast-2.amazonaws.com/logo_sample.png",
+  src: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/logo_sample.png",
   size: 36,
   _className: "",
 };

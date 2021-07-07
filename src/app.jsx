@@ -20,8 +20,8 @@ import { Grid } from "./elements/index";
 function App() {
   return (
     <Grid>
-      <Header></Header>
       <ConnectedRouter history={history}>
+        <Header></Header>
         <Route path="/" exact component={home} />
         <Route path="/login" exact component={Login} />
         <Route path="/signup" exact component={Signup} />

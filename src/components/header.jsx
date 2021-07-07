@@ -42,14 +42,9 @@ const Header = () => {
         </Grid>
 
         <Grid is_flex>
-          {/* <Link to="/login">
-            <Button text="로그인"></Button>
+          <Link to="/login" style={{ width: "50%" }}>
+            <Button text="로그인" padding="10px"></Button>
           </Link>
-          <Link to="/signup">
-            <Button text="회원가입"></Button>
-          </Link> */}
-          <Button text="로그인"></Button>
-          <Button text="회원가입"></Button>
         </Grid>
       </Grid>
     </React.Fragment>

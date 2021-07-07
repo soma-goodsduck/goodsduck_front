@@ -11,7 +11,7 @@ const Login = (props) => {
           height="50px"
           borderRadius="50%"
           margin="0 20px 0 0"
-          src="https://goodsduck-front.s3.ap-northeast-2.amazonaws.com/logo_naver.png"
+          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/logo_naver.png"
         />
       </a>
 
@@ -21,7 +21,7 @@ const Login = (props) => {
           height="50px"
           borderRadius="50%"
           margin="0 20px 0 0"
-          src="https://goodsduck-front.s3.ap-northeast-2.amazonaws.com/logo_kakao.png"
+          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/logo_kakao.png"
         />
       </a>
     </Grid>
