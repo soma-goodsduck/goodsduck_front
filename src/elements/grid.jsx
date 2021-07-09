@@ -2,16 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Grid = (props) => {
-  const {
-    is_flex,
-    is_flex_col,
-    width,
-    margin,
-    padding,
-    bg,
-    children,
-    _className,
-  } = props;
+  const { is_flex, is_flex_col, width, margin, padding, bg, children } = props;
 
   const styles = {
     is_flex: is_flex,
@@ -23,9 +14,7 @@ const Grid = (props) => {
   };
   return (
     <React.Fragment>
-      <GridBox {...styles} className={_className}>
-        {children}
-      </GridBox>
+      <GridBox {...styles}>{children}</GridBox>
     </React.Fragment>
   );
 };
@@ -38,12 +27,10 @@ Grid.defaultProps = {
   padding: false,
   margin: false,
   bg: false,
-  _className: "",
 };
 
 const GridBox = styled.div`
   width: ${(props) => props.width};
-  height: 100%;
   ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) => (props.bg ? `background-color: ${props.bg};` : "")}
@@ -52,9 +39,7 @@ const GridBox = styled.div`
       ? `display: flex; align-items: center; justify-content: center; `
       : ""}
   ${(props) =>
-    props.is_flex_col
-      ? `display: flex; flex-direction: column; align-items: center; justify-content: center; `
-      : ""}
+    props.is_flex_col ? `display: flex; flex-direction: column; ` : ""}
 `;
 
 export default Grid;

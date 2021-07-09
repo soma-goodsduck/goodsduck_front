@@ -38,9 +38,9 @@ const Button = (props) => {
 };
 
 Button.defaultProps = {
-  text: "",
+  text: null,
   width: "100%",
-  height: "100%",
+  height: "",
   borderRadius: "",
   padding: "",
   margin: "",
