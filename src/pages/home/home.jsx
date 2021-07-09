@@ -3,33 +3,21 @@ import styled from "styled-components";
 
 import TestHeader from "../../components/test_header";
 import Header from "../../components/haeder/header";
-import Item from "../../components/item/item";
+import ItemList from "../../components/itemList/itemList";
 import { Grid } from "../../elements";
-import FilteringIdol from "../../components/idolFiltering/idolGroupFiltering";
+//import FilteringIdol from "../../components/idolFiltering/idolGroupFiltering";
+//import Filtering from "../../components/filtering/filtering";
 
-const Main = (props) => {
+const Home = (props) => {
   return (
-    <Grid>
+    <Grid margin="100px 0 0 0">
       <TestHeader></TestHeader>
       <Header></Header>
-      <FilteringIdol></FilteringIdol>
-      <ItemList>
-        <Item />
-        <Item />
-        <Item />
-        <Item />
-        <Item />
-        <Item />
-      </ItemList>
+      {/* <FilteringIdol></FilteringIdol>
+      <Filtering></Filtering> */}
+      <ItemList></ItemList>
     </Grid>
   );
 };
 
-const ItemList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
-  grid-auto-rows: 300px;
-  padding: 10px;
-`;
-
-export default Main;
+export default Home;
