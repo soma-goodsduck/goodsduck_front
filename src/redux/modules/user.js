@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
 import { setLS, deleteLS } from "../../shared/localStorage";
+import { BACKEND_URL } from "../../shared/OAuth";
 
 // actions
 const SIGN_UP = "SIGN_UP";
@@ -17,13 +18,29 @@ const getUser = createAction(GET_USER, (user) => ({ user }));
 
 // initialState
 const initialState = {
-  user: null,
+  user: "",
   id: null,
   type: null,
   is_login: false,
 };
 
 // middleware actions
+const accessAction = (path) => {
+  return function (dispatch, getState, { history }) {
+    console.log("access");
+    history.push(path);
+  };
+};
+
+const noAccessAction = () => {
+  return function (dispatch, getState, { history }) {
+    console.log("no access");
+    window.alert("로그인을 해주세요!");
+    dispatch(logOut());
+    history.push("/home");
+  };
+};
+
 const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
@@ -52,7 +69,7 @@ const signupAction = (user) => {
   return function (dispatch, getState, { history }) {
     axios
       .post(
-        `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/api/v1/signup`,
+        `${BACKEND_URL}/api/v1/signup`,
         JSON.stringify(json),
         {
           headers: {
@@ -109,6 +126,8 @@ const actionCreators = {
   loginAction,
   nonUserAction,
   signupAction,
+  accessAction,
+  noAccessAction,
 };
 
 export { actionCreators };

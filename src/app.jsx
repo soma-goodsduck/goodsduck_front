@@ -12,8 +12,8 @@ import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
 
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "./redux/configureStore";
-
-//import SocialLogin from "./pages/login/socialLogin";
+import LikeItemList from "./pages/likeItemList/likeItemList";
+import Notification from "./pages/notification/notification";
 
 function App() {
   return (
@@ -32,6 +32,8 @@ function App() {
           exact
           component={OAuth2RedirectHandler}
         />
+        <Route path="/favorites" exact component={LikeItemList} />
+        <Route path="/notification" exact component={Notification} />
       </ConnectedRouter>
     </div>
   );
