@@ -1,0 +1,26 @@
+.categories {
+  display: flex;
+  overflow-x: scroll;
+  padding: 5px 0;
+}
+
+/* scroll bar 제거 ( chrome 환경) */
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.category {
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  color: #888888;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.bar {
+  width: 100%;
+  height: 1px;
+  background-color: #dddddd;
+}

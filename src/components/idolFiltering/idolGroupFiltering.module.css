@@ -1,0 +1,10 @@
+.categories {
+  display: flex;
+  overflow-x: scroll;
+  margin: 20px 0;
+}
+
+/* scroll bar 제거 ( chrome 환경) */
+.categories::-webkit-scrollbar {
+  display: none;
+}
