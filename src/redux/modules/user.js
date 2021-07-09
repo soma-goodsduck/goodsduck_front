@@ -27,7 +27,7 @@ const initialState = {
 const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
-    history.push("/");
+    history.push("/home");
   };
 };
 
@@ -62,13 +62,13 @@ const signupAction = (user) => {
         { withCredentials: true }
       )
       .then(function (response) {
-        console.log(response);
-        dispatch(logIn(user.email));
-        history.push("/");
+        console.log(response.data.jwt);
+        dispatch(logIn(response.data.jwt));
+        history.push("/home");
       })
       .catch((error) => {
         console.log("error", error);
-        history.replace("/login");
+        history.replace("/");
       });
   };
 };
@@ -78,25 +78,24 @@ export default handleActions(
   {
     [SIGN_UP]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload);
         draft.id = action.payload.id;
         draft.type = action.payload.type;
       }),
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        setLS("is_login", "success");
         draft.user = action.payload.user;
         draft.is_login = true;
+        setLS("jwt", draft.user);
       }),
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
-        deleteLS("is_login");
+        deleteLS("jwt");
         draft.user = null;
         draft.is_login = false;
       }),
     [GET_USER]: (state, action) =>
       produce(state, (draft) => {
-        draft.user = action.payload.username;
+        draft.user = action.payload.user;
         draft.is_login = true;
       }),
   },

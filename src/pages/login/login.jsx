@@ -1,10 +1,10 @@
 import React from "react";
-import { Grid, Button } from "../../elements";
+import { Flex, Button } from "../../elements";
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from "../../shared/OAuth";
 
 const Login = (props) => {
   return (
-    <Grid is_flex>
+    <Flex margin="200px">
       <a href={NAVER_AUTH_URL}>
         <Button
           width="50px"
@@ -24,7 +24,7 @@ const Login = (props) => {
           src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/logo_kakao.png"
         />
       </a>
-    </Grid>
+    </Flex>
   );
 };
 

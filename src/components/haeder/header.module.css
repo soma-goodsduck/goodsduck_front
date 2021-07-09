@@ -1,0 +1,15 @@
+.search {
+  font-size: 14px;
+  width: 62vw;
+  color: #bbbbbb;
+  background-color: #ffffff;
+  border: 1px solid #bbbbbb;
+  border-radius: 3px;
+  padding: 8px;
+}
+
+@media screen and (min-width: 400px) {
+  .search {
+    width: 250px;
+  }
+}

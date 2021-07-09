@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import styles from "./idol.module.css";
+import styles from "./idolSelect.module.css";
 import styled from "styled-components";
-import { Text } from "../../elements";
+import { Text, Image } from "../../elements";
 
 const Idol = ({ idol, onCheck, onUncheck }) => {
   const [checked, setChecked] = useState(false);
@@ -30,7 +30,8 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
         onChange={(e) => checkHandler(e)}
       />
       <label className={styles.label} htmlFor={idol.engName}>
-        <IdolImg src={idol.img}></IdolImg>
+        <Image src={idol.img} size="70px"></Image>
+        {/* <IdolImg src={idol.img}></IdolImg> */}
       </label>
       <Text margin="5px 0 10px 0">{idol.korName}</Text>
     </IdolBox>
@@ -50,14 +51,6 @@ const IdolInput = styled.input`
   width: 70px;
   height: 70px;
   border-radius: 50%;
-`;
-
-const IdolImg = styled.img`
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: flex;
 `;
 
 export default Idol;

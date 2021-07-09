@@ -1,13 +1,13 @@
-const setLS = (name, value) => {
-  localStorage.setItem(`${name}`, `${value}`);
+const setLS = (key, value) => {
+  localStorage.setItem(`${key}`, `${value}`);
 };
 
-const getLS = (name) => {
-  localStorage.getItem(`${name}`);
+const getLS = (key) => {
+  localStorage.getItem(key);
 };
 
-const deleteLS = (name) => {
-  localStorage.removeItem(`${name}`);
+const deleteLS = (key) => {
+  localStorage.removeItem(key);
 };
 
 export { getLS, setLS, deleteLS };
