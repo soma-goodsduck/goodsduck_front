@@ -2,7 +2,6 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
 import { setLS, deleteLS } from "../../shared/localStorage";
-import { BACKEND_URL } from "../../shared/OAuth";
 
 // actions
 const SIGN_UP = "SIGN_UP";
@@ -25,19 +24,26 @@ const initialState = {
 };
 
 // middleware actions
-const accessAction = (path) => {
+const loginCheckAction = () => {
+  const jwt = localStorage.getItem("jwt");
   return function (dispatch, getState, { history }) {
-    console.log("access");
-    history.push(path);
-  };
-};
-
-const noAccessAction = () => {
-  return function (dispatch, getState, { history }) {
-    console.log("no access");
-    window.alert("로그인을 해주세요!");
-    dispatch(logOut());
-    history.push("/home");
+    if (jwt !== null) {
+      axios
+        .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
+          headers: { token: `${jwt}` },
+        })
+        .then(function (result) {
+          if (result.data.role === "USER") {
+            dispatch(loginAction(jwt));
+          } else if (result.data.role === "ANONYMOUS") {
+            console.log(result.data);
+            dispatch(logOut());
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    }
   };
 };
 
@@ -69,7 +75,7 @@ const signupAction = (user) => {
   return function (dispatch, getState, { history }) {
     axios
       .post(
-        `${BACKEND_URL}/api/v1/signup`,
+        `${process.env.REACT_APP_BACK_URL}/api/v1/signup`,
         JSON.stringify(json),
         {
           headers: {
@@ -124,10 +130,9 @@ const actionCreators = {
   logOut,
   getUser,
   loginAction,
+  loginCheckAction,
   nonUserAction,
   signupAction,
-  accessAction,
-  noAccessAction,
 };
 
 export { actionCreators };

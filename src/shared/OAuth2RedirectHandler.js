@@ -16,7 +16,7 @@ const OAuth2RedirectHandler = (props) => {
       const kakao = async () => {
         try {
           const result = await axios.get(
-            `${process.env.REACT_APP_BACK_LOCALHOST_URL_K}/api/v1/oauth2/authorization/kakao?code=${code}`
+            `${process.env.REACT_APP_BACK_URL}/api/v1/login/kakao?code=${code}`
           );
           console.log(result.data);
           if (result.data.role === "USER") {
@@ -37,7 +37,7 @@ const OAuth2RedirectHandler = (props) => {
       const naver = async () => {
         try {
           const result = await axios.get(
-            `${process.env.REACT_APP_BACK_LOCALHOST_URL_T}/api/v1/oauth2/authorization/naver?code=${code}&state=${state}`
+            `${process.env.REACT_APP_BACK_URL}/api/v1/login/naver?code=${code}&state=${state}`
           );
           // console.log(result.data);
           // dispatch(userActions.nonUserAction(result.data.id, "NAVER"));

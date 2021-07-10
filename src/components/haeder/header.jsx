@@ -1,15 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import styles from "./header.module.css";
 import styled from "styled-components";
+
 import { Flex, Icon } from "../../elements";
 import FilteringIdol from "../idolFiltering/idolGroupFiltering";
 import Filtering from "../filtering/filtering";
+
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators as userActions } from "../../redux/modules/user";
 import { actionCreators as headerActions } from "../../redux/modules/header";
-//import { checkUser } from "../../shared/checkUser";
-import { BACKEND_URL } from "../../shared/OAuth";
+
+import { history } from "../../redux/configureStore";
 
 const Header = () => {
   const inputRef = useRef();
@@ -22,20 +23,22 @@ const Header = () => {
 
   const checkUser = (path) => {
     const jwt = localStorage.getItem("jwt");
+    console.log(jwt);
     if (jwt == null) {
-      dispatch(userActions.noAccessAction());
+      window.alert("로그인을 해주세요!");
     } else {
       axios
-        .get(`${BACKEND_URL}/api/v1/login?token=${jwt}`)
-        // .get(`${BACKEND_URL}/api/v1/login`, {
-        //   headers: { token: `${jwt}` },
-        // })
+        .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
+          headers: { token: `${jwt}` },
+        })
         .then(function (result) {
           console.log(result.data);
           if (result.data.role === "ANONYMOUS") {
-            dispatch(userActions.noAccessAction());
+            window.alert("로그인을 해주세요!");
+            localStorage.removeItem("jwt");
+            window.location.reload(); // 새로고침
           } else {
-            dispatch(userActions.accessAction(path));
+            history.push(path);
           }
         })
         .catch((error) => {
