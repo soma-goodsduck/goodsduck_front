@@ -3,15 +3,8 @@ name: React build
 
 on:
   push:
-    branches:
-      - main
-      - develop
-      - 'feature/login'
-  pull_request:
-    branches:
-      - main
-      - develop
-      
+    branches: [ main, develop ]
+
 jobs:
   build:
     runs-on: ubuntu-18.04
