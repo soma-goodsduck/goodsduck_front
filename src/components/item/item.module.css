@@ -1,0 +1,44 @@
+.imgBox {
+  position: relative;
+  width: 100%;
+}
+
+.itemImg {
+  width: 100%;
+  height: auto;
+}
+
+.likeBtn {
+  position: absolute;
+  margin-left: 120px;
+  margin-bottom: 120px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.clickLikeBtn {
+  position: absolute;
+  margin-left: 140px;
+  margin-bottom: 139px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.likeBtn:hover {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
+}
+
+@media screen and (min-width: 415px) {
+  .likeBtn {
+    margin-left: 140px;
+    margin-bottom: 145px;
+  }
+}
