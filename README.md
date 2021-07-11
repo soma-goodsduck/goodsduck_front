@@ -1,1 +1,3 @@
 # GODDSDUCK FRONT
+
+build test
