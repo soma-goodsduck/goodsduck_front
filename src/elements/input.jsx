@@ -1,25 +1,25 @@
+/* eslint-disable import/no-cycle */
 import React from "react";
 import styled from "styled-components";
 
 import { Text, Grid } from "./index";
 
 const Input = (props) => {
-  const { type, label, placeholder, width, _className, _onChange } = props;
+  const { type, label, placeholder, width, _onChange } = props;
 
-  const styles = { width: width };
+  const styles = { width };
   return (
-    <React.Fragment>
+    <>
       <Grid>
         <Text margin="0px">{label}</Text>
         <ElInput
           {...styles}
           type={type}
           placeholder={placeholder}
-          className={_className}
           onChange={_onChange}
         />
       </Grid>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -2,21 +2,23 @@ import styled from "styled-components";
 import React from "react";
 
 const Image = (props) => {
-  const { shape, src, size, borderRadius, margin } = props;
+  const { shape, src, size, borderRadius, margin, float, display } = props;
 
   const styles = {
-    src: src,
-    size: size,
-    borderRadius: borderRadius,
-    margin: margin,
+    src,
+    size,
+    borderRadius,
+    margin,
+    float,
+    display,
   };
 
   if (shape === "circle") {
-    return <ImageCircle {...styles}></ImageCircle>;
+    return <ImageCircle {...styles} />;
   }
 
   if (shape === "rectangle") {
-    return <ImageRectangle {...styles}></ImageRectangle>;
+    return <ImageRectangle {...styles} />;
   }
 
   return <></>;
@@ -28,6 +30,8 @@ Image.defaultProps = {
   size: "24px",
   borderRadius: "",
   margin: "",
+  float: "",
+  display: "",
 };
 
 const ImageRectangle = styled.div`
@@ -36,6 +40,8 @@ const ImageRectangle = styled.div`
   height: var(--size);
   border-radius: ${(props) => props.borderRadius};
   margin: ${(props) => props.margin};
+  float: ${(props) => props.float};
+  display: ${(props) => props.display};
 
   background-image: url("${(props) => props.src}");
   background-size: cover;
@@ -47,6 +53,8 @@ const ImageCircle = styled.div`
   height: var(--size);
   border-radius: var(--size);
   margin: ${(props) => props.margin};
+  float: ${(props) => props.float};
+  display: ${(props) => props.display};
 
   background-image: url("${(props) => props.src}");
   background-size: cover;

@@ -4,19 +4,19 @@ import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 import Spinner from "./spinner";
 
-const OAuth2RedirectHandler = (props) => {
+const OAuth2RedirectHandler = () => {
   const dispatch = useDispatch();
   const href = window.location.href;
-  let params = new URL(document.location).searchParams;
-  let code = params.get("code");
-  let state = params.get("state");
+  const params = new URL(document.location).searchParams;
+  const code = params.get("code");
+  const state = params.get("state");
 
   useEffect(() => {
     if (href.includes("/kakao")) {
       const kakao = async () => {
         try {
           const result = await axios.get(
-            `${process.env.REACT_APP_BACK_URL}/api/v1/login/kakao?code=${code}`
+            `${process.env.REACT_APP_BACK_URL}/api/v1/login/kakao?code=${code}`,
           );
           console.log(result.data);
           if (result.data.role === "USER") {
@@ -25,7 +25,7 @@ const OAuth2RedirectHandler = (props) => {
           } else if (result.data.role === "ANONYMOUS") {
             console.log(result.data);
             dispatch(
-              userActions.nonUserAction(result.data.socialAccountId, "KAKAO")
+              userActions.nonUserAction(result.data.socialAccountId, "KAKAO"),
             );
           }
         } catch (error) {
@@ -37,7 +37,7 @@ const OAuth2RedirectHandler = (props) => {
       const naver = async () => {
         try {
           const result = await axios.get(
-            `${process.env.REACT_APP_BACK_URL}/api/v1/login/naver?code=${code}&state=${state}`
+            `${process.env.REACT_APP_BACK_URL}/api/v1/login/naver?code=${code}&state=${state}`,
           );
           // console.log(result.data);
           // dispatch(userActions.nonUserAction(result.data.id, "NAVER"));
@@ -47,7 +47,7 @@ const OAuth2RedirectHandler = (props) => {
           } else if (result.data.role === "ANONYMOUS") {
             console.log(result.data);
             dispatch(
-              userActions.nonUserAction(result.data.socialAccountId, "NAVER")
+              userActions.nonUserAction(result.data.socialAccountId, "NAVER"),
             );
           }
         } catch (error) {

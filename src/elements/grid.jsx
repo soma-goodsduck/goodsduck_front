@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from "react";
 import styled from "styled-components";
 
@@ -5,17 +6,17 @@ const Grid = (props) => {
   const { is_flex, is_flex_col, width, margin, padding, bg, children } = props;
 
   const styles = {
-    is_flex: is_flex,
-    is_flex_col: is_flex_col,
-    width: width,
-    margin: margin,
-    padding: padding,
-    bg: bg,
+    is_flex,
+    is_flex_col,
+    width,
+    margin,
+    padding,
+    bg,
   };
   return (
-    <React.Fragment>
+    <>
       <GridBox {...styles}>{children}</GridBox>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -36,10 +37,10 @@ const GridBox = styled.div`
   ${(props) => (props.bg ? `background-color: ${props.bg};` : "")}
   ${(props) =>
     props.is_flex
-      ? `display: flex; align-items: center; justify-content: center; `
+      ? "display: flex; align-items: center; justify-content: center; "
       : ""}
   ${(props) =>
-    props.is_flex_col ? `display: flex; flex-direction: column; ` : ""}
+    props.is_flex_col ? "display: flex; flex-direction: column; " : ""}
 `;
 
 export default Grid;

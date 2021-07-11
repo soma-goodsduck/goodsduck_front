@@ -1,3 +1,8 @@
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-param-reassign */
+/* eslint-disable func-names */
+/* eslint-disable camelcase */
+
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
@@ -24,6 +29,13 @@ const initialState = {
 };
 
 // middleware actions
+const loginAction = (user) => {
+  return function (dispatch, getState, { history }) {
+    dispatch(logIn(user));
+    history.push("/home");
+  };
+};
+
 const loginCheckAction = () => {
   const jwt = localStorage.getItem("jwt");
   return function (dispatch, getState, { history }) {
@@ -44,13 +56,6 @@ const loginCheckAction = () => {
           console.log("error", error);
         });
     }
-  };
-};
-
-const loginAction = (user) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(logIn(user));
-    history.push("/home");
   };
 };
 
@@ -82,9 +87,9 @@ const signupAction = (user) => {
             "Content-Type": "application/json",
           },
         },
-        { withCredentials: true }
+        { withCredentials: true },
       )
-      .then(function (response) {
+      .then((response) => {
         console.log(response.data.jwt);
         dispatch(logIn(response.data.jwt));
         history.push("/home");
@@ -122,7 +127,7 @@ export default handleActions(
         draft.is_login = true;
       }),
   },
-  initialState
+  initialState,
 );
 
 // action creator export

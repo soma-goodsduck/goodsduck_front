@@ -1,17 +1,19 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import styles from "./test_header.module.css";
 import { Grid, Text, Button } from "../elements";
 
-import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 
 import { history } from "../redux/configureStore";
 
+// eslint-disable-next-line consistent-return
 const Header = () => {
-  const is_login = useSelector((state) => state.user.is_login);
+  const isLogin = useSelector((state) => state.user.is_login);
   const dispatch = useDispatch();
 
-  if (is_login) {
+  if (isLogin) {
     return (
       <div className={styles.header}>
         <Grid is_flex>
@@ -29,12 +31,13 @@ const Header = () => {
               _onClick={() => {
                 dispatch(userActions.logOut({}));
               }}
-            ></Button>
+            />
           </Grid>
         </Grid>
       </div>
     );
-  } else if (!is_login) {
+  }
+  if (!isLogin) {
     return (
       <div className={styles.header}>
         <Grid is_flex>
@@ -50,7 +53,7 @@ const Header = () => {
               width="50%"
               padding="10px"
               _onClick={() => history.push("/")}
-            ></Button>
+            />
           </Grid>
         </Grid>
       </div>

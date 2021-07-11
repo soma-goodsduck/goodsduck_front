@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from "react";
 import styled from "styled-components";
 
@@ -5,11 +6,11 @@ const Text = (props) => {
   const { bold, color, size, children, margin, is_long, _className } = props;
 
   const styles = {
-    bold: bold,
-    color: color,
-    size: size,
-    margin: margin,
-    is_long: is_long,
+    bold,
+    color,
+    size,
+    margin,
+    is_long,
   };
   return (
     <P {...styles} className={_className}>
@@ -35,7 +36,7 @@ const P = styled.p`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
     props.is_long
-      ? `white-space: nowrap; overflow:hidden; text-overflow: ellipsis; `
+      ? "white-space: nowrap; overflow:hidden; text-overflow: ellipsis; "
       : ""}
 `;
 

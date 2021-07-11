@@ -24,9 +24,10 @@ const Filtering = (props) => {
   };
 
   return (
-    <div>
-      <div className={styles.bar}></div>
+    <>
+      <div className={styles.bar} />
       <div
+        aria-hidden
         className={styles.categories}
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
@@ -34,14 +35,24 @@ const Filtering = (props) => {
         onMouseLeave={onDragEnd}
         ref={scrollRef}
       >
-        <button className={styles.category}>멤버 전체</button>
-        <button className={styles.category}>판매・구매</button>
-        <button className={styles.category}>카테고리</button>
-        <button className={styles.category}>상품상태</button>
-        <button className={styles.category}>가격대</button>
+        <button type="button" className={styles.category}>
+          멤버 전체
+        </button>
+        <button type="button" className={styles.category}>
+          판매・구매
+        </button>
+        <button type="button" className={styles.category}>
+          카테고리
+        </button>
+        <button type="button" className={styles.category}>
+          상품상태
+        </button>
+        <button type="button" className={styles.category}>
+          가격대
+        </button>
       </div>
-      <div className={styles.bar}></div>
-    </div>
+      <div className={styles.bar} />
+    </>
   );
 };
 

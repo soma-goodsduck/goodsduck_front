@@ -1,13 +1,15 @@
 import React, { useRef } from "react";
-import styles from "./header.module.css";
+
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+
 import styled from "styled-components";
+import styles from "./header.module.css";
 
 import { Flex, Icon } from "../../elements";
 import FilteringIdol from "../idolFiltering/idolGroupFiltering";
 import Filtering from "../filtering/filtering";
 
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as headerActions } from "../../redux/modules/header";
 
 import { history } from "../../redux/configureStore";
@@ -31,7 +33,7 @@ const Header = () => {
         .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
           headers: { token: `${jwt}` },
         })
-        .then(function (result) {
+        .then((result) => {
           console.log(result.data);
           if (result.data.role === "ANONYMOUS") {
             window.alert("로그인을 해주세요!");
@@ -49,8 +51,8 @@ const Header = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    //const name = inputRef.current.value;
-    //name && onSearch(name);
+    //  const name = inputRef.current.value;
+    //  name && onSearch(name);
     inputRef.current.value = "";
   };
 
@@ -94,8 +96,8 @@ const Header = () => {
           />
         </Flex>
       </HeaderBox>
-      {isFiltering && <FilteringIdol></FilteringIdol>}
-      {isFiltering && <Filtering></Filtering>}
+      {isFiltering && <FilteringIdol />}
+      {isFiltering && <Filtering />}
     </div>
   );
 };

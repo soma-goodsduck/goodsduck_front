@@ -1,4 +1,9 @@
 import React, { useEffect } from "react";
+
+import { Route } from "react-router-dom";
+import { ConnectedRouter } from "connected-react-router";
+import { useDispatch } from "react-redux";
+
 import styles from "./app.module.css";
 import "./reset.css";
 import "./normalize.css";
@@ -11,11 +16,7 @@ import Notification from "./pages/notification/notification";
 import Item from "./pages/item/item";
 import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
 
-import { Route } from "react-router-dom";
-import { ConnectedRouter } from "connected-react-router";
-
 import { history } from "./redux/configureStore";
-import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "./redux/modules/user";
 
 function App() {
