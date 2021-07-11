@@ -10,8 +10,8 @@
 
 .likeBtn {
   position: absolute;
-  margin-left: 120px;
-  margin-bottom: 120px;
+  margin-left: 32vw;
+  margin-bottom: 32vw;
   z-index: 2;
   width: 28px;
   height: 28px;
@@ -22,8 +22,8 @@
 
 .clickLikeBtn {
   position: absolute;
-  margin-left: 140px;
-  margin-bottom: 139px;
+  margin-left: 32vw;
+  margin-bottom: 32vw;
   z-index: 2;
   width: 28px;
   height: 28px;
