@@ -1,3 +1,27 @@
-.filteringHeader {
-  margin-top: 260px;
+.filtering,
+.nonFiltering {
+  cursor: pointer;
+}
+
+.filtering {
+  margin-top: 430px;
+}
+
+@media screen and (max-height: 668px) {
+  .filtering {
+    margin-top: 560px;
+  }
+
+  .nonFiltering {
+    margin-top: 250px;
+  }
+}
+
+@media screen and (min-width: 415px) {
+  .filtering {
+    margin-top: 260px;
+  }
+  .nonFiltering {
+    margin-top: 0px;
+  }
 }

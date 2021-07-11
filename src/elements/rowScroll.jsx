@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from "react";
 import styled from "styled-components";
 
@@ -5,15 +6,15 @@ const RowScroll = (props) => {
   const { children, is_flex, is_col, padding, margin } = props;
 
   const styles = {
-    is_flex: is_flex,
-    is_col: is_col,
-    padding: padding,
-    margin: margin,
+    is_flex,
+    is_col,
+    padding,
+    margin,
   };
   return (
-    <React.Fragment>
+    <>
       <RowScrollBox {...styles}>{children}</RowScrollBox>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -25,8 +26,8 @@ RowScroll.defaultProps = {
 };
 
 const RowScrollBox = styled.div`
-  ${(props) => (props.is_flex ? `display: flex;` : "")}
-  ${(props) => (props.is_col ? `flex-direction: column;` : "")}
+  ${(props) => (props.is_flex ? "display: flex;" : "")}
+  ${(props) => (props.is_col ? "flex-direction: column;" : "")}
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

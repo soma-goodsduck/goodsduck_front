@@ -5,14 +5,14 @@ const Icon = (props) => {
   const { width, height, margin, src, alt, _onClick } = props;
 
   const styles = {
-    width: width,
-    height: height,
-    margin: margin,
-    src: src,
-    alt: alt,
+    width,
+    height,
+    margin,
+    src,
+    alt,
   };
 
-  return <IconBox {...styles} onClick={_onClick}></IconBox>;
+  return <IconBox {...styles} onClick={_onClick} />;
 };
 
 Icon.defaultProps = {

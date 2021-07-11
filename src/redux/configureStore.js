@@ -1,18 +1,27 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable object-curly-newline */
+/* eslint-disable indent */
+/* eslint-disable global-require */
+
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createBrowserHistory } from "history";
 import { connectRouter } from "connected-react-router";
 
 import User from "./modules/user";
+import Item from "./modules/item";
+import Header from "./modules/header";
 
 export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
   user: User,
+  item: Item,
+  header: Header,
   router: connectRouter(history),
 });
 
-const middlewares = [thunk.withExtraArgument({ history: history })];
+const middlewares = [thunk.withExtraArgument({ history })];
 
 // 지금이 어느 환경인 지 알려줘요. (개발환경, 프로덕션(배포)환경 ...)
 const env = process.env.NODE_ENV;
@@ -32,6 +41,6 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-let store = (initialStore) => createStore(rootReducer, enhancer);
+const store = (initialStore) => createStore(rootReducer, enhancer);
 
 export default store();

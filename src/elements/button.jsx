@@ -18,14 +18,14 @@ const Button = (props) => {
   } = props;
 
   const styles = {
-    width: width,
-    height: height,
-    borderRadius: borderRadius,
-    padding: padding,
-    margin: margin,
-    bg: bg,
-    color: color,
-    src: src,
+    width,
+    height,
+    borderRadius,
+    padding,
+    margin,
+    bg,
+    color,
+    src,
   };
 
   return (

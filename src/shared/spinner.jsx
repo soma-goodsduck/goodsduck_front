@@ -13,16 +13,16 @@ function Spinner() {
 
 const SpinnerImg = styled.div`
   display: inline-block;
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   position: fixed;
-  top: 50%;
-  left: 46%;
+  top: 40%;
+  left: 30%;
   &::after {
     content: "";
     display: block;
-    width: 70px;
-    height: 70px;
+    width: 130px;
+    height: 130px;
     margin: 8px;
     border-radius: 50%;
     border: 4px solid #e5dada;

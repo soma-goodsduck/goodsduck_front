@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import styles from "./itemList.module.css";
+import { useSelector } from "react-redux";
+
 import styled from "styled-components";
+import styles from "./itemList.module.css";
 import Item from "../item/item";
 
-import axios from "axios";
 // 지금은 목업 데이터에서 가져오지만, 나중에는 GET으로 받아오기
 import { items } from "../../shared/JsonDataItem";
 
-import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as itemActions } from "../../redux/modules/item";
 
+import { history } from "../../redux/configureStore";
+
 const ItemList = (props) => {
-  //const [items, setItems] = useState([]);
+  //  const [items, setItems] = useState([]);
   const isFiltering = useSelector((state) => state.header.click_filtering);
 
   const handleHeartClick = (id) => {
@@ -44,7 +46,12 @@ const ItemList = (props) => {
   //   }, []);
 
   return (
-    <ItemListBox className={isFiltering ? styles.filteringHeader : ""}>
+    <ItemListBox
+      className={isFiltering ? styles.filtering : styles.nonFiltering}
+      onClick={() => {
+        history.push("/item/1");
+      }}
+    >
       {items.map((item) => (
         <Item
           key={item.id}

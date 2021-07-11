@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Grid, Text, Input, Button } from "../../elements";
-//import IdolGroups from "../../components/idolGroups";
-import { actionCreators as userActions } from "../../redux/modules/user";
 import { useSelector, useDispatch } from "react-redux";
+
+import { Grid, Text, Input, Button } from "../../elements";
+
+// import IdolGroups from "../../components/idolSelect/idolGroupSelect";
+import { actionCreators as userActions } from "../../redux/modules/user";
 
 const Signup = (props) => {
   const dispatch = useDispatch();
@@ -13,16 +15,16 @@ const Signup = (props) => {
   const id = useSelector((state) => state.user.id);
   const user = { email, nick, phone, id, type };
 
-  const emailCheck = (email) => {
-    const regex =
-      /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    return email !== "" && email !== "undefined" && regex.test(email);
-  };
+  // const emailCheck = (email) => {
+  //   const regex =
+  //     /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+  //   return email !== "" && email !== "undefined" && regex.test(email);
+  // };
 
-  const phCheck = (phone) => {
-    const regex = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/;
-    return phone !== "" && phone !== "undefined" && regex.test(phone);
-  };
+  // const phCheck = (phone) => {
+  //   const regex = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/;
+  //   return phone !== "" && phone !== "undefined" && regex.test(phone);
+  // };
 
   const signup = () => {
     if (email === "" || phone === "" || nick === "") {
@@ -30,15 +32,15 @@ const Signup = (props) => {
       return;
     }
 
-    if (!emailCheck(email)) {
-      window.alert("이메일을 확인해주세요");
-      return;
-    }
+    // if (!emailCheck(email)) {
+    //   window.alert("이메일을 확인해주세요");
+    //   return;
+    // }
 
-    if (!phCheck(phone)) {
-      window.alert("핸드폰 번호를 확인해주세요");
-      return;
-    }
+    // if (!phCheck(phone)) {
+    //   window.alert("핸드폰 번호를 확인해주세요");
+    //   return;
+    // }
 
     dispatch(userActions.signupAction(user));
   };
@@ -64,7 +66,7 @@ const Signup = (props) => {
       <Grid padding="16px 0px">
         <Input
           label="핸드폰 번호"
-          placeholder="핸드폰 번호를 입력하세요."
+          placeholder="핸드폰 번호를 입력하세요"
           value={phone}
           _onChange={(e) => {
             setPhone(e.target.value);
@@ -87,7 +89,7 @@ const Signup = (props) => {
         _onClick={() => {
           signup();
         }}
-      ></Button>
+      />
     </>
   );
 };

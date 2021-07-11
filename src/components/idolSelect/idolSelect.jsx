@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import styles from "./idolSelect.module.css";
 import styled from "styled-components";
+import styles from "./idolSelect.module.css";
 import { Text, Image } from "../../elements";
 
 const Idol = ({ idol, onCheck, onUncheck }) => {
   const [checked, setChecked] = useState(false);
-
-  const checkHandler = ({ target }) => {
-    console.log(target);
-    setChecked(!checked);
-    checkedItemHandler(target.id, target.checked);
-  };
 
   const checkedItemHandler = (id, isChecked) => {
     if (isChecked) {
@@ -18,6 +12,12 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
     } else if (!isChecked) {
       onUncheck(id);
     }
+  };
+
+  const checkHandler = ({ target }) => {
+    console.log(target);
+    setChecked(!checked);
+    checkedItemHandler(target.id, target.checked);
   };
 
   return (
@@ -30,7 +30,7 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
         onChange={(e) => checkHandler(e)}
       />
       <label className={styles.label} htmlFor={idol.engName}>
-        <Image src={idol.img} size="70px"></Image>
+        <Image src={idol.img} size="70px" />
         {/* <IdolImg src={idol.img}></IdolImg> */}
       </label>
       <Text margin="5px 0 10px 0">{idol.korName}</Text>

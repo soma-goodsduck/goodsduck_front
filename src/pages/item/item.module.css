@@ -1,0 +1,40 @@
+.line {
+  width: 380px;
+  height: 1px;
+  margin: 20px 0;
+  background-color: #dddddd;
+}
+
+.btnChat {
+  background: #ffe200;
+  margin: 0 10px;
+}
+
+.btnPrice {
+  background: black;
+  color: white;
+}
+
+/*  */
+
+.imgBox {
+  position: relative;
+  width: 100%;
+}
+
+.itemImg {
+  width: 100%;
+  height: auto;
+}
+
+.backBtn {
+  position: absolute;
+  top: 3vw;
+  left: 3vw;
+  z-index: 2;
+  width: 18px;
+  height: 28px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_w.svg");
+  background-size: cover;
+  cursor: pointer;
+}

@@ -29,6 +29,7 @@ const IdolGroupFiltering = () => {
 
   return (
     <div
+      aria-hidden
       className={styles.categories}
       onMouseDown={onDragStart}
       onMouseMove={onDragMove}
@@ -45,7 +46,7 @@ const IdolGroupFiltering = () => {
             <Image
               src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
               size="40px"
-            ></Image>
+            />
           </AddBtn>
           <Text size="13px" margin="10px 0 0 0" color="#222222">
             그룹 추가
