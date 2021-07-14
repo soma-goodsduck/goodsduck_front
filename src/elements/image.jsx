@@ -2,7 +2,17 @@ import styled from "styled-components";
 import React from "react";
 
 const Image = (props) => {
-  const { shape, src, size, borderRadius, margin, float, display } = props;
+  const {
+    shape,
+    src,
+    size,
+    borderRadius,
+    margin,
+    float,
+    display,
+    pointer,
+    _onClick,
+  } = props;
 
   const styles = {
     src,
@@ -11,14 +21,16 @@ const Image = (props) => {
     margin,
     float,
     display,
+    pointer,
+    _onClick,
   };
 
   if (shape === "circle") {
-    return <ImageCircle {...styles} />;
+    return <ImageCircle {...styles} onClick={_onClick} />;
   }
 
   if (shape === "rectangle") {
-    return <ImageRectangle {...styles} />;
+    return <ImageRectangle {...styles} onClick={_onClick} />;
   }
 
   return <></>;
@@ -32,6 +44,8 @@ Image.defaultProps = {
   margin: "",
   float: "",
   display: "",
+  pointer: false,
+  _onClick: () => {},
 };
 
 const ImageRectangle = styled.div`
@@ -45,6 +59,8 @@ const ImageRectangle = styled.div`
 
   background-image: url("${(props) => props.src}");
   background-size: cover;
+
+  ${(props) => (props.pointer ? "cursor: pointer;" : "")}
 `;
 
 const ImageCircle = styled.div`
@@ -59,6 +75,8 @@ const ImageCircle = styled.div`
   background-image: url("${(props) => props.src}");
   background-size: cover;
   object-fit: cover;
+
+  ${(props) => (props.pointer ? "cursor: pointer;" : "")}
 `;
 
 export default Image;
