@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./item.module.css";
@@ -8,7 +7,7 @@ import { Image, Grid, Flex, Text } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
-import { timeForToday, numberWithCommas } from "../../shared/calFunctions";
+import { timeForToday, numberWithCommas } from "../../shared/functions";
 
 const Item = ({ item, id }) => {
   const [isLike, setIsLike] = useState(false);
