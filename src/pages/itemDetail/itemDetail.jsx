@@ -5,7 +5,7 @@ import styles from "./itemDetail.module.css";
 import { Flex, Text, Image } from "../../elements/index";
 import { item } from "../../shared/JsonDataItemDetail";
 
-import { timeForToday, numberWithCommas } from "../../shared/calFunctions";
+import { timeForToday, numberWithCommas } from "../../shared/functions";
 
 const Item = ({ history }) => {
   const screen = window.screen.width;
