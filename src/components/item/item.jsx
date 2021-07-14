@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./item.module.css";
 
 import { Image, Grid, Flex, Text } from "../../elements";
 
-const Item = ({ item, id, onHeartClick }) => {
+import { history } from "../../redux/configureStore";
+
+import { timeForToday, numberWithCommas } from "../../shared/functions";
+
+const Item = ({ item, id }) => {
+  const [isLike, setIsLike] = useState(false);
+
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -15,18 +20,19 @@ const Item = ({ item, id, onHeartClick }) => {
     }
   }, [screen]);
 
-  const isLike = useSelector((state) => state.item.is_like);
-
-  const clickHeart = () => {
-    onHeartClick(id);
+  const clickItem = (e) => {
+    if (e.target.tagName !== "DIV") {
+      return;
+    }
+    history.push(`/item/${id}`);
   };
 
-  const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const clickHeart = () => {
+    setIsLike(!isLike);
   };
 
   return (
-    <Grid is_flex_col margin="10px 0 0 0">
+    <Grid is_flex_col margin="10px 0 0 0" _onClick={(e) => clickItem(e)}>
       <Flex className={styles.imgBox}>
         <Image
           shape="rectangle"
@@ -67,18 +73,18 @@ const Item = ({ item, id, onHeartClick }) => {
           <Flex>
             <Image
               shape="circle"
-              src={item.user_image}
+              src={item.user_info.user_profile}
               size={isMobile ? "6.5vw" : "24px"}
               margin="0 7px 0 0"
             />
             <UserName>
               <Text is_long size={isMobile ? "4.5vw" : "18px"}>
-                {item.user_name}
+                {item.user_info.user_name}
               </Text>
             </UserName>
           </Flex>
           <Text color="#bbbbbb" size={isMobile ? "4vw" : "16px"}>
-            {item.item_created_at}분전
+            {timeForToday(item.item_created_at)}
           </Text>
         </Flex>
       </InfoBox>

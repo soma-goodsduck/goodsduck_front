@@ -17,11 +17,9 @@ const Header = () => {
     return (
       <div className={styles.header}>
         <Grid is_flex>
-          <Grid>
-            <Text margin="0px" size="24px" bold>
-              GOODSDUCK
-            </Text>
-          </Grid>
+          <Text margin="0px" size="24px" bold>
+            GOODSDUCK
+          </Text>
 
           <Grid is_flex>
             <Button
@@ -32,6 +30,12 @@ const Header = () => {
                 dispatch(userActions.logOut({}));
               }}
             />
+            <Button
+              text="굿즈등록"
+              width="50%"
+              padding="10px"
+              _onClick={() => history.push("/new")}
+            />
           </Grid>
         </Grid>
       </div>
@@ -41,11 +45,9 @@ const Header = () => {
     return (
       <div className={styles.header}>
         <Grid is_flex>
-          <Grid>
-            <Text margin="0px" size="24px" bold>
-              GOODSDUCK
-            </Text>
-          </Grid>
+          <Text margin="0px" size="24px" bold>
+            GOODSDUCK
+          </Text>
 
           <Grid is_flex>
             <Button
@@ -53,6 +55,12 @@ const Header = () => {
               width="50%"
               padding="10px"
               _onClick={() => history.push("/")}
+            />
+            <Button
+              text="굿즈등록"
+              width="50%"
+              padding="10px"
+              _onClick={() => history.push("/new")}
             />
           </Grid>
         </Grid>

@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
+
 import styled from "styled-components";
 import styles from "./idolGroupFiltering.module.css";
 import { Flex, Text, Image } from "../../elements";
+
 import Idol from "./idolFiltering";
-import { idols } from "../../shared/JsonData";
+import idols from "../../shared/IdolGroupData.json";
 
 const IdolGroupFiltering = () => {
   const scrollRef = useRef(null);

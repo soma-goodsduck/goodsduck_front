@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import styles from "./item.module.css";
+import styles from "./itemDetail.module.css";
 
 import { Flex, Text, Image } from "../../elements/index";
 import { item } from "../../shared/JsonDataItemDetail";
+
+import { timeForToday, numberWithCommas } from "../../shared/functions";
 
 const Item = ({ history }) => {
   const screen = window.screen.width;
@@ -13,15 +15,9 @@ const Item = ({ history }) => {
       setIsMobile(true);
     }
   }, [screen]);
-  console.log(isMobile);
 
   const goBack = () => {
-    console.log("back");
     history.goBack();
-  };
-
-  const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -63,7 +59,7 @@ const Item = ({ history }) => {
         <Flex justify="flex-start">
           <Flex>
             <Text size="18px" color="#bbbbbb">
-              {item.item_created_at}분전
+              {timeForToday(item.item_created_at)}
             </Text>
           </Flex>
           <Flex margin="0 20px">

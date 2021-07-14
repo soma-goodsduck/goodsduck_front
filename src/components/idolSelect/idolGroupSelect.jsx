@@ -1,18 +1,19 @@
 import React, { useState, useCallback } from "react";
+
 import styled from "styled-components";
 import Idol from "./idolSelect";
-import { idols } from "../../shared/JsonData";
+import idols from "../../shared/IdolGroupData.json";
 
 const IdolGroups = (props) => {
   const [checkedIdols, setCheckedIdols] = useState([]);
 
-  const handleCheck = useCallback((name) => {
-    setCheckedIdols(checkedIdols.push(name));
+  const handleCheck = useCallback((id) => {
+    setCheckedIdols(checkedIdols.push(id));
     console.log(checkedIdols);
   }, []);
 
-  const handleUncheck = useCallback((name) => {
-    const idx = checkedIdols.indexOf(name);
+  const handleUncheck = useCallback((id) => {
+    const idx = checkedIdols.indexOf(id);
     setCheckedIdols(checkedIdols.splice(idx, 1));
     console.log(checkedIdols);
   }, []);
@@ -34,8 +35,8 @@ const IdolGroups = (props) => {
 const IdolList = styled.div`
   display: grid;
   gap: 5px;
-  grid-template-columns: repeat(4, 100px);
-  grid-auto-rows: 100px;
+  grid-template-columns: repeat(4, 90px);
+  grid-auto-rows: 130px;
 `;
 
 export default IdolGroups;

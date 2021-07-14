@@ -9,14 +9,18 @@ import { createBrowserHistory } from "history";
 import { connectRouter } from "connected-react-router";
 
 import User from "./modules/user";
+import Image from "./modules/image";
 import Item from "./modules/item";
 import Header from "./modules/header";
+import NewItem from "./modules/newItem";
 
 export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
   user: User,
+  image: Image,
   item: Item,
+  newItem: NewItem,
   header: Header,
   router: connectRouter(history),
 });

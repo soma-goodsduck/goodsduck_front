@@ -21,7 +21,7 @@ export const item = {
     "https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg", // 글쓴이 프로필 이미지
   user_level: null, // 글쓴이 레벨
   is_like: false, // 유저가 해당 아이템을 찜했는지 여부
-  item_created_at: 47, // 글 생성 시각
+  item_created_at: "2021-07-12 10:00:00", // 글 생성 시각
   likes_item_count: 32, // 찜 개수
   views_item_count: 119, // 조회수
 };

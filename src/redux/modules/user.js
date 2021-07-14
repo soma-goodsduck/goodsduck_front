@@ -42,7 +42,7 @@ const loginCheckAction = () => {
     if (jwt !== null) {
       axios
         .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
-          headers: { token: `${jwt}` },
+          headers: { jwt: `${jwt}` },
         })
         .then(function (result) {
           if (result.data.role === "USER") {
@@ -90,7 +90,6 @@ const signupAction = (user) => {
         { withCredentials: true },
       )
       .then((response) => {
-        console.log(response.data.jwt);
         dispatch(logIn(response.data.jwt));
         history.push("/home");
       })

@@ -1,111 +1,181 @@
+/* eslint-disable max-len */
 export const items = [
   {
-    id: 1, // 굿즈 아이디
-    idol_member_id: null, // 아이돌 멤버
-    category_item_id: null, // 카테고리
-    trade_status: "구매중", // 거래 상태
-    trade_type: "구매", // 거래 타입
-    status: "", // 상품 상태
-    name: "GD 포토카드 사요", // 제목
-    image_url: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg", // 굿즈 이미지
-    price: 20000, // 굿즈 가격
-    user_name: "GDDDD", // 글쓴이 아이디
-    user_image:
-      "https://pbs.twimg.com/profile_images/1236934708405006337/DnWgP_0M_400x400.jpg", // 글쓴이 프로필 이미지
-    item_created_at: 2, // 글 생성 시각
-    is_like: false, // 유저가 해당 아이템을 찜했는지 여부
+    //  판매자 정보
+    user_info: {
+      id: 1,
+      user_name: "GDDDD",
+      user_profile:
+        "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
+      user_level: 2,
+    },
+    //  아이템 정보
+    id: 1,
+    name: "GD 포토카드 팔아요",
+    description: "GD 포카 팔아요",
+    image_url:
+      "https://pbs.twimg.com/profile_images/1236934708405006337/DnWgP_0M_400x400.jpg",
+    price: 10000,
+    trade_type: "판매",
+    trade_status: "S",
+    idol_group_id: "빅뱅",
+    idol_member_id: "GD",
+    category_item_id: "포토카드",
+    item_created_at: "2021-07-12 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
   },
   {
+    //  판매자 정보
+    user_info: {
+      id: 2,
+      user_name: "마크크크",
+      user_profile:
+        "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+      user_level: 1,
+    },
+    //  아이템 정보
     id: 2,
-    idol_member_id: null,
-    category_item_id: null,
-    trade_status: "판매중",
-    trade_type: "판매",
-    status: "",
-    name: "NCT 마크 포토카드 팔아요",
+    name: "마크 포토카드 팔아요",
+    description: "NCT 마크 맛 Hot Sauce 포카 팔아요",
     image_url: "https://pbs.twimg.com/media/D8JNRkpUwAACjz6.jpg",
-    price: 7000,
-    user_name: "마크크크",
-    user_image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv4n-yPPCpcpZgY7wYjb8uYHip7A4N05sx9w&usqp=CAU",
-    item_created_at: 47,
-    is_like: false,
-  },
-  {
-    id: 3,
-    idol_member_id: null,
-    category_item_id: null,
-    trade_status: "판매중",
+    price: 20000,
     trade_type: "판매",
-    status: "",
-    name: "GD 포스터 판매",
-    image_url: "https://purme.org/wp-content/uploads/20170214_085521.jpg",
-    price: 100000,
-    user_name: "GDDDD",
-    user_image: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
-    item_created_at: 147,
-    is_like: false,
+    trade_status: "A",
+    idol_group_id: "NCT",
+    idol_member_id: "마크",
+    category_item_id: "포토카드",
+    item_created_at: "2021-07-10 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
   },
   {
+    //  판매자 정보
+    user_info: {
+      id: 3,
+      user_name: "뷔뷔",
+      user_profile:
+        "https://w.namu.la/s/0eacd7d6d02c78891560048c06cec80829c1f16cdb495d2384836257555638f08b03bb6a787054267ee32563086a27e5f1ae5ff8e454845ddbba689589b26b22c7f017441d21dd5b149d41044b3b6b066dd676d5b10a630f20c4b498ae6efba6",
+      user_level: 7,
+    },
+    //  아이템 정보
+    id: 3,
+    name: "BTS 뷔 포카 사요",
+    description: "BTS 뷔 포카 사요",
+    image_url:
+      "https://w.namu.la/s/0eacd7d6d02c78891560048c06cec80829c1f16cdb495d2384836257555638f08b03bb6a787054267ee32563086a27e5f1ae5ff8e454845ddbba689589b26b22c7f017441d21dd5b149d41044b3b6b066dd676d5b10a630f20c4b498ae6efba6",
+    price: 20000,
+    trade_type: "구매",
+    trade_status: "B",
+    idol_group_id: "BTS",
+    idol_member_id: "뷔",
+    category_item_id: "포토카드",
+    item_created_at: "2021-06-27 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
+  },
+  {
+    //  판매자 정보
+    user_info: {
+      id: 4,
+      user_name: "아르르",
+      user_profile:
+        "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+      user_level: 1,
+    },
+    //  아이템 정보
     id: 4,
-    idol_member_id: null,
-    category_item_id: null,
-    trade_status: "구매중",
-    trade_type: "구매",
-    status: "",
-    name: "GD 포토카드 사요",
+    name: "아린 포스터 팜",
+    description: "오마이걸 아린 2020 온라인 콘서트 개인 포스터 팔아요",
     image_url:
-      "https://nimage.g-enews.com/phpwas/restmb_allidxmake.php?idx=5&simg=201506011138446473545_20150601113900_01.jpg",
+      "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/G4YU2VD54PPGYOQKBW5HZGFTTA.jpg",
     price: 20000,
-    user_name: "GDDDD",
-    user_image: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
-    item_created_at: 151,
-    is_like: false,
+    trade_type: "판매",
+    trade_status: "A",
+    idol_group_id: "오마이걸",
+    idol_member_id: "아린",
+    category_item_id: "포스터",
+    item_created_at: "2021-05-27 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
   },
   {
+    //  판매자 정보
+    user_info: {
+      id: 5,
+      user_name: "마크크크",
+      user_profile:
+        "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+      user_level: 1,
+    },
+    //  아이템 정보
     id: 5,
-    idol_member_id: null,
-    category_item_id: null,
-    trade_status: "구매중",
-    trade_type: "구매",
-    status: "",
-    name: "포토카드 사요",
-    image_url:
-      "https://ssl.pstatic.net/sstatic/people/portrait/202010/20201015104158808-4251462.jpg",
+    name: "마크 포토카드 팔아요",
+    description: "NCT 마크 맛 Hot Sauce 포카 팔아요",
+    image_url: "https://pbs.twimg.com/media/D8JNRkpUwAACjz6.jpg",
     price: 20000,
-    user_name: "GDDDD",
-    user_image: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
-    item_created_at: 47,
-    is_like: false,
+    trade_type: "판매",
+    trade_status: "A",
+    idol_group_id: "NCT",
+    idol_member_id: "마크",
+    category_item_id: "포토카드",
+    item_created_at: "2021-02-27 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
   },
   {
+    //  판매자 정보
+    user_info: {
+      id: 6,
+      user_name: "마크크크",
+      user_profile:
+        "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+      user_level: 1,
+    },
+    //  아이템 정보
     id: 6,
-    idol_member_id: null,
-    category_item_id: null,
-    trade_status: "구매중",
-    trade_type: "구매",
-    status: "",
-    name: "GD 포토카드 사요",
-    image_url: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
+    name: "마크 포토카드 팔아요",
+    description: "NCT 마크 맛 Hot Sauce 포카 팔아요",
+    image_url: "https://pbs.twimg.com/media/D8JNRkpUwAACjz6.jpg",
     price: 20000,
-    user_name: "GDDDD",
-    user_image: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
-    item_created_at: 47,
-    is_like: false,
+    trade_type: "판매",
+    trade_status: "A",
+    idol_group_id: "NCT",
+    idol_member_id: "마크",
+    category_item_id: "포토카드",
+    item_created_at: "2021-02-27 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
   },
   {
+    //  판매자 정보
+    user_info: {
+      id: 7,
+      user_name: "마크크크",
+      user_profile:
+        "https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg",
+      user_level: 1,
+    },
+    //  아이템 정보
     id: 7,
-    idol_member_id: null,
-    category_item_id: null,
-    trade_status: "구매중",
-    trade_type: "구매",
-    status: "",
-    name: "GD 포토카드 사요",
-    image_url: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
+    name: "마크 포토카드 팔아요",
+    description: "NCT 마크 맛 Hot Sauce 포카 팔아요",
+    image_url: "https://pbs.twimg.com/media/D8JNRkpUwAACjz6.jpg",
     price: 20000,
-    user_name: "GDDDD",
-    user_image: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/gd.jpg",
-    item_created_at: 47,
-    is_like: false,
+    trade_type: "판매",
+    trade_status: "A",
+    idol_group_id: "NCT",
+    idol_member_id: "마크",
+    category_item_id: "포토카드",
+    item_created_at: "2021-02-27 10:00:00",
+    likes_item_count: 32,
+    views_item_count: 119,
+    is_like: false, // 유저가 해당 상품을 찜했는지 여부
   },
 ];

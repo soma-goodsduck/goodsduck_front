@@ -13,7 +13,10 @@ import Signup from "./pages/signup/signup";
 import home from "./pages/home/home";
 import LikeItemList from "./pages/likeItemList/likeItemList";
 import Notification from "./pages/notification/notification";
-import Item from "./pages/item/item";
+import Item from "./pages/itemDetail/itemDetail";
+import ItemUpload from "./pages/itemUpload/itemUpload";
+import IdolGroup from "./pages/itemUpload/idolSelect";
+import IdolMember from "./pages/itemUpload/idolMeberSelect";
 import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
 
 import { history } from "./redux/configureStore";
@@ -44,7 +47,11 @@ function App() {
         />
         <Route path="/favorites" exact component={LikeItemList} />
         <Route path="/notification" exact component={Notification} />
-        <Route path="/item/1" exact component={Item} />
+        <Route path="/new" exact component={ItemUpload} />
+        <Route path="/idolSelect" exact component={IdolGroup} />
+        <Route path="/idolMemberSelect" exact component={IdolMember} />
+
+        <Route path="/item/:id" exact component={Item} />
       </ConnectedRouter>
     </div>
   );
