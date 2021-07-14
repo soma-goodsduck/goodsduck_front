@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemList.module.css";
@@ -8,57 +8,24 @@ import Item from "../item/item";
 // 지금은 목업 데이터에서 가져오지만, 나중에는 GET으로 받아오기
 import { items } from "../../shared/JsonDataItem";
 
-import { actionCreators as itemActions } from "../../redux/modules/item";
-
-import { history } from "../../redux/configureStore";
+// import { actionCreators as itemActions } from "../../redux/modules/item";
 
 const ItemList = (props) => {
-  //  const [items, setItems] = useState([]);
+  const dispatch = useDispatch();
+
+  const itemList = useSelector((state) => state.item.list);
   const isFiltering = useSelector((state) => state.header.click_filtering);
 
-  const handleHeartClick = (id) => {
-    console.log(id);
-    // id를 보내서 해당 id에 맞는 아이템의 정보를 수정해서 가져옴
-    // axios
-    //   .post(`${process.env.REACT_APP_BACKEND_LOCALHOST_URL}/likeItem`, {
-    //     id: idol.id,
-    //   })
-    //   .then(function (response) {
-    //     console.log(response);
-    //     fetchData();
-    //   })
-    //   .catch((error) => console.log("error", error));
-  };
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const result = await axios.get(
-  //         `${process.env.REACT_APP_BACKEND_LOCALHOST_URL}/items`
-  //       );
-  //       setItems(result.data);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
+  // useEffect(() => {
+  //   dispatch(itemActions.getItemAciton());
+  // }, []);
 
   return (
     <ItemListBox
       className={isFiltering ? styles.filtering : styles.nonFiltering}
-      onClick={() => {
-        history.push("/item/1");
-      }}
     >
       {items.map((item) => (
-        <Item
-          key={item.id}
-          id={item.id}
-          item={item}
-          onHeartClick={handleHeartClick}
-        />
+        <Item key={item.id} id={item.id} item={item} />
       ))}
     </ItemListBox>
   );
