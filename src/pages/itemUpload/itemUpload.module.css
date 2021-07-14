@@ -1,0 +1,59 @@
+/* 전체적인 선택 버튼 */
+.selectBtn {
+  width: 380px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+}
+
+label {
+  cursor: pointer;
+}
+
+/* 구매, 판매 버튼 */
+.typeBtn {
+  background-color: #ffe201;
+}
+
+.clickTypeBtn {
+  background-color: black;
+  color: white;
+}
+
+/* 상품 상태 버튼 */
+.statusBtn {
+  background-color: #ffe201;
+  color: black;
+}
+
+.clickStatusBtn {
+  background-color: black;
+  color: white;
+}
+
+/* 카테고리 버튼 */
+.categoryBox {
+  width: 450px;
+}
+
+/* 아이돌 선택 버튼 */
+.clickIdolGroupBtn {
+  font-weight: bold;
+  color: black;
+}
+
+.idolGroupBtn {
+  color: gray;
+}
+
+.idolGroupImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
