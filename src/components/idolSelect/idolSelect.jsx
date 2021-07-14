@@ -1,7 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from "react";
 import styled from "styled-components";
 import styles from "./idolSelect.module.css";
-import { Text, Image } from "../../elements";
 
 const Idol = ({ idol, onCheck, onUncheck }) => {
   const [checked, setChecked] = useState(false);
@@ -15,9 +15,8 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
   };
 
   const checkHandler = ({ target }) => {
-    console.log(target);
     setChecked(!checked);
-    checkedItemHandler(target.id, target.checked);
+    checkedItemHandler(idol.id, target.checked);
   };
 
   return (
@@ -29,11 +28,14 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
         checked={checked}
         onChange={(e) => checkHandler(e)}
       />
-      <label className={styles.label} htmlFor={idol.engName}>
-        <Image src={idol.img} size="70px" />
-        {/* <IdolImg src={idol.img}></IdolImg> */}
+      <label htmlFor={idol.engName} className={styles.label}>
+        <img
+          className={styles.idolGroupImg}
+          src={idol.imageUrl}
+          alt="Idol Group"
+        />
+        {idol.engName}
       </label>
-      <Text margin="5px 0 10px 0">{idol.korName}</Text>
     </IdolBox>
   );
 };
@@ -47,10 +49,6 @@ const IdolBox = styled.div`
 
 const IdolInput = styled.input`
   display: none;
-  type: checkbox;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
 `;
 
 export default Idol;

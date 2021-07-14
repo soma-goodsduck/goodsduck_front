@@ -1,8 +1,16 @@
 .label {
-  font-size: 12px;
+  color: gray;
+  text-align: center;
 }
 
 .input:checked + .label {
-  border: 3px black solid;
+  font-weight: bold;
+  color: black;
+}
+
+.idolGroupImg {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
+  margin: 5px;
 }
