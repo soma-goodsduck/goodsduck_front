@@ -5,9 +5,9 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
+import * as Sentry from "@sentry/react";
 
 // actions
-const SET_ITEM = "SET_ITEM";
 const SET_IDOL_GROUP = "SET_IDOL_GROUP";
 const SET_IDOL_MEMBER = "SET_IDOL_MEMBER";
 const SET_NAME = "SET_NAME";
@@ -19,13 +19,20 @@ const SET_DESC = "SET_DESC";
 const CLEAR = "CLEAR";
 
 // action creators
-const setItem = createAction(SET_ITEM, (item) => ({ item }));
-const setIdolGroup = createAction(SET_IDOL_GROUP, (idol_group_id) => ({
-  idol_group_id,
-}));
-const setIdolMember = createAction(SET_IDOL_MEMBER, (idol_member_id) => ({
-  idol_member_id,
-}));
+const setIdolGroup = createAction(
+  SET_IDOL_GROUP,
+  (idol_group_id, idol_group_name) => ({
+    idol_group_id,
+    idol_group_name,
+  }),
+);
+const setIdolMember = createAction(
+  SET_IDOL_MEMBER,
+  (idol_member_id, idol_member_name) => ({
+    idol_member_id,
+    idol_member_name,
+  }),
+);
 const setName = createAction(SET_NAME, (name) => ({ name }));
 const setPrice = createAction(SET_PRICE, (price) => ({ price }));
 const setTradeType = createAction(SET_TRADE_TYPE, (trade_type) => ({
@@ -50,6 +57,8 @@ const initialState = {
   status_grade: "",
   idol_group_id: null,
   idol_member_id: null,
+  idol_group_name: "",
+  idol_member_name: "",
   category: "",
 };
 
@@ -69,15 +78,15 @@ const initialItem = {
 
 // middleware actions
 // 아이템 등록할 때 필요한 정보들을 저장
-const setIdolAction = (idolGroup) => {
+const setIdolAction = (idolGroup, idolGroupName) => {
   return function (dispatch, getState, { history }) {
-    dispatch(setIdolGroup(idolGroup));
+    dispatch(setIdolGroup(idolGroup, idolGroupName));
   };
 };
 
-const setIdolMemberAction = (idolMember) => {
+const setIdolMemberAction = (idolMember, idolMemberName) => {
   return function (dispatch, getState, { history }) {
-    dispatch(setIdolMember(idolMember));
+    dispatch(setIdolMember(idolMember, idolMemberName));
   };
 };
 
@@ -102,6 +111,7 @@ const setTradeTypeAction = (tradeType) => {
 const setCategoryAction = (category) => {
   return function (dispatch, getState, { history }) {
     dispatch(setCategory(category));
+    history.push("/new");
   };
 };
 
@@ -135,9 +145,8 @@ const addItemAction = (item, fileList) => {
       price: item.dataPrice,
       description: item.dataDesc,
       tradeType: item.dataTradeType,
-      statusGrade: item.dataStatus,
+      gradeStatus: item.dataStatus,
       category: item.dataCategory,
-      idolGroup: item.idolGroup,
       idolMember: item.idolMember,
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
@@ -148,16 +157,18 @@ const addItemAction = (item, fileList) => {
         headers: { jwt: `${item.userJwt}` },
       })
       .then((response) => {
-        if (response.data === "OK") {
+        console.log(response.data);
+        if (response.data !== -1) {
           console.log("굿즈 등록 완료");
-          history.push("/home");
+          history.replace(`/item/${response.data}`);
         } else {
           console.log("굿즈 등록 실패");
         }
       })
       .catch((error) => {
         console.log("error", error);
-        history.replace("/");
+        Sentry.captureException(error);
+        history.replace("/home");
       });
   };
 };
@@ -165,17 +176,16 @@ const addItemAction = (item, fileList) => {
 // reducer
 export default handleActions(
   {
-    [SET_ITEM]: (state, action) =>
-      produce(state, (draft) => {
-        draft.item = action.payload.item;
-      }),
     [SET_IDOL_GROUP]: (state, action) =>
       produce(state, (draft) => {
+        console.log(action.payload);
         draft.idol_group_id = action.payload.idol_group_id;
+        draft.idol_group_name = action.payload.idol_group_name;
       }),
     [SET_IDOL_MEMBER]: (state, action) =>
       produce(state, (draft) => {
         draft.idol_member_id = action.payload.idol_member_id;
+        draft.idol_member_name = action.payload.idol_member_name;
       }),
     [SET_NAME]: (state, action) =>
       produce(state, (draft) => {
@@ -210,6 +220,9 @@ export default handleActions(
         draft.trade_type = "";
         draft.status_grade = "";
         draft.idol_group_id = null;
+        draft.idol_member_id = null;
+        draft.idol_group_name = "";
+        draft.idol_member_name = "";
       }),
   },
   initialState,

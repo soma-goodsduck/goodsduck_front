@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex } from "../../elements";
+import { Icon } from "../../elements";
+import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
@@ -29,15 +30,14 @@ const ItemCategory = () => {
   };
 
   return (
-    <Flex is_flex is_wrap>
+    <CategoryContainer>
+      <HeaderInfo text="카테고리" padding="0 16px" />
+      <div className={styles.detailText}>전체 카테고리</div>
       {categories.map((category) => (
         <CategoryBox
           key={category}
-          className={
-            categoryValue === `${category}`
-              ? styles.clickStatusBtn
-              : styles.statusBtn
-          }
+          className={styles.categoryBtn}
+          onClick={() => checkHandler(`${category}`)}
         >
           <CategoryInput
             id={category}
@@ -46,19 +46,29 @@ const ItemCategory = () => {
             onChange={() => checkHandler(`${category}`)}
           />
           <label htmlFor={category}>{category}</label>
+          <Icon
+            width="12px"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+          />
         </CategoryBox>
       ))}
-    </Flex>
+    </CategoryContainer>
   );
 };
 
+const CategoryContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #f8f8f8;
+`;
 const CategoryBox = styled.div`
-  width: 100px;
-  border-radius: 5px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-right: 10px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 15px;
+  background-color: #ffffff;
+  cursor: pointer;
 `;
 const CategoryInput = styled.input`
   display: none;

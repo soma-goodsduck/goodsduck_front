@@ -4,7 +4,6 @@
 
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import axios from "axios";
 
 // actions
 const SAVE_IMG = "SAVE_IMG";
@@ -17,6 +16,7 @@ const saveImg = createAction(SAVE_IMG, (userId, fileList) => ({
   fileList,
 }));
 const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
+
 const clearImg = createAction(CLEAR_IMG, () => ({}));
 
 // initialState
@@ -45,7 +45,6 @@ export default handleActions(
   {
     [SAVE_IMG]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload);
         draft.userId = action.payload.userId;
         draft.fileList = action.payload.fileList;
       }),
