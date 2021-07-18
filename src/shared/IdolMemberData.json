@@ -66,122 +66,122 @@
   {
     "2": [
       {
-        "id": 1,
+        "id": 13,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_nct.jpg"
       },
       {
-        "id": 2,
+        "id": 14,
         "name": "태일",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/1.jpg"
       },
       {
-        "id": 3,
+        "id": 15,
         "name": "쟈니",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/2.jpg"
       },
       {
-        "id": 4,
+        "id": 16,
         "name": "태용",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/3.jpg"
       },
       {
-        "id": 5,
+        "id": 17,
         "name": "유타",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/4.jpg"
       },
       {
-        "id": 6,
+        "id": 18,
         "name": "도영",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/5.jpg"
       },
       {
-        "id": 7,
+        "id": 19,
         "name": "텐",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/6.png"
       },
       {
-        "id": 8,
+        "id": 20,
         "name": "재현",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/7.jpg"
       },
       {
-        "id": 9,
+        "id": 21,
         "name": "윈윈",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/8.png"
       },
       {
-        "id": 10,
+        "id": 22,
         "name": "마크",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/9.jpg"
       },
       {
-        "id": 11,
+        "id": 23,
         "name": "런쥔",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/10.jpg"
       },
       {
-        "id": 12,
+        "id": 24,
         "name": "제노",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/11.jpg"
       },
       {
-        "id": 13,
+        "id": 25,
         "name": "해찬",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/12.jpg"
       },
       {
-        "id": 14,
+        "id": 26,
         "name": "재민",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/13.jpg"
       },
       {
-        "id": 15,
+        "id": 27,
         "name": "천러",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/14.jpg"
       },
       {
-        "id": 16,
+        "id": 28,
         "name": "지성",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/15.jpg"
       },
       {
-        "id": 17,
+        "id": 29,
         "name": "루카스",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/6.png"
       },
       {
-        "id": 18,
+        "id": 30,
         "name": "정우",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/17.jpg"
       },
       {
-        "id": 19,
+        "id": 31,
         "name": "쿤",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/18.png"
       },
       {
-        "id": 20,
+        "id": 32,
         "name": "샤오쥔",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/19.jpg"
       },
       {
-        "id": 21,
+        "id": 33,
         "name": "양양",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/20.jpg"
       },
       {
-        "id": 22,
+        "id": 34,
         "name": "헨드리",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/21.jpg"
       },
       {
-        "id": 23,
+        "id": 35,
         "name": "쇼타로",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/22.jpg"
       },
       {
-        "id": 24,
+        "id": 36,
         "name": "성찬",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/nct/23.jpg"
       }
@@ -190,52 +190,52 @@
   {
     "3": [
       {
-        "id": 1,
+        "id": 37,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_sf9.jpg"
       },
       {
-        "id": 2,
+        "id": 38,
         "name": "영빈",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/1.jpg"
       },
       {
-        "id": 3,
+        "id": 39,
         "name": "인성",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/2.jpg"
       },
       {
-        "id": 4,
+        "id": 40,
         "name": "재윤",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/3.jpg"
       },
       {
-        "id": 5,
+        "id": 41,
         "name": "다원",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/4.jpg"
       },
       {
-        "id": 6,
+        "id": 42,
         "name": "로운",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/5.jpg"
       },
       {
-        "id": 7,
+        "id": 43,
         "name": "주호",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/6.jpg"
       },
       {
-        "id": 8,
+        "id": 44,
         "name": "유태양",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/7.jpg"
       },
       {
-        "id": 9,
+        "id": 45,
         "name": "휘영",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/8.jpg"
       },
       {
-        "id": 10,
+        "id": 46,
         "name": "찬희",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/sf9/9.jpg"
       }
@@ -244,37 +244,37 @@
   {
     "4": [
       {
-        "id": 1,
+        "id": 47,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_astro.jpg"
       },
       {
-        "id": 2,
+        "id": 48,
         "name": "차은우",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/astro/1.jpg"
       },
       {
-        "id": 3,
+        "id": 49,
         "name": "문빈",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/astro/2.jpg"
       },
       {
-        "id": 4,
+        "id": 50,
         "name": "MJ",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/astro/3.jpg"
       },
       {
-        "id": 5,
+        "id": 51,
         "name": "진진",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/astro/4.jpg"
       },
       {
-        "id": 6,
+        "id": 52,
         "name": "라키",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/astro/5.jpg"
       },
       {
-        "id": 7,
+        "id": 53,
         "name": "윤산하",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/astro/6.jpg"
       }
@@ -283,52 +283,52 @@
   {
     "5": [
       {
-        "id": 1,
+        "id": 54,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_twice.jpg"
       },
       {
-        "id": 2,
+        "id": 55,
         "name": "나연",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/1.jpg"
       },
       {
-        "id": 3,
+        "id": 56,
         "name": "정연",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/2.jpg"
       },
       {
-        "id": 4,
+        "id": 57,
         "name": "모모",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/3.jpg"
       },
       {
-        "id": 5,
+        "id": 58,
         "name": "사나",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/4.jpg"
       },
       {
-        "id": 6,
+        "id": 59,
         "name": "지효",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/5.jpg"
       },
       {
-        "id": 7,
+        "id": 60,
         "name": "미나",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/6.jpg"
       },
       {
-        "id": 8,
+        "id": 61,
         "name": "다현",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/7.jpg"
       },
       {
-        "id": 9,
+        "id": 62,
         "name": "채영",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/8.jpg"
       },
       {
-        "id": 10,
+        "id": 63,
         "name": "쯔위",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/twice/9.jpg"
       }
@@ -337,42 +337,42 @@
   {
     "6": [
       {
-        "id": 1,
+        "id": 64,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_ohmygirl.jpg"
       },
       {
-        "id": 2,
+        "id": 65,
         "name": "효정",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/1.jpg"
       },
       {
-        "id": 3,
+        "id": 66,
         "name": "미미",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/2.jpg"
       },
       {
-        "id": 4,
+        "id": 67,
         "name": "유아",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/3.jpg"
       },
       {
-        "id": 5,
+        "id": 68,
         "name": "승희",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/4.jpg"
       },
       {
-        "id": 6,
+        "id": 69,
         "name": "지호",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/5.jpg"
       },
       {
-        "id": 7,
+        "id": 70,
         "name": "비니",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/6.jpg"
       },
       {
-        "id": 8,
+        "id": 71,
         "name": "아린",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/ohmygirl/7.jpg"
       }
@@ -381,72 +381,72 @@
   {
     "7": [
       {
-        "id": 1,
+        "id": 72,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_seventeen.jpg"
       },
       {
-        "id": 2,
+        "id": 73,
         "name": "에스쿱스",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/1.jpg"
       },
       {
-        "id": 3,
+        "id": 74,
         "name": "정한",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/2.jpg"
       },
       {
-        "id": 4,
+        "id": 75,
         "name": "조슈아",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/3.jpg"
       },
       {
-        "id": 5,
+        "id": 76,
         "name": "준",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/4.jpg"
       },
       {
-        "id": 6,
+        "id": 77,
         "name": "호시",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/5.jpg"
       },
       {
-        "id": 7,
+        "id": 78,
         "name": "원우",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/6.jpg"
       },
       {
-        "id": 8,
+        "id": 79,
         "name": "우지",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/7.jpg"
       },
       {
-        "id": 9,
+        "id": 80,
         "name": "디에잇",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/8.jpg"
       },
       {
-        "id": 10,
+        "id": 81,
         "name": "민규",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/9.jpg"
       },
       {
-        "id": 11,
+        "id": 82,
         "name": "도겸",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/10.jpg"
       },
       {
-        "id": 12,
+        "id": 83,
         "name": "승관",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/11.jpg"
       },
       {
-        "id": 13,
+        "id": 84,
         "name": "버논",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/12.jpg"
       },
       {
-        "id": 14,
+        "id": 85,
         "name": "디노",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/seventeen/13.jpg"
       }
@@ -455,52 +455,52 @@
   {
     "8": [
       {
-        "id": 1,
+        "id": 86,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_exo.jpg"
       },
       {
-        "id": 2,
+        "id": 87,
         "name": "수호",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/1.jpg"
       },
       {
-        "id": 3,
+        "id": 88,
         "name": "찬열",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/2.jpg"
       },
       {
-        "id": 4,
+        "id": 89,
         "name": "카이",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/3.jpg"
       },
       {
-        "id": 5,
+        "id": 90,
         "name": "디오",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/4.jpg"
       },
       {
-        "id": 6,
+        "id": 91,
         "name": "백현",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/5.jpg"
       },
       {
-        "id": 7,
+        "id": 92,
         "name": "세훈",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/6.jpg"
       },
       {
-        "id": 8,
+        "id": 93,
         "name": "시우민",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/7.jpg"
       },
       {
-        "id": 9,
+        "id": 94,
         "name": "첸",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/8.jpg"
       },
       {
-        "id": 10,
+        "id": 95,
         "name": "레이",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/exo/9.jpg"
       }
@@ -509,27 +509,27 @@
   {
     "9": [
       {
-        "id": 1,
+        "id": 96,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_blackpink.jpg"
       },
       {
-        "id": 2,
+        "id": 97,
         "name": "지수",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/blackpink/1.jpg"
       },
       {
-        "id": 3,
+        "id": 98,
         "name": "제니",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/blackpink/2.jpg"
       },
       {
-        "id": 4,
+        "id": 99,
         "name": "로제",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/blackpink/3.jpg"
       },
       {
-        "id": 5,
+        "id": 100,
         "name": "리사",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/blackpink/4.jpg"
       }
@@ -538,47 +538,47 @@
   {
     "10": [
       {
-        "id": 1,
+        "id": 101,
         "name": "전체",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/artist_straykids.jpg"
       },
       {
-        "id": 2,
+        "id": 102,
         "name": "방찬",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/1.jpg"
       },
       {
-        "id": 3,
+        "id": 103,
         "name": "리노",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/2.jpg"
       },
       {
-        "id": 4,
+        "id": 104,
         "name": "창빈",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/3.jpg"
       },
       {
-        "id": 5,
+        "id": 105,
         "name": "현진",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/4.jpg"
       },
       {
-        "id": 6,
+        "id": 106,
         "name": "한",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/5.jpg"
       },
       {
-        "id": 7,
+        "id": 107,
         "name": "필릭스",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/6.jpg"
       },
       {
-        "id": 8,
+        "id": 108,
         "name": "승민",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/7.jpg"
       },
       {
-        "id": 9,
+        "id": 109,
         "name": "아이엔",
         "imageUrl": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/idol/straykids/8.jpg"
       }
