@@ -12,6 +12,8 @@ const Flex = (props) => {
     align,
     padding,
     margin,
+    bg,
+    _className,
     _onClick,
   } = props;
 
@@ -23,10 +25,11 @@ const Flex = (props) => {
     align,
     padding,
     margin,
+    bg,
   };
   return (
     <>
-      <FlexBox {...styles} onClick={_onClick}>
+      <FlexBox {...styles} onClick={_onClick} className={_className}>
         {children}
       </FlexBox>
     </>
@@ -41,6 +44,8 @@ Flex.defaultProps = {
   align: "center",
   padding: "",
   margin: "",
+  bg: "#ffffff",
+  _className: "",
   _onClick: () => {},
 };
 
@@ -52,6 +57,7 @@ const FlexBox = styled.div`
   align-items: ${(props) => props.align};
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin};
+  background-color: ${(props) => props.bg};
 `;
 
 export default Flex;
