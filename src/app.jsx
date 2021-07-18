@@ -15,6 +15,8 @@ import LikeItemList from "./pages/likeItemList/likeItemList";
 import Notification from "./pages/notification/notification";
 import Item from "./pages/itemDetail/itemDetail";
 import ItemUpload from "./pages/itemUpload/itemUpload";
+import ItemCategory from "./pages/itemUpload/itemCategory";
+import ItemStatus from "./pages/itemUpload/itemStatus";
 import IdolGroup from "./pages/itemUpload/idolSelect";
 import IdolMember from "./pages/itemUpload/idolMeberSelect";
 import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
@@ -47,11 +49,13 @@ function App() {
         />
         <Route path="/favorites" exact component={LikeItemList} />
         <Route path="/notification" exact component={Notification} />
+        <Route path="/item/:id" exact component={Item} />
+        {/* 아이템 등록 */}
         <Route path="/new" exact component={ItemUpload} />
+        <Route path="/category" exact component={ItemCategory} />
+        <Route path="/status" exact component={ItemStatus} />
         <Route path="/idolSelect" exact component={IdolGroup} />
         <Route path="/idolMemberSelect" exact component={IdolMember} />
-
-        <Route path="/item/:id" exact component={Item} />
       </ConnectedRouter>
     </div>
   );

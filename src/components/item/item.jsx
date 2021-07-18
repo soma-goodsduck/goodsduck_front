@@ -78,7 +78,7 @@ const Item = ({ item, id }) => {
               margin="0 7px 0 0"
             />
             <UserName>
-              <Text is_long size={isMobile ? "4.5vw" : "18px"}>
+              <Text is_long size={isMobile ? "4.5vw" : "17px"}>
                 {item.user_info.user_name}
               </Text>
             </UserName>

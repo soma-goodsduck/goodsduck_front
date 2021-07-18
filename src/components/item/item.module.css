@@ -10,8 +10,8 @@
 
 .likeBtn {
   position: absolute;
-  margin-left: 32vw;
-  margin-bottom: 32vw;
+  top: 185px;
+  right: 25px;
   z-index: 2;
   width: 28px;
   height: 28px;
@@ -22,17 +22,21 @@
 
 .clickLikeBtn {
   position: absolute;
-  margin-left: 22vw;
-  margin-bottom: 22.5vw;
+  top: 184px;
+  right: 26px;
   z-index: 2;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
   background-size: cover;
   cursor: pointer;
 }
 
 .likeBtn:hover {
+  top: 184px;
+  right: 26px;
+  width: 30px;
+  height: 30px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
 }
 
