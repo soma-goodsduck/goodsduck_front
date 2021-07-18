@@ -1,0 +1,28 @@
+{
+  "categoryName": "포토카드",
+  "description": "BTS 뷔 2019 시즌 그리팅 팔아요",
+  "gradeStatus": "S",
+  "idolMember": {
+    "groupName": "BTS",
+    "memberName": "뷔"
+  },
+  "images": [
+    {
+      "url": "https://w.namu.la/s/0eacd7d6d02c78891560048c06cec80829c1f16cdb495d2384836257555638f08b03bb6a787054267ee32563086a27e5f1ae5ff8e454845ddbba689589b26b22c7f017441d21dd5b149d41044b3b6b066dd676d5b10a630f20c4b498ae6efba6"
+    },
+    { "url": "https://pbs.twimg.com/media/D8JNRkpUwAACjz6.jpg" },
+    {
+      "url": "https://pbs.twimg.com/profile_images/1236934708405006337/DnWgP_0M_400x400.jpg"
+    }
+  ],
+  "itemCreatedAt": "2021-07-17T14:02:04.347Z",
+  "name": "BTS 뷔 포토카드 팔아요",
+  "price": 15000,
+  "tradeType": "판매",
+  "user": {
+    "nickname": "뷔뷔뷔",
+    "userImage": "https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
+  },
+  "likes_item_count": 32,
+  "views_item_count": 119
+}
