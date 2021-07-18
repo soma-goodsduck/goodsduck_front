@@ -10,7 +10,7 @@ const Login = (props) => {
         <button
           type="button"
           onClick={() => {
-            history.push("/home");
+            history.replace("/home");
           }}
         >
           둘러보기

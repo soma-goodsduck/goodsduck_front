@@ -1,0 +1,25 @@
+input::label {
+  color: #bbbbbb;
+  font-size: 12px;
+}
+
+input::placeholder {
+  color: #bbbbbb;
+  font-size: 12px;
+}
+
+.nextBtn,
+.nextOKBtn {
+  padding: 18px;
+  border-radius: 5px;
+}
+.nextBtn {
+  color: #ffffff;
+  background-color: #bbbbbb;
+  cursor: auto;
+}
+
+.nextOKBtn {
+  color: #222222;
+  background-color: #ffe200;
+}

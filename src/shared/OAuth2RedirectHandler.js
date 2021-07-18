@@ -20,10 +20,8 @@ const OAuth2RedirectHandler = () => {
           );
           console.log(result.data);
           if (result.data.role === "USER") {
-            console.log(result.data);
             dispatch(userActions.loginAction(result.data.jwt));
           } else if (result.data.role === "ANONYMOUS") {
-            console.log(result.data);
             dispatch(
               userActions.nonUserAction(result.data.socialAccountId, "KAKAO"),
             );
@@ -40,12 +38,9 @@ const OAuth2RedirectHandler = () => {
             `${process.env.REACT_APP_BACK_URL}/api/v1/login/naver?code=${code}&state=${state}`,
           );
           // console.log(result.data);
-          // dispatch(userActions.nonUserAction(result.data.id, "NAVER"));
           if (result.data.role === "USER") {
-            console.log(result.data);
             dispatch(userActions.loginAction(result.data.jwt));
           } else if (result.data.role === "ANONYMOUS") {
-            console.log(result.data);
             dispatch(
               userActions.nonUserAction(result.data.socialAccountId, "NAVER"),
             );
