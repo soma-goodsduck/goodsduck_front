@@ -68,7 +68,7 @@ const Signup = () => {
 
   return (
     <SignUpBox>
-      {showEmailPopUp && <PopUp width="250px" text="이메일을 확인해주세요" />}
+      {showEmailPopUp && <PopUp width="250px" text1="이메일을 확인해주세요" />}
       {showPhonePopUp && (
         <PopUp width="250px" text="핸드폰 번호를 확인해주세요" />
       )}

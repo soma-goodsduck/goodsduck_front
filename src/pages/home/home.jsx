@@ -22,7 +22,14 @@ const Home = (props) => {
     <Grid>
       <Header />
       {showPopup && (
-        <PopUp text="로그인 하러가기 👉" _onClick={() => handleClick()} />
+        <PopUp
+          is_bold
+          width="250px"
+          height="120px"
+          text1="👉 로그인 하러가기"
+          text2="그냥 둘러볼게요"
+          _onClick={() => handleClick()}
+        />
       )}
       <ItemList />
       <Nav />

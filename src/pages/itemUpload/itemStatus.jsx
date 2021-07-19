@@ -22,7 +22,6 @@ const ItemStatus = () => {
   ];
   const [_grade, setGrade] = useState("");
   const [nextOK, setNextOK] = useState(false);
-  const [showPopUp, setShowPopUp] = useState(false);
 
   useEffect(() => {
     if (_grade) {

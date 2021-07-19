@@ -35,7 +35,6 @@ const clearImgAction = () => {
 
 const saveImgAction = (userId, fileList) => {
   return function (dispatch, getState, { history }) {
-    console.log(userId, fileList);
     dispatch(saveImg(userId, fileList));
   };
 };

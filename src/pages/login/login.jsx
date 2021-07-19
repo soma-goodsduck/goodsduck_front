@@ -1,44 +1,62 @@
 import React from "react";
-import { Flex, Button } from "../../elements";
+
+import styled from "styled-components";
+import { Flex, Button, Image } from "../../elements";
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from "../../shared/OAuth";
 import { history } from "../../redux/configureStore";
 
 const Login = (props) => {
   return (
-    <>
-      <Flex margin="250px 0 50px 0">
-        <button
-          type="button"
+    <Flex is_col>
+      <Logo />
+      <Flex is_flex>
+        <a href={NAVER_AUTH_URL}>
+          <Button
+            width="60px"
+            height="60px"
+            borderRadius="50%"
+            margin="0 20px 0 0"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_naver.svg"
+          />
+        </a>
+        <a href={KAKAO_AUTH_URL}>
+          <Button
+            width="60px"
+            height="60px"
+            borderRadius="50%"
+            margin="0 20px 0 0"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_kakao.svg"
+          />
+        </a>
+      </Flex>
+      <Flex is_flex margin="20px">
+        <TextBtn
           onClick={() => {
             history.replace("/home");
           }}
         >
-          둘러보기
-        </button>
+          그냥 둘러볼게요
+        </TextBtn>
       </Flex>
-      <Flex margin="0 auto">
-        <a href={NAVER_AUTH_URL}>
-          <Button
-            width="50px"
-            height="50px"
-            borderRadius="50%"
-            margin="0 20px 0 0"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/logo_naver.png"
-          />
-        </a>
-
-        <a href={KAKAO_AUTH_URL}>
-          <Button
-            width="50px"
-            height="50px"
-            borderRadius="50%"
-            margin="0 20px 0 0"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/logo_kakao.png"
-          />
-        </a>
-      </Flex>
-    </>
+    </Flex>
   );
 };
+
+const Logo = styled.div`
+  width: 80%;
+  height: 70px;
+  margin: 250px auto;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/logo.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
+
+const TextBtn = styled.div`
+  display: flex;
+  justify-contents: center;
+  margin: 20px 0;
+  padding-right: 20px;
+  cursor: pointer;
+`;
 
 export default Login;

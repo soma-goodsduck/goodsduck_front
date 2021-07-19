@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 14px;
+  font-size: 13px;
   margin-right: 10px;
 }
 
@@ -26,12 +26,16 @@
   height: 50px;
   background: var(--blackBtn);
   color: var(--white);
-  font-size: 14px;
   text-align: center;
+}
+
+.btnPrice {
+  font-size: 13px;
 }
 
 .btnRePrice {
   width: 65%;
+  font-size: 15px;
 }
 
 /*  */
@@ -131,4 +135,14 @@
   border: 1px solid var(--blackBtn);
   border-radius: 15px;
   margin-right: 5px;
+}
+
+@media screen and (min-width: 415px) {
+  .btnChat {
+    font-size: 14px;
+  }
+
+  .btnPrice {
+    font-size: 14px;
+  }
 }
