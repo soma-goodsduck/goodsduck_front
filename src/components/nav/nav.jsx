@@ -1,18 +1,12 @@
 /* eslint-disable indent */
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import styles from "./nav.module.css";
-
 import { Flex } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
-import { actionCreators as userActions } from "../../redux/modules/user";
-
 const Nav = (props) => {
-  const dispatch = useDispatch();
-
   const href = window.location.href;
 
   const [isHome, setIsHome] = useState(false);
@@ -35,16 +29,6 @@ const Nav = (props) => {
     }
   });
 
-  const handleClick = (path) => {
-    if (path === "home") {
-      history.push("/home");
-    } else if (path === "new") {
-      history.push("/new");
-    } else {
-      dispatch(userActions.checkUserAction(path));
-    }
-  };
-
   return (
     <div className={styles.nav}>
       <Flex is_flex justify="space-around">
@@ -52,7 +36,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            handleClick("home");
+            history.push("home");
           }}
         >
           <div className={isHome ? styles.isHomeIcon : styles.isNotHomeIcon} />
@@ -64,7 +48,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            handleClick("chatting");
+            history.push("chatting");
           }}
         >
           <div className={isChat ? styles.isChatIcon : styles.isNotChatIcon} />
@@ -76,7 +60,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            handleClick("new");
+            history.push("new");
           }}
         >
           <div className={isUpload ? styles.isNewIcon : styles.isNotNewIcon} />
@@ -88,7 +72,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            handleClick("community");
+            history.push("community");
           }}
         >
           <div
@@ -108,7 +92,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            handleClick("profile");
+            history.push("profile");
           }}
         >
           <div

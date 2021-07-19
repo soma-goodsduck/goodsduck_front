@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
@@ -9,16 +9,11 @@ import { Flex, Icon } from "../../elements";
 import FilteringIdol from "../idolFiltering/idolGroupFiltering";
 import Filtering from "../filtering/filtering";
 
-import { actionCreators as userActions } from "../../redux/modules/user";
+import { history } from "../../redux/configureStore";
 
 const Header = () => {
   const inputRef = useRef();
   const isFiltering = useSelector((state) => state.header.click_filtering);
-  const dispatch = useDispatch();
-
-  const checkUser = (path) => {
-    dispatch(userActions.checkUserAction(path));
-  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -47,14 +42,16 @@ const Header = () => {
             alt="heart"
             margin="0 10px"
             _onClick={() => {
-              checkUser("favorites");
+              history.push("/favorites");
             }}
           />
           <Icon
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notification.svg"
             alt="notice"
             width="20px"
-            _onClick={() => checkUser("notification")}
+            _onClick={() => {
+              history.push("/notification");
+            }}
           />
         </Flex>
       </HeaderBox>

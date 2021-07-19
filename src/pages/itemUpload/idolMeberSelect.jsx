@@ -9,15 +9,28 @@ import { Flex } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
-import { history } from "../../redux/configureStore";
 
-import members from "../../shared/IdolMemberData.json";
+import { getInfo } from "../../shared/axios";
 
-const IdolMemberSelect = () => {
+const IdolMemberSelect = ({ history }) => {
   const dispatch = useDispatch();
 
+  // 아이돌 멤버 데이터 가져오기
   const groupId = useSelector((state) => state.newItem.idol_group_id);
-  const groupIdIdx = groupId - 1;
+  const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+    const getIdolMember = getInfo(`/idol/${groupId}/member`);
+    getIdolMember.then((result) => {
+      setMembers(result);
+    });
+  }, []);
+
+  if (!members) {
+    return null;
+  }
+
+  // 아이돌 멤버 선택
   const [memberId, setMemberId] = useState(0);
   const [nextOK, setNextOK] = useState(false);
 
@@ -49,7 +62,7 @@ const IdolMemberSelect = () => {
         <div>
           <div className={styles.detailText}>전체 아이돌 멤버</div>
           <Flex is_flex is_wrap>
-            {members[groupIdIdx][groupId].map((member) => (
+            {members.map((member) => (
               <IdolMemberBox key={member.id}>
                 <IdolMemberInput
                   id={member.id}

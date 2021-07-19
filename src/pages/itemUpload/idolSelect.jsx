@@ -10,13 +10,26 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 import { Flex } from "../../elements";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
-import { history } from "../../redux/configureStore";
 
-import idols from "../../shared/IdolGroupData.json";
+import { getInfo } from "../../shared/axios";
 
-const IdolSelect = () => {
+const IdolSelect = ({ history }) => {
   const dispatch = useDispatch();
+  // 아이돌 데이터 가져오기
+  const [idols, setIdols] = useState([]);
 
+  useEffect(() => {
+    const getIdolGroup = getInfo("idol");
+    getIdolGroup.then((result) => {
+      setIdols(result);
+    });
+  }, []);
+
+  if (!idols) {
+    return null;
+  }
+
+  // 아이돌 선택
   const [groupId, setGroupId] = useState(0);
   const [nextOK, setNextOK] = useState(false);
 

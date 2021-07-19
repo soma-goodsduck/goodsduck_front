@@ -1,16 +1,26 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./idolGroupFiltering.module.css";
 import { Flex, Text, Image } from "../../elements";
 
-import idols from "../../shared/IdolGroupData.json";
-
 import { actionCreators as headerActions } from "../../redux/modules/header";
+
+import { getInfo } from "../../shared/axios";
 
 const IdolGroupFiltering = () => {
   const dispatch = useDispatch();
+
+  // 아이돌 데이터 가져오기
+  const [idols, setIdols] = useState([]);
+
+  useEffect(() => {
+    const getIdolGroup = getInfo("idol");
+    getIdolGroup.then((result) => {
+      setIdols(result);
+    });
+  }, []);
 
   const [groupId, setGroupId] = useState(0);
   const isFiltering = useSelector((state) => state.header.click_filtering);
@@ -20,6 +30,7 @@ const IdolGroupFiltering = () => {
     dispatch(headerActions.clickfilteringAction(isFiltering));
   };
 
+  // 가로 스크롤
   const scrollRef = useRef(null);
 
   const [isDrag, setIsDrag] = useState(false);
@@ -51,48 +62,50 @@ const IdolGroupFiltering = () => {
       onMouseLeave={onDragEnd}
       ref={scrollRef}
     >
-      <Flex justify="flex-start">
-        {idols.map((idol) => (
-          <IdolBox key={idol.id}>
-            <IdolInput
-              id={idol.id}
-              type="radio"
-              checked={groupId === idol.id}
-              onChange={() => checkGroupHandler(idol.id)}
-            />
-            <label
-              htmlFor={idol.id}
-              className={
-                groupId === idol.id
-                  ? styles.clickIdolGroupBtn
-                  : styles.idolGroupBtn
-              }
-            >
-              <img
+      {idols !== [] && (
+        <Flex justify="flex-start">
+          {idols.map((idol) => (
+            <IdolBox key={idol.id}>
+              <IdolInput
+                id={idol.id}
+                type="radio"
+                checked={groupId === idol.id}
+                onChange={() => checkGroupHandler(idol.id)}
+              />
+              <label
+                htmlFor={idol.id}
                 className={
                   groupId === idol.id
-                    ? styles.clickIdolGroupImg
-                    : styles.idolGroupImg
+                    ? styles.clickIdolGroupBtn
+                    : styles.idolGroupBtn
                 }
-                src={idol.imageUrl}
-                alt="Idol Group"
+              >
+                <img
+                  className={
+                    groupId === idol.id
+                      ? styles.clickIdolGroupImg
+                      : styles.idolGroupImg
+                  }
+                  src={idol.imageUrl}
+                  alt="Idol Group"
+                />
+                {idol.name}
+              </label>
+            </IdolBox>
+          ))}
+          <BtnBox>
+            <AddBtn>
+              <Image
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+                size="30px"
               />
-              {idol.name}
-            </label>
-          </IdolBox>
-        ))}
-        <BtnBox>
-          <AddBtn>
-            <Image
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-              size="30px"
-            />
-          </AddBtn>
-          <Text size="13px" margin="10px 0 0 0" color="#222222">
-            그룹 추가
-          </Text>
-        </BtnBox>
-      </Flex>
+            </AddBtn>
+            <Text size="13px" margin="10px 0 0 0" color="#222222">
+              그룹 추가
+            </Text>
+          </BtnBox>
+        </Flex>
+      )}
     </div>
   );
 };

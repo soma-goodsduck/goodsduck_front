@@ -19,11 +19,14 @@ const OAuth2RedirectHandler = () => {
             `${process.env.REACT_APP_BACK_URL}/api/v1/login/kakao?code=${code}`,
           );
           console.log(result.data);
-          if (result.data.role === "USER") {
-            dispatch(userActions.loginAction(result.data.jwt));
-          } else if (result.data.role === "ANONYMOUS") {
+          if (result.data.response.role === "USER") {
+            dispatch(userActions.loginAction(result.data.response.jwt));
+          } else if (result.data.response.role === "ANONYMOUS") {
             dispatch(
-              userActions.nonUserAction(result.data.socialAccountId, "KAKAO"),
+              userActions.nonUserAction(
+                result.data.response.socialAccountId,
+                "KAKAO",
+              ),
             );
           }
         } catch (error) {
@@ -37,12 +40,15 @@ const OAuth2RedirectHandler = () => {
           const result = await axios.get(
             `${process.env.REACT_APP_BACK_URL}/api/v1/login/naver?code=${code}&state=${state}`,
           );
-          // console.log(result.data);
-          if (result.data.role === "USER") {
-            dispatch(userActions.loginAction(result.data.jwt));
-          } else if (result.data.role === "ANONYMOUS") {
+          console.log(result.data);
+          if (result.data.response.role === "USER") {
+            dispatch(userActions.loginAction(result.data.response.jwt));
+          } else if (result.data.response.role === "ANONYMOUS") {
             dispatch(
-              userActions.nonUserAction(result.data.socialAccountId, "NAVER"),
+              userActions.nonUserAction(
+                result.data.response.socialAccountId,
+                "NAVER",
+              ),
             );
           }
         } catch (error) {

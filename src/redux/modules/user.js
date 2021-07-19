@@ -17,6 +17,7 @@ const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const SHOW_POPUP = "SHOW_POPUP";
 const NO_SHOW_POPUP = "NO_SHOW_POPUP";
+const UPDATE_JWT = "UPDATE_JWT";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -25,6 +26,7 @@ const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const showPopup = createAction(SHOW_POPUP, () => ({}));
 const noShowPopup = createAction(NO_SHOW_POPUP, () => ({}));
+const updateJwt = createAction(UPDATE_JWT, () => ({}));
 
 // initialState
 const initialState = {
@@ -79,7 +81,7 @@ const checkUserAction = (path) => {
         })
         .then((result) => {
           console.log(result.data);
-          if (result.data.role === "ANONYMOUS") {
+          if (result.data.response.role === "ANONYMOUS") {
             dispatch(showPopup());
             localStorage.removeItem("jwt");
             window.location.reload(); // 새로고침
@@ -137,6 +139,12 @@ const signupAction = (user) => {
   };
 };
 
+const showPopupAction = () => {
+  return function (dispatch, getState, { history }) {
+    dispatch(showPopup());
+  };
+};
+
 const noShowPopupAction = () => {
   return function (dispatch, getState, { history }) {
     dispatch(noShowPopup());
@@ -179,6 +187,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.show_popup = false;
       }),
+    [UPDATE_JWT]: (state, action) =>
+      produce(state, (draft) => {
+        setLS("jwt", draft.user);
+      }),
   },
   initialState,
 );
@@ -192,7 +204,9 @@ const actionCreators = {
   checkUserAction,
   nonUserAction,
   signupAction,
+  showPopupAction,
   noShowPopupAction,
+  updateJwt,
 };
 
 export { actionCreators };

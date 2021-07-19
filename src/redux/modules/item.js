@@ -11,33 +11,37 @@ const GET_ITEM = "GET_ITEM";
 const CLICK_HEART = "CLICK_HEART";
 
 // action creators
-const getItem = createAction(GET_ITEM, (item) => ({ item }));
+const getItem = createAction(GET_ITEM, (list) => ({ list }));
 const clickHeart = createAction(CLICK_HEART, (is_like) => ({
   is_like,
 }));
 
 // initialState
 const initialState = {
-  item: [],
+  item: null,
 };
 
 // middleware actions
-// const getItemAciton = (itemId) => {
-//   return function (dispatch, getState, { history }) {
-//     const fetchData = async () => {
-//       try {
-//         const result = await axios.get(
-//           `${process.env.REACT_APP_BACK_URL}/api/v1/items`,
-//         );
-//         getItem(result.data);
-//         console.log(result.data);
-//       } catch (error) {
-//         console.log("error", error);
-//       }
-//     };
-//     fetchData();
-//   };
-// };
+const getItemAciton = () => {
+  const jwt = localStorage.getItem("jwt");
+  return function (dispatch, getState, { history }) {
+    const fetchData = async () => {
+      try {
+        const result = await axios.get(
+          `${process.env.REACT_APP_BACK_URL}/api/v1/items`,
+          {
+            headers: { jwt: `${jwt}` },
+          },
+        );
+        getItem(result.data.response.content);
+        console.log(result.data.response.content);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  };
+};
 
 const clickHeartAction = (state) => {
   return function (dispatch, getState, { history }) {
@@ -63,7 +67,7 @@ export default handleActions(
 
 // action creator export
 const actionCreators = {
-  // getItemAciton,
+  getItemAciton,
   clickHeartAction,
 };
 
