@@ -8,10 +8,17 @@
   height: auto;
 }
 
-.likeBtn {
+.likeBox {
   position: absolute;
-  margin-left: 32vw;
-  margin-bottom: 32vw;
+  z-index: 2;
+  font-size: 20px;
+  text-align: right;
+  width: 99%;
+  padding-bottom: 110px;
+  padding-right: 15px;
+}
+
+.likeBtn {
   z-index: 2;
   width: 28px;
   height: 28px;
@@ -21,24 +28,23 @@
 }
 
 .clickLikeBtn {
-  position: absolute;
-  margin-left: 22vw;
-  margin-bottom: 22.5vw;
   z-index: 2;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
   background-size: cover;
   cursor: pointer;
 }
 
 .likeBtn:hover {
+  width: 30px;
+  height: 30px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
 }
 
 @media screen and (min-width: 415px) {
-  .likeBtn {
-    margin-left: 140px;
-    margin-bottom: 145px;
+  .likeBox {
+    padding-bottom: 130px;
+    padding-right: 10px;
   }
 }

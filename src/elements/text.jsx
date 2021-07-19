@@ -3,7 +3,16 @@ import React from "react";
 import styled from "styled-components";
 
 const Text = (props) => {
-  const { bold, color, size, children, margin, is_long, _className } = props;
+  const {
+    bold,
+    color,
+    size,
+    children,
+    margin,
+    is_long,
+    is_center,
+    _className,
+  } = props;
 
   const styles = {
     bold,
@@ -11,6 +20,7 @@ const Text = (props) => {
     size,
     margin,
     is_long,
+    is_center,
   };
   return (
     <P {...styles} className={_className}>
@@ -26,6 +36,7 @@ Text.defaultProps = {
   size: "16px",
   margin: false,
   is_long: false,
+  is_center: false,
   _className: "",
 };
 
@@ -38,6 +49,7 @@ const P = styled.p`
     props.is_long
       ? "white-space: nowrap; overflow:hidden; text-overflow: ellipsis; "
       : ""}
+      ${(props) => (props.is_center ? "align: center; " : "")}
 `;
 
 export default Text;

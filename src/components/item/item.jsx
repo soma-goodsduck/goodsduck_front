@@ -3,14 +3,23 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "./item.module.css";
 
-import { Image, Grid, Flex, Text } from "../../elements";
+import { Image, Flex, Text } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
 import { timeForToday, numberWithCommas } from "../../shared/functions";
+import { getAction, deleteAction } from "../../shared/axios";
 
 const Item = ({ item, id }) => {
-  const [isLike, setIsLike] = useState(false);
+  let color;
+  let tradeType;
+  if (item.tradeType === "SELL") {
+    color = "#e15b5b";
+    tradeType = "판매";
+  } else if (item.tradeType === "BUY") {
+    color = "#299bff";
+    tradeType = "구매";
+  }
 
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -24,29 +33,39 @@ const Item = ({ item, id }) => {
     if (e.target.tagName !== "DIV") {
       return;
     }
-    history.push(`/item/${id}`);
+    history.push(`item/${id}`);
   };
 
+  const [isLike, setIsLike] = useState(item.like);
+  // 좋아요
   const clickHeart = () => {
+    if (!isLike) {
+      getAction(`like/item/${id}`);
+    } else {
+      deleteAction(`like/item/${id}`);
+    }
+
     setIsLike(!isLike);
   };
 
   return (
-    <Grid is_flex_col margin="10px 0 0 0" _onClick={(e) => clickItem(e)}>
+    <ItemBox onClick={(e) => clickItem(e)}>
       <Flex className={styles.imgBox}>
         <Image
           shape="rectangle"
-          src={item.image_url}
+          src={item.images[0].url}
           size={isMobile ? "43vw" : "185px"}
           borderRadius="10px"
           className={styles.itemImg}
         />
-        <button
-          type="button"
-          aria-label="like"
-          className={isLike ? styles.clickLikeBtn : styles.likeBtn}
-          onClick={() => clickHeart()}
-        />
+        <div className={styles.likeBox}>
+          <button
+            type="button"
+            aria-label="like"
+            className={item.like ? styles.clickLikeBtn : styles.likeBtn}
+            onClick={() => clickHeart()}
+          />
+        </div>
       </Flex>
       <InfoBox>
         <Flex justify="flex-start" padding="5px">
@@ -54,9 +73,9 @@ const Item = ({ item, id }) => {
             size={isMobile ? "4vw" : "16px"}
             bold
             margin="0 5px 0 0"
-            color={item.trade_type === "구매" ? "#299bff" : "#e15b5b"}
+            color={color}
           >
-            {item.trade_type}
+            {tradeType}
           </Text>
           <Title>
             <Text size={isMobile ? "4vw" : "16px"} is_long>
@@ -64,33 +83,42 @@ const Item = ({ item, id }) => {
             </Text>
           </Title>
         </Flex>
-        <Flex justify="flex-start" padding=" 0 7px">
+        <Flex justify="flex-start" padding="5px 7px">
           <Text size={isMobile ? "5vw" : "18px"} bold>
             {numberWithCommas(item.price)}원
           </Text>
         </Flex>
-        <Flex justify="space-between" padding="5px 10px 20px 5px">
+        <Flex justify="space-between" padding="5px 5px 20px 3px">
           <Flex>
             <Image
               shape="circle"
-              src={item.user_info.user_profile}
+              // src={item.user_info.user_profile}
               size={isMobile ? "6.5vw" : "24px"}
-              margin="0 7px 0 0"
+              margin="0 5px 0 0"
             />
             <UserName>
-              <Text is_long size={isMobile ? "4.5vw" : "18px"}>
-                {item.user_info.user_name}
+              <Text is_long size={isMobile ? "4.3vw" : "17px"}>
+                {item.user.nickName}
               </Text>
             </UserName>
           </Flex>
-          <Text color="#bbbbbb" size={isMobile ? "4vw" : "16px"}>
-            {timeForToday(item.item_created_at)}
+          <Text color="#bbbbbb" size={isMobile ? "3.5vw" : "16px"}>
+            {timeForToday(item.itemCreatedAt)}
           </Text>
         </Flex>
       </InfoBox>
-    </Grid>
+    </ItemBox>
   );
 };
+
+const ItemBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+`;
 
 const Title = styled.div`
   width: 75%;
@@ -101,6 +129,7 @@ const UserName = styled.div`
 `;
 
 const InfoBox = styled.div`
+  width: 100%;
   padding: 5px;
 `;
 

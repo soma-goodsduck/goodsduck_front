@@ -49,6 +49,8 @@ Image.defaultProps = {
 };
 
 const ImageRectangle = styled.div`
+  position: ${(props) => props.position};
+
   --size: ${(props) => props.size};
   width: var(--size);
   height: var(--size);

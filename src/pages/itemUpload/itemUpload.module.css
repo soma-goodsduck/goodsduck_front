@@ -1,3 +1,5 @@
+@import "../../shared/colors.css";
+
 /* 전체적인 선택 버튼 */
 .selectBtn {
   width: 380px;
@@ -5,35 +7,96 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px 16px;
   margin: 10px 0;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--grayBorder);
   cursor: pointer;
+}
+
+.selectText {
+  color: var(--grayText);
+}
+
+.selectDoneText {
+  color: var(--blackBtn);
+}
+
+.detailText {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--blackBtn);
+  padding: 10px 16px;
 }
 
 label {
   cursor: pointer;
 }
 
+.inputText::placeholder {
+  font-size: 16px;
+  color: var(--grayText);
+}
+
+/* 숫자 input 증감 아이콘 없애기 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.moreIcon {
+  width: 12px;
+  height: 22px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+.moreIconClick {
+  width: 12px;
+  height: 22px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more_black.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
 /* 구매, 판매 버튼 */
 .typeBtn {
-  background-color: #ffe201;
+  border: 2px solid var(--grayBorder);
+  border-radius: 5px;
 }
 
 .clickTypeBtn {
-  background-color: black;
-  color: white;
+  border: 2px solid var(--yellow);
+  background-color: var(--yellow);
+  color: var(--blackBtn);
+  border-radius: 5px;
+}
+
+.typeBtn:first-child,
+.clickTypeBtn:first-child {
+  margin-right: 8px;
 }
 
 /* 상품 상태 버튼 */
-.statusBtn {
-  background-color: #ffe201;
-  color: black;
+.clickStatusBtn {
+  background-color: var(--yellow);
+  color: var(--blackBtn);
+  border: none;
+  box-sizing: border-box;
 }
 
-.clickStatusBtn {
-  background-color: black;
-  color: white;
+.statusBtn {
+  background-color: #ffffff;
+  color: var(--blackBtn);
+  border: 2px solid var(--grayBorder);
+  box-sizing: border-box;
+}
+
+.statusGrade {
+  width: 100px;
+  margin: 0 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--blackBtn);
 }
 
 /* 카테고리 버튼 */
@@ -41,19 +104,55 @@ label {
   width: 450px;
 }
 
+.categoryBtn {
+  border-top: 1px solid var(--grayBorder);
+}
+.categoryBtn:last-child {
+  border-top: 1px solid var(--grayBorder);
+  border-bottom: 1px solid var(--grayBorder);
+}
+
 /* 아이돌 선택 버튼 */
+.clickIdolGroupBtn,
+.idolGroupBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .clickIdolGroupBtn {
+  font-size: 16px;
+
   font-weight: bold;
-  color: black;
+  color: var(--blackBtn);
 }
 
 .idolGroupBtn {
-  color: gray;
+  font-size: 14px;
+  color: var(--grayText);
 }
 
 .idolGroupImg {
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   margin-bottom: 5px;
+}
+
+/* 등록완료 버튼 */
+.nextBtn,
+.nextOKBtn {
+  width: 100%;
+  padding: 18px;
+  border-radius: 5px;
+}
+.nextBtn {
+  color: var(--white);
+  background-color: var(--gray);
+  cursor: auto;
+}
+
+.nextOKBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
 }

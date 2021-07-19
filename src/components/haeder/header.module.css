@@ -1,36 +1,25 @@
+@import "../../shared/colors.css";
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  margin-top: 40px;
-  background-color: white;
-  z-index: 3;
-}
-
-.filteringHeader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  margin-top: 40px;
-  margin-bottom: 170px;
-  background-color: white;
+  background-color: var(--white);
   z-index: 3;
 }
 
 .search {
-  font-size: 16px;
+  font-size: 20px;
   width: 62vw;
   color: black;
-  background-color: #ffffff;
-  border: 1px solid #bbbbbb;
+  background-color: var(--white);
   border-radius: 3px;
-  padding: 8px 35px;
+  padding: 8px;
 }
 
 .search::placeholder {
-  color: #bbbbbb;
+  color: var(--gray);
   font-size: 14px;
 }
 
@@ -38,10 +27,6 @@
   width: 18px;
   position: absolute;
   margin-left: 10px;
-}
-
-.filterIcon {
-  display: none;
 }
 
 @media screen and (min-width: 415px) {

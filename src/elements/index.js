@@ -8,5 +8,6 @@ import Button from "./button";
 import Flex from "./flex";
 import Icon from "./icon";
 import RowScroll from "./rowScroll";
+import PopUp from "./popUp";
 
-export { Grid, Image, Icon, Text, Input, Button, Flex, RowScroll };
+export { Grid, Image, Icon, Text, Input, Button, Flex, RowScroll, PopUp };

@@ -1,10 +1,43 @@
+@import "../../shared/colors.css";
+
 .categories {
   display: flex;
   overflow-x: scroll;
-  margin: 20px 0;
+  margin: 10px 0;
+  padding-right: 20px;
 }
 
 /* scroll bar 제거 ( chrome 환경) */
 .categories::-webkit-scrollbar {
   display: none;
+}
+
+.idolImg,
+.filteringIdolImg {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.clickIdolGroupBtn {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--black);
+}
+
+.idolGroupBtn {
+  font-size: 13px;
+  color: gray;
+}
+
+.idolGroupImg,
+.clickIdolGroupImg {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 3px;
+}
+
+.clickIdolGroupImg {
+  border: 3px solid var(--yellow);
 }

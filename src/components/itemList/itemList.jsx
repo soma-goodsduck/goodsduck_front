@@ -1,31 +1,35 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemList.module.css";
 import Item from "../item/item";
 
-// 지금은 목업 데이터에서 가져오지만, 나중에는 GET으로 받아오기
-import { items } from "../../shared/JsonDataItem";
+import { getInfo } from "../../shared/axios";
 
-// import { actionCreators as itemActions } from "../../redux/modules/item";
-
-const ItemList = (props) => {
-  const dispatch = useDispatch();
-
-  const itemList = useSelector((state) => state.item.list);
+const ItemList = () => {
   const isFiltering = useSelector((state) => state.header.click_filtering);
 
-  // useEffect(() => {
-  //   dispatch(itemActions.getItemAciton());
-  // }, []);
+  // 해당 아이템 데이터 받아오기
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const getItemList = getInfo("items");
+    getItemList.then((result) => {
+      setItems(result);
+    });
+  }, []);
+
+  if (!items) {
+    return null;
+  }
 
   return (
     <ItemListBox
       className={isFiltering ? styles.filtering : styles.nonFiltering}
     >
       {items.map((item) => (
-        <Item key={item.id} id={item.id} item={item} />
+        <Item key={item.name} id={item.itemId} item={item} />
       ))}
     </ItemListBox>
   );

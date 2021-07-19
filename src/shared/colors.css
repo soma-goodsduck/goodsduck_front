@@ -1,0 +1,20 @@
+/* @import '../../shared/colors.css'; */
+
+:root {
+  --yellow: #ffe200;
+  --darkYellow: #ff8d29;
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #bbbbbb;
+  --lightGray: #f8f8f8;
+  --red: #e15b5b;
+  --darkRed: #e33e3e;
+  --blue: #299bff;
+  --green: #00920a;
+  --blackNav: #444444;
+  --blackBtn: #222222;
+  --grayBtn: #f8f8f8;
+  --grayBtnText: #888888;
+  --grayText: #999999;
+  --grayBorder: #dddddd;
+}

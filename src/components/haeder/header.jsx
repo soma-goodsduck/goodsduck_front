@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
@@ -10,44 +9,11 @@ import { Flex, Icon } from "../../elements";
 import FilteringIdol from "../idolFiltering/idolGroupFiltering";
 import Filtering from "../filtering/filtering";
 
-import { actionCreators as headerActions } from "../../redux/modules/header";
-
 import { history } from "../../redux/configureStore";
 
 const Header = () => {
   const inputRef = useRef();
   const isFiltering = useSelector((state) => state.header.click_filtering);
-  const dispatch = useDispatch();
-
-  const handleFiltering = () => {
-    dispatch(headerActions.clickfilteringAction(isFiltering));
-  };
-
-  const checkUser = (path) => {
-    const jwt = localStorage.getItem("jwt");
-    console.log(jwt);
-    if (jwt == null) {
-      window.alert("로그인을 해주세요!");
-    } else {
-      axios
-        .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
-          headers: { token: `${jwt}` },
-        })
-        .then((result) => {
-          console.log(result.data);
-          if (result.data.role === "ANONYMOUS") {
-            window.alert("로그인을 해주세요!");
-            localStorage.removeItem("jwt");
-            window.location.reload(); // 새로고침
-          } else {
-            history.push(path);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }
-  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -57,13 +23,8 @@ const Header = () => {
   };
 
   return (
-    <div className={isFiltering ? styles.filteringHeader : styles.header}>
+    <div className={styles.header}>
       <HeaderBox>
-        <img
-          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
-          alt="search"
-          className={styles.searchIcon}
-        />
         <form onSubmit={onSubmit}>
           <input
             ref={inputRef}
@@ -73,37 +34,36 @@ const Header = () => {
         </form>
         <Flex>
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_filter.svg"
-            alt="filter"
-            className={{ isFiltering: styles.filterIcon }}
-            _onClick={() => {
-              handleFiltering();
-            }}
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
+            alt="search"
           />
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart.svg"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart2.svg"
             alt="heart"
             margin="0 10px"
             _onClick={() => {
-              checkUser("/favorites");
+              history.push("/favorites");
             }}
           />
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notice.svg"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notification.svg"
             alt="notice"
-            width="22px"
-            _onClick={() => checkUser("/notification")}
+            width="20px"
+            _onClick={() => {
+              history.push("/notification");
+            }}
           />
         </Flex>
       </HeaderBox>
-      {isFiltering && <FilteringIdol />}
+      <FilteringIdol />
       {isFiltering && <Filtering />}
     </div>
   );
 };
 
 const HeaderBox = styled.div`
-  background-color: #ffe200;
+  background-color: #ffffff;
+  border-bottom: 3px solid #ffe200;
   display: flex;
   align-items: center;
   justify-content: space-between;

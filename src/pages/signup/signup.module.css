@@ -1,0 +1,27 @@
+@import "../../shared/colors.css";
+
+input::label {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+input::placeholder {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.nextBtn,
+.nextOKBtn {
+  padding: 18px;
+  border-radius: 5px;
+}
+.nextBtn {
+  color: var(--white);
+  background-color: var(--gray);
+  cursor: auto;
+}
+
+.nextOKBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
+}

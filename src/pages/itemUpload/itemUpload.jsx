@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex, Button, Image, Icon } from "../../elements";
+import { Flex, Image, Icon } from "../../elements";
+import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as imgActions } from "../../redux/modules/image";
 
-import ItemStatus from "./itemStatus";
-import ItemCategory from "./itemCategory";
 import ItemImgUpload from "../../components/itemImgUpload/itemImgUpload";
 import { history } from "../../redux/configureStore";
 
@@ -23,6 +22,7 @@ const ItemUpload = (props) => {
   const descriptionRef = useRef();
   const [tradeType, setTradeType] = useState("SELL");
   const [isSelling, setIsSelling] = useState(true);
+  const [nextOK, setNextOK] = useState(false);
 
   // 기존에 저장된 상태값 가져오기
   const userJwt = localStorage.getItem("jwt");
@@ -34,10 +34,11 @@ const ItemUpload = (props) => {
     dataCategory,
     dataTradeType,
     dataStatus,
-    idolGroup,
     idolMember,
+    idolMemberName,
+    idolGroupName,
     fileList,
-    preview,
+    itemId,
   } = useSelector((state) => ({
     dataName: state.newItem.name,
     dataPrice: state.newItem.price,
@@ -45,10 +46,11 @@ const ItemUpload = (props) => {
     dataCategory: state.newItem.category,
     dataTradeType: state.newItem.trade_type,
     dataStatus: state.newItem.status_grade,
-    idolGroup: state.newItem.idol_group_id,
     idolMember: state.newItem.idol_member_id,
+    idolMemberName: state.newItem.idol_member_name,
+    idolGroupName: state.newItem.idol_group_name,
     fileList: state.image.fileList,
-    preview: state.image.preview,
+    itemId: state.newItem.item_id,
   }));
 
   const item = {
@@ -59,13 +61,18 @@ const ItemUpload = (props) => {
     dataTradeType,
     dataStatus,
     dataCategory,
-    idolGroup,
     idolMember,
   };
 
   // 입력값이 변할때마다 상태값에 저장
   useEffect(() => {
     dispatch(newItemActions.setTradeTypeAction(tradeType));
+    // 판매하기와 구매하기 선택값 유지
+    if (dataTradeType === "BUY") {
+      setIsSelling(false);
+    } else if (dataTradeType === "SELL") {
+      setIsSelling(true);
+    }
   }, [tradeType]);
 
   const clickTradeType = (e) => {
@@ -78,25 +85,41 @@ const ItemUpload = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (
+      dataName &&
+      dataPrice &&
+      dataTradeType &&
+      dataStatus &&
+      dataCategory &&
+      idolMember &&
+      fileList.length !== 0
+    ) {
+      setNextOK(true);
+    } else {
+      setNextOK(false);
+    }
+  }, [
+    dataName,
+    dataPrice,
+    dataTradeType,
+    dataStatus,
+    dataCategory,
+    idolMember,
+    fileList,
+  ]);
+
   const uploadItem = () => {
-    if (fileList.length === 0) {
-      window.alert("사진을 추가해주세요");
+    if (!nextOK) {
       return;
     }
 
-    if (!idolGroup || !idolMember) {
-      window.alert("아이돌 그룹과 멤버를 추가해주세요");
-      return;
+    // 굿즈 등록 또는 업데이트
+    if (itemId !== null) {
+      dispatch(newItemActions.updateItemAction(item, itemId));
+    } else {
+      dispatch(newItemActions.addItemAction(item, fileList));
     }
-
-    if (!dataName || !dataCategory || !dataStatus || !dataDesc || !dataPrice) {
-      window.alert(
-        "상품 제목, 카테고리, 상품 상태, 상품설명, 가격을 모두 입력해주세요",
-      );
-      return;
-    }
-
-    dispatch(newItemActions.addItemAction(item, fileList));
 
     // 저장된 상태값 모두 삭제
     dispatch(newItemActions.clearAction());
@@ -105,103 +128,147 @@ const ItemUpload = (props) => {
 
   return (
     <ItemUploadBox>
-      <Flex is_flex justify="flex-start">
-        <ItemImgUpload />
-        <Image
-          shape="rectangle"
-          size="100px"
-          src={preview || ""}
-          margin="0 10px"
-        />
-      </Flex>
-      <Flex is_flex justify="space-evenly">
-        <TypeBtn
-          className={isSelling ? styles.clickTypeBtn : styles.typeBtn}
-          onClick={(e) => clickTradeType(e)}
-        >
-          판매하기
-        </TypeBtn>
-        <TypeBtn
-          className={isSelling ? styles.typeBtn : styles.clickTypeBtn}
-          onClick={(e) => clickTradeType(e)}
-        >
-          구매하기
-        </TypeBtn>
-      </Flex>
-      <Flex is_col>
-        <div className={styles.selectBtn}>
-          <div>상품명</div>
-          <Flex is_flex>
+      <HeaderInfo text="굿즈 등록" isClear />
+      <div>
+        <Flex is_flex justify="flex-start">
+          <ItemImgUpload />
+
+          {/* <Image
+            shape="rectangle"
+            size="80px"
+            src={preview || ""}
+            margin="0 10px 10px 10px"
+          /> */}
+        </Flex>
+        <Flex is_flex justify="space-between">
+          <TypeBtn
+            className={isSelling ? styles.clickTypeBtn : styles.typeBtn}
+            onClick={(e) => clickTradeType(e)}
+          >
+            판매하기
+          </TypeBtn>
+          <TypeBtn
+            className={isSelling ? styles.typeBtn : styles.clickTypeBtn}
+            onClick={(e) => clickTradeType(e)}
+          >
+            구매하기
+          </TypeBtn>
+        </Flex>
+        <Flex is_col>
+          <div className={styles.selectBtn}>
             <InputNameBox
+              className={dataName ? "" : styles.inputText}
               ref={nameRef}
               value={dataName || ""}
-              placeholder="상품 제목을 입력해주세요. "
+              placeholder="굿즈명"
               onChange={() => {
                 dispatch(newItemActions.setNameAction(nameRef.current.value));
               }}
             />
-          </Flex>
-        </div>
-        <div
-          className={styles.selectBtn}
-          onClick={() => {
-            history.push("/idolSelect");
-          }}
-        >
-          <div>아이돌 그룹 & 멤버</div>
-          <Icon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg" />
-        </div>
-        <div className={styles.selectBtn}>
-          <Flex is_col align="flex-start">
-            <div>카테고리</div>
-            <ItemCategory />
-          </Flex>
-        </div>
-        <div className={styles.selectBtn}>
-          <Flex is_col align="flex-start">
-            <div>상품 상태</div>
-            <ItemStatus />
-          </Flex>
-        </div>
-        <div className={styles.selectBtn}>
-          <Flex is_col align="flex-start">
-            <div>상품 설명</div>
-            <TextBox
+            <div
+              className={dataName ? styles.moreIconClick : styles.moreIcon}
+            />
+          </div>
+          <div
+            className={styles.selectBtn}
+            onClick={() => {
+              history.replace("/idolSelect");
+            }}
+          >
+            <div
+              className={
+                idolMember !== null ? styles.selectDoneText : styles.selectText
+              }
+            >
+              {idolMember !== null
+                ? `${idolGroupName} ${idolMemberName}`
+                : "아이돌 그룹 & 멤버"}
+            </div>
+            <div
+              className={idolMember ? styles.moreIconClick : styles.moreIcon}
+            />
+          </div>
+          <div
+            className={styles.selectBtn}
+            onClick={() => {
+              history.replace("/category");
+            }}
+          >
+            <div
+              className={
+                dataCategory !== "" ? styles.selectDoneText : styles.selectText
+              }
+            >
+              {dataCategory !== "" ? dataCategory : "카테고리"}
+            </div>
+            <div
+              className={dataCategory ? styles.moreIconClick : styles.moreIcon}
+            />
+          </div>
+          <div
+            className={styles.selectBtn}
+            onClick={() => {
+              history.replace("/status");
+            }}
+          >
+            <div
+              className={
+                dataStatus !== "" ? styles.selectDoneText : styles.selectText
+              }
+            >
+              {dataStatus !== "" ? `${dataStatus}급` : "굿즈 상태"}
+            </div>
+            <div
+              className={dataStatus ? styles.moreIconClick : styles.moreIcon}
+            />
+          </div>
+          <div className={styles.selectBtn}>
+            <InputNameBox
+              className={dataDesc ? "" : styles.inputText}
               ref={descriptionRef}
               value={dataDesc || ""}
-              placeholder="굿즈 정보를 입력해주세요. "
+              placeholder="굿즈 설명"
               onChange={() => {
                 dispatch(
                   newItemActions.setDescAction(descriptionRef.current.value),
                 );
               }}
             />
-          </Flex>
-        </div>
-        <div className={styles.selectBtn}>
-          <div>가격 입력</div>
-          <Flex is_flex>
-            <InputBox
+            <div
+              className={dataDesc ? styles.moreIconClick : styles.moreIcon}
+            />
+          </div>
+          <div className={styles.selectBtn}>
+            <div
+              className={dataPrice ? styles.selectDoneText : styles.selectText}
+            >
+              ₩
+            </div>
+            <InputNameBox
+              className={dataPrice ? "" : styles.inputText}
               ref={priceRef}
               value={dataPrice || ""}
               type="number"
-              placeholder="숫자만 입력해주세요. "
+              placeholder="가격 입력"
               onChange={() => {
-                dispatch(
-                  newItemActions.setPriceAction(Number(priceRef.current.value)),
-                );
+                dispatch(newItemActions.setPriceAction(priceRef.current.value));
               }}
             />
-            <div>원</div>
-          </Flex>
-        </div>
-      </Flex>
-      <Button
-        text="등록 완료"
-        padding="10px"
-        margin="30px 0 0 0 "
-        _onClick={() => uploadItem()}
-      />
+            <div
+              className={dataPrice ? styles.moreIconClick : styles.moreIcon}
+            />
+          </div>
+        </Flex>
+      </div>
+      <button
+        className={nextOK ? styles.nextOKBtn : styles.nextBtn}
+        type="button"
+        onClick={() => {
+          uploadItem();
+        }}
+      >
+        등록 완료
+      </button>
     </ItemUploadBox>
   );
 };
@@ -210,20 +277,20 @@ const ItemUploadBox = styled.div`
   width: 100%;
   height: 100vh;
   dissplay: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 0 16px;
 `;
 
 const TypeBtn = styled.button`
-  width: 150px;
+  width: 50%;
   padding: 15px;
-  margin: 10px;
 `;
 
 const TextBox = styled.textarea`
   width: 350px;
-  height: 300px;
+  height: 50px;
   border: 1px solid black;
   padding: 15px;
 `;
@@ -237,11 +304,7 @@ const InputBox = styled.input`
 `;
 
 const InputNameBox = styled.input`
-  width: 270px;
-  height: 50px;
-  border: 1px solid black;
-  padding: 10px;
-  margin-right: 5px;
+  width: 100%;
 `;
 
 export default ItemUpload;
