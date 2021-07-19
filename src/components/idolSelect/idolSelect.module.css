@@ -1,11 +1,13 @@
+@import "../../shared/colors.css";
+
 .label {
-  color: gray;
+  color: var(--grayBtnText);
   text-align: center;
 }
 
 .input:checked + .label {
   font-weight: bold;
-  color: black;
+  color: var(--black);
 }
 
 .idolGroupImg {

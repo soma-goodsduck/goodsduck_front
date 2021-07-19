@@ -1,10 +1,12 @@
+@import "../../shared/colors.css";
+
 input::label {
-  color: #bbbbbb;
+  color: var(--gray);
   font-size: 12px;
 }
 
 input::placeholder {
-  color: #bbbbbb;
+  color: var(--gray);
   font-size: 12px;
 }
 
@@ -14,12 +16,12 @@ input::placeholder {
   border-radius: 5px;
 }
 .nextBtn {
-  color: #ffffff;
-  background-color: #bbbbbb;
+  color: var(--white);
+  background-color: var(--gray);
   cursor: auto;
 }
 
 .nextOKBtn {
-  color: #222222;
-  background-color: #ffe200;
+  color: var(--blackBtn);
+  background-color: var(--yellow);
 }

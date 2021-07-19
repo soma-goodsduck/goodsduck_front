@@ -8,10 +8,17 @@
   height: auto;
 }
 
-.likeBtn {
+.likeBox {
   position: absolute;
-  top: 185px;
-  right: 25px;
+  z-index: 2;
+  font-size: 20px;
+  text-align: right;
+  width: 99%;
+  padding-bottom: 110px;
+  padding-right: 15px;
+}
+
+.likeBtn {
   z-index: 2;
   width: 28px;
   height: 28px;
@@ -21,9 +28,6 @@
 }
 
 .clickLikeBtn {
-  position: absolute;
-  top: 184px;
-  right: 26px;
   z-index: 2;
   width: 30px;
   height: 30px;
@@ -33,16 +37,14 @@
 }
 
 .likeBtn:hover {
-  top: 184px;
-  right: 26px;
   width: 30px;
   height: 30px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
 }
 
 @media screen and (min-width: 415px) {
-  .likeBtn {
-    margin-left: 140px;
-    margin-bottom: 145px;
+  .likeBox {
+    padding-bottom: 130px;
+    padding-right: 10px;
   }
 }

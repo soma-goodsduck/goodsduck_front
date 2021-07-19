@@ -1,9 +1,11 @@
+@import "../../shared/colors.css";
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--white);
   z-index: 3;
 }
 
@@ -11,13 +13,13 @@
   font-size: 20px;
   width: 62vw;
   color: black;
-  background-color: #ffffff;
+  background-color: var(--white);
   border-radius: 3px;
   padding: 8px;
 }
 
 .search::placeholder {
-  color: #bbbbbb;
+  color: var(--gray);
   font-size: 14px;
 }
 

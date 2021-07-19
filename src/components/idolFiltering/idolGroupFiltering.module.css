@@ -1,3 +1,5 @@
+@import "../../shared/colors.css";
+
 .categories {
   display: flex;
   overflow-x: scroll;
@@ -20,7 +22,7 @@
 .clickIdolGroupBtn {
   font-size: 13px;
   font-weight: bold;
-  color: black;
+  color: var(--black);
 }
 
 .idolGroupBtn {
@@ -37,5 +39,5 @@
 }
 
 .clickIdolGroupImg {
-  border: 3px solid #ffe200;
+  border: 3px solid var(--yellow);
 }

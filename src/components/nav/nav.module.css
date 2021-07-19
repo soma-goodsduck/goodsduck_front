@@ -1,10 +1,12 @@
+@import "../../shared/colors.css";
+
 .nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   padding: 10px;
-  background-color: #ffffff;
+  background-color: var(--white);
   z-index: 3;
 }
 

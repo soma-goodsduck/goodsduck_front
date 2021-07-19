@@ -1,3 +1,5 @@
+@import "../../shared/colors.css";
+
 /* 전체적인 선택 버튼 */
 .selectBtn {
   width: 380px;
@@ -7,22 +9,22 @@
   align-items: center;
   padding: 15px 16px;
   margin: 10px 0;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid var(--grayBorder);
   cursor: pointer;
 }
 
 .selectText {
-  color: #999999;
+  color: var(--grayText);
 }
 
 .selectDoneText {
-  color: #222222;
+  color: var(--blackBtn);
 }
 
 .detailText {
   font-size: 18px;
   font-weight: bold;
-  color: #222222;
+  color: var(--blackBtn);
   padding: 10px 16px;
 }
 
@@ -32,7 +34,7 @@ label {
 
 .inputText::placeholder {
   font-size: 16px;
-  color: #999999;
+  color: var(--grayText);
 }
 
 /* 숫자 input 증감 아이콘 없애기 */
@@ -58,14 +60,14 @@ input::-webkit-inner-spin-button {
 
 /* 구매, 판매 버튼 */
 .typeBtn {
-  border: 2px solid #dddddd;
+  border: 2px solid var(--grayBorder);
   border-radius: 5px;
 }
 
 .clickTypeBtn {
-  border: 2px solid #ffe201;
-  background-color: #ffe201;
-  color: #222222;
+  border: 2px solid var(--yellow);
+  background-color: var(--yellow);
+  color: var(--blackBtn);
   border-radius: 5px;
 }
 
@@ -76,16 +78,16 @@ input::-webkit-inner-spin-button {
 
 /* 상품 상태 버튼 */
 .clickStatusBtn {
-  background-color: #ffe201;
-  color: #222222;
+  background-color: var(--yellow);
+  color: var(--blackBtn);
   border: none;
   box-sizing: border-box;
 }
 
 .statusBtn {
   background-color: #ffffff;
-  color: #222222;
-  border: 2px solid #dddddd;
+  color: var(--blackBtn);
+  border: 2px solid var(--grayBorder);
   box-sizing: border-box;
 }
 
@@ -94,7 +96,7 @@ input::-webkit-inner-spin-button {
   margin: 0 10px;
   font-size: 24px;
   font-weight: bold;
-  color: #222222;
+  color: var(--blackBtn);
 }
 
 /* 카테고리 버튼 */
@@ -103,11 +105,11 @@ input::-webkit-inner-spin-button {
 }
 
 .categoryBtn {
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid var(--grayBorder);
 }
 .categoryBtn:last-child {
-  border-top: 1px solid #dddddd;
-  border-bottom: 1px solid #dddddd;
+  border-top: 1px solid var(--grayBorder);
+  border-bottom: 1px solid var(--grayBorder);
 }
 
 /* 아이돌 선택 버튼 */
@@ -122,12 +124,12 @@ input::-webkit-inner-spin-button {
   font-size: 16px;
 
   font-weight: bold;
-  color: #222222;
+  color: var(--blackBtn);
 }
 
 .idolGroupBtn {
   font-size: 14px;
-  color: gray;
+  color: var(--grayText);
 }
 
 .idolGroupImg {
@@ -145,12 +147,12 @@ input::-webkit-inner-spin-button {
   border-radius: 5px;
 }
 .nextBtn {
-  color: #ffffff;
-  background-color: #bbbbbb;
+  color: var(--white);
+  background-color: var(--gray);
   cursor: auto;
 }
 
 .nextOKBtn {
-  color: #222222;
-  background-color: #ffe200;
+  color: var(--blackBtn);
+  background-color: var(--yellow);
 }
