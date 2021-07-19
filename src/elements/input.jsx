@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import React from "react";
 import styled from "styled-components";
-import { grayBorder } from "../shared/color";
+import { grayBorder } from "../shared/colors";
 import { Text, Grid } from "./index";
 
 const Input = (props) => {

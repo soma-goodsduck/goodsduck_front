@@ -45,6 +45,7 @@ Flex.defaultProps = {
   padding: "",
   margin: "",
   bg: "#ffffff",
+  width: "100%",
   _className: "",
   _onClick: () => {},
 };

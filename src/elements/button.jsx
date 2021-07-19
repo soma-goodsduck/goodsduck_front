@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { yellow } from "../shared/color";
+import { yellow } from "../shared/colors";
 
 const Button = (props) => {
   const {
@@ -13,6 +13,8 @@ const Button = (props) => {
     bg,
     color,
     src,
+    size,
+    isBold,
     _className,
     _onClick,
   } = props;
@@ -26,6 +28,8 @@ const Button = (props) => {
     bg,
     color,
     src,
+    size,
+    isBold,
   };
 
   return (
@@ -47,6 +51,8 @@ Button.defaultProps = {
   bg: `${yellow}`,
   color: "black",
   src: "",
+  size: "16px",
+  isBold: false,
   _className: "",
   _onClick: () => {},
 };
@@ -59,8 +65,12 @@ const ElButton = styled.button`
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};
   color: ${(props) => props.color};
-  background-image: url("${(props) => props.src}");
+  font-size: ${(props) => props.size};
+  ${(props) => (props.isBold ? "font-weight: bold; " : "")}
+
+  background: url("${(props) => props.src}");
   background-size: cover;
+  background-position: center;
 `;
 
 export default Button;
