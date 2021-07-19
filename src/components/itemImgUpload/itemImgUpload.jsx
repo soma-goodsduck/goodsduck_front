@@ -13,21 +13,22 @@ import { actionCreators as imgActions } from "../../redux/modules/image";
 const ItemImgUpload = (props) => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.user);
-  const [fileList, setFileList] = useState([]);
+  const fileList = [];
+  const fileObject = {};
   const previewContainer = document.getElementById("preview-container");
 
-  // todo => 프리뷰 삭제
-  // const deletePreview = (event) => {
-  //   const box = event.target.parentNode;
-  //   const newFileList = fileList.filter(
-  //     (file) => file.name !== event.target.parentNode.id,
-  //   );
-  //   setFileList(newFileList);
-  //   console.log(newFileList);
-  //   dispatch(imgActions.saveImgAction(userId, fileList));
-  //   previewContainer.removeChild(box);
-  // };
+  // 이미지 & 프리뷰 삭제
+  const deletePreview = (event) => {
+    delete fileObject[`${event.target.parentNode.id}`];
 
+    const box = event.target.parentNode;
+    previewContainer.removeChild(box);
+
+    const newFileList = Object.values(fileObject);
+    dispatch(imgActions.saveImgAction(userId, newFileList));
+  };
+
+  // 이미지 & 프리뷰 등록 및 미리보기 보여주기
   const showPreview = (e) => {
     const files = e.target.files;
 
@@ -35,22 +36,23 @@ const ItemImgUpload = (props) => {
       const previewBox = document.createElement("div");
       const preview = document.createElement("img");
       const deleteBtn = document.createElement("button");
+      previewBox.id = `${i}`;
       preview.className = `${styles.previewImg}`;
       deleteBtn.className = `${styles.deleteBtn}`;
-      // deleteBtn.onclick = (event) => {
-      //   deletePreview(event);
-      // };
+      deleteBtn.onclick = (event) => {
+        deletePreview(event);
+      };
       previewBox.append(preview, deleteBtn);
       previewContainer.appendChild(previewBox);
 
       const reader = new FileReader();
       reader.onload = () => {
         preview.src = reader.result;
-        previewBox.id = files[i].name;
       };
       reader.readAsDataURL(files[i]);
 
       fileList.push(files[i]);
+      fileObject[`${i}`] = files[i];
     }
 
     dispatch(imgActions.saveImgAction(userId, fileList));

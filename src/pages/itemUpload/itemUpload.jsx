@@ -38,7 +38,7 @@ const ItemUpload = (props) => {
     idolMemberName,
     idolGroupName,
     fileList,
-    preview,
+    itemId,
   } = useSelector((state) => ({
     dataName: state.newItem.name,
     dataPrice: state.newItem.price,
@@ -50,7 +50,7 @@ const ItemUpload = (props) => {
     idolMemberName: state.newItem.idol_member_name,
     idolGroupName: state.newItem.idol_group_name,
     fileList: state.image.fileList,
-    preview: state.image.preview,
+    itemId: state.newItem.item_id,
   }));
 
   const item = {
@@ -67,6 +67,12 @@ const ItemUpload = (props) => {
   // 입력값이 변할때마다 상태값에 저장
   useEffect(() => {
     dispatch(newItemActions.setTradeTypeAction(tradeType));
+    // 판매하기와 구매하기 선택값 유지
+    if (dataTradeType === "BUY") {
+      setIsSelling(false);
+    } else if (dataTradeType === "SELL") {
+      setIsSelling(true);
+    }
   }, [tradeType]);
 
   const clickTradeType = (e) => {
@@ -107,7 +113,13 @@ const ItemUpload = (props) => {
     if (!nextOK) {
       return;
     }
-    dispatch(newItemActions.addItemAction(item, fileList));
+
+    // 굿즈 등록 또는 업데이트
+    if (itemId !== null) {
+      dispatch(newItemActions.updateItemAction(item, itemId));
+    } else {
+      dispatch(newItemActions.addItemAction(item, fileList));
+    }
 
     // 저장된 상태값 모두 삭제
     dispatch(newItemActions.clearAction());
@@ -160,7 +172,7 @@ const ItemUpload = (props) => {
           <div
             className={styles.selectBtn}
             onClick={() => {
-              history.push("/idolSelect");
+              history.replace("/idolSelect");
             }}
           >
             <div
@@ -179,7 +191,7 @@ const ItemUpload = (props) => {
           <div
             className={styles.selectBtn}
             onClick={() => {
-              history.push("/category");
+              history.replace("/category");
             }}
           >
             <div
@@ -196,7 +208,7 @@ const ItemUpload = (props) => {
           <div
             className={styles.selectBtn}
             onClick={() => {
-              history.push("/status");
+              history.replace("/status");
             }}
           >
             <div
