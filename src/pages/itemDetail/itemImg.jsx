@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 import * as Sentry from "@sentry/react";
 
 import styles from "./itemDetail.module.css";
 
 import { Flex, Image, Icon } from "../../elements/index";
-// import { itemData } from "../../shared/JsonDataItemDetail";
+import { getAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
-  const jwt = localStorage.getItem("jwt");
+  console.log(item);
 
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -24,27 +23,19 @@ const ItemImg = ({ id, item, onClick }) => {
     history.goBack();
   };
 
-  // todo => 좋아요 기능
-  const [isLike, setIsLike] = useState(false);
+  const [isLike, setIsLike] = useState(item.like);
   const clickHeart = () => {
-    // try {
-    //   // 좋아요
-    //   if (isLike) {
-    //     axios.get(`${process.env.REACT_APP_BACK_URL}/api/v1/like/item/${id}`, {
-    //       headers: { jwt: `${jwt}` },
-    //     });
-    //   } else {
-    //     axios.delete(
-    //       `${process.env.REACT_APP_BACK_URL}/api/v1/like/item/${id}`,
-    //       {
-    //         headers: { jwt: `${jwt}` },
-    //       },
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.log("error", error);
-    //   Sentry.captureException(error);
-    // }
+    try {
+      // 좋아요
+      if (!isLike) {
+        getAction(`like/item/${id}`);
+      } else {
+        deleteAction(`like/item/${id}`);
+      }
+    } catch (error) {
+      console.log("error", error);
+      Sentry.captureException(error);
+    }
     setIsLike(!isLike);
   };
 
@@ -66,6 +57,10 @@ const ItemImg = ({ id, item, onClick }) => {
     }
   };
   useEffect(() => {
+    if (item.images.length === 0) {
+      setShowPreviousImgBtn(false);
+      setShowNextImgBtn(false);
+    }
     if (imgNumber === 0) {
       setShowPreviousImgBtn(false);
     } else if (imgNumber === item.images.length - 1) {
@@ -92,7 +87,7 @@ const ItemImg = ({ id, item, onClick }) => {
       <button
         type="button"
         aria-label="like"
-        className={isLike ? styles.clickLikeBtn : styles.likeBtn}
+        className={item.like ? styles.clickLikeBtn : styles.likeBtn}
         onClick={() => clickHeart()}
       />
       <button
