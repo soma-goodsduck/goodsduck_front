@@ -1,22 +1,35 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
+
 import Idol from "./idolSelect";
-import idols from "../../shared/IdolGroupData.json";
 
-const IdolGroups = (props) => {
-  const [checkedIdols, setCheckedIdols] = useState([]);
+import { getInfo } from "../../shared/axios";
 
-  const handleCheck = useCallback((id) => {
-    setCheckedIdols(checkedIdols.push(id));
-    console.log(checkedIdols);
+const IdolGroups = ({ onUpdate }) => {
+  const dispatch = useDispatch();
+  // 아이돌 데이터 가져오기
+  const [idols, setIdols] = useState([]);
+
+  useEffect(() => {
+    const getIdolGroup = getInfo("idol");
+    getIdolGroup.then((result) => {
+      setIdols(result);
+    });
   }, []);
 
-  const handleUncheck = useCallback((id) => {
-    const idx = checkedIdols.indexOf(id);
-    setCheckedIdols(checkedIdols.splice(idx, 1));
-    console.log(checkedIdols);
-  }, []);
+  if (!idols) {
+    return null;
+  }
+
+  const handleCheck = (id) => {
+    onUpdate(true, id);
+  };
+
+  const handleUncheck = (id) => {
+    onUpdate(false, id);
+  };
 
   return (
     <IdolList>
@@ -34,9 +47,8 @@ const IdolGroups = (props) => {
 
 const IdolList = styled.div`
   display: grid;
-  gap: 5px;
-  grid-template-columns: repeat(4, 90px);
-  grid-auto-rows: 130px;
+  grid-template-columns: repeat(4, 85px);
+  grid-auto-rows: 120px;
 `;
 
 export default IdolGroups;

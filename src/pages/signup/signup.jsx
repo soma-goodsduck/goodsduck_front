@@ -6,8 +6,9 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import styles from "./signup.module.css";
 import { Grid, PopUp, Input, Button } from "../../elements";
+import HeaderInfo from "../../components/haeder/headerInfo";
 
-// import IdolGroups from "../../components/idolSelect/idolGroupSelect";
+import IdolGroups from "../../components/idolSelect/idolGroupSelect";
 import { actionCreators as userActions } from "../../redux/modules/user";
 
 const Signup = () => {
@@ -17,18 +18,19 @@ const Signup = () => {
   const [nick, setNick] = useState("");
   const type = useSelector((state) => state.user.type);
   const id = useSelector((state) => state.user.id);
-  const user = { email, nick, phone, id, type };
+  let idols = [];
+  const user = { email, nick, phone, id, type, idols };
   const [nextOK, setNextOK] = useState(false);
   const [showEmailPopUp, setEmailShowPopUp] = useState(false);
   const [showPhonePopUp, setPhoneShowPopUp] = useState(false);
 
   useEffect(() => {
-    if (email && phone && nick) {
+    if (email && phone && nick && idols) {
       setNextOK(true);
     } else {
       setNextOK(false);
     }
-  }, [email, phone, nick]);
+  }, [email, phone, nick, idols]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -46,6 +48,15 @@ const Signup = () => {
   const phCheck = (_phone) => {
     const regex = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/;
     return _phone !== "" && _phone !== "undefined" && regex.test(_phone);
+  };
+
+  const updateIdols = (isCheck, idolId) => {
+    if (isCheck) {
+      idols.push(idolId);
+    } else {
+      idols = idols.filter((idol) => idol !== idolId);
+    }
+    console.log(idols);
   };
 
   const signup = () => {
@@ -70,9 +81,10 @@ const Signup = () => {
     <SignUpBox>
       {showEmailPopUp && <PopUp width="250px" text1="이메일을 확인해주세요" />}
       {showPhonePopUp && (
-        <PopUp width="250px" text="핸드폰 번호를 확인해주세요" />
+        <PopUp width="250px" text1="핸드폰 번호를 확인해주세요" />
       )}
       <div>
+        <HeaderInfo text="회원가입" />
         <Grid padding="16px 0px">
           <LabelText>이메일</LabelText>
           <Input
@@ -113,8 +125,8 @@ const Signup = () => {
           />
         </Grid>
         <Grid padding="16px 0px">
-          {/* <LabelText>좋아하는 아이돌</LabelText>
-          <IdolGroups></IdolGroups> */}
+          <LabelText>좋아하는 아이돌</LabelText>
+          <IdolGroups onUpdate={updateIdols} />
         </Grid>
       </div>
       <button
@@ -131,11 +143,11 @@ const Signup = () => {
 };
 
 const SignUpBox = styled.div`
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
+  padding: 0 20px;
 `;
 const LabelText = styled.div`
   margin-bottom: 10px;

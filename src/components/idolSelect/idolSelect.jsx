@@ -7,10 +7,10 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
   const [checked, setChecked] = useState(false);
 
   const checkedItemHandler = (id, isChecked) => {
-    if (isChecked) {
-      onCheck(id);
-    } else if (!isChecked) {
+    if (!isChecked) {
       onUncheck(id);
+    } else if (isChecked) {
+      onCheck(id);
     }
   };
 
@@ -34,7 +34,7 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
           src={idol.imageUrl}
           alt="Idol Group"
         />
-        {idol.engName}
+        {idol.name}
       </label>
     </IdolBox>
   );
