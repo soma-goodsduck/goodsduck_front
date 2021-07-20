@@ -1,7 +1,6 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
-/* eslint-disable camelcase */
 
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
@@ -33,8 +32,8 @@ const initialState = {
   user: "",
   id: null,
   type: null,
-  is_login: false,
-  show_popup: false,
+  isLogin: false,
+  showPopup: false,
 };
 
 // middleware actions
@@ -113,6 +112,7 @@ const signupAction = (user) => {
     phoneNumber: user.phone,
     socialAccountId: user.id,
     socialAccountType: user.type,
+    idols: user.idols,
   };
   console.log(json);
   return function (dispatch, getState, { history }) {
@@ -158,13 +158,13 @@ export default handleActions(
       produce(state, (draft) => {
         draft.id = action.payload.id;
         draft.type = action.payload.type;
-        draft.is_login = true;
+        draft.isLogin = true;
         draft.show_popup = false;
       }),
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-        draft.is_login = true;
+        draft.isLogin = true;
         draft.show_popup = false;
         setLS("jwt", draft.user);
       }),
@@ -172,20 +172,20 @@ export default handleActions(
       produce(state, (draft) => {
         deleteLS("jwt");
         draft.user = null;
-        draft.is_login = false;
+        draft.isLogin = false;
       }),
     [GET_USER]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-        draft.is_login = true;
+        draft.isLogin = true;
       }),
     [SHOW_POPUP]: (state, action) =>
       produce(state, (draft) => {
-        draft.show_popup = true;
+        draft.showPopup = true;
       }),
     [NO_SHOW_POPUP]: (state, action) =>
       produce(state, (draft) => {
-        draft.show_popup = false;
+        draft.showPopup = false;
       }),
     [UPDATE_JWT]: (state, action) =>
       produce(state, (draft) => {

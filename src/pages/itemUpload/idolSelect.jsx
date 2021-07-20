@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
@@ -15,6 +15,8 @@ import { getInfo } from "../../shared/axios";
 
 const IdolSelect = ({ history }) => {
   const dispatch = useDispatch();
+  const idolValue = useSelector((state) => state.newItem.idol_group_id);
+
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
@@ -65,7 +67,7 @@ const IdolSelect = ({ history }) => {
                 <IdolInput
                   id={idol.id}
                   type="radio"
-                  checked={groupId === idol.id}
+                  checked={idolValue === idol.id}
                   onChange={() => checkGroupHandler(idol.id, idol.engName)}
                 />
                 <label
@@ -81,7 +83,7 @@ const IdolSelect = ({ history }) => {
                     src={idol.imageUrl}
                     alt="Idol Group"
                   />
-                  {idol.engName}
+                  {idol.name}
                 </label>
               </IdolBox>
             ))}

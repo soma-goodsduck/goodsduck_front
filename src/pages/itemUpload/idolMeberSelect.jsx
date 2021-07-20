@@ -14,6 +14,7 @@ import { getInfo } from "../../shared/axios";
 
 const IdolMemberSelect = ({ history }) => {
   const dispatch = useDispatch();
+  const idolValue = useSelector((state) => state.newItem.idol_member_id);
 
   // 아이돌 멤버 데이터 가져오기
   const groupId = useSelector((state) => state.newItem.idol_group_id);
@@ -67,7 +68,7 @@ const IdolMemberSelect = ({ history }) => {
                 <IdolMemberInput
                   id={member.id}
                   type="radio"
-                  checked={memberId === member.id}
+                  checked={idolValue === member.id}
                   onChange={() => checkMemberHandler(member.id, member.name)}
                 />
                 <label

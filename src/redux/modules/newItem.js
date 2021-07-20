@@ -236,9 +236,9 @@ export default handleActions(
       produce(state, (draft) => {
         draft.item_id = action.payload.item.id;
         draft.images = action.payload.images;
-        draft.idol_group_id = action.payload.item.idol_group_id;
+        draft.idol_group_id = action.payload.item.groupId;
         draft.idol_group_name = action.payload.item.groupName;
-        draft.idol_member_id = action.payload.item.idol_member_id;
+        draft.idol_member_id = action.payload.item.memberId;
         draft.idol_member_name = action.payload.item.memberName;
         draft.name = action.payload.item.name;
         draft.price = action.payload.item.price;
