@@ -1,15 +1,15 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 
+import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
 import { Flex, Image, Icon } from "../../elements/index";
 import { getAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
-  console.log(item);
-
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -57,7 +57,7 @@ const ItemImg = ({ id, item, onClick }) => {
     }
   };
   useEffect(() => {
-    if (item.images.length === 0) {
+    if (item.images.length === 1) {
       setShowPreviousImgBtn(false);
       setShowNextImgBtn(false);
     }
@@ -87,7 +87,7 @@ const ItemImg = ({ id, item, onClick }) => {
       <button
         type="button"
         aria-label="like"
-        className={item.like ? styles.clickLikeBtn : styles.likeBtn}
+        className={isLike ? styles.clickLikeBtn : styles.likeBtn}
         onClick={() => clickHeart()}
       />
       <button
@@ -111,5 +111,9 @@ const ItemImg = ({ id, item, onClick }) => {
     </Flex>
   );
 };
+
+const HeartInput = styled.input`
+  display: none;
+`;
 
 export default ItemImg;
