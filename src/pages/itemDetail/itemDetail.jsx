@@ -11,18 +11,12 @@ import { Flex, Text, Image, Icon } from "../../elements/index";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as imgActions } from "../../redux/modules/image";
 
-import { timeForToday, numberWithCommas } from "../../shared/functions";
+import { timeForToday } from "../../shared/functions";
 import { getInfo, getData, deleteAction } from "../../shared/axios";
+import ItemNav from "./itemNav";
+import PriceList from "./priceList";
 
 const ItemDetail = ({ history }) => {
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
   const dispatch = useDispatch();
 
   // 아이템 아이디
@@ -35,15 +29,21 @@ const ItemDetail = ({ history }) => {
     const getItemDetail = getInfo(`item/${itemId}`);
     getItemDetail.then((result) => {
       setItemData(result);
+      console.log(itemData);
     });
   }, []);
 
   // 아이템 글쓴이인지 확인
+  const [showPopup, setShowPopup] = useState(false);
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
     const checkWriter = () => {
       const getIsWriter = getData(`item/edit/${itemId}`);
       getIsWriter.then((result) => {
+        console.log(result);
+        if (result === "login") {
+          setShowPopup(true);
+        }
         if (result === 1) {
           setIsWriter(true);
         }
@@ -56,16 +56,16 @@ const ItemDetail = ({ history }) => {
   const hideWriterPopup = () => {
     setShowWriterPopup(false);
   };
-  const [showPopup, setShowPopup] = useState(null);
+  const [showUserPopup, setShowUserPopup] = useState(null);
   const hidePopup = () => {
-    setShowPopup(false);
+    setShowUserPopup(false);
   };
 
   const clickDots = () => {
     if (isWriter) {
       setShowWriterPopup(true);
     } else {
-      setShowPopup(true);
+      setShowUserPopup(true);
     }
   };
 
@@ -119,7 +119,7 @@ const ItemDetail = ({ history }) => {
           }}
         />
       )}
-      {showPopup && (
+      {showUserPopup && (
         <PopUp2
           text1="신고하기"
           _onClick1={() => {
@@ -204,10 +204,11 @@ const ItemDetail = ({ history }) => {
               <Text>{itemData.description}</Text>
             </Flex>
             <div className={styles.line} />
-            {/* 가격 제안 목록 */}
-            <Text bold size="18px">
-              가격 제안 목록
+            {/* 가격 제시 목록 */}
+            <Text bold size="18px" margin="0 0 20px 0">
+              가격 제시 목록
             </Text>
+            <PriceList id={itemId} />
             <div className={styles.line} />
             {/* 글쓴이 정보 */}
             <button
@@ -221,14 +222,14 @@ const ItemDetail = ({ history }) => {
                   <Image
                     shape="circle"
                     src="https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
-                    // src={itemData.user.userImage}
-                    margin="0 7px 0 0"
+                    // src={itemData.itemOwner.userImage}
+                    margin="0 10px 0 0"
                     size="50px"
                   />
                   <Flex is_col align="flex-start">
-                    <Image shape="circle" size="15px" margin="0 0 5px 0" />
+                    <Image shape="circle" size="20px" />
                     <UserName>
-                      <Text is_long>{itemData.user.nickName}</Text>
+                      <Text size="18px">{itemData.itemOwner.nickName}</Text>
                     </UserName>
                   </Flex>
                 </Flex>
@@ -247,29 +248,7 @@ const ItemDetail = ({ history }) => {
 
           <div className={styles.line} />
           {/* 가격, 버튼 */}
-          <InfoBox2>
-            <Flex justify="space-between">
-              <Text bold size={isMobile ? "20px" : "25px"}>
-                {numberWithCommas(itemData.price)}원
-              </Text>
-              {isWriter ? (
-                <Button className={styles.btnRePrice}>가격 제안 보기</Button>
-              ) : (
-                <Flex>
-                  <Button className={styles.btnChat}>
-                    <Icon
-                      width="18px"
-                      src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
-                      alt="go chat"
-                      margin="0 5px 2px 0"
-                    />
-                    즉시 판매 가능
-                  </Button>
-                  <Button className={styles.btnPrice}>가격 제시하기</Button>
-                </Flex>
-              )}
-            </Flex>
-          </InfoBox2>
+          <ItemNav item={itemData} id={itemId} isWriter={isWriter} />
         </>
       ) : null}
     </>
@@ -281,24 +260,14 @@ const Title = styled.div`
 `;
 
 const UserName = styled.div`
-  width: 65px;
+  width: 100px;
+  text-align: left;
+  margin-top: 5px;
 `;
 
 const InfoBox = styled.div`
   width: 100%;
   padding: 16px 16px 0 16px;
-`;
-
-const InfoBox2 = styled.div`
-  width: 100%;
-  padding: 0 16px 20px 16px;
-`;
-
-const Button = styled.div`
-  font-weight: bold;
-  border-radius: 5px;
-  padding: 15px;
-  cursor: pointer;
 `;
 
 export default ItemDetail;
