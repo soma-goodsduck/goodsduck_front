@@ -13,6 +13,7 @@ const Flex = (props) => {
     padding,
     margin,
     bg,
+    pointer,
     _className,
     _onClick,
   } = props;
@@ -26,6 +27,7 @@ const Flex = (props) => {
     padding,
     margin,
     bg,
+    pointer,
   };
   return (
     <>
@@ -46,6 +48,7 @@ Flex.defaultProps = {
   margin: "",
   bg: "#ffffff",
   width: "100%",
+  pointer: false,
   _className: "",
   _onClick: () => {},
 };
@@ -59,6 +62,7 @@ const FlexBox = styled.div`
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};
+  ${(props) => (props.pointer ? "cursor: pointer;" : "")}
 `;
 
 export default Flex;

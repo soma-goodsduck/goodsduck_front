@@ -6,6 +6,7 @@ import styled from "styled-components";
 import styles from "./itemUpload.module.css";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
+import { getInfo } from "../../shared/axios";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { history } from "../../redux/configureStore";
 
@@ -13,23 +14,18 @@ const ItemStatus = () => {
   const dispatch = useDispatch();
   const statusValue = useSelector((state) => state.newItem.status_grade);
 
-  const grades = ["S", "A", "B", "C"];
-  const statusTexts = [
-    "박스를 개봉하지 않은 새상품이며, 생산 당시의 포장상태가 그대로 보존된 완전한 상태입니다.",
-    "박스를 개봉한 중고 상품이며, 새 상품처럼 깨끗한 상태입니다.",
-    "사용 흔적이 있으나, 대체로 관리 상태가 양호한 중고 상품입니다.",
-    "사용 흔적이 많지만, 사용상에는 문제가 없는 상태입니다.",
-  ];
-  const [_grade, setGrade] = useState("");
-  const [nextOK, setNextOK] = useState(false);
+  // 상품상태 데이터 받아오기
+  const [statusData, setStatusData] = useState([]);
 
   useEffect(() => {
-    if (_grade) {
-      setNextOK(true);
-    } else {
-      setNextOK(false);
-    }
-  }, [_grade]);
+    const getCategory = getInfo("item/gradestatus");
+    getCategory.then((result) => {
+      console.log(result);
+      setStatusData(result);
+    });
+  }, []);
+
+  const [nextOK, setNextOK] = useState(false);
 
   const checkHandler = (grade) => {
     console.log(statusValue, grade);
@@ -47,25 +43,27 @@ const ItemStatus = () => {
       <StatusContainer>
         <div>
           <div className={styles.detailText}>굿즈 상태 선택</div>
-          {grades.map((grade, idx) => (
+          {statusData.map((_statusData, idx) => (
             <StatusBox
-              key={grade}
+              key={_statusData.gradeStatus}
               className={
-                statusValue === `${grade}`
+                statusValue === `${_statusData.gradeStatus}`
                   ? styles.clickStatusBtn
                   : styles.statusBtn
               }
-              onClick={() => checkHandler(`${grade}`)}
+              onClick={() => checkHandler(`${_statusData.gradeStatus}`)}
             >
               <StatusInput
-                id={grade}
+                id={_statusData.gradeStatus}
                 type="radio"
-                checked={statusValue === `${grade}`}
-                onChange={() => checkHandler(`${grade}`)}
+                checked={statusValue === `${_statusData.gradeStatus}`}
+                onChange={() => checkHandler(`${_statusData.gradeStatus}`)}
               />
-              <label htmlFor={grade} />
-              <div className={styles.statusGrade}>{grade}급</div>
-              <div>{statusTexts[idx]}</div>
+              <label htmlFor={_statusData.gradeStatus} />
+              <div className={styles.statusGrade}>
+                {_statusData.gradeStatus}급
+              </div>
+              <div>{_statusData.description}</div>
             </StatusBox>
           ))}
         </div>
@@ -84,6 +82,7 @@ const ItemStatus = () => {
 };
 
 const Outer = styled.div`
+  margin-top: 35px;
   height: 100vh;
   padding: 0 15px;
 `;

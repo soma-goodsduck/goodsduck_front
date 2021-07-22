@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./signup.module.css";
-import { Grid, PopUp, Input, Button } from "../../elements";
+import { Grid, PopUp, Input } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import IdolGroups from "../../components/idolSelect/idolGroupSelect";
@@ -100,6 +100,7 @@ const Signup = () => {
         <Grid padding="16px 0px">
           <LabelText>핸드폰 번호</LabelText>
           <Input
+            type="number"
             placeholder="핸드폰 번호를 입력해주세요"
             borderRadius="5px"
             value={phone}

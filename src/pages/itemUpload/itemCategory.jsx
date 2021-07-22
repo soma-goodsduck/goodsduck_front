@@ -57,6 +57,7 @@ const ItemCategory = () => {
 };
 
 const CategoryContainer = styled.div`
+  margin-top: 55px;
   height: 100vh;
   background-color: #f8f8f8;
 `;

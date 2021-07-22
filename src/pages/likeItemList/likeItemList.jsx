@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
-import ItemInfo from "../../components/itemInfo/itemInfo";
+import ItemRow from "../../components/itemRow/itemRow";
 import PopUp from "../../elements/popUp";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
@@ -45,7 +45,7 @@ const LikeItemList = ({ history }) => {
       {favoriteItems !== [] && (
         <Box>
           {favoriteItems.map((favoriteItem) => (
-            <ItemInfo key={favoriteItem.name} item={favoriteItem} />
+            <ItemRow key={favoriteItem.itemId} item={favoriteItem} isBtn />
           ))}
         </Box>
       )}
@@ -54,6 +54,7 @@ const LikeItemList = ({ history }) => {
 };
 
 const Box = styled.div`
+  margin-top: 65px;
   padding: 0 16px;
 `;
 

@@ -8,13 +8,9 @@ import axios from "axios";
 
 // actions
 const GET_ITEM = "GET_ITEM";
-const CLICK_HEART = "CLICK_HEART";
 
 // action creators
 const getItem = createAction(GET_ITEM, (list) => ({ list }));
-const clickHeart = createAction(CLICK_HEART, (is_like) => ({
-  is_like,
-}));
 
 // initialState
 const initialState = {
@@ -43,12 +39,6 @@ const getItemAciton = () => {
   };
 };
 
-const clickHeartAction = (state) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(clickHeart(state));
-  };
-};
-
 // reducer
 export default handleActions(
   {
@@ -57,10 +47,6 @@ export default handleActions(
         console.log(action.payload);
         draft.item = action.payload.item;
       }),
-    [CLICK_HEART]: (state, action) =>
-      produce(state, (draft) => {
-        draft.is_like = !state.is_like;
-      }),
   },
   initialState,
 );
@@ -68,7 +54,6 @@ export default handleActions(
 // action creator export
 const actionCreators = {
   getItemAciton,
-  clickHeartAction,
 };
 
 export { actionCreators };

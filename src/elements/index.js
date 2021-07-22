@@ -9,5 +9,19 @@ import Flex from "./flex";
 import Icon from "./icon";
 import RowScroll from "./rowScroll";
 import PopUp from "./popUp";
+import PopUp2 from "./popUp2";
+import LoginPopUp from "./loginPopUp";
 
-export { Grid, Image, Icon, Text, Input, Button, Flex, RowScroll, PopUp };
+export {
+  Grid,
+  Image,
+  Icon,
+  Text,
+  Input,
+  Button,
+  Flex,
+  RowScroll,
+  PopUp,
+  PopUp2,
+  LoginPopUp,
+};

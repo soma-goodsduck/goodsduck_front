@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex, Image, Icon } from "../../elements";
+import { Flex } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
@@ -115,7 +115,7 @@ const ItemUpload = (props) => {
     }
 
     // 굿즈 등록 또는 업데이트
-    if (itemId !== null) {
+    if (itemId !== 0) {
       dispatch(newItemActions.updateItemAction(item, itemId));
     } else {
       dispatch(newItemActions.addItemAction(item, fileList));
@@ -132,13 +132,6 @@ const ItemUpload = (props) => {
       <div>
         <Flex is_flex justify="flex-start">
           <ItemImgUpload />
-
-          {/* <Image
-            shape="rectangle"
-            size="80px"
-            src={preview || ""}
-            margin="0 10px 10px 10px"
-          /> */}
         </Flex>
         <Flex is_flex justify="space-between">
           <TypeBtn
@@ -281,26 +274,12 @@ const ItemUploadBox = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
+  margin-top: 65px;
 `;
 
 const TypeBtn = styled.button`
   width: 50%;
   padding: 15px;
-`;
-
-const TextBox = styled.textarea`
-  width: 350px;
-  height: 50px;
-  border: 1px solid black;
-  padding: 15px;
-`;
-
-const InputBox = styled.input`
-  width: 200px;
-  height: 50px;
-  border: 1px solid black;
-  padding: 10px;
-  margin-right: 5px;
 `;
 
 const InputNameBox = styled.input`

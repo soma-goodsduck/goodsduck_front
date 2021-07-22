@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import { blackBtn, orange, darkRed, grayText } from "../../shared/colors";
@@ -7,7 +7,9 @@ import { Image, Text } from "../../elements";
 
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 
-const ItemInfo = ({ item }) => {
+import { history } from "../../redux/configureStore";
+
+const ItemRow = ({ item, isBtn }) => {
   let color;
   let tradeStatus;
   if (item.tradeStatus === "TRADING") {
@@ -24,18 +26,25 @@ const ItemInfo = ({ item }) => {
     tradeStatus = "구매중";
   }
 
+  const styles = { isBtn };
+
   return (
-    <ItemBox>
+    <ItemBox
+      {...styles}
+      onClick={() => {
+        history.push(`/item/${item.itemId}`);
+      }}
+    >
       <Image
         shape="rectangle"
-        src={item.image[0].url}
+        src={item.images[0].url}
         size="100px"
         borderRadius="5px"
       />
       <HeartIconBox>
         {item.isLike ? <HeartClickIcon /> : <HeartIcon />}
       </HeartIconBox>
-      <ItemInfoBox>
+      <ItemRowBox>
         <div>
           <Text bold color={color} size="14px">
             {tradeStatus}
@@ -48,18 +57,23 @@ const ItemInfo = ({ item }) => {
           </Text>
         </div>
         <TimeText>{timeForToday(item.itemCreatedAt)}</TimeText>
-      </ItemInfoBox>
+      </ItemRowBox>
     </ItemBox>
   );
+};
+
+ItemRow.defaultProps = {
+  isBtn: false,
 };
 
 const ItemBox = styled.div`
   margin: 20px 0;
   display: flex;
   position: relative;
+  ${(props) => (props.isBtn ? "cursor: pointer;" : "")}
 `;
 
-const ItemInfoBox = styled.div`
+const ItemRowBox = styled.div`
   width: 65%;
   height: 90px;
   display: flex;
@@ -104,4 +118,4 @@ const HeartIconBox = styled.div`
   margin-left: 75px;
 `;
 
-export default ItemInfo;
+export default ItemRow;

@@ -23,7 +23,7 @@ const ItemImg = ({ id, item, onClick }) => {
     history.goBack();
   };
 
-  const [isLike, setIsLike] = useState(item.like);
+  const [isLike, setIsLike] = useState(item.isLike);
   const clickHeart = () => {
     try {
       // 좋아요

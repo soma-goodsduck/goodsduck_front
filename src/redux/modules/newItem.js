@@ -115,7 +115,7 @@ const addItemAction = (item, fileList) => {
       .catch((error) => {
         console.log("error", error);
         Sentry.captureException(error);
-        history.replace("/home");
+        history.replace("/");
       });
   };
 };

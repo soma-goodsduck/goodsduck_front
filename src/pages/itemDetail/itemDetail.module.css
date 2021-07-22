@@ -3,7 +3,7 @@
 .line {
   width: 100%;
   height: 1px;
-  margin: 20px auto;
+  margin: 30px auto;
   background-color: var(--grayBorder);
 }
 
@@ -11,7 +11,25 @@
   width: 100%;
 }
 
-.btnChat {
+/* itemNav */
+
+.itemNavCol,
+.itemNavRow {
+  display: flex;
+  align-items: center;
+}
+
+.itemNavRow {
+  justify-content: space-between;
+}
+
+.itemNavCol {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.btnChat,
+.btnChatCol {
   height: 50px;
   background: var(--yellow);
   display: flex;
@@ -21,8 +39,15 @@
   margin-right: 10px;
 }
 
+.btnChatCol,
+.btnPriceCol {
+  width: 44vw;
+  margin-top: 20px;
+}
+
 .btnPrice,
-.btnRePrice {
+.btnRePrice,
+.btnPriceCol {
   height: 50px;
   background: var(--blackBtn);
   color: var(--white);
@@ -122,10 +147,6 @@
   cursor: pointer;
 }
 
-.likeBtn:hover {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
-}
-
 .filteringBtn {
   font-size: 14px;
   height: 100%;
@@ -144,5 +165,10 @@
 
   .btnPrice {
     font-size: 14px;
+  }
+
+  .btnChatCol,
+  .btnPriceCol {
+    width: 185px;
   }
 }

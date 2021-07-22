@@ -21,7 +21,6 @@
 .isNotHomeIcon,
 .isChatIcon,
 .isNotChatIcon,
-.isNewIcon,
 .isNotNewIcon,
 .isCommunityIcon,
 .isNotCommunityIcon,
@@ -58,9 +57,6 @@
 .isNotChatIcon {
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_chatting.svg");
 }
-.isNewIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_upload_click.svg");
-}
 .isNotNewIcon {
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_upload.svg");
 }
@@ -81,13 +77,12 @@
 .isNotHomeText,
 .isChatText,
 .isNotChatText,
-.isNewText,
 .isNotNewText,
 .isCommunityText,
 .isNotCommunityText,
 .isProfileText,
 .isNotProfileText {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .isHomeText,
@@ -115,14 +110,13 @@
   .isNotHomeIcon,
   .isChatIcon,
   .isNotChatIcon,
-  .isNewIcon,
   .isNotNewIcon,
   .isCommunityIcon,
   .isNotCommunityIcon,
   .isProfileIcon,
   .isNotProfileIcon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   .isCommunityIcon,
@@ -140,12 +134,11 @@
   .isNotHomeText,
   .isChatText,
   .isNotChatText,
-  .isNewText,
   .isNotNewText,
   .isCommunityText,
   .isNotCommunityText,
   .isProfileText,
   .isNotProfileText {
-    font-size: 16px;
+    font-size: 14px;
   }
 }

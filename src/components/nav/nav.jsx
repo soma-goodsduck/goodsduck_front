@@ -11,21 +11,18 @@ const Nav = (props) => {
 
   const [isHome, setIsHome] = useState(false);
   const [isChat, setIsChat] = useState(false);
-  const [isUpload, setIsUpload] = useState(false);
   const [isCommunity, setIsCommunity] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
 
   useEffect(() => {
-    if (href.includes("/home")) {
-      setIsHome(true);
-    } else if (href.includes("/chatting")) {
+    if (href.includes("/chatting")) {
       setIsChat(true);
-    } else if (href.includes("/new")) {
-      setIsUpload(true);
     } else if (href.includes("/community")) {
       setIsCommunity(true);
-    } else if (href.includes("/profile")) {
+    } else if (href.includes("/mypage")) {
       setIsProfile(true);
+    } else {
+      setIsHome(true);
     }
   });
 
@@ -36,7 +33,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("home");
+            history.push("/");
           }}
         >
           <div className={isHome ? styles.isHomeIcon : styles.isNotHomeIcon} />
@@ -48,7 +45,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("chatting");
+            history.push("/chatting");
           }}
         >
           <div className={isChat ? styles.isChatIcon : styles.isNotChatIcon} />
@@ -60,19 +57,17 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("new");
+            history.push("/new");
           }}
         >
-          <div className={isUpload ? styles.isNewIcon : styles.isNotNewIcon} />
-          <span className={isUpload ? styles.isNewText : styles.isNotNewText}>
-            등록
-          </span>
+          <div className={styles.isNotNewIcon} />
+          <span className={styles.isNotNewText}>등록</span>
         </button>
-        <button
+        {/* <button
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("community");
+            history.push("/community");
           }}
         >
           <div
@@ -87,12 +82,12 @@ const Nav = (props) => {
           >
             커뮤니티
           </span>
-        </button>
+        </button> */}
         <button
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("profile");
+            history.push("/mypage");
           }}
         >
           <div

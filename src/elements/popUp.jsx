@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { green } from "../shared/colors";
 
+import { history } from "../redux/configureStore";
+
 import { actionCreators as userActions } from "../redux/modules/user";
 
 const PopUp = (props) => {
@@ -35,6 +37,11 @@ const PopUp = (props) => {
     isBold,
   };
 
+  const noLogin = () => {
+    dispatch(userActions.noShowPopupAction());
+    history.push("/");
+  };
+
   return (
     <PopUpBox {...styles}>
       <Text
@@ -45,9 +52,7 @@ const PopUp = (props) => {
       >
         {text1}
       </Text>
-      <ExitText onClick={() => dispatch(userActions.noShowPopupAction())}>
-        {text2}
-      </ExitText>
+      <ExitText onClick={() => noLogin()}>{text2}</ExitText>
     </PopUpBox>
   );
 };
@@ -80,9 +85,14 @@ const PopUpBox = styled.div`
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};
   color: ${(props) => props.color};
+
+  -webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.5);
 `;
 
 const Text = styled.button`
+  font-family: "Do Hyeon", sans-serif;
   font-size: 18px;
   ${(props) => (props.isBold ? "font-weight: bold; " : "")}
   margin: 20px 0;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -10,11 +10,22 @@ import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
 const HeaderInfo = (props) => {
   const dispatch = useDispatch();
-  const { text, padding, margin, isClear } = props;
+
+  const screen = window.screen.width;
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (screen < 415) {
+      setIsMobile(true);
+    }
+  }, [screen]);
+
+  const { text, margin, bg, borderRadius, isClear } = props;
 
   const styles = {
-    padding,
     margin,
+    bg,
+    borderRadius,
+    isMobile,
   };
 
   const history = useHistory();
@@ -23,7 +34,7 @@ const HeaderInfo = (props) => {
     if (isClear) {
       dispatch(newItemActions.clearAction());
       dispatch(imgActions.clearImgAction());
-      history.replace("/home");
+      history.replace("/");
       return;
     }
     history.goBack();
@@ -52,16 +63,21 @@ const HeaderInfo = (props) => {
 };
 
 HeaderInfo.defaultProps = {
-  padding: "",
   margin: "",
   bg: "#ffffff",
-  _onClick: () => {},
+  borderRadius: "10px",
 };
 
 const HeaderBox = styled.div`
-  padding: ${(props) => props.padding};
+  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  padding: 0 20px;
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};
+  border-radius: ${(props) => props.borderRadius};
+  position: fixed;
+  top: 0;
+  ${(props) => (props.isMobile ? "left: 0;" : "left: 30%;")};
+  z-index: 3;
 `;
 
 const Column1 = styled.div`

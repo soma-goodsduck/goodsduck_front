@@ -26,3 +26,11 @@ export const timeForToday = (value) => {
 export const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const formatDate = (x) => {
+  const currentDatetime = new Date(x);
+  const formattedDate = `${currentDatetime.getFullYear()}.${
+    currentDatetime.getMonth() + 1
+  }.${currentDatetime.getDate()} ${currentDatetime.getHours()}:${currentDatetime.getMinutes()}`;
+  return formattedDate;
+};

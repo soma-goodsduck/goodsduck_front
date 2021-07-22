@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const Text = (props) => {
   const {
+    medium,
     bold,
     color,
     size,
@@ -15,6 +16,7 @@ const Text = (props) => {
   } = props;
 
   const styles = {
+    medium,
     bold,
     color,
     size,
@@ -43,13 +45,14 @@ Text.defaultProps = {
 const P = styled.p`
   color: ${(props) => props.color};
   font-size: ${(props) => props.size};
-  font-weight: ${(props) => (props.bold ? "600" : "400")};
+  font-weight: ${(props) => (props.bold ? "600" : "")};
+  font-weight: ${(props) => (props.medium ? "500" : "")};
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
     props.is_long
       ? "white-space: nowrap; overflow:hidden; text-overflow: ellipsis; "
       : ""}
-      ${(props) => (props.is_center ? "align: center; " : "")}
+  ${(props) => (props.is_center ? "text-align: center; " : "")}
 `;
 
 export default Text;
