@@ -40,7 +40,14 @@ const initialState = {
 const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
-    history.replace("/home");
+    history.replace("/");
+  };
+};
+
+const logoutAction = (user) => {
+  return function (dispatch, getState, { history }) {
+    dispatch(logOut(user));
+    history.replace("/");
   };
 };
 
@@ -114,7 +121,6 @@ const signupAction = (user) => {
     socialAccountType: user.type,
     idols: user.idols,
   };
-  console.log(json);
   return function (dispatch, getState, { history }) {
     axios
       .post(
@@ -129,12 +135,12 @@ const signupAction = (user) => {
       )
       .then((response) => {
         dispatch(logIn(response.data.jwt));
-        history.push("/home");
+        history.push("/");
       })
       .catch((error) => {
         console.log("error", error);
         Sentry.captureException(error);
-        history.replace("/");
+        history.replace("/login");
       });
   };
 };
@@ -197,7 +203,7 @@ export default handleActions(
 
 // action creator export
 const actionCreators = {
-  logOut,
+  logoutAction,
   getUser,
   loginAction,
   loginCheckAction,
