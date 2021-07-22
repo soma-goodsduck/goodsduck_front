@@ -12,13 +12,10 @@ import { getAction, deleteAction } from "../../shared/axios";
 
 const Item = ({ item, id }) => {
   let color;
-  let tradeType;
-  if (item.tradeType === "SELL") {
+  if (item.tradeType === "판매") {
     color = "#e15b5b";
-    tradeType = "판매";
-  } else if (item.tradeType === "BUY") {
+  } else if (item.tradeType === "구매") {
     color = "#299bff";
-    tradeType = "구매";
   }
 
   const screen = window.screen.width;
@@ -36,7 +33,7 @@ const Item = ({ item, id }) => {
     history.push(`item/${id}`);
   };
 
-  const [isLike, setIsLike] = useState(item.like);
+  const [isLike, setIsLike] = useState(item.isLike);
   // 좋아요
   const clickHeart = () => {
     if (!isLike) {
@@ -62,7 +59,7 @@ const Item = ({ item, id }) => {
           <button
             type="button"
             aria-label="like"
-            className={item.like ? styles.clickLikeBtn : styles.likeBtn}
+            className={isLike ? styles.clickLikeBtn : styles.likeBtn}
             onClick={() => clickHeart()}
           />
         </div>
@@ -75,7 +72,7 @@ const Item = ({ item, id }) => {
             margin="0 5px 0 0"
             color={color}
           >
-            {tradeType}
+            {item.tradeType}
           </Text>
           <Title>
             <Text size={isMobile ? "4vw" : "16px"} is_long>
@@ -98,7 +95,7 @@ const Item = ({ item, id }) => {
             />
             <UserName>
               <Text is_long size={isMobile ? "4.3vw" : "17px"}>
-                {item.user.nickName}
+                {item.itemOwner.nickName}
               </Text>
             </UserName>
           </Flex>

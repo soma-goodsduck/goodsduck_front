@@ -21,7 +21,7 @@ const IdolMemberSelect = ({ history }) => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    const getIdolMember = getInfo(`/idol/${groupId}/member`);
+    const getIdolMember = getInfo(`idol/${groupId}/member`);
     getIdolMember.then((result) => {
       setMembers(result);
     });
@@ -107,6 +107,7 @@ const IdolMemberSelect = ({ history }) => {
 };
 
 const IdolContainer = styled.div`
+  margin-top: 65px;
   height: 90vh;
   display: flex;
   flex-direction: column;

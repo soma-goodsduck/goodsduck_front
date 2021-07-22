@@ -1,7 +1,7 @@
 import React from "react";
 
 import styled from "styled-components";
-import { Flex, Button, Image } from "../../elements";
+import { Flex, Button } from "../../elements";
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from "../../shared/OAuth";
 import { history } from "../../redux/configureStore";
 
