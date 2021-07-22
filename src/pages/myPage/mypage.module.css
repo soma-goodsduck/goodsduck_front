@@ -1,0 +1,42 @@
+@import "../../shared/colors.css";
+
+/* userProfile */
+.gaugeBox {
+  width: 65vw;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--lightGray2);
+  margin-top: 10px;
+}
+
+/* itemList */
+.isClicked {
+  color: var(--blackBtn);
+  border-bottom: 3px solid var(--blackBtn);
+  padding-bottom: 10px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.isNotClicked {
+  color: var(--gray);
+  padding-bottom: 15px;
+}
+
+/* myProfile */
+.cameraBtnBox {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  margin-top: 80px;
+  margin-left: 105vw;
+}
+
+@media screen and (min-width: 415px) {
+  .gaugeBox {
+    width: 280px;
+  }
+  .cameraBtnBox {
+    margin-left: 430px;
+  }
+}
