@@ -25,31 +25,18 @@ const ItemDetail = ({ history }) => {
 
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
-  useEffect(() => {
-    const getItemDetail = getInfo(`item/${itemId}`);
-    getItemDetail.then((result) => {
-      setItemData(result);
-      console.log(itemData);
-    });
-  }, []);
-
-  // 아이템 글쓴이인지 확인
-  const [showPopup, setShowPopup] = useState(false);
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
-    const checkWriter = () => {
-      const getIsWriter = getData(`item/edit/${itemId}`);
-      getIsWriter.then((result) => {
-        console.log(result);
-        if (result === "login") {
-          setShowPopup(true);
-        }
-        if (result === 1) {
-          setIsWriter(true);
-        }
-      });
-    };
-    checkWriter();
+    const getItemDetail = getInfo(`items/${itemId}`);
+    getItemDetail.then((result) => {
+      console.log(result);
+      setItemData(result);
+      console.log(itemData);
+
+      if (result.isOwner) {
+        setIsWriter(true);
+      }
+    });
   }, []);
 
   const [showWriterPopup, setShowWriterPopup] = useState(null);
@@ -90,11 +77,11 @@ const ItemDetail = ({ history }) => {
     // dispatch(imgActions.setItemAction(userId, itemData.images));
   };
 
-  // 등록한 아이템 삭제 => 아직 안되는듯
+  // 등록한 아이템 삭제
   const deleteItem = () => {
-    deleteAction(`item/${itemId}`);
+    deleteAction(`items/${itemId}`);
     console.log("굿즈 삭제");
-    history.replace("/home");
+    history.replace("/");
   };
 
   // 판매자/구매자의 마이페이지로 이동
@@ -221,8 +208,10 @@ const ItemDetail = ({ history }) => {
                 <Flex>
                   <Image
                     shape="circle"
-                    src="https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
-                    // src={itemData.itemOwner.userImage}
+                    src={
+                      itemData.itemOwner.imageUrl ||
+                      "https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
+                    }
                     margin="0 10px 0 0"
                     size="50px"
                   />

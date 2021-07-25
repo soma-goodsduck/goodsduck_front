@@ -51,58 +51,6 @@ const logoutAction = (user) => {
   };
 };
 
-const loginCheckAction = () => {
-  const jwt = localStorage.getItem("jwt");
-  return function (dispatch, getState, { history }) {
-    if (jwt !== null) {
-      axios
-        .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
-          headers: { jwt: `${jwt}` },
-        })
-        .then(function (result) {
-          if (result.data.role === "USER") {
-            dispatch(loginAction(jwt));
-          } else if (result.data.role === "ANONYMOUS") {
-            console.log(result.data);
-            dispatch(logOut());
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-          Sentry.captureException(error);
-        });
-    }
-  };
-};
-
-const checkUserAction = (path) => {
-  const jwt = localStorage.getItem("jwt");
-  return function (dispatch, getState, { history }) {
-    if (jwt == null) {
-      dispatch(showPopup());
-    } else {
-      axios
-        .get(`${process.env.REACT_APP_BACK_URL}/api/v1/validate/user`, {
-          headers: { jwt: `${jwt}` },
-        })
-        .then((result) => {
-          console.log(result.data);
-          if (result.data.response.role === "ANONYMOUS") {
-            dispatch(showPopup());
-            localStorage.removeItem("jwt");
-            window.location.reload(); // 새로고침
-          } else {
-            history.push(`/${path}`);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-          Sentry.captureException(error);
-        });
-    }
-  };
-};
-
 // 비회원인 경우, 회원가입 페이지로 이동
 const nonUserAction = (id, type) => {
   return function (dispatch, getState, { history }) {
@@ -124,7 +72,7 @@ const signupAction = (user) => {
   return function (dispatch, getState, { history }) {
     axios
       .post(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/signup`,
+        `${process.env.REACT_APP_BACK_URL}/api/v1/sign-up`,
         JSON.stringify(json),
         {
           headers: {
@@ -206,8 +154,6 @@ const actionCreators = {
   logoutAction,
   getUser,
   loginAction,
-  loginCheckAction,
-  checkUserAction,
   nonUserAction,
   signupAction,
   showPopupAction,

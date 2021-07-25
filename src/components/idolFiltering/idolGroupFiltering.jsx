@@ -16,7 +16,7 @@ const IdolGroupFiltering = () => {
   const [idols, setIdols] = useState([]);
 
   useEffect(() => {
-    const getIdolGroup = getInfo("idol");
+    const getIdolGroup = getInfo("idol-groups");
     getIdolGroup.then((result) => {
       setIdols(result);
     });

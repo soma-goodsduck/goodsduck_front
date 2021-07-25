@@ -15,7 +15,7 @@ const MyPage = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const getUserData = getData("user/lookup");
+    const getUserData = getData("users/look-up");
     getUserData.then((result) => {
       setUser(result);
     });

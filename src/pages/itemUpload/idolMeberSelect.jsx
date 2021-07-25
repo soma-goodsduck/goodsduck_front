@@ -21,7 +21,7 @@ const IdolMemberSelect = ({ history }) => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    const getIdolMember = getInfo(`idol/${groupId}/member`);
+    const getIdolMember = getInfo(`idol-members/idol-groups/${groupId}`);
     getIdolMember.then((result) => {
       setMembers(result);
     });

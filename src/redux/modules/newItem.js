@@ -100,7 +100,7 @@ const addItemAction = (item, fileList) => {
     console.log(itemDto);
 
     axios
-      .post(`${process.env.REACT_APP_BACK_URL}/api/v1/item/new`, formData, {
+      .post(`${process.env.REACT_APP_BACK_URL}/api/v1/items`, formData, {
         headers: { jwt: `${item.userJwt}` },
       })
       .then((response) => {
@@ -155,16 +155,12 @@ const updateItemAction = (item, id) => {
     console.log(itemDto);
 
     axios
-      .put(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/item/edit/${id}`,
-        formData,
-        {
-          headers: { jwt: `${item.userJwt}` },
-        },
-      )
+      .put(`${process.env.REACT_APP_BACK_URL}/api/v1/items/${id}`, formData, {
+        headers: { jwt: `${item.userJwt}` },
+      })
       .then((response) => {
-        console.log(response.data.response);
-        if (response.data.response !== -1) {
+        console.log(response.data.success);
+        if (response.data.success) {
           console.log("굿즈 수정 완료");
           history.replace(`/item/${id}`);
         } else {

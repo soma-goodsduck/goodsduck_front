@@ -8,19 +8,20 @@ import { grayText } from "../../shared/colors";
 import { formatDate, numberWithCommas } from "../../shared/functions";
 
 const PriceList = ({ id }) => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(null);
 
   useEffect(() => {
     const getItems = getInfo(`item/${id}/propose`);
     getItems.then((result) => {
       setItems(result);
+      console.log(result);
     });
   }, []);
 
   return (
     <>
-      {items.length === 0 && <Text>현재 제시된 가격이 없습니다😢</Text>}
-      {items !== [] && (
+      {items === null && <Text>현재 제시된 가격이 없습니다😢</Text>}
+      {items !== null && (
         <div>
           {items.map((item) => (
             <ItemBox key={item.priceProposeId}>

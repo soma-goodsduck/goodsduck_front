@@ -9,7 +9,7 @@ import { Text, PopUp } from "../../elements";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 
-import { getData } from "../../shared/axios";
+import { getInfo, getData } from "../../shared/axios";
 import { grayBorder, grayBtnText } from "../../shared/colors";
 import PriceFilteringPopup from "./priceFilteringPopup";
 
@@ -25,12 +25,9 @@ const PriceProposeList = ({ history }) => {
   const showPopup = useSelector((state) => state.user.show_popup);
 
   useEffect(() => {
-    const getItemData = getData(`item/${itemId}`);
+    const getItemData = getInfo(`items/${itemId}`);
     getItemData.then((result) => {
       setItemData(result);
-      if (result === "login") {
-        dispatch(userActions.showPopupAction());
-      }
     });
 
     const getLikeItemList = getData(`item/${itemId}/propose`);

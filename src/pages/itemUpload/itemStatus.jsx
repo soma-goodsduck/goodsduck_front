@@ -15,13 +15,12 @@ const ItemStatus = () => {
   const statusValue = useSelector((state) => state.newItem.status_grade);
 
   // 상품상태 데이터 받아오기
-  const [statusData, setStatusData] = useState([]);
+  const [statuses, setStatuses] = useState([]);
 
   useEffect(() => {
-    const getCategory = getInfo("item/gradestatus");
+    const getCategory = getInfo("items/grade-status");
     getCategory.then((result) => {
-      console.log(result);
-      setStatusData(result);
+      setStatuses(result);
     });
   }, []);
 
@@ -43,27 +42,25 @@ const ItemStatus = () => {
       <StatusContainer>
         <div>
           <div className={styles.detailText}>굿즈 상태 선택</div>
-          {statusData.map((_statusData, idx) => (
+          {statuses.map((status, idx) => (
             <StatusBox
-              key={_statusData.gradeStatus}
+              key={status.gradeStatus}
               className={
-                statusValue === `${_statusData.gradeStatus}`
+                statusValue === `${status.gradeStatus}`
                   ? styles.clickStatusBtn
                   : styles.statusBtn
               }
-              onClick={() => checkHandler(`${_statusData.gradeStatus}`)}
+              onClick={() => checkHandler(`${status.gradeStatus}`)}
             >
               <StatusInput
-                id={_statusData.gradeStatus}
+                id={status.gradeStatus}
                 type="radio"
-                checked={statusValue === `${_statusData.gradeStatus}`}
-                onChange={() => checkHandler(`${_statusData.gradeStatus}`)}
+                checked={statusValue === `${status.gradeStatus}`}
+                onChange={() => checkHandler(`${status.gradeStatus}`)}
               />
-              <label htmlFor={_statusData.gradeStatus} />
-              <div className={styles.statusGrade}>
-                {_statusData.gradeStatus}급
-              </div>
-              <div>{_statusData.description}</div>
+              <label htmlFor={status.gradeStatus} />
+              <div className={styles.statusGrade}>{status.gradeStatus}급</div>
+              <div>{status.description}</div>
             </StatusBox>
           ))}
         </div>

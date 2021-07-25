@@ -34,9 +34,9 @@ const ItemList = (props) => {
   const [items, setItems] = useState(null);
   let tradeStatus;
   if (isBuying) {
-    tradeStatus = "BUYING,RESERVING";
+    tradeStatus = "BUYING";
   } else if (isSelling) {
-    tradeStatus = "SELLING,RESERVING";
+    tradeStatus = "SELLING";
   } else if (isCompleted) {
     tradeStatus = "COMPLETE";
   }
@@ -44,7 +44,7 @@ const ItemList = (props) => {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const getItems = getData(`mypage/item?tradeStatus=${tradeStatus}`);
+    const getItems = getData(`users/items?tradeStatus=${tradeStatus}`);
     getItems.then((result) => {
       console.log(result);
       if (result === "login") {

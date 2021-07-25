@@ -18,7 +18,7 @@ const MyProfile = (props) => {
   const [img, setImg] = useState();
 
   useEffect(() => {
-    const getUserData = getData("user/lookup");
+    const getUserData = getData("users/look-up");
     getUserData.then((result) => {
       setUser(result);
       setNick(result.nickName);
