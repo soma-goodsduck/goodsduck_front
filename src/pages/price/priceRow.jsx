@@ -5,7 +5,7 @@ import styles from "./pricePropose.module.css";
 import { Flex, Image, Text } from "../../elements";
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 
-import { getData } from "../../shared/axios";
+import { postAction } from "../../shared/axios";
 
 const PriceRow = ({ item }) => {
   // 아이템 아이디
@@ -15,24 +15,16 @@ const PriceRow = ({ item }) => {
   // 가격제안 수락, 거절
   const proposeId = item.priceProposeId;
   const handleAccept = () => {
-    const getItemDetail = getData(`item/${itemId}/propose/${proposeId}/accept`);
-    getItemDetail.then((result) => {
-      if (result.success === true) {
-        console.log("가격 제안을 수락했습니다");
-      } else {
-        console.log("가격 제안 수락에 실패했습니다");
-      }
-    });
+    const acceptPricePropose = postAction(
+      `items/${itemId}/price-propose/${proposeId}/accept`,
+    );
+    acceptPricePropose();
   };
-  const handleReject = () => {
-    const getItemDetail = getData(`item/${itemId}/propose/${proposeId}/refuse`);
-    getItemDetail.then((result) => {
-      if (result.success === true) {
-        console.log("가격 제안을 거절했습니다");
-      } else {
-        console.log("가격 제안 거절에 실패했습니다");
-      }
-    });
+  const handleRefuse = () => {
+    const refusePricePropose = postAction(
+      `items/${itemId}/price-propose/${proposeId}/refuse`,
+    );
+    refusePricePropose();
   };
 
   return (
@@ -72,7 +64,7 @@ const PriceRow = ({ item }) => {
           type="button"
           className={styles.rejectBtn}
           onClick={() => {
-            handleReject();
+            handleRefuse();
           }}
         >
           거절

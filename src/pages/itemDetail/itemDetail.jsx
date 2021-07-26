@@ -25,7 +25,7 @@ const ItemDetail = ({ history }) => {
 
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
-  const [isWriter, setIsWriter] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   useEffect(() => {
     const getItemDetail = getInfo(`items/${itemId}`);
     getItemDetail.then((result) => {
@@ -34,7 +34,7 @@ const ItemDetail = ({ history }) => {
       console.log(itemData);
 
       if (result.isOwner) {
-        setIsWriter(true);
+        setIsOwner(true);
       }
     });
   }, []);
@@ -49,7 +49,7 @@ const ItemDetail = ({ history }) => {
   };
 
   const clickDots = () => {
-    if (isWriter) {
+    if (isOwner) {
       setShowWriterPopup(true);
     } else {
       setShowUserPopup(true);
@@ -237,7 +237,7 @@ const ItemDetail = ({ history }) => {
 
           <div className={styles.line} />
           {/* 가격, 버튼 */}
-          <ItemNav item={itemData} id={itemId} isWriter={isWriter} />
+          <ItemNav item={itemData} id={itemId} isOwner={isOwner} />
         </>
       ) : null}
     </>

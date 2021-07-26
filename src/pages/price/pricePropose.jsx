@@ -27,7 +27,7 @@ const PricePropose = ({ _onClick }) => {
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
   useEffect(() => {
-    const getItemDetail = getInfo(`item/${itemId}`);
+    const getItemDetail = getInfo(`items/${itemId}`);
     getItemDetail.then((result) => {
       setItemData(result);
     });
@@ -36,17 +36,12 @@ const PricePropose = ({ _onClick }) => {
   // 가격 제안 요청
   const [price, setPrice] = useState(0);
   const handleClcik = () => {
-    const postPrice = postAction(`item/${itemId}/propose`, {
+    const postPrice = postAction(`items/${itemId}/price-propose`, {
       price,
     });
     postPrice.then((result) => {
       console.log(result);
-      // if (result.success === true) {
-      //   console.log("가격 제안에 성공했습니다");
-      //   history.push(`/item/${itemId}`);
-      // } else {
-      //   console.log("가격 제안에 실패했습니다");
-      // }
+      _onClick();
     });
   };
 

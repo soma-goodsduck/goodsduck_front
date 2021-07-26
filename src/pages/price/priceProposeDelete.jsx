@@ -10,7 +10,7 @@ import { numberWithCommas } from "../../shared/functions";
 import { getInfo, deleteAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const priceProposeUpdate = ({ id, proposePrice, _onClick }) => {
+const priceProposeDelete = ({ priceId, proposePrice, _onClick }) => {
   // 반응형
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -28,7 +28,7 @@ const priceProposeUpdate = ({ id, proposePrice, _onClick }) => {
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
   useEffect(() => {
-    const getItemDetail = getInfo(`item/${itemId}`);
+    const getItemDetail = getInfo(`items/${itemId}`);
     getItemDetail.then((result) => {
       setItemData(result);
     });
@@ -36,16 +36,13 @@ const priceProposeUpdate = ({ id, proposePrice, _onClick }) => {
 
   // 가격 제안 취소
   const handleDelete = () => {
-    // const deletePrice = deleteAction(`item/${itemId}/propose/${priceId}`);
-    // deletePrice.then((result) => {
-    //   console.log(result);
-    // if (result !== null) {
-    //   console.log("가격 제안 삭제에 성공했습니다");
-    //   history.push(`/item/${itemId}`);
-    // } else {
-    //   console.log("가격 제안 삭제에 실패했습니다");
-    // }
-    // });
+    console.log("delete");
+    const deletePrice = deleteAction(
+      `items/${itemId}/price-propose/${priceId}`,
+    );
+    deletePrice.then((result) => {
+      _onClick();
+    });
   };
 
   return (
@@ -55,8 +52,7 @@ const priceProposeUpdate = ({ id, proposePrice, _onClick }) => {
           <ExitBtn onClick={_onClick} />
           {itemData && <ItemRow item={itemData} />}
           <Text size="20px" margin="20px 0 0 0" bold is_center>
-            기존 제시 금액 : 15,000원
-            {/* 기존 제시 금액 : {numberWithCommas(proposePrice)}원 */}
+            기존 제시 금액 : {numberWithCommas(proposePrice)}원
           </Text>
         </Info>
 
@@ -128,4 +124,4 @@ const ExitBtn = styled.button`
   cursor: pointer;
 `;
 
-export default priceProposeUpdate;
+export default priceProposeDelete;

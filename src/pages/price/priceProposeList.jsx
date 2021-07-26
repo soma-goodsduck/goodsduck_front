@@ -30,9 +30,10 @@ const PriceProposeList = ({ history }) => {
       setItemData(result);
     });
 
-    const getLikeItemList = getData(`item/${itemId}/propose`);
-    getLikeItemList.then((result) => {
-      setPriceLists(result);
+    const getPriceList = getData(`items/${itemId}/price-propose`);
+    getPriceList.then((result) => {
+      const newResult = result.filter((x) => x.status === "SUGGESTED");
+      setPriceLists(newResult);
 
       if (result === "login") {
         dispatch(userActions.showPopupAction());
