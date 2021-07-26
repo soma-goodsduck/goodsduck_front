@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import * as Sentry from "@sentry/react";
 
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
 import { Flex, Image, Icon } from "../../elements/index";
-import { getAction, deleteAction } from "../../shared/axios";
+import { postAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
   const screen = window.screen.width;
@@ -25,17 +24,12 @@ const ItemImg = ({ id, item, onClick }) => {
 
   const [isLike, setIsLike] = useState(item.isLike);
   const clickHeart = () => {
-    try {
-      // 좋아요
-      if (!isLike) {
-        getAction(`like/item/${id}`);
-      } else {
-        deleteAction(`like/item/${id}`);
-      }
-    } catch (error) {
-      console.log("error", error);
-      Sentry.captureException(error);
+    if (!isLike) {
+      postAction(`items/${id}/like`);
+    } else {
+      deleteAction(`items/${id}/like`);
     }
+
     setIsLike(!isLike);
   };
 

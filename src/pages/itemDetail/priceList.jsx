@@ -13,7 +13,7 @@ const PriceList = ({ id }) => {
   useEffect(() => {
     const getItems = getInfo(`items/${id}/price-propose`);
     getItems.then((result) => {
-      if (result.length !== 0) {
+      if (result !== null && result.length !== 0) {
         const sortData = result.reverse();
         if (sortData.length > 5) {
           sortData.slice(0, 5);
