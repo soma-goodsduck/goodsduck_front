@@ -36,12 +36,6 @@
   cursor: pointer;
 }
 
-.likeBtn:hover {
-  width: 30px;
-  height: 30px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
-}
-
 @media screen and (min-width: 415px) {
   .likeBox {
     padding-bottom: 130px;

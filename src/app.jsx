@@ -10,6 +10,7 @@ import "./normalize.css";
 import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import home from "./pages/home/home";
+import Chatting from "./pages/chatting/chatting";
 import MyPage from "./pages/myPage/myPage";
 import Setting from "./pages/myPage/setting";
 import MyProfile from "./pages/myPage/myProfile";
@@ -43,6 +44,7 @@ function App() {
           exact
           component={OAuth2RedirectHandler}
         />
+        <Route path="/chatting" exact component={Chatting} />
         <Route path="/mypage" exact component={MyPage} />
         <Route path="/setting" exact component={Setting} />
         <Route path="/myProfile" exact component={MyProfile} />

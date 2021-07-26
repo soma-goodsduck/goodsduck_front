@@ -8,20 +8,25 @@ import { grayText } from "../../shared/colors";
 import { formatDate, numberWithCommas } from "../../shared/functions";
 
 const PriceList = ({ id }) => {
-  const [items, setItems] = useState(null);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const getItems = getInfo(`item/${id}/propose`);
+    const getItems = getInfo(`items/${id}/price-propose`);
     getItems.then((result) => {
-      setItems(result);
-      console.log(result);
+      if (result.length !== 0) {
+        const sortData = result.reverse();
+        if (sortData.length > 5) {
+          sortData.slice(0, 5);
+        }
+        setItems(sortData);
+      }
     });
   }, []);
 
   return (
     <>
-      {items === null && <Text>현재 제시된 가격이 없습니다😢</Text>}
-      {items !== null && (
+      {items.length === 0 && <Text>현재 제시된 가격이 없습니다😢</Text>}
+      {items.length !== 0 && (
         <div>
           {items.map((item) => (
             <ItemBox key={item.priceProposeId}>

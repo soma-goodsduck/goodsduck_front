@@ -32,7 +32,7 @@ const Login = (props) => {
       <Flex is_flex margin="20px">
         <TextBtn
           onClick={() => {
-            history.replace("/home");
+            history.replace("/");
           }}
         >
           그냥 둘러볼게요
