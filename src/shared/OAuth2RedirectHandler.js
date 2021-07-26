@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import * as Sentry from "@sentry/react";
+// import * as Sentry from "@sentry/react";
 
 import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
@@ -33,7 +33,7 @@ const OAuth2RedirectHandler = () => {
           }
         } catch (error) {
           console.log("error", error);
-          Sentry.captureException(error);
+          // Sentry.captureException(error);
         }
       };
       kakao();
@@ -56,7 +56,7 @@ const OAuth2RedirectHandler = () => {
           }
         } catch (error) {
           console.log("error", error);
-          Sentry.captureException(error);
+          // Sentry.captureException(error);
         }
       };
       naver();

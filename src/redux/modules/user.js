@@ -5,7 +5,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
-import * as Sentry from "@sentry/react";
+// import * as Sentry from "@sentry/react";
 
 import { setLS, deleteLS } from "../../shared/localStorage";
 
@@ -87,7 +87,7 @@ const signupAction = (user) => {
       })
       .catch((error) => {
         console.log("error", error);
-        Sentry.captureException(error);
+        // Sentry.captureException(error);
         history.replace("/login");
       });
   };

@@ -5,7 +5,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
-import * as Sentry from "@sentry/react";
+// import * as Sentry from "@sentry/react";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -114,7 +114,7 @@ const addItemAction = (item, fileList) => {
       })
       .catch((error) => {
         console.log("error", error);
-        Sentry.captureException(error);
+        // Sentry.captureException(error);
         history.replace("/");
       });
   };
@@ -169,7 +169,7 @@ const updateItemAction = (item, id) => {
       })
       .catch((error) => {
         console.log("error", error);
-        Sentry.captureException(error);
+        // Sentry.captureException(error);
         history.replace(`/item/${id}`);
       });
   };

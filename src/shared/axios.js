@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import axios from "axios";
-import * as Sentry from "@sentry/react";
+// import * as Sentry from "@sentry/react";
 
 // 무한 스크롤 (홈 데이터)
 export const getList = async (path, pageNumber) => {
@@ -20,7 +20,7 @@ export const getList = async (path, pageNumber) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -42,7 +42,7 @@ export const getInfo = async (path) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -70,7 +70,7 @@ export const getData = async (path) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -98,7 +98,7 @@ export const checkLoginWithData = async (path) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -127,7 +127,7 @@ export const getAction = async (path) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -153,10 +153,10 @@ export const deleteAction = async (path) => {
       localStorage.setItem("jwt", result.headers.jwt);
     }
 
-    return result.data.response;
+    return result.data;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -186,7 +186,7 @@ export const postAction = async (path, json) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -215,7 +215,7 @@ export const patchAction = async (path, json) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
 
@@ -245,6 +245,6 @@ export const patchJsonAction = async (path, json) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   }
 };
