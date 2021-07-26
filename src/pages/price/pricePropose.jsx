@@ -5,6 +5,7 @@ import styles from "./pricePropose.module.css";
 
 import ItemRow from "../../components/itemRow/itemRow";
 import { Input, Flex } from "../../elements";
+import LoginPopUp from "../../elements/loginPopUp";
 
 import { getInfo, postAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
@@ -35,44 +36,54 @@ const PricePropose = ({ _onClick }) => {
 
   // 가격 제안 요청
   const [price, setPrice] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleClcik = () => {
     const postPrice = postAction(`items/${itemId}/price-propose`, {
       price,
     });
     postPrice.then((result) => {
-      console.log(result);
-      _onClick();
+      if (result === "login") {
+        setShowPopup(true);
+      } else {
+        _onClick();
+      }
     });
   };
 
   return (
-    <Screen {...styleProps}>
-      <PriceProposeBox>
-        <Info>
-          <ExitBtn onClick={_onClick} />
-          {itemData && <ItemRow item={itemData} />}
-          <Flex is_felxm margin="25px 0 0 0">
-            <div className={styles.wonSign}>₩</div>
-            <Input
-              type="number"
-              borderRadius="5px"
-              value={price}
-              placeholder="금액을 적어주세요"
-              _onChange={(e) => {
-                setPrice(e.target.value);
+    <>
+      {showPopup && <LoginPopUp />}
+      {!showPopup && (
+        <Screen {...styleProps}>
+          <PriceProposeBox>
+            <Info>
+              <ExitBtn onClick={_onClick} />
+              {itemData && <ItemRow item={itemData} />}
+              <Flex is_felxm margin="25px 0 0 0">
+                <div className={styles.wonSign}>₩</div>
+                <Input
+                  type="number"
+                  borderRadius="5px"
+                  value={price}
+                  placeholder="금액을 적어주세요"
+                  _onChange={(e) => {
+                    setPrice(e.target.value);
+                  }}
+                />
+              </Flex>
+            </Info>
+            <ProposeBtn
+              onClick={() => {
+                handleClcik();
               }}
-            />
-          </Flex>
-        </Info>
-        <ProposeBtn
-          onClick={() => {
-            handleClcik();
-          }}
-        >
-          가격 제시하기
-        </ProposeBtn>
-      </PriceProposeBox>
-    </Screen>
+            >
+              가격 제시하기
+            </ProposeBtn>
+          </PriceProposeBox>
+        </Screen>
+      )}
+    </>
   );
 };
 
