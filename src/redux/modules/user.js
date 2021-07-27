@@ -72,7 +72,7 @@ const signupAction = (user) => {
   return function (dispatch, getState, { history }) {
     axios
       .post(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/sign-up`,
+        `${process.env.REACT_APP_BACK_URL}/api/v1/users/sign-up`,
         JSON.stringify(json),
         {
           headers: {

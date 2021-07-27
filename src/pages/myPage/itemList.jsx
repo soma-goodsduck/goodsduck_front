@@ -49,8 +49,9 @@ const ItemList = (props) => {
       console.log(result);
       if (result === "login") {
         setShowPopup(true);
+      } else {
+        setItems(result);
       }
-      setItems(result);
     });
   }, [tradeStatus]);
 

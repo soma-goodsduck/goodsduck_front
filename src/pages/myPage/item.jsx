@@ -26,9 +26,9 @@ const Item = ({ item, clickCompleted }) => {
   }
 
   const handleUpdate = (updateType) => {
-    patchJsonAction(
-      `items/${item.itemId}/trade-status?tradeStatus=${updateType}`,
-    );
+    patchJsonAction(`items/${item.itemId}/trade-status`, {
+      tradeStatus: updateType,
+    });
   };
 
   return (

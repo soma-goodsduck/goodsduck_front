@@ -8,7 +8,7 @@ import { Image, Flex, Text } from "../../elements";
 import { history } from "../../redux/configureStore";
 
 import { timeForToday, numberWithCommas } from "../../shared/functions";
-import { getAction, deleteAction } from "../../shared/axios";
+import { postAction, deleteAction } from "../../shared/axios";
 
 const Item = ({ item, id }) => {
   let color;
@@ -34,12 +34,11 @@ const Item = ({ item, id }) => {
   };
 
   const [isLike, setIsLike] = useState(item.isLike);
-  // 좋아요
   const clickHeart = () => {
     if (!isLike) {
-      getAction(`like/item/${id}`);
+      postAction(`items/${id}/like`);
     } else {
-      deleteAction(`like/item/${id}`);
+      deleteAction(`items/${id}/like`);
     }
 
     setIsLike(!isLike);

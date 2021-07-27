@@ -1,55 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemRow from "../../components/itemRow/itemRow";
-import PopUp from "../../elements/popUp";
-
-import { actionCreators as userActions } from "../../redux/modules/user";
+import LoginPopUp from "../../elements/loginPopUp";
 
 import { getData } from "../../shared/axios";
 
-const LikeItemList = ({ history }) => {
+const LikeItemList = () => {
   const dispatch = useDispatch();
   const [favoriteItems, setFavoriteItems] = useState([]);
-  const showPopup = useSelector((state) => state.user.show_popup);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const getLikeItemList = getData("like/item");
+    const getLikeItemList = getData("items/like");
     getLikeItemList.then((result) => {
-      setFavoriteItems(result);
-
       if (result === "login") {
-        dispatch(userActions.showPopupAction());
+        setShowPopup(true);
+      } else {
+        setFavoriteItems(result);
       }
     });
   }, []);
 
   return (
-    <div>
-      {showPopup && (
-        <PopUp
-          is_bold
-          width="250px"
-          height="120px"
-          text1="👉 로그인 하러가기"
-          text2="그냥 둘러볼게요"
-          _onClick={() => {
-            history.replace("/");
-          }}
-        />
+    <>
+      {showPopup && <LoginPopUp />}
+      {!showPopup && (
+        <div>
+          <HeaderInfo text="찜" padding="0 16px" />
+          {favoriteItems !== [] && (
+            <Box>
+              {favoriteItems.map((favoriteItem) => (
+                <ItemRow key={favoriteItem.itemId} item={favoriteItem} isBtn />
+              ))}
+            </Box>
+          )}
+        </div>
       )}
-      <HeaderInfo text="찜" padding="0 16px" />
-      {favoriteItems !== [] && (
-        <Box>
-          {favoriteItems.map((favoriteItem) => (
-            <ItemRow key={favoriteItem.itemId} item={favoriteItem} isBtn />
-          ))}
-        </Box>
-      )}
-    </div>
+    </>
   );
 };
 

@@ -33,14 +33,12 @@ const ItemNav = ({ item, id, isOwner }) => {
   const [isPriceProposer, setIsPriceProposer] = useState(false);
   const [isHighPrice, setIsHighPrice] = useState(false);
   useEffect(() => {
-    console.log(item.proposedList);
     if (!isOwner && item.proposedList.length !== 0) {
       setIsPriceProposer(true);
     }
     if (item.price > 999999) {
       setIsHighPrice(true);
     }
-    console.log(isPriceProposer);
   }, []);
 
   return (
