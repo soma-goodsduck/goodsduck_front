@@ -11,6 +11,7 @@ import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import home from "./pages/home/home";
 import Chatting from "./pages/chatting/chatting";
+import ChatRoom from "./pages/chatting/chatRoom";
 import MyPage from "./pages/myPage/myPage";
 import Setting from "./pages/myPage/setting";
 import MyProfile from "./pages/myPage/myProfile";
@@ -22,10 +23,10 @@ import ItemCategory from "./pages/itemUpload/itemCategory";
 import ItemStatus from "./pages/itemUpload/itemStatus";
 import IdolGroup from "./pages/itemUpload/idolSelect";
 import IdolMember from "./pages/itemUpload/idolMeberSelect";
+import PriceProposeList from "./pages/price/priceProposeList";
 import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
 
 import { history } from "./redux/configureStore";
-import PriceProposeList from "./pages/price/priceProposeList";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           component={OAuth2RedirectHandler}
         />
         <Route path="/chatting" exact component={Chatting} />
+        <Route path="/chat/:id" exact component={ChatRoom} />
         <Route path="/mypage" exact component={MyPage} />
         <Route path="/setting" exact component={Setting} />
         <Route path="/myProfile" exact component={MyProfile} />

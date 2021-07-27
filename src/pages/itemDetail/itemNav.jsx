@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
@@ -109,6 +111,9 @@ const ItemNav = ({ item, id, isOwner }) => {
           <Flex>
             <Button
               className={isHighPrice ? styles.btnChatCol : styles.btnChat}
+              onClick={() => {
+                history.push(`/chat/${uuidv4()}`);
+              }}
             >
               <Icon
                 width="18px"
