@@ -53,7 +53,7 @@ const PriceProposeList = ({ history }) => {
   const [filtering, setFiltering] = useState("최신순");
   const sortingNew = () => {
     const sortData = priceList.sort((a, b) => {
-      return new Date(a.createdAt) - new Date(b.createdAt);
+      return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     setPriceLists(sortData);

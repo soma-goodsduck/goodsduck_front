@@ -6,6 +6,7 @@ import { Flex, Image, Text } from "../../elements";
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 
 import { postAction } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const PriceRow = ({ item }) => {
   // 아이템 아이디
@@ -18,13 +19,21 @@ const PriceRow = ({ item }) => {
     const acceptPricePropose = postAction(
       `items/${itemId}/price-propose/${proposeId}/accept`,
     );
-    acceptPricePropose();
+    acceptPricePropose.then((result) => {
+      if (result.success === true) {
+        console.log("채팅방 이동");
+      }
+    });
   };
   const handleRefuse = () => {
     const refusePricePropose = postAction(
       `items/${itemId}/price-propose/${proposeId}/refuse`,
     );
-    refusePricePropose();
+    refusePricePropose.then((result) => {
+      if (result.success === true) {
+        history.go(0);
+      }
+    });
   };
 
   return (
