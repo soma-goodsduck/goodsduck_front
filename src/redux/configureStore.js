@@ -13,6 +13,7 @@ import Image from "./modules/image";
 import Item from "./modules/item";
 import Header from "./modules/header";
 import NewItem from "./modules/newItem";
+import Chat from "./modules/chat";
 
 export const history = createBrowserHistory();
 
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   item: Item,
   newItem: NewItem,
   header: Header,
+  chat: Chat,
   router: connectRouter(history),
 });
 

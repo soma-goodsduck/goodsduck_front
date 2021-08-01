@@ -190,6 +190,66 @@ export const postAction = async (path, json) => {
   }
 };
 
+// post(image) 요청
+export const postImgAction = async (path, file) => {
+  const jwt = localStorage.getItem("jwt");
+
+  try {
+    const result = await axios.post(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+      file,
+      {
+        headers: { jwt: `${jwt}` },
+      },
+    );
+    if (result.data.error !== null) {
+      if (result.data.error.status === 401) {
+        // 로그인 만료
+        return "login";
+      }
+    }
+
+    if (result.headers.jwt) {
+      localStorage.setItem("jwt", result.headers.jwt);
+    }
+
+    return result.data.response;
+  } catch (error) {
+    console.log("error", error);
+    // Sentry.captureException(error);
+  }
+};
+
+// put 요청
+export const putAction = async (path, data) => {
+  const jwt = localStorage.getItem("jwt");
+
+  try {
+    const result = await axios.put(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+      data,
+      {
+        headers: { jwt: `${jwt}` },
+      },
+    );
+    if (result.data.error !== null) {
+      if (result.data.error.status === 401) {
+        // 로그인 만료
+        return "login";
+      }
+    }
+
+    if (result.headers.jwt) {
+      localStorage.setItem("jwt", result.headers.jwt);
+    }
+
+    return result.data;
+  } catch (error) {
+    console.log("error", error);
+    // Sentry.captureException(error);
+  }
+};
+
 // patch 요청
 export const patchAction = async (path, json) => {
   const jwt = localStorage.getItem("jwt");
