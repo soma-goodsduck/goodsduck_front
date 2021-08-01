@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
-const PopUp2 = (props) => {
+const PopUp3 = (props) => {
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -12,29 +12,24 @@ const PopUp2 = (props) => {
     }
   }, [screen]);
 
-  const { text1, text2, _onClick1, _onClick2, _onClick3 } = props;
+  const { text, _onClick1, _onClick2 } = props;
 
   const styles = { isMobile };
 
   return (
     <PopUpBox {...styles}>
       <BtnBox>
-        <Btns>
-          <Button1 onClick={_onClick1}>{text1}</Button1>
-          <Button2 onClick={_onClick2}>{text2}</Button2>
-        </Btns>
-        <ExitBtn onClick={_onClick3}>닫기</ExitBtn>
+        <Button onClick={_onClick1}>{text}</Button>
+        <ExitBtn onClick={_onClick2}>닫기</ExitBtn>
       </BtnBox>
     </PopUpBox>
   );
 };
 
-PopUp2.defaultProps = {
-  text1: null,
-  text2: null,
+PopUp3.defaultProps = {
+  text: null,
   _onClick1: () => {},
   _onClick2: () => {},
-  _onClick3: () => {},
 };
 
 const PopUpBox = styled.div`
@@ -57,26 +52,13 @@ const BtnBox = styled.div`
   bottom: 20px;
 `;
 
-const Btns = styled.div`
+const Button = styled.button`
   background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  padding: 17px;
   border-radius: 10px;
-`;
-
-const Button1 = styled.button`
-  padding: 15px;
-  border-bottom: 1px solid #dddddd;
+  margin-bottom: 10px;
+  color: #e33e3e;
   &:hover {
-    font-weight: bold;
-  }
-`;
-
-const Button2 = styled.button`
-  padding: 15px;
-  &:hover {
-    color: #e33e3e;
     font-weight: bold;
   }
 `;
@@ -90,4 +72,4 @@ const ExitBtn = styled.button`
   }
 `;
 
-export default PopUp2;
+export default PopUp3;

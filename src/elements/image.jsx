@@ -6,6 +6,8 @@ const Image = (props) => {
     shape,
     src,
     size,
+    width,
+    height,
     borderRadius,
     margin,
     float,
@@ -17,6 +19,8 @@ const Image = (props) => {
   const styles = {
     src,
     size,
+    width,
+    height,
     borderRadius,
     margin,
     float,
@@ -33,6 +37,10 @@ const Image = (props) => {
     return <ImageRectangle {...styles} onClick={_onClick} />;
   }
 
+  if (shape === "normal") {
+    return <ImageNormal {...styles} onClick={_onClick} />;
+  }
+
   return <></>;
 };
 
@@ -40,6 +48,8 @@ Image.defaultProps = {
   shape: "circle",
   src: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level.svg",
   size: "24px",
+  width: "",
+  height: "",
   borderRadius: "",
   margin: "",
   float: "",
@@ -47,6 +57,21 @@ Image.defaultProps = {
   pointer: false,
   _onClick: () => {},
 };
+
+const ImageNormal = styled.img`
+  position: ${(props) => props.position};
+
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  border-radius: ${(props) => props.borderRadius};
+  margin: ${(props) => props.margin};
+  float: ${(props) => props.float};
+  display: ${(props) => props.display};
+
+  src: ${(props) => props.src};
+
+  ${(props) => (props.pointer ? "cursor: pointer;" : "")}
+`;
 
 const ImageRectangle = styled.div`
   position: ${(props) => props.position};

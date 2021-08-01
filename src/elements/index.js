@@ -10,6 +10,7 @@ import Icon from "./icon";
 import RowScroll from "./rowScroll";
 import PopUp from "./popUp";
 import PopUp2 from "./popUp2";
+import PopUp3 from "./popUp3";
 import LoginPopUp from "./loginPopUp";
 
 export {
@@ -23,5 +24,6 @@ export {
   RowScroll,
   PopUp,
   PopUp2,
+  PopUp3,
   LoginPopUp,
 };
