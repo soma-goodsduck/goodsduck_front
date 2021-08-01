@@ -4,6 +4,7 @@
     "es2021": true
   },
   "extends": ["plugin:react/recommended", "airbnb"],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -36,6 +37,7 @@
     "implicit-arrow-linebreak": "off",
     "no-alert": "off",
     "operator-linebreak": "off",
-    "import/no-unresolved": ["error", { "caseSensitive": false }]
+    "import/no-unresolved": ["error", { "caseSensitive": false }],
+    "import/no-named-as-default": 0
   }
 }
