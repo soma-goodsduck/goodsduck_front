@@ -31,7 +31,6 @@ const ItemDetail = ({ history }) => {
     getItemDetail.then((result) => {
       console.log(result);
       setItemData(result);
-      console.log(itemData);
 
       if (result.isOwner) {
         setIsOwner(true);
@@ -210,7 +209,7 @@ const ItemDetail = ({ history }) => {
                     shape="circle"
                     src={
                       itemData.itemOwner.imageUrl ||
-                      "https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
+                      "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
                     }
                     margin="0 10px 0 0"
                     size="50px"
