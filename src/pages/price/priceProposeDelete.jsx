@@ -36,13 +36,8 @@ const priceProposeDelete = ({ priceId, proposePrice, _onClick }) => {
 
   // 가격 제안 취소
   const handleDelete = () => {
-    console.log("delete");
-    const deletePrice = deleteAction(
-      `items/${itemId}/price-propose/${priceId}`,
-    );
-    deletePrice.then((result) => {
-      _onClick();
-    });
+    deleteAction(`items/${itemId}/price-propose/${priceId}`);
+    window.location.reload();
   };
 
   return (

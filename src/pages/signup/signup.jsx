@@ -85,50 +85,52 @@ const Signup = () => {
       )}
       <div>
         <HeaderInfo text="회원가입" />
-        <Grid padding="16px 0px">
-          <LabelText>이메일</LabelText>
-          <Input
-            type="email"
-            placeholder="이메일을 입력해주세요."
-            borderRadius="5px"
-            value={email}
-            _onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </Grid>
-        <Grid padding="16px 0px">
-          <LabelText>핸드폰 번호</LabelText>
-          <Input
-            type="number"
-            placeholder="핸드폰 번호를 입력해주세요"
-            borderRadius="5px"
-            value={phone}
-            _onChange={(e) => {
-              setPhone(
-                e.target.value.replace(
-                  /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/,
-                  "$1-$2-$3",
-                ),
-              );
-            }}
-          />
-        </Grid>
-        <Grid padding="16px 0px">
-          <LabelText>닉네임</LabelText>
-          <Input
-            placeholder="닉네임을 입력해주세요"
-            borderRadius="5px"
-            value={nick}
-            _onChange={(e) => {
-              setNick(e.target.value);
-            }}
-          />
-        </Grid>
-        <Grid padding="16px 0px">
-          <LabelText>좋아하는 아이돌</LabelText>
-          <IdolGroups onUpdate={updateIdols} />
-        </Grid>
+        <Box>
+          <Grid padding="16px 0px">
+            <LabelText>이메일</LabelText>
+            <Input
+              type="email"
+              placeholder="이메일을 입력해주세요."
+              borderRadius="5px"
+              value={email}
+              _onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid padding="16px 0px">
+            <LabelText>핸드폰 번호</LabelText>
+            <Input
+              type="number"
+              placeholder="핸드폰 번호를 입력해주세요 ex.01012345678"
+              borderRadius="5px"
+              value={phone}
+              _onChange={(e) => {
+                setPhone(
+                  e.target.value.replace(
+                    /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/,
+                    "$1-$2-$3",
+                  ),
+                );
+              }}
+            />
+          </Grid>
+          <Grid padding="16px 0px">
+            <LabelText>닉네임</LabelText>
+            <Input
+              placeholder="닉네임을 입력해주세요"
+              borderRadius="5px"
+              value={nick}
+              _onChange={(e) => {
+                setNick(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid padding="16px 0px">
+            <LabelText>좋아하는 아이돌</LabelText>
+            <IdolGroups onUpdate={updateIdols} />
+          </Grid>
+        </Box>
       </div>
       <button
         className={nextOK ? styles.nextOKBtn : styles.nextBtn}
@@ -150,6 +152,11 @@ const SignUpBox = styled.div`
   justify-content: space-between;
   padding: 0 20px;
 `;
+
+const Box = styled.div`
+  margin-top: 50px;
+`;
+
 const LabelText = styled.div`
   margin-bottom: 10px;
   font-weight: bold;

@@ -42,7 +42,21 @@ const Btns = (props) => {
             후기
           </Text>
         </Flex>
-        <Flex is_col>
+        <Flex
+          is_col
+          pointer
+          _onClick={() => {
+            history.push("/price-proposes");
+          }}
+        >
+          <Text bold size="22px">
+            16
+          </Text>
+          <Text size="15px" margin="10px 0 0 0" color={grayText}>
+            가격제시
+          </Text>
+        </Flex>
+        {/* <Flex is_col>
           <Text bold size="22px">
             112
           </Text>
@@ -87,7 +101,7 @@ const Btns = (props) => {
           <Text size="15px" margin="10px 0 0 0" color={grayText}>
             공지사항
           </Text>
-        </Flex>
+        </Flex> */}
         <Flex is_col>
           <Icon
             width="40px"

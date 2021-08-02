@@ -16,7 +16,10 @@ const UserProfile = ({ user }) => {
     >
       <Image
         shape="circle"
-        src="https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
+        src={
+          user.imageUrl ||
+          "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+        }
         margin="0 7px 0 0"
         size="80px"
       />

@@ -80,7 +80,7 @@ const Item = ({ item, id }) => {
           </Title>
         </Flex>
         <Flex justify="flex-start" padding="5px 7px">
-          <Text size={isMobile ? "5vw" : "18px"} bold>
+          <Text size={isMobile ? "5vw" : "18px"} bold is_long>
             {numberWithCommas(item.price)}원
           </Text>
         </Flex>
@@ -88,7 +88,10 @@ const Item = ({ item, id }) => {
           <Flex>
             <Image
               shape="circle"
-              // src={item.user_info.user_profile}
+              src={
+                item.itemOwner.imageUrl ||
+                "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+              }
               size={isMobile ? "6.5vw" : "24px"}
               margin="0 5px 0 0"
             />

@@ -9,7 +9,7 @@ import { getInfo } from "../../../shared/axios";
 import { gray, lightGray2, yellow } from "../../../shared/colors";
 
 const Message = ({ message }) => {
-  const [isMessageMine, setIsMessageMine] = useState(false);
+  const [isMessageMine, setIsMessageMine] = useState(true);
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
 
   const isImage = (_message) => {

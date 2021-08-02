@@ -3,7 +3,8 @@
 .categories {
   display: flex;
   overflow-x: scroll;
-  margin: 10px 0;
+  margin: 10px;
+  margin-top: 70px;
   padding-right: 20px;
 }
 
@@ -27,7 +28,7 @@
 
 .idolGroupBtn {
   font-size: 13px;
-  color: gray;
+  color: var(--grayText);
 }
 
 .idolGroupImg,
@@ -36,6 +37,10 @@
   height: 60px;
   border-radius: 50%;
   margin-bottom: 3px;
+}
+
+.idolGroupImg {
+  border: 3px solid var(--white);
 }
 
 .clickIdolGroupImg {

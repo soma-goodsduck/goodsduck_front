@@ -8,7 +8,6 @@ import { Input, Flex } from "../../elements";
 import LoginPopUp from "../../elements/loginPopUp";
 
 import { getInfo, postAction } from "../../shared/axios";
-import { history } from "../../redux/configureStore";
 
 const PricePropose = ({ _onClick }) => {
   // 반응형
@@ -46,7 +45,7 @@ const PricePropose = ({ _onClick }) => {
       if (result === "login") {
         setShowPopup(true);
       } else {
-        _onClick();
+        window.location.reload();
       }
     });
   };

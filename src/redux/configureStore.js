@@ -10,7 +10,6 @@ import { connectRouter } from "connected-react-router";
 
 import User from "./modules/user";
 import Image from "./modules/image";
-import Item from "./modules/item";
 import Header from "./modules/header";
 import NewItem from "./modules/newItem";
 import Chat from "./modules/chat";
@@ -20,7 +19,6 @@ export const history = createBrowserHistory();
 const rootReducer = combineReducers({
   user: User,
   image: Image,
-  item: Item,
   newItem: NewItem,
   header: Header,
   chat: Chat,

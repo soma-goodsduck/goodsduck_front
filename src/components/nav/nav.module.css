@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 10px;
+  padding: 0 10px;
   background-color: var(--white);
   z-index: 3;
 }
@@ -15,6 +15,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.chatBadge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--green);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 23px;
+  padding-bottom: 4px;
+  position: relative;
+  bottom: -13px;
+  right: -1px;
+}
+
+.chatBadgeZero {
+  visibility: hidden;
 }
 
 .isHomeIcon,
@@ -104,6 +126,14 @@
   .nav {
     width: 415px;
     left: 30%;
+  }
+
+  .chatBadge {
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+    bottom: -15px;
+    right: -3px;
   }
 
   .isHomeIcon,

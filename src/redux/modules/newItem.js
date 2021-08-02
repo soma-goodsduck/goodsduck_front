@@ -5,7 +5,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
-// import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/react";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -97,7 +97,6 @@ const addItemAction = (item, fileList) => {
       idolMember: item.idolMember,
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
-    console.log(itemDto);
 
     axios
       .post(`${process.env.REACT_APP_BACK_URL}/api/v1/items`, formData, {
@@ -114,7 +113,7 @@ const addItemAction = (item, fileList) => {
       })
       .catch((error) => {
         console.log("error", error);
-        // Sentry.captureException(error);
+        Sentry.captureException(error);
         history.replace("/");
       });
   };
@@ -169,7 +168,7 @@ const updateItemAction = (item, id) => {
       })
       .catch((error) => {
         console.log("error", error);
-        // Sentry.captureException(error);
+        Sentry.captureException(error);
         history.replace(`/item/${id}`);
       });
   };

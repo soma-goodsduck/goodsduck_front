@@ -29,7 +29,6 @@ const ItemDetail = ({ history }) => {
   useEffect(() => {
     const getItemDetail = getInfo(`items/${itemId}`);
     getItemDetail.then((result) => {
-      console.log(result);
       setItemData(result);
 
       if (result.isOwner) {

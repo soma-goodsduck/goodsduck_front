@@ -1,4 +1,4 @@
-.filtering,
+/* .filtering,
 .nonFiltering {
   cursor: pointer;
   margin-top: 160px;
@@ -7,7 +7,7 @@
 
 .filtering {
   margin-top: 210px;
-}
+} */
 
 /* 
 @media screen and (max-height: 668px) {
@@ -20,7 +20,7 @@
   }
 } */
 
-@media screen and (min-width: 415px) {
+/* @media screen and (min-width: 415px) {
   .filtering,
   .nonFiltering {
     margin-bottom: 80px;
@@ -31,4 +31,4 @@
   .nonFiltering {
     margin-top: 160px;
   }
-}
+} */

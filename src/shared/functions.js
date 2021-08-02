@@ -34,3 +34,29 @@ export const formatDate = (x) => {
   }.${currentDatetime.getDate()} ${currentDatetime.getHours()}:${currentDatetime.getMinutes()}`;
   return formattedDate;
 };
+
+export const getDate = (type) => {
+  // const today = new Date();
+  // const createdAt = new Date(message.timestamp);
+
+  const year = type.getFullYear();
+  const date = type.getDate();
+  const arrMonths = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+  ];
+  const month = arrMonths[type.getMonth()];
+
+  const textDate = `${year}년 ${month}월 ${date}일`;
+  return textDate;
+};

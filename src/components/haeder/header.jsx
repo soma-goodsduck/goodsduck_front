@@ -1,24 +1,25 @@
 import React, { useRef } from "react";
 
-import { useSelector } from "react-redux";
-
 import styled from "styled-components";
 import styles from "./header.module.css";
 
 import { Flex, Icon } from "../../elements";
-import FilteringIdol from "../idolFiltering/idolGroupFiltering";
-import Filtering from "../filtering/filtering";
 
 import { history } from "../../redux/configureStore";
 
 const Header = () => {
   const inputRef = useRef();
-  const isFiltering = useSelector((state) => state.header.click_filtering);
+
+  const onSearch = (name) => {
+    history.push(`/search/item/${name}`);
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
-    //  const name = inputRef.current.value;
-    //  name && onSearch(name);
+    const name = inputRef.current.value;
+    if (name) {
+      onSearch(name);
+    }
     inputRef.current.value = "";
   };
 
@@ -55,8 +56,6 @@ const Header = () => {
           />
         </Flex>
       </HeaderBox>
-      <FilteringIdol />
-      {isFiltering && <Filtering />}
     </div>
   );
 };

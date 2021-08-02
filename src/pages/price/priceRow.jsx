@@ -13,8 +13,6 @@ import { history } from "../../redux/configureStore";
 const PriceRow = ({ item }) => {
   const dispatch = useDispatch();
 
-  console.log(item);
-
   // 아이템 아이디
   const href = window.location.href.split("/");
   const itemId = Number(href[href.length - 1]);
@@ -29,7 +27,6 @@ const PriceRow = ({ item }) => {
       if (result.success === true) {
         const getUserId = getInfo("/users/look-up-id");
         getUserId.then((userResult) => {
-          console.log(userResult);
           const user = {
             id: userResult.userId,
             nickName: userResult.nickName,

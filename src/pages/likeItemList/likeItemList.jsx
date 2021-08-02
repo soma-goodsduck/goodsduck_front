@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
@@ -10,7 +9,6 @@ import LoginPopUp from "../../elements/loginPopUp";
 import { getData } from "../../shared/axios";
 
 const LikeItemList = () => {
-  const dispatch = useDispatch();
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 

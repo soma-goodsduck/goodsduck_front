@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
-/* eslint-disable camelcase */
 
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
@@ -9,13 +8,14 @@ import { produce } from "immer";
 const CLICK_FILTERING = "CLICK_FILTERING";
 
 // action creators
-const clickFiltering = createAction(CLICK_FILTERING, (click_filtering) => ({
-  click_filtering,
+
+const clickFiltering = createAction(CLICK_FILTERING, (isFiltering) => ({
+  isFiltering,
 }));
 
 // initialState
 const initialState = {
-  click_filtering: false,
+  isFiltering: false,
 };
 
 // middleware actions
@@ -30,7 +30,7 @@ export default handleActions(
   {
     [CLICK_FILTERING]: (state, action) =>
       produce(state, (draft) => {
-        draft.click_filtering = !state.click_filtering;
+        draft.isFiltering = !state.isFiltering;
       }),
   },
   initialState,

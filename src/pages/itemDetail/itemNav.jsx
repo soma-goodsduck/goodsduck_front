@@ -54,8 +54,6 @@ const ItemNav = ({ item, id, isOwner }) => {
     });
   };
 
-  console.log(item);
-
   return (
     <>
       {showPricePopup && (

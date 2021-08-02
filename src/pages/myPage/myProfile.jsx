@@ -8,54 +8,52 @@ import { Image } from "../../elements/index";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder, yellow } from "../../shared/colors";
 
-import { getData, postAction } from "../../shared/axios";
+import { getData, putAction, getInfo } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
+import IdolGroupFiltering from "../../components/idolFiltering/idolGroupFiltering";
 
 const MyProfile = (props) => {
   // 해당 유저 데이터 받아오기
   const [user, setUser] = useState(null);
   const nickRef = useRef();
   const [nick, setNick] = useState("");
-  const [img, setImg] = useState();
+  const [img, setImg] = useState(
+    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
+  );
+  const [imgFile, setImgFile] = useState();
 
   useEffect(() => {
     const getUserData = getData("users/look-up");
     getUserData.then((result) => {
       setUser(result);
       setNick(result.nickName);
+      if (result.imageUrl !== null) {
+        setImg(result.imageUrl);
+      }
     });
   }, []);
 
   const updateImg = (e) => {
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log(file);
+
+    setImgFile(file);
 
     reader.readAsDataURL(file);
 
     reader.onloadend = () => {
-      console.log(reader.result);
       setImg(reader.result);
     };
   };
 
   const updateProfile = () => {
     const formData = new FormData();
-    formData.append("multipartFiles", img);
-    const profileDto = {
-      nickName: nick,
-    };
-    formData.append("stringProfileDto", JSON.stringify(profileDto));
+    formData.append("multipartFile", imgFile);
 
-    // const postProfileInfo = postAction("profile", profileDto);
-    // postProfileInfo.then((result) => {
-    //     console.log(result);
-    //     if (result.success === true) {
-    //       console.log("프로필 수정에 성공했습니다");
-    //       history.push("/myPage");
-    //     } else {
-    //       console.log("프로필 수정에 실패했습니다");
-    //     }
-    //   });
+    const postProfileInfo = putAction("users/profile-image", formData);
+    postProfileInfo.then((result) => {
+      history.push("/mypage");
+    });
   };
 
   return (
@@ -68,11 +66,7 @@ const MyProfile = (props) => {
               <form method="post" encType="multipart/form-data">
                 <label htmlFor="chooseFile">
                   <ImgBox>
-                    <Image
-                      shape="circle"
-                      size="130px"
-                      src="https://pbs.twimg.com/media/D99mKq1UYAE5eP9.jpg"
-                    />
+                    <Image shape="circle" size="130px" src={img} />
                     <div className={styles.cameraBtnBox}>
                       <CameraBtn />
                     </div>
@@ -100,9 +94,16 @@ const MyProfile = (props) => {
             </NicknameBox>
             <IdolBox>
               <LabelText>좋아하는 아이돌</LabelText>
+              <IdolGroupFiltering />
             </IdolBox>
           </div>
-          <SaveBtn>저장</SaveBtn>
+          <SaveBtn
+            onClick={() => {
+              updateProfile();
+            }}
+          >
+            저장
+          </SaveBtn>
         </MyProfileBox>
       )}
     </>
