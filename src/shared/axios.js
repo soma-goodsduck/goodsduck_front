@@ -1,14 +1,14 @@
 /* eslint-disable consistent-return */
 import axios from "axios";
-// import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/react";
 
 // 무한 스크롤 (홈 데이터)
-export const getList = async (path, pageNumber) => {
+export const getList = async (path, itemId) => {
   const jwt = localStorage.getItem("jwt");
 
   try {
     const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}?pageNumber=${pageNumber}`,
+      `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`,
       {
         headers: { jwt: `${jwt}` },
       },
@@ -20,7 +20,29 @@ export const getList = async (path, pageNumber) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
+  }
+};
+
+// 무한 스크롤 - 아이돌 필터링(홈 데이터)
+export const getListByIdol = async (path, itemId, idolGroupId) => {
+  const jwt = localStorage.getItem("jwt");
+
+  try {
+    const result = await axios.get(
+      `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?idolGroup=${idolGroupId}&itemId=${itemId}`,
+      {
+        headers: { jwt: `${jwt}` },
+      },
+    );
+    if (result.headers.jwt) {
+      localStorage.setItem("jwt", result.headers.jwt);
+    }
+
+    return result.data;
+  } catch (error) {
+    console.log("error", error);
+    Sentry.captureException(error);
   }
 };
 
@@ -42,7 +64,7 @@ export const getInfo = async (path) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -70,7 +92,7 @@ export const getData = async (path) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -98,7 +120,7 @@ export const checkLoginWithData = async (path) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -127,7 +149,7 @@ export const getAction = async (path) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -156,7 +178,7 @@ export const deleteAction = async (path) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -186,7 +208,7 @@ export const postAction = async (path, json) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -216,7 +238,7 @@ export const postImgAction = async (path, file) => {
     return result.data.response;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -246,7 +268,7 @@ export const putAction = async (path, data) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -275,7 +297,7 @@ export const patchAction = async (path, json) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };
 
@@ -305,6 +327,6 @@ export const patchJsonAction = async (path, json) => {
     return result.data;
   } catch (error) {
     console.log("error", error);
-    // Sentry.captureException(error);
+    Sentry.captureException(error);
   }
 };

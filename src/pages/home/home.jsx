@@ -1,18 +1,33 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
 
 import Header from "../../components/haeder/header";
 import ItemList from "../../components/itemList/itemList";
-import { Grid, LoginPopUp } from "../../elements";
+import { Grid } from "../../elements";
 import Nav from "../../components/nav/nav";
 
+import { getInfo } from "../../shared/axios";
+
 const Home = (props) => {
-  const showPopup = useSelector((state) => state.user.show_popup);
+  const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
+
+  useEffect(() => {
+    if (!likeIdolGroupsLS) {
+      const getUserData = getInfo("/users/look-up");
+      getUserData.then((result) => {
+        if (result) {
+          const likeIdolGroups = [];
+          result.likeIdolGroups.forEach((idolGroup) => {
+            likeIdolGroups.push(idolGroup.idolGroupId);
+          });
+          localStorage.setItem("likeIdolGroups", likeIdolGroups);
+        }
+      });
+    }
+  }, []);
 
   return (
     <Grid>
       <Header />
-      {showPopup && <LoginPopUp />}
       <ItemList />
       <Nav />
     </Grid>

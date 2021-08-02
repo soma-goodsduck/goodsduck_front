@@ -1,33 +1,46 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./idolGroupFiltering.module.css";
 import { Flex, Text, Image } from "../../elements";
 
-import { actionCreators as headerActions } from "../../redux/modules/header";
-
 import { getInfo } from "../../shared/axios";
+import { grayText } from "../../shared/colors";
 
-const IdolGroupFiltering = () => {
-  const dispatch = useDispatch();
-
+const IdolGroupFiltering = ({ onClick }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
+  const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
 
   useEffect(() => {
-    const getIdolGroup = getInfo("idol-groups");
-    getIdolGroup.then((result) => {
-      setIdols(result);
-    });
+    if (likeIdolGroupsLS) {
+      const likeIdolGroups = likeIdolGroupsLS.split(",").map(Number);
+
+      const getIdolGroup = getInfo("idol-groups");
+      getIdolGroup.then((result) => {
+        const idolData = [];
+        likeIdolGroups.forEach((idolId) => {
+          result.forEach((idol) => {
+            if (idol.id === idolId) {
+              idolData.push(idol);
+            }
+          });
+        });
+        setIdols(idolData);
+      });
+    } else {
+      const getIdolGroup = getInfo("idol-groups");
+      getIdolGroup.then((result) => {
+        setIdols(result);
+      });
+    }
   }, []);
 
   const [groupId, setGroupId] = useState(0);
-  const isFiltering = useSelector((state) => state.header.click_filtering);
 
   const checkGroupHandler = (id) => {
     setGroupId(id);
-    dispatch(headerActions.clickfilteringAction(isFiltering));
+    onClick(id);
   };
 
   // 가로 스크롤
@@ -64,6 +77,21 @@ const IdolGroupFiltering = () => {
     >
       {idols !== [] && (
         <Flex justify="flex-start">
+          <BtnBox
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            <Btn>
+              <Image
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                size="55px"
+              />
+            </Btn>
+            <Text size="13px" margin="10px 0 0 0" color={grayText}>
+              전체
+            </Text>
+          </BtnBox>
           {idols.map((idol) => (
             <IdolBox key={idol.id}>
               <IdolInput
@@ -89,19 +117,19 @@ const IdolGroupFiltering = () => {
                   src={idol.imageUrl}
                   alt="Idol Group"
                 />
-                {idol.name}
+                <div>{idol.name}</div>
               </label>
             </IdolBox>
           ))}
           <BtnBox>
-            <AddBtn>
+            <Btn>
               <Image
                 src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
                 size="30px"
               />
-            </AddBtn>
-            <Text size="13px" margin="10px 0 0 0" color="#222222">
-              그룹 추가
+            </Btn>
+            <Text size="13px" margin="10px 0 0 0" color={grayText}>
+              그룹 편집
             </Text>
           </BtnBox>
         </Flex>
@@ -111,9 +139,10 @@ const IdolGroupFiltering = () => {
 };
 
 const IdolBox = styled.div`
-  padding: 0 10px;
+  padding: 0 5px;
   text-align: center;
 `;
+
 const IdolInput = styled.input`
   display: none;
 `;
@@ -125,7 +154,7 @@ const BtnBox = styled.button`
   align-items: center;
 `;
 
-const AddBtn = styled.div`
+const Btn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

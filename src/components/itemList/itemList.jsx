@@ -1,36 +1,66 @@
 /* eslint-disable consistent-return */
 import React, { useEffect, useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemList.module.css";
 import Item from "../item/item";
+import FilteringIdol from "../idolFiltering/idolGroupFiltering";
 
-import { getList } from "../../shared/axios";
+import { getList, getListByIdol } from "../../shared/axios";
+import { actionCreators as headerActions } from "../../redux/modules/header";
 
 const ItemList = () => {
-  const isFiltering = useSelector((state) => state.header.click_filtering);
+  const dispatch = useDispatch();
 
-  // 해당 아이템 데이터 받아오기
   const [items, setItems] = useState([]);
   const [hasNext, setHasNext] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [pageNum, setPageNum] = useState(0);
+  const [itemNum, setItemNum] = useState(0);
+  const [isIdolFilter, setIsIdolFilter] = useState(false);
+  const [idolFilter, setIdolFilter] = useState(0);
+
+  const idolItems = useSelector((state) => state.header.items);
 
   const getItems = (num) => {
     setLoading(true);
     const getItemList = getList("items", num);
     getItemList.then((result) => {
-      const newItem = [...items, ...result.response.content];
+      const newItemData = result.response;
+      const newItem = [...items, ...result.response];
       setItems(newItem);
       setHasNext(result.hasNext);
       setLoading(false);
-      setPageNum(pageNum + 1);
+      if (result.hasNext) {
+        setItemNum(newItemData[newItemData.length - 1].itemId);
+      }
     });
   };
 
+  const getItemsWithIdolFilter = (num, idolId) => {
+    setLoading(true);
+    const getItemList = getListByIdol("items/filter", num, idolId);
+    getItemList.then((result) => {
+      const newItemData = result.response;
+      const newItem = [...idolItems, ...result.response];
+      setItems(newItem);
+      setHasNext(result.hasNext);
+      setLoading(false);
+      if (result.hasNext) {
+        setItemNum(newItemData[newItemData.length - 1].itemId);
+      }
+    });
+  };
+
+  const handleFiltering = async (id) => {
+    setIdolFilter(id);
+    setIsIdolFilter(true);
+    dispatch(headerActions.setItems([]));
+    getItemsWithIdolFilter(0, id);
+  };
+
   useEffect(() => {
-    getItems(pageNum);
+    getItems(itemNum);
   }, []);
 
   // 무한 스크롤
@@ -49,9 +79,14 @@ const ItemList = () => {
       if (loading) {
         return;
       }
-      getItems(pageNum);
+
+      if (isIdolFilter) {
+        getItemsWithIdolFilter(itemNum, idolFilter);
+      } else {
+        getItems(itemNum);
+      }
     }
-  }, [pageNum]);
+  }, [itemNum]);
 
   useEffect(() => {
     if (loading) {
@@ -65,14 +100,14 @@ const ItemList = () => {
     }
 
     return () => window.removeEventListener("scroll", infiniteScroll, true);
-  }, [hasNext, pageNum]);
+  }, [hasNext, itemNum]);
 
   return (
     <>
+      <FilteringIdol onClick={handleFiltering} />
+
       {items && (
-        <ItemListBox
-          className={isFiltering ? styles.filtering : styles.nonFiltering}
-        >
+        <ItemListBox>
           {items.map((item) => (
             <Item key={item.itemId} id={item.itemId} item={item} />
           ))}
@@ -87,6 +122,7 @@ const ItemListBox = styled.div`
   grid-template-columns: repeat(2, 50%);
   grid-auto-rows: 300px;
   padding: 10px;
+  margin-bottom: 80px;
 `;
 
 export default ItemList;
