@@ -7,10 +7,13 @@ import styles from "./app.module.css";
 import "./reset.css";
 import "./normalize.css";
 
+import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
 import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import home from "./pages/home/home";
+import KeywordSearch from "./pages/home/keywordSearch";
 import Chatting from "./pages/chatting/chatting";
+import ChatRoom from "./pages/chatting/chatRoom/chatRoom";
 import MyPage from "./pages/myPage/myPage";
 import Setting from "./pages/myPage/setting";
 import MyProfile from "./pages/myPage/myProfile";
@@ -22,10 +25,10 @@ import ItemCategory from "./pages/itemUpload/itemCategory";
 import ItemStatus from "./pages/itemUpload/itemStatus";
 import IdolGroup from "./pages/itemUpload/idolSelect";
 import IdolMember from "./pages/itemUpload/idolMeberSelect";
-import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
+import PriceProposeList from "./pages/price/priceProposeList";
+import PriceProposePage from "./pages/myPage/priceProposePage";
 
 import { history } from "./redux/configureStore";
-import PriceProposeList from "./pages/price/priceProposeList";
 
 function App() {
   return (
@@ -44,10 +47,13 @@ function App() {
           exact
           component={OAuth2RedirectHandler}
         />
+        <Route path="/search/item/:name" exact component={KeywordSearch} />
         <Route path="/chatting" exact component={Chatting} />
+        <Route path="/chat-room/:id" exact component={ChatRoom} />
         <Route path="/mypage" exact component={MyPage} />
         <Route path="/setting" exact component={Setting} />
         <Route path="/myProfile" exact component={MyProfile} />
+        <Route path="/price-proposes" exact component={PriceProposePage} />
         <Route path="/favorites" exact component={LikeItemList} />
         <Route path="/price/:id" exact component={PriceProposeList} />
         <Route path="/notification" exact component={Notification} />
