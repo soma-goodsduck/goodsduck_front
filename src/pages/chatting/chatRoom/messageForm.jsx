@@ -5,15 +5,16 @@ import firebase from "firebase/app";
 
 import styled from "styled-components";
 
-import { Flex, Icon, Button } from "../../../elements";
+import { Flex, Icon, Button, PopUp } from "../../../elements";
+
 import { grayBorder, white } from "../../../shared/colors";
 import { firebaseDatabase } from "../../../shared/firebase";
-
 import { getInfo, postImgAction } from "../../../shared/axios";
 
 const MessageForm = (props) => {
   const href = window.location.href.split("/");
   const chatRoomId = href[href.length - 1];
+  const chatRoomRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
 
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -32,6 +33,7 @@ const MessageForm = (props) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const inputOpenImageRef = useRef();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const getUserId = getInfo("/users/look-up-id");
@@ -40,6 +42,12 @@ const MessageForm = (props) => {
       setUserNick(result.nickName);
     });
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 2000);
+  }, [showPopup]);
 
   const handleOpenImageRef = () => {
     inputOpenImageRef.current.click();
@@ -68,24 +76,29 @@ const MessageForm = (props) => {
   };
 
   const handleSubmit = async () => {
-    let isExistedChatRoom;
-    firebase
-      .database()
+    // 채팅방 최신순 정렬을 위한 timestamp 업데이트
+    firebaseDatabase
       .ref(`chatRooms/${chatRoomId}`)
-      .on("value", (snapshot) => {
-        if (snapshot.exists()) {
-          isExistedChatRoom = true;
-        } else {
-          isExistedChatRoom = false;
-        }
-      });
-    if (!isExistedChatRoom) {
-      setErrors((prev) => prev.concat("채팅방이 존재하지 않습니다."));
+      .update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
+
+    // 만약 상대방이 존재하지 않는 채팅방이라면 메세지를 보낼 수 없도록 알림
+    let isNotChatRoom;
+    chatRoomRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (
+        (data.createdBy.id !== userId &&
+          data.createdBy.isPresented === false) ||
+        (data.createdWith.id !== userId &&
+          data.createdWith.isPresented === false)
+      ) {
+        isNotChatRoom = true;
+        setShowPopup(true);
+      }
+    });
+    if (isNotChatRoom) {
       return;
     }
-
     if (!content) {
-      setErrors((prev) => prev.concat("메세지를 입력 후 전송해주세요."));
       return;
     }
     setLoading(true);
@@ -96,17 +109,17 @@ const MessageForm = (props) => {
       setErrors([]);
       setContent("");
       setLoading(false);
+
+      // LS에 채팅방에 방문한 시각 업데이트
+      localStorage.setItem(
+        `${chatRoomId}`,
+        `${Math.round(new Date().getTime())}`,
+      );
     } catch (error) {
       console.error(error.message);
       setErrors((prev) => prev.concat(error.message));
       setLoading(false);
     }
-
-    // LS에 채팅방에 방문한 시각 업데이트
-    localStorage.setItem(
-      `${chatRoomId}`,
-      `${Math.round(new Date().getTime())}`,
-    );
   };
 
   const handleKeyDown = (event) => {
@@ -119,56 +132,60 @@ const MessageForm = (props) => {
     const file = event.target.files[0];
     if (!file) return;
 
+    console.log(file);
     const formData = new FormData();
     formData.append("multipartFile", file);
-    const postImg = postImgAction("/users/chat-image", formData);
+    const postImg = postImgAction("users/chat-image", formData);
     postImg.then((result) => {
       messagesRef.child(chatRoomId).push().set(createMessage(result));
     });
   };
 
   return (
-    <MessageFormBox {...styles} onSubmit={handleSubmit}>
-      <div>
-        {errors.map((errorMsg) => (
-          <p style={{ color: "red" }} key={errorMsg}>
-            {errorMsg}
-          </p>
-        ))}
-      </div>
-      <Flex is_flex justify="space-between" padding="20px">
-        <input
-          type="file"
-          accept="image/jpeg, image/png"
-          ref={inputOpenImageRef}
-          style={{ display: "none" }}
-          onChange={handleUploadImage}
-        />
-        <Icon
-          width="28px"
-          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-          _onClick={() => {
-            handleOpenImageRef();
-          }}
-        />
-        <InputBox
-          placeholder="메세지를 입력하세요."
-          onKeyDown={handleKeyDown}
-          value={content}
-          onChange={handleChange}
-        />
-        <Button
-          type="submit"
-          width="32px"
-          height="28px"
-          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
-          disabled={loading}
-          _onClick={() => {
-            handleSubmit();
-          }}
-        />
-      </Flex>
-    </MessageFormBox>
+    <>
+      {showPopup && <PopUp width="250px" text1="상대방이 존재하지 않습니다." />}
+      <MessageFormBox {...styles} onSubmit={handleSubmit}>
+        <div>
+          {errors.map((errorMsg) => (
+            <p style={{ color: "red" }} key={errorMsg}>
+              {errorMsg}
+            </p>
+          ))}
+        </div>
+        <Flex is_flex justify="space-between" padding="20px">
+          <input
+            type="file"
+            accept="image/jpeg, image/png, image/jpg"
+            ref={inputOpenImageRef}
+            style={{ display: "none" }}
+            onChange={handleUploadImage}
+          />
+          <Icon
+            width="28px"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+            _onClick={() => {
+              handleOpenImageRef();
+            }}
+          />
+          <InputBox
+            placeholder="메세지를 입력하세요."
+            onKeyDown={handleKeyDown}
+            value={content}
+            onChange={handleChange}
+          />
+          <Button
+            type="submit"
+            width="32px"
+            height="28px"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+            disabled={loading}
+            _onClick={() => {
+              handleSubmit();
+            }}
+          />
+        </Flex>
+      </MessageFormBox>
+    </>
   );
 };
 

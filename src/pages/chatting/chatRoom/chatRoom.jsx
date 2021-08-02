@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-return-assign */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/state-in-constructor */
 import React, { Component, createRef } from "react";
@@ -21,12 +21,13 @@ export class ChatRoom extends Component {
   messagesEnd = createRef();
 
   state = {
+    createdByMe: false,
     chatRoomId: this.props.chatRoomId,
     withChatNick: "",
     messages: [],
     messageLoading: true,
     messagesRef: firebaseDatabase.ref("messages"),
-    chatRoomsRef: firebaseDatabase.ref("chatRooms"),
+    // chatRoomsRef: firebaseDatabase.ref("chatRooms"),
   };
 
   componentDidMount() {
@@ -37,6 +38,7 @@ export class ChatRoom extends Component {
       const { createdById, chatRoomId } = this.props;
       getUserId.then((result) => {
         if (result.userId === createdById) {
+          this.setState({ createdByMe: true });
           this.setState({ withChatNick: this.props.createdWithNickName });
         } else {
           this.setState({ withChatNick: this.props.createdByNickName });
@@ -60,6 +62,7 @@ export class ChatRoom extends Component {
             const data = snapshot.val();
             getUserId.then((result) => {
               if (result.userId === data.createdBy.id) {
+                this.setState({ createdByMe: true });
                 this.setState({ withChatNick: data.createdWith.nickName });
               } else {
                 this.setState({ withChatNick: data.createdBy.nickName });
@@ -78,7 +81,7 @@ export class ChatRoom extends Component {
       this.setState({
         messageLoading: false,
       });
-    }, 2000);
+    }, 1000);
   }
 
   componentDidUpdate() {
@@ -106,9 +109,15 @@ export class ChatRoom extends Component {
   };
 
   leaveChatRoom = (chatRoomId) => {
-    console.log(chatRoomId);
-    this.state.chatRoomsRef.child(chatRoomId).remove();
-    this.state.messagesRef.child(chatRoomId).remove();
+    if (this.state.createdByMe) {
+      firebaseDatabase
+        .ref(`chatRooms/${chatRoomId}/createdBy`)
+        .update({ isPresented: false });
+    } else {
+      firebaseDatabase
+        .ref(`chatRooms/${chatRoomId}/createdWith`)
+        .update({ isPresented: false });
+    }
     localStorage.removeItem(chatRoomId);
     history.push("/chatting");
   };

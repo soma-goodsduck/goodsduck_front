@@ -1,9 +1,3 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable function-paren-newline */
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/no-unused-state */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from "react";
@@ -46,15 +40,21 @@ export class Chatting extends Component {
   }
 
   AddChatRoomsListeners = (userId) => {
-    const chatRommsArray = [];
+    const chatRoomsArray = [];
     this.state.chatRoomsRef.on("child_added", (DataSnapshot) => {
       if (
-        DataSnapshot.val().createdBy.id === userId ||
-        DataSnapshot.val().createdWith.id === userId
+        (DataSnapshot.val().createdBy.id === userId &&
+          DataSnapshot.val().createdBy.isPresented === true) ||
+        (DataSnapshot.val().createdWith.id === userId &&
+          DataSnapshot.val().createdWith.isPresented === true)
       ) {
-        console.log(DataSnapshot.val());
-        chatRommsArray.push(DataSnapshot.val());
-        this.setState({ chatRooms: chatRommsArray });
+        chatRoomsArray.push(DataSnapshot.val());
+
+        const sortChatRoomsArray = chatRoomsArray.sort((a, b) => {
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+
+        this.setState({ chatRooms: sortChatRoomsArray });
       }
     });
   };
@@ -73,7 +73,7 @@ export class Chatting extends Component {
               </Text>
             </Header>
             {chatRooms !== [] && (
-              <div>
+              <div style={{ marginBottom: "80px" }}>
                 {chatRooms.map((chatRoom) => (
                   <ChattingRow
                     key={chatRoom.id}
