@@ -6,41 +6,45 @@ import { Flex, Text, Image } from "../../elements";
 
 import { getInfo } from "../../shared/axios";
 import { grayText } from "../../shared/colors";
+import IdolEdit from "./idolEdit";
 
 const IdolGroupFiltering = ({ onClick }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
 
-  useEffect(() => {
+  const requestIdolGroup = async () => {
+    const result = await getInfo("idol-groups");
     if (likeIdolGroupsLS) {
       const likeIdolGroups = likeIdolGroupsLS.split(",").map(Number);
 
-      const getIdolGroup = getInfo("idol-groups");
-      getIdolGroup.then((result) => {
-        const idolData = [];
-        likeIdolGroups.forEach((idolId) => {
-          result.forEach((idol) => {
-            if (idol.id === idolId) {
-              idolData.push(idol);
-            }
-          });
+      const idolData = [];
+      likeIdolGroups.forEach((idolId) => {
+        result.forEach((idol) => {
+          if (idol.id === idolId) {
+            idolData.push(idol);
+          }
         });
-        setIdols(idolData);
       });
-    } else {
-      const getIdolGroup = getInfo("idol-groups");
-      getIdolGroup.then((result) => {
-        setIdols(result);
-      });
+      return idolData;
     }
-  }, []);
+    return result;
+  };
+  const fnEffect = async () => {
+    const idolGroups = await requestIdolGroup();
+    setIdols(idolGroups);
+  };
+  useEffect(fnEffect, []);
 
   const [groupId, setGroupId] = useState(0);
-
   const checkGroupHandler = (id) => {
     setGroupId(id);
     onClick(id);
+  };
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const hideEditModal = () => {
+    setShowEditModal(false);
   };
 
   // 가로 스크롤
@@ -66,75 +70,92 @@ const IdolGroupFiltering = ({ onClick }) => {
   };
 
   return (
-    <div
-      aria-hidden
-      className={styles.categories}
-      onMouseDown={onDragStart}
-      onMouseMove={onDragMove}
-      onMouseUp={onDragEnd}
-      onMouseLeave={onDragEnd}
-      ref={scrollRef}
-    >
-      {idols !== [] && (
-        <Flex justify="flex-start">
-          <BtnBox
-            onClick={() => {
-              window.location.reload();
-            }}
-          >
-            <Btn>
-              <Image
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
-                size="55px"
-              />
-            </Btn>
-            <Text size="13px" margin="10px 0 0 0" color={grayText}>
-              전체
-            </Text>
-          </BtnBox>
-          {idols.map((idol) => (
-            <IdolBox key={idol.id}>
-              <IdolInput
-                id={idol.id}
-                type="radio"
-                checked={groupId === idol.id}
-                onChange={() => checkGroupHandler(idol.id)}
-              />
-              <label
-                htmlFor={idol.id}
-                className={
-                  groupId === idol.id
-                    ? styles.clickIdolGroupBtn
-                    : styles.idolGroupBtn
-                }
-              >
-                <img
+    <>
+      {showEditModal && (
+        <IdolEdit
+          _onClick={() => {
+            hideEditModal();
+          }}
+        />
+      )}
+      <div
+        aria-hidden
+        className={styles.categories}
+        onMouseDown={onDragStart}
+        onMouseMove={onDragMove}
+        onMouseUp={onDragEnd}
+        onMouseLeave={onDragEnd}
+        ref={scrollRef}
+      >
+        {idols !== [] && (
+          <Flex justify="flex-start">
+            <BtnBox
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              <Btn>
+                <Image
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  size="55px"
+                />
+              </Btn>
+              <Text size="13px" margin="10px 0 0 0" color={grayText}>
+                전체
+              </Text>
+            </BtnBox>
+            {idols.map((idol) => (
+              <IdolBox key={idol.id}>
+                <IdolInput
+                  id={idol.id}
+                  type="radio"
+                  checked={groupId === idol.id}
+                  onChange={() => checkGroupHandler(idol.id)}
+                />
+                <label
+                  htmlFor={idol.id}
                   className={
                     groupId === idol.id
-                      ? styles.clickIdolGroupImg
-                      : styles.idolGroupImg
+                      ? styles.clickIdolGroupBtn
+                      : styles.idolGroupBtn
                   }
-                  src={idol.imageUrl}
-                  alt="Idol Group"
+                >
+                  <img
+                    className={
+                      groupId === idol.id
+                        ? styles.clickIdolGroupImg
+                        : styles.idolGroupImg
+                    }
+                    src={idol.imageUrl}
+                    alt="Idol Group"
+                  />
+                  <div
+                    className={idol.id === 10 ? styles.idolGroupLongName : ""}
+                  >
+                    {idol.name}
+                  </div>
+                </label>
+              </IdolBox>
+            ))}
+            <BtnBox
+              onClick={() => {
+                setShowEditModal(true);
+              }}
+            >
+              <Btn>
+                <Image
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+                  size="30px"
                 />
-                <div>{idol.name}</div>
-              </label>
-            </IdolBox>
-          ))}
-          <BtnBox>
-            <Btn>
-              <Image
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-                size="30px"
-              />
-            </Btn>
-            <Text size="13px" margin="10px 0 0 0" color={grayText}>
-              그룹 편집
-            </Text>
-          </BtnBox>
-        </Flex>
-      )}
-    </div>
+              </Btn>
+              <Text size="13px" margin="10px 0 0 0" color={grayText}>
+                그룹 편집
+              </Text>
+            </BtnBox>
+          </Flex>
+        )}
+      </div>
+    </>
   );
 };
 

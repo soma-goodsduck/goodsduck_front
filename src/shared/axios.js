@@ -1,332 +1,238 @@
 /* eslint-disable consistent-return */
 import axios from "axios";
-import * as Sentry from "@sentry/react";
 
-// 무한 스크롤 (홈 데이터)
-export const getList = async (path, itemId) => {
+const verifyJwt = () => {
   const jwt = localStorage.getItem("jwt");
 
   try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
+    if (!jwt) {
+      throw new Error("There is no jwt");
     }
-
-    return result.data;
   } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+    console.log(error);
+    return "login";
   }
+
+  return jwt;
+};
+
+const updateJwt = (newJwt) => {
+  localStorage.setItem("jwt", newJwt);
+};
+
+const verifyLogin = (error) => {
+  if (error !== null && error.status === 401) {
+    // 로그인 만료
+    return "login";
+  }
+};
+
+// 무한 스크롤 (홈 데이터)
+export const getList = async (path, itemId) => {
+  const jwt = verifyJwt();
+
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`,
+    {
+      headers: { jwt },
+    },
+  );
+
+  return result.data;
 };
 
 // 무한 스크롤 - 아이돌 필터링(홈 데이터)
 export const getListByIdol = async (path, itemId, idolGroupId) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?idolGroup=${idolGroupId}&itemId=${itemId}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?idolGroup=${idolGroupId}&itemId=${itemId}`,
+    {
+      headers: { jwt },
+    },
+  );
 
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
-  }
+  return result.data;
 };
 
 // JWT를 리턴하지 않는 데이터 (비회원 가능)
+// requestPublicData
 export const getInfo = async (path) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    {
+      headers: { jwt },
+    },
+  );
 
-    return result.data.response;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
-  }
+  return result.data.response;
 };
 
 // JWT를 리턴하는 데이터 (회원 전용)
+// requestAuthData
 export const getData = async (path) => {
-  const jwt = localStorage.getItem("jwt");
-
-  try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data.response;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  if (verifyJwt() === "login") {
+    return "login";
   }
+  const jwt = verifyJwt();
+
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    {
+      headers: { jwt },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
+  }
+  updateJwt(result.headers.jwt);
+
+  return result.data.response;
 };
 
 // 회원인지, 비회원인지 체크
 export const checkLoginWithData = async (path) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    {
+      headers: { jwt },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
 };
 
 // get 요청
 export const getAction = async (path) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data.response;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    {
+      headers: { jwt },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data.response;
 };
 
 // delete 요청
 export const deleteAction = async (path) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.delete(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.delete(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    {
+      headers: { jwt },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
 };
 
 // post 요청
 export const postAction = async (path, json) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.post(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      JSON.stringify(json),
-      {
-        headers: { jwt: `${jwt}`, "Content-Type": "application/json" },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.post(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    JSON.stringify(json),
+    {
+      headers: { jwt, "Content-Type": "application/json" },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
 };
 
 // post(image) 요청
 export const postImgAction = async (path, file) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.post(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      file,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data.response;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.post(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    file,
+    {
+      headers: { jwt },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data.response;
 };
 
 // put 요청
 export const putAction = async (path, data) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.put(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      data,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.put(url, data, options);
 
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
 };
 
 // patch 요청
 export const patchAction = async (path, json) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.patch(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      {
-        headers: { jwt: `${jwt}` },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.patch(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    {
+      headers: { jwt },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
 };
 
 // patch JSON 요청
 export const patchJsonAction = async (path, json) => {
-  const jwt = localStorage.getItem("jwt");
+  const jwt = verifyJwt();
 
-  try {
-    const result = await axios.patch(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
-      JSON.stringify(json),
-      {
-        headers: { jwt: `${jwt}`, "Content-Type": "application/json" },
-      },
-    );
-    if (result.data.error !== null) {
-      if (result.data.error.status === 401) {
-        // 로그인 만료
-        return "login";
-      }
-    }
-
-    if (result.headers.jwt) {
-      localStorage.setItem("jwt", result.headers.jwt);
-    }
-
-    return result.data;
-  } catch (error) {
-    console.log("error", error);
-    Sentry.captureException(error);
+  const result = await axios.patch(
+    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}`,
+    JSON.stringify(json),
+    {
+      headers: { jwt, "Content-Type": "application/json" },
+    },
+  );
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
   }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
 };
