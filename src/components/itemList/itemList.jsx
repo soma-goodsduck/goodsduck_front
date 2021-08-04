@@ -7,10 +7,10 @@ import styles from "./itemList.module.css";
 import Item from "../item/item";
 import FilteringIdol from "../idolFiltering/idolGroupFiltering";
 
-import { getList, getListByIdol } from "../../shared/axios";
+import { getItems, getItemsByIdol, getItemsBySearch } from "../../shared/axios";
 import { actionCreators as headerActions } from "../../redux/modules/header";
 
-const ItemList = () => {
+const ItemList = ({ keyword }) => {
   const dispatch = useDispatch();
 
   const [items, setItems] = useState([]);
@@ -22,9 +22,9 @@ const ItemList = () => {
 
   const idolItems = useSelector((state) => state.header.items);
 
-  const getItems = (num) => {
+  const getItemsData = (num) => {
     setLoading(true);
-    const getItemList = getList("items", num);
+    const getItemList = getItems("items", num);
     getItemList.then((result) => {
       const newItemData = result.response;
       const newItem = [...items, ...result.response];
@@ -37,9 +37,24 @@ const ItemList = () => {
     });
   };
 
-  const getItemsWithIdolFilter = (num, idolId) => {
+  const getItemsDataByIdol = (num, idolId) => {
     setLoading(true);
-    const getItemList = getListByIdol("items/filter", num, idolId);
+    const getItemList = getItemsByIdol("items/filter", num, idolId);
+    getItemList.then((result) => {
+      const newItemData = result.response;
+      const newItem = [...idolItems, ...result.response];
+      setItems(newItem);
+      setHasNext(result.hasNext);
+      setLoading(false);
+      if (result.hasNext) {
+        setItemNum(newItemData[newItemData.length - 1].itemId);
+      }
+    });
+  };
+
+  const getItemsDataBySearch = (num, _keyword) => {
+    setLoading(true);
+    const getItemList = getItemsBySearch("items/search", num, _keyword);
     getItemList.then((result) => {
       const newItemData = result.response;
       const newItem = [...idolItems, ...result.response];
@@ -56,11 +71,15 @@ const ItemList = () => {
     setIdolFilter(id);
     setIsIdolFilter(true);
     dispatch(headerActions.setItems([]));
-    getItemsWithIdolFilter(0, id);
+    getItemsDataByIdol(0, id);
   };
 
   useEffect(() => {
-    getItems(itemNum);
+    if (keyword) {
+      getItemsDataBySearch(itemNum, keyword);
+    } else {
+      getItemsData(itemNum);
+    }
   }, []);
 
   // 무한 스크롤
@@ -81,9 +100,11 @@ const ItemList = () => {
       }
 
       if (isIdolFilter) {
-        getItemsWithIdolFilter(itemNum, idolFilter);
+        getItemsDataByIdol(itemNum, idolFilter);
+      } else if (keyword) {
+        getItemsDataBySearch(itemNum, keyword);
       } else {
-        getItems(itemNum);
+        getItemsData(itemNum);
       }
     }
   }, [itemNum]);
@@ -104,7 +125,7 @@ const ItemList = () => {
 
   return (
     <>
-      <FilteringIdol onClick={handleFiltering} />
+      {!keyword && <FilteringIdol onClick={handleFiltering} />}
 
       {items && (
         <ItemListBox>
