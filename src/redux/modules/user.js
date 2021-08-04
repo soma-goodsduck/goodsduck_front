@@ -7,6 +7,7 @@ import { produce } from "immer";
 import axios from "axios";
 import * as Sentry from "@sentry/react";
 
+import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
 
 // actions
@@ -17,6 +18,7 @@ const GET_USER = "GET_USER";
 const SHOW_POPUP = "SHOW_POPUP";
 const NO_SHOW_POPUP = "NO_SHOW_POPUP";
 const UPDATE_JWT = "UPDATE_JWT";
+const SET_FAV_IDOL_GROUPS = "SET_FAV_IDOL_GROUPS";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -26,6 +28,9 @@ const getUser = createAction(GET_USER, (user) => ({ user }));
 const showPopup = createAction(SHOW_POPUP, () => ({}));
 const noShowPopup = createAction(NO_SHOW_POPUP, () => ({}));
 const updateJwt = createAction(UPDATE_JWT, () => ({}));
+const setFavIdolGroups = createAction(SET_FAV_IDOL_GROUPS, (favIdolGroups) => ({
+  favIdolGroups,
+}));
 
 // initialState
 const initialState = {
@@ -34,6 +39,7 @@ const initialState = {
   type: null,
   isLogin: false,
   showPopup: false,
+  favIdolGroups: [],
 };
 
 // middleware actions
@@ -41,6 +47,7 @@ const initialState = {
 const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
+    notification();
     history.replace("/");
   };
 };
@@ -84,6 +91,7 @@ const signupAction = (user) => {
       )
       .then((response) => {
         dispatch(logIn(response.data.jwt));
+        notification();
         history.push("/");
       })
       .catch((error) => {
@@ -91,18 +99,6 @@ const signupAction = (user) => {
         Sentry.captureException(error);
         history.replace("/login");
       });
-  };
-};
-
-const showPopupAction = () => {
-  return function (dispatch, getState, { history }) {
-    dispatch(showPopup());
-  };
-};
-
-const noShowPopupAction = () => {
-  return function (dispatch, getState, { history }) {
-    dispatch(noShowPopup());
   };
 };
 
@@ -126,6 +122,7 @@ export default handleActions(
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
         deleteLS("jwt");
+        deleteLS("likeIdolGroups");
         draft.user = null;
         draft.isLogin = false;
       }),
@@ -146,6 +143,10 @@ export default handleActions(
       produce(state, (draft) => {
         setLS("jwt", draft.user);
       }),
+    [SET_FAV_IDOL_GROUPS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.favIdolGroups = action.payload.favIdolGroups;
+      }),
   },
   initialState,
 );
@@ -157,9 +158,10 @@ const actionCreators = {
   loginAction,
   nonUserAction,
   signupAction,
-  showPopupAction,
-  noShowPopupAction,
+  showPopup,
+  noShowPopup,
   updateJwt,
+  setFavIdolGroups,
 };
 
 export { actionCreators };

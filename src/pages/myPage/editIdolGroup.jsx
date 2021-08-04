@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
-
-import Idol from "./idolSelect";
+import Idol from "./editIdolBox";
 
 import { getInfo } from "../../shared/axios";
 
-const IdolGroups = ({ onUpdate }) => {
+const EditIdolGroup = ({ onUpdate }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
@@ -49,4 +48,4 @@ const IdolList = styled.div`
   grid-auto-rows: 115px;
 `;
 
-export default IdolGroups;
+export default EditIdolGroup;

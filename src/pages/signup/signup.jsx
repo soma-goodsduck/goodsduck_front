@@ -5,13 +5,15 @@ import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./signup.module.css";
-import { Grid, PopUp, Input } from "../../elements";
+import { Grid, PopUp, Input, Button, Flex } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import IdolGroups from "../../components/idolSelect/idolGroupSelect";
 import { actionCreators as userActions } from "../../redux/modules/user";
+import { yellow } from "../../shared/colors";
 
 const Signup = () => {
+  localStorage.removeItem("likeIdolGroups");
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -117,14 +119,17 @@ const Signup = () => {
           </Grid>
           <Grid padding="16px 0px">
             <LabelText>닉네임</LabelText>
-            <Input
-              placeholder="닉네임을 입력해주세요"
-              borderRadius="5px"
-              value={nick}
-              _onChange={(e) => {
-                setNick(e.target.value);
-              }}
-            />
+            <Flex>
+              <Input
+                placeholder="닉네임을 입력해주세요"
+                borderRadius="5px"
+                value={nick}
+                _onChange={(e) => {
+                  setNick(e.target.value);
+                }}
+              />
+              <CheckBtn>중복 검사</CheckBtn>
+            </Flex>
           </Grid>
           <Grid padding="16px 0px">
             <LabelText>좋아하는 아이돌</LabelText>
@@ -161,6 +166,14 @@ const LabelText = styled.div`
   margin-bottom: 10px;
   font-weight: bold;
   color: #222222;
+`;
+
+const CheckBtn = styled.button`
+  width: 100px;
+  height: 45px;
+  border-radius: 5px;
+  background-color: ${yellow};
+  margin-left: 10px;
 `;
 
 export default Signup;

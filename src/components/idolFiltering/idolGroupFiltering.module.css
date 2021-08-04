@@ -46,3 +46,7 @@
 .clickIdolGroupImg {
   border: 3px solid var(--yellow);
 }
+
+.idolGroupLongName {
+  width: 80px;
+}
