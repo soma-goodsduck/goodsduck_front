@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import React from "react";
 import ReactDOM from "react-dom";
 import * as Sentry from "@sentry/react";
@@ -6,6 +7,7 @@ import "./index.css";
 import { Provider } from "react-redux";
 import store from "./redux/configureStore";
 import App from "./app";
+import "@fortawesome/fontawesome-free/js/all.js";
 
 if (process.env.REACT_APP_SENTRY) {
   Sentry.init({
