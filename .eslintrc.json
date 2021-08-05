@@ -40,6 +40,7 @@
     "import/no-unresolved": ["error", { "caseSensitive": false }],
     "import/no-named-as-default": 0,
     "consistent-return": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "react/no-array-index-key": "off"
   }
 }
