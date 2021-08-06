@@ -4,13 +4,11 @@ import styled from "styled-components";
 import styles from "./pricePropose.module.css";
 
 import ItemRow from "../../components/itemRow/itemRow";
-import { Input, Flex, Text } from "../../elements";
-import { numberWithCommas } from "../../shared/functions";
+import { Input, Flex, LoginPopUp } from "../../elements";
 
-import { getInfo, deleteAction } from "../../shared/axios";
-import { history } from "../../redux/configureStore";
+import { requestPublicData, postAction } from "../../shared/axios";
 
-const priceProposeDelete = ({ priceId, proposePrice, _onClick }) => {
+const PriceProposeModal = ({ _onClick }) => {
   // 반응형
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -28,38 +26,61 @@ const priceProposeDelete = ({ priceId, proposePrice, _onClick }) => {
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
   useEffect(() => {
-    const getItemDetail = getInfo(`items/${itemId}`);
+    const getItemDetail = requestPublicData(`v1/items/${itemId}/summary`);
     getItemDetail.then((result) => {
       setItemData(result);
     });
   }, []);
 
-  // 가격 제안 취소
-  const handleDelete = () => {
-    deleteAction(`items/${itemId}/price-propose/${priceId}`);
+  // 가격 제안 요청
+  const [price, setPrice] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleClcik = () => {
+    const postPrice = postAction(`v1/items/${itemId}/price-propose`, {
+      price,
+    });
+    postPrice.then((result) => {
+      if (result === "login") {
+        setShowPopup(true);
+      }
+    });
     window.location.reload();
   };
 
   return (
-    <Screen {...styleProps}>
-      <PriceProposeUpdateBox>
-        <Info>
-          <ExitBtn onClick={_onClick} />
-          {itemData && <ItemRow item={itemData} />}
-          <Text size="20px" margin="20px 0 0 0" bold is_center>
-            기존 제시 금액 : {numberWithCommas(proposePrice)}원
-          </Text>
-        </Info>
-
-        <ProposeDeleteBtn
-          onClick={() => {
-            handleDelete();
-          }}
-        >
-          취소하기
-        </ProposeDeleteBtn>
-      </PriceProposeUpdateBox>
-    </Screen>
+    <>
+      {showPopup && <LoginPopUp />}
+      {!showPopup && (
+        <Screen {...styleProps}>
+          <PriceProposeBox>
+            <Info>
+              <ExitBtn onClick={_onClick} />
+              {itemData && <ItemRow item={itemData} />}
+              <Flex is_felxm margin="25px 0 0 0">
+                <div className={styles.wonSign}>₩</div>
+                <Input
+                  type="number"
+                  borderRadius="5px"
+                  value={price}
+                  placeholder="금액을 적어주세요"
+                  _onChange={(e) => {
+                    setPrice(e.target.value);
+                  }}
+                />
+              </Flex>
+            </Info>
+            <ProposeBtn
+              onClick={() => {
+                handleClcik();
+              }}
+            >
+              가격 제시하기
+            </ProposeBtn>
+          </PriceProposeBox>
+        </Screen>
+      )}
+    </>
   );
 };
 
@@ -75,7 +96,7 @@ const Screen = styled.div`
   color: #222222;
 `;
 
-const PriceProposeUpdateBox = styled.div`
+const PriceProposeBox = styled.div`
   width: 340px;
   display: flex;
   flex-direction: column;
@@ -86,7 +107,7 @@ const PriceProposeUpdateBox = styled.div`
 
 const Info = styled.div`
   position: relative;
-  height: 240px;
+  height: 260px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -95,15 +116,16 @@ const Info = styled.div`
   border-radius: 10px;
 `;
 
-const ProposeDeleteBtn = styled.button`
+const ProposeBtn = styled.button`
   font-size: 16px;
   font-weight: bold;
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
+  transition: transform 200ms ease-in;
 
   &:hover {
-    color: #e33e3e;
+    transform: scale(1.05);
   }
 `;
 
@@ -119,4 +141,4 @@ const ExitBtn = styled.button`
   cursor: pointer;
 `;
 
-export default priceProposeDelete;
+export default PriceProposeModal;

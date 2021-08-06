@@ -6,7 +6,7 @@ import { grayText } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
-const Btns = (props) => {
+const Btns = ({ myProfile }) => {
   // 반응형
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -18,45 +18,53 @@ const Btns = (props) => {
   const styleProps = { isMobile };
 
   return (
-    <Flex {...styleProps}>
-      <BtnGrid isMobile>
-        <Flex
-          is_col
-          pointer
-          _onClick={() => {
-            history.push("/favorites");
-          }}
-        >
-          <Text bold size="22px">
-            23
-          </Text>
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            찜
-          </Text>
-        </Flex>
-        <Flex is_col>
-          <Text bold size="22px">
-            16
-          </Text>
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            후기
-          </Text>
-        </Flex>
-        <Flex
-          is_col
-          pointer
-          _onClick={() => {
-            history.push("/price-proposes");
-          }}
-        >
-          <Text bold size="22px">
-            16
-          </Text>
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            가격제시
-          </Text>
-        </Flex>
-        {/* <Flex is_col>
+    <>
+      {myProfile && (
+        <Flex {...styleProps}>
+          <BtnGrid isMobile>
+            <Flex
+              is_col
+              pointer
+              _onClick={() => {
+                history.push("/favorites");
+              }}
+            >
+              <Text bold size="22px">
+                {myProfile.countOfLikes}
+              </Text>
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                찜
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              pointer
+              _onClick={() => {
+                history.push("/reviews");
+              }}
+            >
+              <Text bold size="22px">
+                {myProfile.countOfReceivedReviews}
+              </Text>
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                후기
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              pointer
+              _onClick={() => {
+                history.push("/price-proposes");
+              }}
+            >
+              <Text bold size="22px">
+                {myProfile.countOfReceievedPriceProposes}
+              </Text>
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                가격제시
+              </Text>
+            </Flex>
+            {/* <Flex is_col>
           <Text bold size="22px">
             112
           </Text>
@@ -102,18 +110,20 @@ const Btns = (props) => {
             공지사항
           </Text>
         </Flex> */}
-        <Flex is_col>
-          <Icon
-            width="40px"
-            margin="0 auto"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
-          />
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            고객센터
-          </Text>
+            <Flex is_col>
+              <Icon
+                width="40px"
+                margin="0 auto"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
+              />
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                고객센터
+              </Text>
+            </Flex>
+          </BtnGrid>
         </Flex>
-      </BtnGrid>
-    </Flex>
+      )}
+    </>
   );
 };
 

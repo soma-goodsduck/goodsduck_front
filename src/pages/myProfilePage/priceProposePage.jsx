@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getData } from "../../shared/axios";
+import { requestAuthData } from "../../shared/axios";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
 import PriceProposeRow from "./priceProposeRow";
@@ -8,7 +8,7 @@ import PriceProposeRow from "./priceProposeRow";
 const PriceProposePage = (props) => {
   const [items, setItems] = useState([]);
   useEffect(() => {
-    const getItems = getData("users/items/price-propose");
+    const getItems = requestAuthData("v1/users/items/price-propose");
     getItems.then((result) => {
       console.log(result);
       setItems(result);

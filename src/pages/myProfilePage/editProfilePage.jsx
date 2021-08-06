@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import styles from "./mypage.module.css";
+import styles from "./myProfilePage.module.css";
 
 import EditIdolGroup from "./editIdolGroup";
 import { Image } from "../../elements/index";
@@ -12,7 +12,7 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder, yellow } from "../../shared/colors";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
-import { getData, putAction } from "../../shared/axios";
+import { requestLookUp, putAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const EditProfilePage = (props) => {
@@ -30,7 +30,7 @@ const EditProfilePage = (props) => {
 
   useEffect(() => {
     const idolsFromUser = [];
-    const getUserData = getData("users/look-up");
+    const getUserData = requestLookUp();
     getUserData.then((result) => {
       setUser(result);
       setNick(result.nickName);

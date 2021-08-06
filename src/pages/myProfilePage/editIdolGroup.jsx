@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Idol from "./editIdolBox";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const EditIdolGroup = ({ onUpdate }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
   useEffect(() => {
-    const getIdolGroup = getInfo("idol-groups");
+    const getIdolGroup = requestPublicData("v1/idol-groups");
     getIdolGroup.then((result) => {
       setIdols(result);
     });

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
-const PriceFilteringPopup = ({
+const PriceFilteringModal = ({
   sortingNew,
   sortingLowPrice,
   sortingHighPrice,
@@ -85,4 +85,4 @@ const ExitBtn = styled.button`
   }
 `;
 
-export default PriceFilteringPopup;
+export default PriceFilteringModal;

@@ -9,14 +9,13 @@ import PopUp2 from "../../elements/popUp2";
 import { Flex, Text, Image, Icon } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
-import { actionCreators as imgActions } from "../../redux/modules/image";
 
 import { timeForToday } from "../../shared/functions";
-import { getInfo, getData, deleteAction } from "../../shared/axios";
+import { requestPublicData, deleteAction } from "../../shared/axios";
 import ItemNav from "./itemNav";
 import PriceList from "./priceList";
 
-const ItemDetail = ({ history }) => {
+const ItemDetailPage = ({ history }) => {
   const dispatch = useDispatch();
 
   // 아이템 아이디
@@ -26,13 +25,30 @@ const ItemDetail = ({ history }) => {
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [color, setColor] = useState("");
+  const [tradeType, setTradeType] = useState("");
+
   useEffect(() => {
-    const getItemDetail = getInfo(`items/${itemId}`);
+    const getItemDetail = requestPublicData(`v1/items/${itemId}`);
     getItemDetail.then((result) => {
       setItemData(result);
 
       if (result.isOwner) {
         setIsOwner(true);
+      }
+
+      if (result.tradeStatus === "SELLING") {
+        setColor("#e15b5b");
+        setTradeType("판매");
+      } else if (result.tradeStatus === "BUYING") {
+        setColor("#299bff");
+        setTradeType("구매");
+      } else if (result.tradeStatus === "RESERVING") {
+        setColor("#222222");
+        setTradeType("예약");
+      } else if (result.tradeStatus === "COMPLETE") {
+        setColor("#222222");
+        setTradeType("완료");
       }
     });
   }, []);
@@ -56,7 +72,9 @@ const ItemDetail = ({ history }) => {
 
   // 등록한 아이템 수정
   const editItem = () => {
-    // eslint-disable-next-line no-underscore-dangle
+    const imgUrls = [];
+    itemData.images.forEach((image) => imgUrls.push(image.url));
+
     const _itemData = {
       category: itemData.categoryName,
       description: itemData.description,
@@ -68,16 +86,15 @@ const ItemDetail = ({ history }) => {
       name: itemData.name,
       price: itemData.price,
       tradeType: itemData.tradeType,
-      images: itemData.images,
+      images: imgUrls,
       id: itemId,
     };
     dispatch(newItemActions.setItemAction(_itemData));
-    // dispatch(imgActions.setItemAction(userId, itemData.images));
   };
 
   // 등록한 아이템 삭제
   const deleteItem = () => {
-    deleteAction(`items/${itemId}`);
+    deleteAction(`v1/items/${itemId}`);
     console.log("굿즈 삭제");
     history.replace("/");
   };
@@ -121,13 +138,8 @@ const ItemDetail = ({ history }) => {
           <InfoBox>
             {/* 타입, 제목 */}
             <Flex justify="flex-start" margin="0 0 10px 0">
-              <Text
-                size="22px"
-                bold
-                margin="0 20px 0 0"
-                color={itemData.tradeType === "구매" ? "#299bff" : "#e15b5b"}
-              >
-                {itemData.tradeType}
+              <Text size="22px" bold margin="0 20px 0 0" color={color}>
+                {tradeType}
               </Text>
               <Title>
                 <Text size="22px">{itemData.name}</Text>
@@ -235,7 +247,12 @@ const ItemDetail = ({ history }) => {
 
           <div className={styles.line} />
           {/* 가격, 버튼 */}
-          <ItemNav item={itemData} id={itemId} isOwner={isOwner} />
+          <ItemNav
+            item={itemData}
+            id={itemId}
+            isOwner={isOwner}
+            tradeType={tradeType}
+          />
         </>
       ) : null}
     </>
@@ -257,4 +274,4 @@ const InfoBox = styled.div`
   padding: 16px 16px 0 16px;
 `;
 
-export default ItemDetail;
+export default ItemDetailPage;

@@ -6,14 +6,14 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemRow from "../../components/itemRow/itemRow";
 import PriceRow from "./priceRow";
 import { Text, PopUp } from "../../elements";
+import PriceFilteringModal from "./priceFilteringModal";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 
-import { getInfo, getData } from "../../shared/axios";
+import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { grayBorder, grayBtnText } from "../../shared/colors";
-import PriceFilteringPopup from "./priceFilteringPopup";
 
-const PriceProposeList = ({ history }) => {
+const PriceProposeListPage = ({ history }) => {
   // 아이템 아이디
   const href = window.location.href.split("/");
   const itemId = Number(href[href.length - 1]);
@@ -25,12 +25,12 @@ const PriceProposeList = ({ history }) => {
   const showPopup = useSelector((state) => state.user.show_popup);
 
   useEffect(() => {
-    const getItemData = getInfo(`items/${itemId}`);
+    const getItemData = requestPublicData(`v1/items/${itemId}/summary`);
     getItemData.then((result) => {
       setItemData(result);
     });
 
-    const getPriceList = getData(`items/${itemId}/price-propose`);
+    const getPriceList = requestAuthData(`v1/items/${itemId}/price-propose`);
     getPriceList.then((result) => {
       const newResult = result.filter((x) => x.status === "SUGGESTED");
       setPriceLists(newResult);
@@ -96,7 +96,7 @@ const PriceProposeList = ({ history }) => {
         />
       )}
       {showFilteringPopup && (
-        <PriceFilteringPopup
+        <PriceFilteringModal
           clickExit={hideFileringPopup}
           sortingNew={sortingNew}
           sortingLowPrice={sortingLowPrice}
@@ -153,4 +153,4 @@ const Dropdown = styled.div`
   margin-left: 5px;
 `;
 
-export default PriceProposeList;
+export default PriceProposeListPage;

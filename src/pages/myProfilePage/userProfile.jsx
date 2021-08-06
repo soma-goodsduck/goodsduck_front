@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import styles from "./mypage.module.css";
+import styles from "./myProfilePage.module.css";
 
 import { Flex, Text, Image } from "../../elements";
-import { yellow, black } from "../../shared/colors";
+import { yellow, blackBtn } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
@@ -11,7 +11,7 @@ const UserProfile = ({ user }) => {
   return (
     <UserProfileBox
       onClick={() => {
-        history.push("/myProfile");
+        history.push("/edit-profile");
       }}
     >
       <Image
@@ -37,7 +37,7 @@ const UserProfile = ({ user }) => {
         </Flex>
         <div className={styles.gaugeBox}>
           <Gauge>
-            <GaugePercent>57%</GaugePercent>
+            <GaugePercent>준비중 😉</GaugePercent>
           </Gauge>
         </div>
       </Flex>
@@ -59,8 +59,8 @@ const Gauge = styled.div`
 `;
 
 const GaugePercent = styled.div`
-  color: ${black};
-  font-size: 0.8rem;
+  color: ${blackBtn};
+  font-size: 0.7rem;
   text-align: right;
   padding-top: 2px;
   padding-right: 10px;

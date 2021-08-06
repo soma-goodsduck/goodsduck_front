@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import styles from "./mypage.module.css";
+import styles from "./myProfilePage.module.css";
 
 const EditIdolBox = ({ idol, onCheck, onUncheck }) => {
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
