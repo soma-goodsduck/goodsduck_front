@@ -4,7 +4,7 @@ import styled from "styled-components";
 import styles from "./idolGroupFiltering.module.css";
 import { Flex, Text, Image } from "../../elements";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 import { grayText } from "../../shared/colors";
 import IdolEdit from "./idolEdit";
 
@@ -14,7 +14,7 @@ const IdolGroupFiltering = ({ onClick }) => {
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
 
   const requestIdolGroup = async () => {
-    const result = await getInfo("idol-groups");
+    const result = await requestPublicData("v1/idol-groups");
     if (likeIdolGroupsLS) {
       const likeIdolGroups = likeIdolGroupsLS.split(",").map(Number);
 

@@ -7,7 +7,7 @@ import ChattingRow from "./chattingRow";
 import { Text, LoginPopUp } from "../../elements";
 import Nav from "../../components/nav/nav";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 import { firebaseDatabase } from "../../shared/firebase";
 
 export class Chatting extends Component {
@@ -20,7 +20,7 @@ export class Chatting extends Component {
   };
 
   componentDidMount() {
-    const getUserId = getInfo("/users/look-up-id");
+    const getUserId = requestPublicData("v1/users/look-up-id");
     getUserId.then((result) => {
       if (result === null) {
         this.setState({ showPopup: true });

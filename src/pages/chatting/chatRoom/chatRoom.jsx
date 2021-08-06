@@ -14,7 +14,7 @@ import MessageForm from "./messageForm";
 import Skeleton from "./skeleton";
 import { firebaseDatabase } from "../../../shared/firebase";
 
-import { getInfo } from "../../../shared/axios";
+import { postAction, requestPublicData } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
 
 export class ChatRoom extends Component {
@@ -27,11 +27,10 @@ export class ChatRoom extends Component {
     messages: [],
     messageLoading: true,
     messagesRef: firebaseDatabase.ref("messages"),
-    // chatRoomsRef: firebaseDatabase.ref("chatRooms"),
   };
 
   componentDidMount() {
-    const getUserId = getInfo("/users/look-up-id");
+    const getUserId = requestPublicData("v1/users/look-up-id");
 
     // 전달되는 props이 있을때 (ex. 채팅방을 클릭해서 들어온 경우)
     if (this.props.chatRoomId !== "") {
@@ -118,6 +117,7 @@ export class ChatRoom extends Component {
         .ref(`chatRooms/${chatRoomId}/createdWith`)
         .update({ isPresented: false });
     }
+    postAction("v1/chat", { chatId: chatRoomId });
     localStorage.removeItem(chatRoomId);
     history.push("/chatting");
   };

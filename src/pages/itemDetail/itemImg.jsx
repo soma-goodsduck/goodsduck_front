@@ -2,10 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
-import { Flex, Image, Icon } from "../../elements/index";
+import { Flex, Image } from "../../elements/index";
 import { postAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
@@ -19,15 +18,15 @@ const ItemImg = ({ id, item, onClick }) => {
 
   const history = useHistory();
   const goBack = () => {
-    history.goBack();
+    history.push("/");
   };
 
   const [isLike, setIsLike] = useState(item.isLike);
   const clickHeart = () => {
     if (!isLike) {
-      postAction(`items/${id}/like`);
+      postAction(`v1/items/${id}/like`);
     } else {
-      deleteAction(`items/${id}/like`);
+      deleteAction(`v1/items/${id}/like`);
     }
 
     setIsLike(!isLike);
@@ -105,9 +104,5 @@ const ItemImg = ({ id, item, onClick }) => {
     </Flex>
   );
 };
-
-const HeartInput = styled.input`
-  display: none;
-`;
 
 export default ItemImg;

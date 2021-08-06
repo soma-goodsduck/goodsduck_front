@@ -9,7 +9,7 @@ import { Flex, Icon, Button, PopUp } from "../../../elements";
 
 import { grayBorder, white } from "../../../shared/colors";
 import { firebaseDatabase } from "../../../shared/firebase";
-import { getInfo, postImgAction } from "../../../shared/axios";
+import { requestAuthData, postImgAction } from "../../../shared/axios";
 
 const MessageForm = (props) => {
   const href = window.location.href.split("/");
@@ -36,7 +36,7 @@ const MessageForm = (props) => {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const getUserId = getInfo("/users/look-up-id");
+    const getUserId = requestAuthData("v1/users/look-up-id");
     getUserId.then((result) => {
       setUserId(result.userId);
       setUserNick(result.nickName);
@@ -135,7 +135,7 @@ const MessageForm = (props) => {
     console.log(file);
     const formData = new FormData();
     formData.append("multipartFile", file);
-    const postImg = postImgAction("users/chat-image", formData);
+    const postImg = postImgAction("v1/users/chat-image", formData);
     postImg.then((result) => {
       messagesRef.child(chatRoomId).push().set(createMessage(result));
     });
@@ -177,7 +177,11 @@ const MessageForm = (props) => {
             type="submit"
             width="32px"
             height="28px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+            src={
+              content
+                ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send_ready.svg"
+                : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+            }
             disabled={loading}
             _onClick={() => {
               handleSubmit();

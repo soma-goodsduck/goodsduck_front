@@ -6,14 +6,14 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemRow from "../../components/itemRow/itemRow";
 import LoginPopUp from "../../elements/loginPopUp";
 
-import { getData } from "../../shared/axios";
+import { requestAuthData } from "../../shared/axios";
 
 const LikeItemList = () => {
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const getLikeItemList = getData("items/like");
+    const getLikeItemList = requestAuthData("v2/items/like");
     getLikeItemList.then((result) => {
       if (result === "login") {
         setShowPopup(true);

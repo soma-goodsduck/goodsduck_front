@@ -61,7 +61,7 @@ const addChatRoomAciton = (item) => {
   return function (dispatch, getState, { history }) {
     chatRoomsRef.child(key).update(newChatRoom);
 
-    postAction(`chat/items/${newChatRoom.item.id}`, {
+    postAction(`v1/chat/items/${newChatRoom.item.id}`, {
       chatId: key,
     });
     history.push(`/chat-room/${key}`);
@@ -76,7 +76,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
     id: key,
     timestamp: firebase.database.ServerValue.TIMESTAMP,
     item: {
-      id: item.item.id, // 아이템 ID
+      id: item.item.itemId, // 아이템 ID
       image: item.item.imageUrl, // 아이템 이미지
       name: item.item.name, // 아이템 이름
       price: item.proposedPrice, // 제안된 아이템 가격
@@ -97,7 +97,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
 
   return function (dispatch, getState, { history }) {
     chatRoomsRef.child(key).update(newChatRoom);
-    postAction(`chat/price-propose/${item.priceProposeId}`, {
+    postAction(`v1/chat/price-propose/${item.priceProposeId}`, {
       chatId: key,
     });
     history.push(`/chat-room/${key}`);

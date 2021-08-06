@@ -10,7 +10,7 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const IdolMemberSelect = ({ history }) => {
   const dispatch = useDispatch();
@@ -21,7 +21,9 @@ const IdolMemberSelect = ({ history }) => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    const getIdolMember = getInfo(`idol-members/idol-groups/${groupId}`);
+    const getIdolMember = requestPublicData(
+      `v1/idol-members/idol-groups/${groupId}`,
+    );
     getIdolMember.then((result) => {
       setMembers(result);
     });
@@ -46,14 +48,14 @@ const IdolMemberSelect = ({ history }) => {
   const checkMemberHandler = (id, name) => {
     console.log(id, name);
     setMemberId(id);
-    dispatch(newItemActions.setIdolMemberAction(id, name));
+    dispatch(newItemActions.setIdolMember(id, name));
   };
 
   const selectFin = () => {
     if (!memberId) {
       return;
     }
-    history.push("/new");
+    history.push("/upload-item");
   };
 
   return (

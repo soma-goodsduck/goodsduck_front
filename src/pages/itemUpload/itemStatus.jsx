@@ -6,7 +6,7 @@ import styled from "styled-components";
 import styles from "./itemUpload.module.css";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { history } from "../../redux/configureStore";
 
@@ -18,7 +18,7 @@ const ItemStatus = () => {
   const [statuses, setStatuses] = useState([]);
 
   useEffect(() => {
-    const getCategory = getInfo("items/grade-status");
+    const getCategory = requestPublicData("v1/items/grade-status");
     getCategory.then((result) => {
       setStatuses(result);
     });
@@ -28,12 +28,12 @@ const ItemStatus = () => {
 
   const checkHandler = (grade) => {
     console.log(statusValue, grade);
-    dispatch(newItemActions.setStatusAction(grade));
+    dispatch(newItemActions.setStatus(grade));
     setNextOK(true);
   };
 
   const next = () => {
-    history.push("/new");
+    history.push("/upload-item");
   };
 
   return (
@@ -42,7 +42,7 @@ const ItemStatus = () => {
       <StatusContainer>
         <div>
           <div className={styles.detailText}>굿즈 상태 선택</div>
-          {statuses.map((status, idx) => (
+          {statuses.map((status) => (
             <StatusBox
               key={status.gradeStatus}
               className={

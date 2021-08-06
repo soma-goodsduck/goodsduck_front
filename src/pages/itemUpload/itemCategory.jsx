@@ -7,8 +7,9 @@ import styles from "./itemUpload.module.css";
 import { Icon } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
+import { history } from "../../redux/configureStore";
 
 const ItemCategory = () => {
   const dispatch = useDispatch();
@@ -18,16 +19,15 @@ const ItemCategory = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const getCategory = getInfo("items/category");
+    const getCategory = requestPublicData("v1/items/category");
     getCategory.then((result) => {
-      console.log(result);
       setCategories(result);
     });
   }, []);
 
   const checkHandler = (name) => {
-    console.log(name);
-    dispatch(newItemActions.setCategoryAction(name));
+    dispatch(newItemActions.setCategory(name));
+    history.push("/upload-item");
   };
 
   return (

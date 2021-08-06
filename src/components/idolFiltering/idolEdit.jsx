@@ -31,7 +31,7 @@ const IdolEdit = ({ _onClick }) => {
   const onEdit = () => {
     if (likeIdolGroupsLS && likeIdolGroupsLS.split(",").map(Number) !== idols) {
       if (idols.length > 0) {
-        putAction("users/idol-groups", { likeIdolGroupsId: idols });
+        putAction("v1/users/idol-groups", { likeIdolGroupsId: idols });
         localStorage.setItem("likeIdolGroups", idols);
       }
     }
