@@ -19,6 +19,11 @@ const SHOW_POPUP = "SHOW_POPUP";
 const NO_SHOW_POPUP = "NO_SHOW_POPUP";
 const UPDATE_JWT = "UPDATE_JWT";
 const SET_FAV_IDOL_GROUPS = "SET_FAV_IDOL_GROUPS";
+const SET_FILTERING_TYPE = "SET_FILTERING_TYPE";
+const SET_USER_FOR_REVIEW = "SET_USER_FOR_REVIEW";
+const SET_REVIEW = "SET_REVIEW";
+const SET_NUM_OF_STAR = "SET_NUM_OF_STAR";
+const CLEAR_REVIEW = "CLEAR_REVIEW";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -31,6 +36,19 @@ const updateJwt = createAction(UPDATE_JWT, () => ({}));
 const setFavIdolGroups = createAction(SET_FAV_IDOL_GROUPS, (favIdolGroups) => ({
   favIdolGroups,
 }));
+const setFilteringType = createAction(SET_FILTERING_TYPE, (filteringType) => ({
+  filteringType,
+}));
+const setUserForReview = createAction(SET_USER_FOR_REVIEW, (userForReview) => ({
+  userForReview,
+}));
+const setReview = createAction(SET_REVIEW, (review) => ({
+  review,
+}));
+const setNumOfStar = createAction(SET_NUM_OF_STAR, (numOfStar) => ({
+  numOfStar,
+}));
+const clearReview = createAction(CLEAR_REVIEW, () => ({}));
 
 // initialState
 const initialState = {
@@ -40,6 +58,10 @@ const initialState = {
   isLogin: false,
   showPopup: false,
   favIdolGroups: [],
+  filteringType: "SELLING",
+  userForReview: "",
+  review: "",
+  numOfStar: 0,
 };
 
 // middleware actions
@@ -147,6 +169,28 @@ export default handleActions(
       produce(state, (draft) => {
         draft.favIdolGroups = action.payload.favIdolGroups;
       }),
+    [SET_FILTERING_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.filteringType = action.payload.filteringType;
+      }),
+    [SET_USER_FOR_REVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.userForReview = action.payload.userForReview;
+      }),
+    [SET_REVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.review = action.payload.review;
+      }),
+    [SET_NUM_OF_STAR]: (state, action) =>
+      produce(state, (draft) => {
+        draft.numOfStar = action.payload.numOfStar;
+      }),
+    [CLEAR_REVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.userForReview = "";
+        draft.numOfStar = 0;
+        draft.review = "";
+      }),
   },
   initialState,
 );
@@ -162,6 +206,11 @@ const actionCreators = {
   noShowPopup,
   updateJwt,
   setFavIdolGroups,
+  setFilteringType,
+  setUserForReview,
+  setReview,
+  setNumOfStar,
+  clearReview,
 };
 
 export { actionCreators };

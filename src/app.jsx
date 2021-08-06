@@ -14,19 +14,21 @@ import home from "./pages/home/home";
 import KeywordSearch from "./pages/home/keywordSearch";
 import Chatting from "./pages/chatting/chatting";
 import ChatRoom from "./pages/chatting/chatRoom/chatRoom";
-import MyPage from "./pages/myPage/myPage";
-import Setting from "./pages/myPage/setting";
-import MyProfile from "./pages/myPage/myProfile";
+import Setting from "./pages/myProfilePage/setting";
+import MyProfile from "./pages/myProfilePage/myProfilePage";
+import EditProfile from "./pages/myProfilePage/editProfilePage";
 import LikeItemList from "./pages/likeItemList/likeItemList";
-import Notification from "./pages/notification/notification";
-import ItemDetail from "./pages/itemDetail/itemDetail";
-import ItemUpload from "./pages/itemUpload/itemUpload";
+import NotificationPage from "./pages/notification/notificationPage";
+import ItemDetailPage from "./pages/itemDetail/itemDetailPage";
+import ItemUploadPage from "./pages/itemUpload/itemUploadPage";
 import ItemCategory from "./pages/itemUpload/itemCategory";
 import ItemStatus from "./pages/itemUpload/itemStatus";
 import IdolGroup from "./pages/itemUpload/idolSelect";
 import IdolMember from "./pages/itemUpload/idolMeberSelect";
-import PriceProposeList from "./pages/price/priceProposeList";
-import PriceProposePage from "./pages/myPage/priceProposePage";
+import PriceProposeListPage from "./pages/price/priceProposeListPage";
+import PriceProposePage from "./pages/myProfilePage/priceProposePage";
+import ReviewPage from "./pages/myProfilePage/reviewPage";
+import WritingReviewPage from "./pages/review/writingReviewPage";
 
 import { history } from "./redux/configureStore";
 
@@ -50,20 +52,22 @@ function App() {
         <Route path="/search/item/:name" exact component={KeywordSearch} />
         <Route path="/chatting" exact component={Chatting} />
         <Route path="/chat-room/:id" exact component={ChatRoom} />
-        <Route path="/mypage" exact component={MyPage} />
+        <Route path="/my-profile" exact component={MyProfile} />
+        <Route path="/review/:id" exact component={WritingReviewPage} />
         <Route path="/setting" exact component={Setting} />
-        <Route path="/myProfile" exact component={MyProfile} />
+        <Route path="/edit-profile" exact component={EditProfile} />
         <Route path="/price-proposes" exact component={PriceProposePage} />
+        <Route path="/reviews" exact component={ReviewPage} />
         <Route path="/favorites" exact component={LikeItemList} />
-        <Route path="/price/:id" exact component={PriceProposeList} />
-        <Route path="/notification" exact component={Notification} />
-        <Route path="/item/:id" exact component={ItemDetail} />
+        <Route path="/price/:id" exact component={PriceProposeListPage} />
+        <Route path="/notification" exact component={NotificationPage} />
+        <Route path="/item/:id" exact component={ItemDetailPage} />
         {/* 아이템 등록 */}
-        <Route path="/new" exact component={ItemUpload} />
+        <Route path="/upload-item" exact component={ItemUploadPage} />
         <Route path="/category" exact component={ItemCategory} />
         <Route path="/status" exact component={ItemStatus} />
-        <Route path="/idolSelect" exact component={IdolGroup} />
-        <Route path="/idolMemberSelect" exact component={IdolMember} />
+        <Route path="/select-idol" exact component={IdolGroup} />
+        <Route path="/select-idol-member" exact component={IdolMember} />
       </ConnectedRouter>
     </div>
   );
