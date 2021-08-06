@@ -2,19 +2,17 @@ import React from "react";
 
 import styled from "styled-components";
 import { blackBtn, orange, darkRed, grayText } from "../../shared/colors";
-
 import { Image, Text } from "../../elements";
 
 import { timeForToday, numberWithCommas } from "../../shared/functions";
-
 import { history } from "../../redux/configureStore";
 
-const ItemRow = ({ item, isBtn }) => {
+const ItemRow = ({ item, isNotBtn }) => {
   let color;
   let tradeStatus;
-  if (item.tradeStatus === "TRADING") {
+  if (item.tradeStatus === "RESERVING") {
     color = orange;
-    tradeStatus = "거래중";
+    tradeStatus = "예약중";
   } else if (item.tradeStatus === "COMPLETE") {
     color = blackBtn;
     tradeStatus = "거래완료";
@@ -24,31 +22,33 @@ const ItemRow = ({ item, isBtn }) => {
   } else if (item.tradeStatus === "BUYING") {
     color = darkRed;
     tradeStatus = "구매중";
+  } else if (item.tradeStatus === "REVIEW") {
+    color = blackBtn;
+    tradeStatus = "REVIEW";
   }
 
-  const styles = { isBtn };
+  const styles = { isNotBtn };
 
   return (
     <ItemBox
       {...styles}
       onClick={() => {
-        history.push(`/item/${item.itemId}`);
+        history.push(`/item/${item.id}`);
       }}
     >
       <Image
         shape="rectangle"
-        src={item.images[0].url}
+        src={item.imageUrl}
         size="100px"
         borderRadius="5px"
       />
-      <HeartIconBox>
-        {item.isLike ? <HeartClickIcon /> : <HeartIcon />}
-      </HeartIconBox>
       <ItemRowBox>
         <div>
-          <Text bold color={color} size="14px">
-            {tradeStatus}
-          </Text>
+          {item.tradeStatus !== "COMPLETE" && (
+            <Text bold color={color} size="14px">
+              {tradeStatus !== "REVIEW" && tradeStatus}
+            </Text>
+          )}
           <Text is_long margin="5px 0">
             {item.name}
           </Text>
@@ -63,14 +63,14 @@ const ItemRow = ({ item, isBtn }) => {
 };
 
 ItemRow.defaultProps = {
-  isBtn: false,
+  isNotBtn: false,
 };
 
 const ItemBox = styled.div`
   margin: 20px 0;
   display: flex;
   position: relative;
-  ${(props) => (props.isBtn ? "cursor: pointer;" : "")}
+  ${(props) => (props.isNotBtn ? "cursor: pointer;" : "")}
 `;
 
 const ItemRowBox = styled.div`
@@ -88,34 +88,6 @@ const TimeText = styled.div`
   justify-content: flex-end;
   color: ${grayText};
   font-size: 14px;
-`;
-
-const HeartIcon = styled.div`
-  z-index: 3;
-  width: 22px;
-  height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart.svg");
-  background-size: cover;
-`;
-
-const HeartClickIcon = styled.div`
-  z-index: 3;
-  width: 22px;
-  height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
-  background-size: cover;
-`;
-
-const HeartIconBox = styled.div`
-  position: absolute;
-  z-index: 2;
-  color: whitesmoke;
-  font-size: 20px;
-  text-align: right;
-  width: 100%;
-  padding-top: 4px;
-  padding-right: 4px;
-  margin-left: 75px;
 `;
 
 export default ItemRow;
