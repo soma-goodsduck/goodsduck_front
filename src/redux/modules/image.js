@@ -7,22 +7,24 @@ import { produce } from "immer";
 
 // actions
 const SAVE_IMG = "SAVE_IMG";
+const SAVE_FILE_OBJECT = "SAVE_FILE_OBJECT";
 const SET_PREVIEW = "SET_PREVIEW";
 const CLEAR_IMG = "CLEAR_IMG";
 
 // action creators
-const saveImg = createAction(SAVE_IMG, (userId, fileList) => ({
-  userId,
+const saveImg = createAction(SAVE_IMG, (fileList) => ({
   fileList,
 }));
+const saveFileObject = createAction(SAVE_FILE_OBJECT, (fileObj) => ({
+  fileObj,
+}));
 const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
-
 const clearImg = createAction(CLEAR_IMG, () => ({}));
 
 // initialState
 const initialState = {
-  userId: null,
   fileList: [],
+  fileObj: {},
   preview: null,
 };
 
@@ -33,18 +35,15 @@ const clearImgAction = () => {
   };
 };
 
-const saveImgAction = (userId, fileList) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(saveImg(userId, fileList));
-  };
-};
-
 // reducer
 export default handleActions(
   {
+    [SAVE_FILE_OBJECT]: (state, action) =>
+      produce(state, (draft) => {
+        draft.fileObj = action.payload.fileObj;
+      }),
     [SAVE_IMG]: (state, action) =>
       produce(state, (draft) => {
-        draft.userId = action.payload.userId;
         draft.fileList = action.payload.fileList;
       }),
     [SET_PREVIEW]: (state, action) =>
@@ -55,6 +54,7 @@ export default handleActions(
       produce(state, (draft) => {
         draft.fileList = [];
         draft.preview = null;
+        draft.isImgAdded = false;
       }),
   },
   initialState,
@@ -62,7 +62,8 @@ export default handleActions(
 
 // action creator export
 const actionCreators = {
-  saveImgAction,
+  saveImg,
+  saveFileObject,
   setPreview,
   clearImgAction,
 };
