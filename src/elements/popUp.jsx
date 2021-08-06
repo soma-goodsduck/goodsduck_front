@@ -38,7 +38,7 @@ const PopUp = (props) => {
   };
 
   const noLogin = () => {
-    dispatch(userActions.noShowPopupAction());
+    dispatch(userActions.noShowPopup());
     history.push("/");
   };
 

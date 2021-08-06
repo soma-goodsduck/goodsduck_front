@@ -2,7 +2,7 @@
 
 /* 전체적인 선택 버튼 */
 .selectBtn {
-  width: 380px;
+  width: 340px;
   height: 100%;
   display: flex;
   justify-content: space-between;
@@ -155,4 +155,10 @@ input::-webkit-inner-spin-button {
 .nextOKBtn {
   color: var(--blackBtn);
   background-color: var(--yellow);
+}
+
+@media screen and (min-width: 415px) {
+  .selectBtn {
+    width: 380px;
+  }
 }

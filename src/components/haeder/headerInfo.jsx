@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Flex, Text, Icon } from "../../elements/index";
 
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { actionCreators as imgActions } from "../../redux/modules/image";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
@@ -19,7 +20,7 @@ const HeaderInfo = (props) => {
     }
   }, [screen]);
 
-  const { text, margin, bg, borderRadius, isClear } = props;
+  const { text, margin, bg, borderRadius, isClear, isReviewClear } = props;
 
   const styles = {
     margin,
@@ -35,9 +36,12 @@ const HeaderInfo = (props) => {
       dispatch(newItemActions.clearAction());
       dispatch(imgActions.clearImgAction());
       history.replace("/");
-      return;
+    } else if (isReviewClear) {
+      dispatch(userActions.clearReview());
+      history.goBack();
+    } else {
+      history.goBack();
     }
-    history.goBack();
   };
 
   return (

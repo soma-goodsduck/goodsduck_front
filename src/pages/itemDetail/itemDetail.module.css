@@ -50,9 +50,11 @@
 }
 
 .btnPrice,
-.btnRePrice,
 .btnPriceCol,
-.btnRePriceCol {
+.btnRePrice,
+.btnRePriceCol,
+.btnSoldout,
+.btnSoldoutCol {
   height: 50px;
   background: var(--blackBtn);
   color: var(--white);
@@ -74,11 +76,13 @@
   margin-top: 10px;
 }
 
-.btnReChat {
+.btnReChat,
+.btnSoldout {
   width: 220px;
   font-size: 15px;
 }
-.btnReChatCol {
+.btnReChatCol,
+.btnSoldoutCol {
   width: 90vw;
   margin-top: 10px;
 }
@@ -192,10 +196,12 @@
     width: 185px;
   }
 
-  .btnReChat {
+  .btnReChat,
+  .btnSoldout {
     width: 240px;
   }
-  .btnReChatCol {
+  .btnReChatCol,
+  .btnSoldoutCol {
     width: 380px;
   }
 }
