@@ -23,6 +23,7 @@ export class ChatRoom extends Component {
   state = {
     createdByMe: false,
     chatRoomId: this.props.chatRoomId,
+    createdWithBcryptId: this.props.createdWithBcryptId,
     withChatNick: "",
     messages: [],
     messageLoading: true,
@@ -59,6 +60,7 @@ export class ChatRoom extends Component {
         .then((snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
+            this.setState({ createdWithBcryptId: data.createdWith.bcryptId });
             getUserId.then((result) => {
               if (result.userId === data.createdBy.id) {
                 this.setState({ createdByMe: true });
@@ -138,7 +140,8 @@ export class ChatRoom extends Component {
     );
 
   render() {
-    const { messages, messageLoading, chatRoomId } = this.state;
+    const { messages, messageLoading, chatRoomId, createdWithBcryptId } =
+      this.state;
 
     return (
       <>
@@ -149,6 +152,11 @@ export class ChatRoom extends Component {
           _onClick={() => {
             this.leaveChatRoom(chatRoomId);
           }}
+          _nickClick={() => {
+            history.push(`/profile/${createdWithBcryptId}`);
+          }}
+          type="chat"
+          isClick
         />
         <ItemInfo />
         <div>
@@ -174,6 +182,7 @@ const mapStateToProps = (state) => {
     createdById: state.chat.createdById,
     createdByNickName: state.chat.createdByNickName,
     createdWithNickName: state.chat.createdWithNickName,
+    createdWithBcryptId: state.chat.createdWithBcryptId,
   };
 };
 

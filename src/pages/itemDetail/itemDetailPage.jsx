@@ -5,8 +5,7 @@ import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
 import ItemImg from "./itemImg";
-import PopUp2 from "../../elements/popUp2";
-import { Flex, Text, Image, Icon } from "../../elements/index";
+import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
@@ -24,6 +23,7 @@ const ItemDetailPage = ({ history }) => {
 
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
+  const [itemOwnerId, setItemOwnerId] = useState("");
   const [isOwner, setIsOwner] = useState(false);
   const [color, setColor] = useState("");
   const [tradeType, setTradeType] = useState("");
@@ -32,6 +32,8 @@ const ItemDetailPage = ({ history }) => {
     const getItemDetail = requestPublicData(`v1/items/${itemId}`);
     getItemDetail.then((result) => {
       setItemData(result);
+
+      setItemOwnerId(result.itemOwner.bcryptId);
 
       if (result.isOwner) {
         setIsOwner(true);
@@ -95,13 +97,16 @@ const ItemDetailPage = ({ history }) => {
   // 등록한 아이템 삭제
   const deleteItem = () => {
     deleteAction(`v1/items/${itemId}`);
-    console.log("굿즈 삭제");
     history.replace("/");
   };
 
   // 판매자/구매자의 마이페이지로 이동
   const clickUser = () => {
-    console.log("판매자");
+    if (isOwner) {
+      history.push("/my-profile");
+    } else {
+      history.push(`/profile/${itemOwnerId}`);
+    }
   };
 
   return (
@@ -122,12 +127,12 @@ const ItemDetailPage = ({ history }) => {
         />
       )}
       {showUserPopup && (
-        <PopUp2
-          text1="신고하기"
+        <PopUp3
+          text="신고하기"
           _onClick1={() => {
             console.log("신고");
           }}
-          _onClick3={() => {
+          _onClick2={() => {
             hidePopup();
           }}
         />
@@ -138,7 +143,7 @@ const ItemDetailPage = ({ history }) => {
           <InfoBox>
             {/* 타입, 제목 */}
             <Flex justify="flex-start" margin="0 0 10px 0">
-              <Text size="22px" bold margin="0 20px 0 0" color={color}>
+              <Text size="22px" bold color={color}>
                 {tradeType}
               </Text>
               <Title>
@@ -261,6 +266,7 @@ const ItemDetailPage = ({ history }) => {
 
 const Title = styled.div`
   width: 70%;
+  margin-left: 10px;
 `;
 
 const UserName = styled.div`

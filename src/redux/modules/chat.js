@@ -23,6 +23,7 @@ const initialState = {
   createdByNickName: "",
   createdByImg: "",
   createdWithId: "",
+  createdWithBcryptId: "",
   createdWithNickName: "",
   createdWithImg: "",
   itemId: "",
@@ -46,6 +47,7 @@ const addChatRoomAciton = (item) => {
     },
     createdWith: {
       id: item.itemOwner.userId, // 글쓴이의 아이디
+      bcryptId: item.itemOwner.bcryptId, // 글쓴이의 bcrypt
       nickName: item.itemOwner.nickName, // 글쓴이의 닉네임
       profileImg: item.itemOwner.imageUrl, // 글쓴이의 프로필 이미지
       isPresented: true, // 현재 채팅방에 참여하고 있는지
@@ -83,6 +85,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
     },
     createdWith: {
       id: item.proposer.userId, // 가격제안한 유저 아이디
+      bcryptId: item.proposer.bcryptId, // 가격제안한 유저 bcrypt
       nickName: item.proposer.nickName, // 가격제안한 유저의 닉네임
       profileImg: item.proposer.imageUrl, // 가격제안한 유저의 프로필 이미지
       isPresented: true, // 현재 채팅방에 참여하고 있는지
@@ -109,11 +112,14 @@ export default handleActions(
   {
     [SET_CHAT_ROOM]: (state, action) =>
       produce(state, (draft) => {
+        console.log(action.payload);
         draft.chatRoomId = action.payload.chatRoom.id;
         draft.createdById = action.payload.chatRoom.createdBy.id;
         draft.createdByNickName = action.payload.chatRoom.createdBy.nickName;
         draft.createdByImg = action.payload.chatRoom.createdBy.imageUrl;
         draft.createdWithId = action.payload.chatRoom.createdWith.id;
+        draft.createdWithBcryptId =
+          action.payload.chatRoom.createdWith.bcryptId;
         draft.createdWithNickName =
           action.payload.chatRoom.createdWith.nickName;
         draft.createdWithImg = action.payload.chatRoom.createdWith.imageUrl;
