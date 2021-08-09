@@ -44,11 +44,9 @@ const ItemRow = ({ item, isNotBtn }) => {
       />
       <ItemRowBox>
         <div>
-          {item.tradeStatus !== "COMPLETE" && (
-            <Text bold color={color} size="14px">
-              {tradeStatus !== "REVIEW" && tradeStatus}
-            </Text>
-          )}
+          <Text bold color={color} size="14px">
+            {tradeStatus !== "REVIEW" && tradeStatus}
+          </Text>
           <Text is_long margin="5px 0">
             {item.name}
           </Text>

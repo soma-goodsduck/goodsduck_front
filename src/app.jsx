@@ -29,6 +29,7 @@ import PriceProposeListPage from "./pages/price/priceProposeListPage";
 import PriceProposePage from "./pages/myProfilePage/priceProposePage";
 import ReviewPage from "./pages/myProfilePage/reviewPage";
 import WritingReviewPage from "./pages/review/writingReviewPage";
+import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
 
 import { history } from "./redux/configureStore";
 
@@ -62,6 +63,7 @@ function App() {
         <Route path="/price/:id" exact component={PriceProposeListPage} />
         <Route path="/notification" exact component={NotificationPage} />
         <Route path="/item/:id" exact component={ItemDetailPage} />
+        <Route path="/profile/:id" exact component={OtherProfilePage} />
         {/* 아이템 등록 */}
         <Route path="/upload-item" exact component={ItemUploadPage} />
         <Route path="/category" exact component={ItemCategory} />

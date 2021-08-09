@@ -9,6 +9,7 @@ const Text = (props) => {
     color,
     size,
     children,
+    height,
     margin,
     is_long,
     is_center,
@@ -20,6 +21,7 @@ const Text = (props) => {
     bold,
     color,
     size,
+    height,
     margin,
     is_long,
     is_center,
@@ -36,7 +38,8 @@ Text.defaultProps = {
   bold: false,
   color: "#000000",
   size: "16px",
-  margin: false,
+  height: "",
+  margin: "",
   is_long: false,
   is_center: false,
   _className: "",
@@ -47,6 +50,8 @@ const P = styled.p`
   font-size: ${(props) => props.size};
   font-weight: ${(props) => (props.bold ? "600" : "")};
   font-weight: ${(props) => (props.medium ? "500" : "")};
+  line-height: ${(props) => props.height};
+  margin: ${(props) => props.margin};
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
     props.is_long

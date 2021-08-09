@@ -109,7 +109,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
-                  즉시 {item.tradeType} 가능
+                  즉시 {item.tradeType === "판매" ? "구매" : "판매"} 가능
                 </Button>
                 <Button
                   className={isHighPrice ? styles.btnPriceCol : styles.btnPrice}
@@ -139,7 +139,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
-                  즉시 {item.tradeType} 가능
+                  즉시 {item.tradeType === "판매" ? "구매" : "판매"} 가능
                 </Button>
                 <Button
                   className={isHighPrice ? styles.btnPriceCol : styles.btnPrice}

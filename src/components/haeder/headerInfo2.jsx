@@ -14,13 +14,27 @@ const HeaderInfo2 = (props) => {
     }
   }, [screen]);
 
-  const { text1, text2, _onClick, margin, bg, borderRadius, isClear } = props;
+  const {
+    text1,
+    text2,
+    _onClick,
+    _nickClick,
+    isClick,
+    type,
+    margin,
+    bg,
+    borderRadius,
+    isClear,
+    isNotReport,
+  } = props;
 
   const styles = {
     margin,
     bg,
     borderRadius,
     isMobile,
+    isNotReport,
+    isClick,
   };
 
   const [showPopup, setShowPopup] = useState(false);
@@ -64,12 +78,19 @@ const HeaderInfo2 = (props) => {
                 }}
               />
             </Column1>
-            <Column2>
+            <Column2
+              {...styles}
+              onClick={() => {
+                if (type === "chat") {
+                  _nickClick();
+                }
+              }}
+            >
               <Text is_center size="18px">
                 {text2}
               </Text>
             </Column2>
-            <Column3>
+            <Column3 {...styles}>
               <Icon
                 width="12px"
                 src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg"
@@ -89,6 +110,7 @@ HeaderInfo2.defaultProps = {
   margin: "",
   bg: "#ffffff",
   borderRadius: "10px",
+  isClick: false,
 };
 
 const HeaderBox = styled.div`
@@ -109,10 +131,12 @@ const Column1 = styled.div`
 const Column2 = styled.div`
   width: 100%;
   text-align: center;
+  ${(props) => props.isClick && "cursor: pointer;"};
 `;
 
 const Column3 = styled.div`
   float: right;
+  ${(props) => props.isNotReport && "display:none;"};
 `;
 
 export default HeaderInfo2;

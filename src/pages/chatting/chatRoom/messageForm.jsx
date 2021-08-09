@@ -71,7 +71,6 @@ const MessageForm = (props) => {
     } else {
       message["content"] = content;
     }
-    console.log("message", message);
     return message;
   };
 
@@ -132,7 +131,6 @@ const MessageForm = (props) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    console.log(file);
     const formData = new FormData();
     formData.append("multipartFile", file);
     const postImg = postImgAction("v1/users/chat-image", formData);

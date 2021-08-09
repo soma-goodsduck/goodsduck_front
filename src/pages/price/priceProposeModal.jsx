@@ -43,9 +43,10 @@ const PriceProposeModal = ({ _onClick }) => {
     postPrice.then((result) => {
       if (result === "login") {
         setShowPopup(true);
+      } else {
+        window.location.reload();
       }
     });
-    window.location.reload();
   };
 
   return (
