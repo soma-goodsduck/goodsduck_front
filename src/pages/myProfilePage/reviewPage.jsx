@@ -4,7 +4,7 @@ import styled from "styled-components";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { requestAuthData } from "../../shared/axios";
-import ReviewRow from "./reviewRow";
+import Review from "../../components/review/review";
 
 const ReviewPage = (props) => {
   const [reviews, setReviews] = useState([]);
@@ -23,7 +23,7 @@ const ReviewPage = (props) => {
       <HeaderInfo text="리뷰" padding="0 16px" />
       <ReviewBox>
         {reviews &&
-          reviews.map((review, idx) => <ReviewRow key={idx} review={review} />)}
+          reviews.map((review, idx) => <Review key={idx} review={review} />)}
       </ReviewBox>
     </>
   );

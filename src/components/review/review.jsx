@@ -28,7 +28,7 @@ const ReviewRow = ({ review }) => {
 
   return (
     <>
-      <UserBox>
+      <ReviewBox>
         <Image
           shape="circle"
           src={review.writerImageUrl}
@@ -45,14 +45,14 @@ const ReviewRow = ({ review }) => {
           </Row>
           <Text size="15px">{review.content}</Text>
         </InfoBox>
-      </UserBox>
-      <Line />
+      </ReviewBox>
     </>
   );
 };
 
-const UserBox = styled.div`
+const ReviewBox = styled.div`
   display: flex;
+  margin-bottom: 30px;
 `;
 
 const InfoBox = styled.div`
@@ -76,13 +76,6 @@ const StarIcon = styled.i`
 const StarCheckIcon = styled.i`
   font-size: 16px;
   color: ${yellow};
-`;
-
-const Line = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${grayBorder};
-  margin: 18px 0;
 `;
 
 export default ReviewRow;
