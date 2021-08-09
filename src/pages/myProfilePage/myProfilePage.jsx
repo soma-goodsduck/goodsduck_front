@@ -9,7 +9,7 @@ import Btns from "./btns";
 import UserProfile from "./userProfile";
 import Nav from "../../components/nav/nav";
 
-import { requestAuthData, requestLookUp } from "../../shared/axios";
+import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const MyProfilePage = () => {
@@ -21,7 +21,7 @@ const MyProfilePage = () => {
   const tradeStatus = useSelector((state) => state.user.filteringType);
 
   const requestUserData = async () => {
-    const result = await requestLookUp();
+    const result = await requestAuthData("v1/users/look-up");
     if (result === "login") {
       setShowPopup(true);
     }

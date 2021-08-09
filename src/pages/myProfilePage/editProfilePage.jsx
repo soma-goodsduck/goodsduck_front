@@ -12,7 +12,7 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder, yellow } from "../../shared/colors";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
-import { requestLookUp, putAction } from "../../shared/axios";
+import { requestAuthData, putAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const EditProfilePage = (props) => {
@@ -30,7 +30,7 @@ const EditProfilePage = (props) => {
 
   useEffect(() => {
     const idolsFromUser = [];
-    const getUserData = requestLookUp();
+    const getUserData = requestAuthData("v1/users/look-up");
     getUserData.then((result) => {
       setUser(result);
       setNick(result.nickName);
@@ -76,7 +76,7 @@ const EditProfilePage = (props) => {
         formData.append("stringProfileDto", JSON.stringify(profileDto));
         localStorage.setItem("likeIdolGroups", newIdols);
 
-        putAction("users/profile", formData);
+        putAction("v1/users/profile", formData);
         history.replace("/my-profile");
         history.go(0);
       }

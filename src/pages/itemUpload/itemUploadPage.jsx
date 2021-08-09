@@ -12,10 +12,20 @@ import ItemImgUpload from "../../components/itemImgUpload/itemImgUpload";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as imgActions } from "../../redux/modules/image";
 
-import { requestLookUp } from "../../shared/axios";
+import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const ItemUpload = (props) => {
+  // 반응형
+  const screen = window.screen.width;
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (screen < 415) {
+      setIsMobile(true);
+    }
+  }, [screen]);
+  const styleProps = { isMobile };
+
   const dispatch = useDispatch();
 
   const [userJwt, setUserJwt] = useState("");
@@ -28,8 +38,8 @@ const ItemUpload = (props) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const requestUserData = async () => {
-    const result = await requestLookUp();
-    if (result.role === "ANONYMOUS") {
+    const result = await requestAuthData("v1/users/look-up");
+    if (result === "login") {
       setShowPopup(true);
     }
     return result;
@@ -156,7 +166,7 @@ const ItemUpload = (props) => {
       {!showPopup && (
         <div>
           <HeaderInfo text="굿즈 등록" isClear />
-          <ItemUploadBox>
+          <ItemUploadBox {...styleProps}>
             <div>
               <Flex is_flex justify="flex-start">
                 <ItemImgUpload />
@@ -177,7 +187,7 @@ const ItemUpload = (props) => {
               </Flex>
               <Flex is_col>
                 <div className={styles.selectBtn}>
-                  <InputNameBox
+                  <InputBox
                     className={dataName ? "" : styles.inputText}
                     ref={nameRef}
                     value={dataName || ""}
@@ -258,7 +268,7 @@ const ItemUpload = (props) => {
                   />
                 </div>
                 <div className={styles.selectBtn}>
-                  <InputNameBox
+                  <InputDescBox
                     className={dataDesc ? "" : styles.inputText}
                     ref={descriptionRef}
                     value={dataDesc || ""}
@@ -283,7 +293,7 @@ const ItemUpload = (props) => {
                   >
                     ₩
                   </div>
-                  <InputNameBox
+                  <InputBox
                     className={dataPrice ? "" : styles.inputText}
                     ref={priceRef}
                     value={dataPrice || ""}
@@ -317,7 +327,7 @@ const ItemUpload = (props) => {
 };
 
 const ItemUploadBox = styled.div`
-  height: 100vh;
+  ${(props) => (props.isMobile ? "height: 90vh;" : "height: 93vh;")};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -331,12 +341,18 @@ const TypeBtn = styled.button`
   padding: 15px;
 `;
 
-const InputNameBox = styled.input`
+const InputBox = styled.input`
   width: 100%;
+`;
+const InputDescBox = styled.textarea`
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  resize: vertical;
 `;
 
 const AddBtn = styled.button`
-  margin-bottom: 80px;
+  margin-top: 10px;
 `;
 
 export default ItemUpload;

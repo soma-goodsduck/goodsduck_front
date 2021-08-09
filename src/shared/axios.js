@@ -68,26 +68,6 @@ export const getItemsBySearch = async (path, itemId, keyword) => {
   return result.data;
 };
 
-export const requestLookUp = async () => {
-  const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
-  }
-
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v1/users/look-up`,
-    {
-      headers: { jwt },
-    },
-  );
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
-  }
-  updateJwt(result.data.response.jwt);
-
-  return result.data.response;
-};
-
 // JWT를 리턴하지 않는 데이터 (비회원 가능)
 export const requestPublicData = async (path) => {
   const jwt = verifyJwt();
@@ -204,6 +184,19 @@ export const postAction = async (path, json) => {
     return "login";
   }
   updateJwt(result.headers.jwt);
+
+  return result.data;
+};
+
+// post 요청 (비회원)
+export const postActionForNonUser = async (path, json) => {
+  const result = await axios.post(
+    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
+    JSON.stringify(json),
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
 
   return result.data;
 };
