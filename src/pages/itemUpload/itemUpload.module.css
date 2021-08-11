@@ -157,6 +157,11 @@ input::-webkit-inner-spin-button {
   background-color: var(--yellow);
 }
 
+/* 필터링 */
+.priceInput::placeholder {
+  text-align: center;
+}
+
 @media screen and (min-width: 415px) {
   .selectBtn {
     width: 380px;

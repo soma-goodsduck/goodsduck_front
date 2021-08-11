@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import styles from "./itemList.module.css";
 import Item from "../item/item";
-import FilteringIdol from "../idolFiltering/idolGroupFiltering";
+import FilteringIdol from "../filtering/idolGroupFiltering";
+import DetailFiltering from "../filtering/filtering";
 
 import { getItems, getItemsByIdol, getItemsBySearch } from "../../shared/axios";
 import { actionCreators as headerActions } from "../../redux/modules/header";
@@ -18,6 +19,7 @@ const ItemList = ({ keyword }) => {
   const [loading, setLoading] = useState(false);
   const [itemNum, setItemNum] = useState(0);
   const [isIdolFilter, setIsIdolFilter] = useState(false);
+  const [isDetailFilter, setIsDetailFilter] = useState(false);
   const [idolFilter, setIdolFilter] = useState(0);
 
   const idolItems = useSelector((state) => state.header.items);
@@ -70,6 +72,7 @@ const ItemList = ({ keyword }) => {
   const handleFiltering = async (id) => {
     setIdolFilter(id);
     setIsIdolFilter(true);
+    setIsDetailFilter(true);
     dispatch(headerActions.setItems([]));
     getItemsDataByIdol(0, id);
   };
@@ -126,6 +129,7 @@ const ItemList = ({ keyword }) => {
   return (
     <>
       {!keyword && <FilteringIdol onClick={handleFiltering} />}
+      {!keyword && isDetailFilter && <DetailFiltering idolId={idolFilter} />}
 
       {items && (
         <ItemListBox>

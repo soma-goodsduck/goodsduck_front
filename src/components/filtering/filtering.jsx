@@ -1,7 +1,21 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
 import styles from "./filtering.module.css";
 
-const Filtering = (props) => {
+import { Flex } from "../../elements";
+import { grayBorder, grayBtn, grayBtnText } from "../../shared/colors";
+import { history } from "../../redux/configureStore";
+
+const Filtering = () => {
+  const handleFiltering = () => {
+    localStorage.removeItem("filter_idolMember");
+    localStorage.removeItem("filter_idolMemberName");
+    localStorage.removeItem("filter_category");
+    localStorage.removeItem("filter_status");
+    history.push("/filtering");
+  };
+
+  // 가로 스크롤
   const scrollRef = useRef(null);
 
   const [isDrag, setIsDrag] = useState(false);
@@ -25,35 +39,47 @@ const Filtering = (props) => {
 
   return (
     <>
-      <div className={styles.bar} />
+      <Line />
       <div
         aria-hidden
-        className={styles.categories}
+        className={styles.filterings}
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
         onMouseLeave={onDragEnd}
         ref={scrollRef}
+        onClick={() => {
+          handleFiltering();
+        }}
       >
-        <button type="button" className={styles.category}>
-          멤버 전체
-        </button>
-        <button type="button" className={styles.category}>
-          판매・구매
-        </button>
-        <button type="button" className={styles.category}>
-          카테고리
-        </button>
-        <button type="button" className={styles.category}>
-          상품상태
-        </button>
-        <button type="button" className={styles.category}>
-          가격대
-        </button>
+        <Flex justify="flex-start">
+          <FilteringBox>그룹 & 멤버</FilteringBox>
+          <FilteringBox>판매/구매</FilteringBox>
+          <FilteringBox>카테고리</FilteringBox>
+          <FilteringBox>굿즈 상태</FilteringBox>
+          <FilteringBox>가격대</FilteringBox>
+        </Flex>
       </div>
-      <div className={styles.bar} />
+      <Line />
     </>
   );
 };
+
+const FilteringBox = styled.div`
+  width: 100px;
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 100px;
+  margin-right: 10px;
+  background-color: ${grayBtn};
+  color: ${grayBtnText};
+  text-align: center;
+`;
+
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${grayBorder};
+`;
 
 export default Filtering;

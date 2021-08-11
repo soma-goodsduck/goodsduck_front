@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import styled from "styled-components";
-import styles from "./idolGroupFiltering.module.css";
+import styles from "./filtering.module.css";
 import { Flex, Text, Image } from "../../elements";
 
 import { requestPublicData } from "../../shared/axios";
@@ -40,6 +40,7 @@ const IdolGroupFiltering = ({ onClick }) => {
   const checkGroupHandler = (id) => {
     setGroupId(id);
     onClick(id);
+    localStorage.setItem("filter_idolGroup", `${id}`);
   };
 
   const [showEditModal, setShowEditModal] = useState(false);

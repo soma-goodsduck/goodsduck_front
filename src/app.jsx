@@ -12,6 +12,10 @@ import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import home from "./pages/home/home";
 import KeywordSearch from "./pages/home/keywordSearch";
+import Filtering from "./pages/filtering/filteringPage";
+import FilterItemCategory from "./pages/filtering/itemCategory";
+import FilterItemStatus from "./pages/filtering/itemStatus";
+import FilterIdolMember from "./pages/filtering/idolMemberSelect";
 import Chatting from "./pages/chatting/chatting";
 import ChatRoom from "./pages/chatting/chatRoom/chatRoom";
 import Setting from "./pages/myProfilePage/setting";
@@ -70,6 +74,15 @@ function App() {
         <Route path="/status" exact component={ItemStatus} />
         <Route path="/select-idol" exact component={IdolGroup} />
         <Route path="/select-idol-member" exact component={IdolMember} />
+        {/* 필터링 */}
+        <Route path="/filtering" exact component={Filtering} />
+        <Route path="/filter-category" exact component={FilterItemCategory} />
+        <Route path="/filter-status" exact component={FilterItemStatus} />
+        <Route
+          path="/filter-select-idol-member"
+          exact
+          component={FilterIdolMember}
+        />
       </ConnectedRouter>
     </div>
   );
