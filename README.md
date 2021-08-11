@@ -4,6 +4,12 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
+![react-shield]
+![postcss-shield]
+![firebase-shield]
+![yarn-shield]
+![s3-shield]
+
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -60,8 +66,10 @@
 ### Built With
 
 - MacOS (Big Sur 11.4)
-- Node.js version 14.17.1
-- yarn version 1.22.10
+- React JS
+  - node.js (version 14.17.1)
+  - yarn (version 1.22.10)
+  - [Create React App](https://ko.reactjs.org/docs/create-a-new-react-app.html)
 - Visual Studio Code
 
 <!-- GETTING STARTED -->
@@ -79,7 +87,7 @@
 $ git clone [YOUR_REPOSITORY_URL]
 $ cd goodsduck_front
 
-# Start this project.
+# Install npm packages and start this project.
 $ yarn
 $ yarn start
 
@@ -93,7 +101,14 @@ $ yarn start
 REACT_APP_FRONT_URL = https://www.goods-duck.com
 REACT_APP_BACK_URL = https://api.goods-duck.com
 
+# You need to get KAKAO client ID from https://developers.kakao.com/product/kakaoLogin
+# You need to get NAVER client ID & state from https://developers.naver.com/products/login/api/api.md
+REACT_APP_KAKAO_CLIENT_ID =
+REACT_APP_NAVER_CLIENT_ID =
+REACT_APP_NAVER_STATE =
+
 # Firebase Project Environment
+# You have to use Realtime DataBase
 REACT_APP_FIREBASE_API_KEY =
 REACT_APP_FIREBASE_AUTH_DOMAIN =
 REACT_APP_FIREBASE_DATABASE_URL =
@@ -116,7 +131,7 @@ $ git clone [YOUR_REPOSITORY_URL]
 $ cd goodsduck_front
 
 # Install npm packages and start this project.
-$ npm install
+$ yarn
 $ yarn start
 
 # (Working...)
@@ -165,3 +180,8 @@ Consider starting the commit message with an applicable emoji:
 [license-shield]: https://img.shields.io/github/license/soma-goodsduck/goodsduck_front.svg?&style=for-the-badge
 [license-url]: https://github.com/soma-goodsduck/goodsduck_front/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[react-shield]: https://img.shields.io/badge/react%20-%2320232a.svg?&style=for-the-badge&logo=react&logoColor=%2361DAFB
+[postcss-shield]: https://img.shields.io/badge/postcss-DD3A0A.svg?&style=for-the-badge&logo=postcss&logoColor=white
+[firebase-shield]: https://img.shields.io/badge/Firebase-FFCA28.svg?&style=for-the-badge&logo=Firebase&logoColor=white
+[yarn-shield]: https://img.shields.io/badge/Yarn-2c8ebb.svg?&style=for-the-badge&logo=yarn&logoColor=white
+[s3-shield]: https://img.shields.io/badge/AmazonS3-569A31.svg?&style=for-the-badge&logo=AmazonS3&logoColor=white
