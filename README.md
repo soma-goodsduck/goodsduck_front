@@ -69,6 +69,7 @@
 - React JS
   - node.js (version 14.17.1)
   - yarn (version 1.22.10)
+  - [Create React App](https://ko.reactjs.org/docs/create-a-new-react-app.html)
 - Visual Studio Code
 
 <!-- GETTING STARTED -->
