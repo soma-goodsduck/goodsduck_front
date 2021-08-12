@@ -1,17 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import styles from "./filtering.module.css";
 
 import { Flex } from "../../elements";
-import { grayBorder, grayBtn, grayBtnText } from "../../shared/colors";
+import { grayBorder } from "../../shared/colors";
 import { history } from "../../redux/configureStore";
 
 const Filtering = () => {
+  const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
+  const filteringIdolGroup = localStorage.getItem("filter_idolGroupName");
+
   const handleFiltering = () => {
-    localStorage.removeItem("filter_idolMember");
-    localStorage.removeItem("filter_idolMemberName");
-    localStorage.removeItem("filter_category");
-    localStorage.removeItem("filter_status");
     history.push("/filtering");
   };
 
@@ -52,29 +51,71 @@ const Filtering = () => {
           handleFiltering();
         }}
       >
-        <Flex justify="flex-start">
-          <FilteringBox>그룹 & 멤버</FilteringBox>
-          <FilteringBox>판매/구매</FilteringBox>
-          <FilteringBox>카테고리</FilteringBox>
-          <FilteringBox>굿즈 상태</FilteringBox>
-          <FilteringBox>가격대</FilteringBox>
-        </Flex>
+        {filteringInfo && (
+          <Flex justify="flex-start">
+            <div className={styles.filterIdolBox}>
+              {filteringIdolGroup !== ""
+                ? `${filteringIdolGroup} ${filteringInfo.idolMemberName}`
+                : filteringIdolGroup}
+            </div>
+            <div
+              className={
+                filteringInfo.tradeType !== "ALL"
+                  ? styles.filterCheckBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.tradeType !== "ALL"
+                ? filteringInfo.tradeTypeKor
+                : "판매/구매"}
+            </div>
+            <div
+              className={
+                filteringInfo.category
+                  ? styles.filterCheckBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.categoryName || "카테고리"}
+            </div>
+            <div
+              className={
+                filteringInfo.gradeStatus !== ""
+                  ? styles.filterCheckBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.gradeStatus !== ""
+                ? `${filteringInfo.gradeStatus}급`
+                : "굿즈 상태"}
+            </div>
+            <div
+              className={
+                filteringInfo.minPrice !== 0 && filteringInfo.maxPrice !== 0
+                  ? styles.filterPriceBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.minPrice !== 0 && filteringInfo.maxPrice !== 0
+                ? `${filteringInfo.minPrice}원 ~ ${filteringInfo.maxPrice}원`
+                : "가격대"}
+            </div>
+          </Flex>
+        )}
+        {!filteringInfo && (
+          <Flex justify="flex-start">
+            <div className={styles.filterIdolBox}>{filteringIdolGroup}</div>
+            <div className={styles.filterBox}>판매/구매</div>
+            <div className={styles.filterBox}>카테고리</div>
+            <div className={styles.filterBox}>굿즈 상태</div>
+            <div className={styles.filterBox}>가격대</div>
+          </Flex>
+        )}
       </div>
       <Line />
     </>
   );
 };
-
-const FilteringBox = styled.div`
-  width: 100px;
-  height: 30px;
-  padding: 5px 10px;
-  border-radius: 100px;
-  margin-right: 10px;
-  background-color: ${grayBtn};
-  color: ${grayBtnText};
-  text-align: center;
-`;
 
 const Line = styled.div`
   width: 100%;

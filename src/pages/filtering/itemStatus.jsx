@@ -1,15 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "../itemUpload/itemUpload.module.css";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 import { requestPublicData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const ItemStatus = () => {
-  const statusValue = localStorage.getItem("filter_status");
+  const dispatch = useDispatch();
+
+  const statusValue = useSelector((state) => state.filtering.filterStatus);
 
   // 상품상태 데이터 받아오기
   const [statuses, setStatuses] = useState([]);
@@ -25,7 +29,7 @@ const ItemStatus = () => {
 
   const checkHandler = (grade) => {
     console.log(statusValue, grade);
-    localStorage.setItem("filter_status", `${grade}`);
+    dispatch(filteringActions.setFilterStatus(grade));
     setNextOK(true);
   };
 

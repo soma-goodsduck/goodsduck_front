@@ -1,16 +1,20 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "../itemUpload/itemUpload.module.css";
 import { Flex } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 import { requestPublicData } from "../../shared/axios";
 
 const IdolMemberSelect = ({ history }) => {
-  const idolValue = localStorage.getItem("filter_idolMember");
+  const dispatch = useDispatch();
+
+  const idolValue = useSelector((state) => state.filtering.filterIdolMemberId);
 
   // 아이돌 멤버 데이터 가져오기
   const groupId = localStorage.getItem("filter_idolGroup");
@@ -43,8 +47,7 @@ const IdolMemberSelect = ({ history }) => {
 
   const checkMemberHandler = (id, name) => {
     setMemberId(id);
-    localStorage.setItem("filter_idolMember", `${id}`);
-    localStorage.setItem("filter_idolMemberName", `${name}`);
+    dispatch(filteringActions.setFilterIdolMember(name, id));
   };
 
   const selectFin = () => {

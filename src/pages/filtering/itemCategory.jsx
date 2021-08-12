@@ -1,5 +1,7 @@
+/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "../itemUpload/itemUpload.module.css";
@@ -7,11 +9,14 @@ import { Icon } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { requestPublicData } from "../../shared/axios";
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 
 import { history } from "../../redux/configureStore";
 
 const ItemCategory = () => {
-  const categoryValue = localStorage.getItem("filter_category");
+  const dispatch = useDispatch();
+
+  const categoryValue = useSelector((state) => state.filtering.filterCategory);
 
   // 카테고리 데이터 받아오기
   const [categories, setCategories] = useState([]);
@@ -24,8 +29,8 @@ const ItemCategory = () => {
     });
   }, []);
 
-  const checkHandler = (name) => {
-    localStorage.setItem("filter_category", `${name}`);
+  const checkHandler = (name, id) => {
+    dispatch(filteringActions.setFilterCategory(name, id));
     history.push("/filtering");
   };
 
@@ -38,7 +43,9 @@ const ItemCategory = () => {
           <CategoryBox
             key={category.categoryItemId}
             className={styles.categoryBtn}
-            onClick={() => checkHandler(`${category.categoryItemName}`)}
+            onClick={() =>
+              checkHandler(category.categoryItemName, category.categoryItemId)
+            }
           >
             <CategoryInput
               id={category.categoryItemId}

@@ -146,13 +146,15 @@ input::-webkit-inner-spin-button {
   padding: 18px;
   border-radius: 5px;
 }
-.nextBtn {
+.nextBtn,
+.filterNextBtn {
   color: var(--white);
   background-color: var(--gray);
   cursor: auto;
 }
 
-.nextOKBtn {
+.nextOKBtn,
+.filterNextOKBtn {
   color: var(--blackBtn);
   background-color: var(--yellow);
 }
@@ -160,6 +162,14 @@ input::-webkit-inner-spin-button {
 /* 필터링 */
 .priceInput::placeholder {
   text-align: center;
+}
+
+.filterNextBtn,
+.filterNextOKBtn {
+  width: 90%;
+  padding: 18px;
+  border-radius: 5px;
+  margin-top: 50px;
 }
 
 @media screen and (min-width: 415px) {

@@ -41,11 +41,25 @@ export const getItems = async (path, itemId) => {
 };
 
 // 무한 스크롤 - 아이돌 필터링(홈 데이터)
-export const getItemsByIdol = async (path, itemId, idolGroupId) => {
+export const getItemsByIdol = async (itemId, idolGroupId) => {
   const jwt = verifyJwt();
 
   const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?idolGroup=${idolGroupId}&itemId=${itemId}`,
+    `${process.env.REACT_APP_BACK_URL}/api/v3/items/filter?idolGroup=${idolGroupId}&itemId=${itemId}`,
+    {
+      headers: { jwt },
+    },
+  );
+
+  return result.data;
+};
+
+// 무한 스크롤 - 상세 필터링(홈 데이터)
+export const getItemsByFilter = async (path) => {
+  const jwt = verifyJwt();
+
+  const result = await axios.get(
+    `${process.env.REACT_APP_BACK_URL}/api/v3/items/filters?${path}`,
     {
       headers: { jwt },
     },
@@ -55,11 +69,11 @@ export const getItemsByIdol = async (path, itemId, idolGroupId) => {
 };
 
 // 무한 스크롤 - 검색 필터링(홈 데이터)
-export const getItemsBySearch = async (path, itemId, keyword) => {
+export const getItemsBySearch = async (itemId, keyword) => {
   const jwt = verifyJwt();
 
   const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v1/${path}?itemId=${itemId}&keyword=${keyword}`,
+    `${process.env.REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}`,
     {
       headers: { jwt },
     },

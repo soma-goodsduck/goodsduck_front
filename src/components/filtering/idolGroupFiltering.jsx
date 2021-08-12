@@ -1,17 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./filtering.module.css";
 import { Flex, Text, Image } from "../../elements";
-
-import { requestPublicData } from "../../shared/axios";
 import { grayText } from "../../shared/colors";
 import IdolEdit from "./idolEdit";
 
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
+import { requestPublicData } from "../../shared/axios";
+
 const IdolGroupFiltering = ({ onClick }) => {
+  const dispatch = useDispatch();
+
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
+  const [groupId, setGroupId] = useState(0);
+
+  const checkGroupHandler = (id, name) => {
+    setGroupId(id);
+    onClick(id);
+    localStorage.setItem("filter_idolGroup", `${id}`);
+    localStorage.setItem("filter_idolGroupName", `${name}`);
+  };
 
   const requestIdolGroup = async () => {
     const result = await requestPublicData("v1/idol-groups");
@@ -33,15 +45,9 @@ const IdolGroupFiltering = ({ onClick }) => {
   const fnEffect = async () => {
     const idolGroups = await requestIdolGroup();
     setIdols(idolGroups);
+    setGroupId(localStorage.getItem("filter_idolGroup"));
   };
   useEffect(fnEffect, []);
-
-  const [groupId, setGroupId] = useState(0);
-  const checkGroupHandler = (id) => {
-    setGroupId(id);
-    onClick(id);
-    localStorage.setItem("filter_idolGroup", `${id}`);
-  };
 
   const [showEditModal, setShowEditModal] = useState(false);
   const hideEditModal = () => {
@@ -92,6 +98,8 @@ const IdolGroupFiltering = ({ onClick }) => {
           <Flex justify="flex-start">
             <BtnBox
               onClick={() => {
+                localStorage.removeItem("filter_idolGroup");
+                dispatch(filteringActions.clearFiltering());
                 window.location.reload();
               }}
             >
@@ -106,12 +114,17 @@ const IdolGroupFiltering = ({ onClick }) => {
               </Text>
             </BtnBox>
             {idols.map((idol) => (
-              <IdolBox key={idol.id}>
+              <IdolBox
+                key={idol.id}
+                onClick={() => {
+                  dispatch(filteringActions.clearFiltering());
+                }}
+              >
                 <IdolInput
                   id={idol.id}
                   type="radio"
                   checked={groupId === idol.id}
-                  onChange={() => checkGroupHandler(idol.id)}
+                  onChange={() => checkGroupHandler(idol.id, idol.name)}
                 />
                 <label
                   htmlFor={idol.id}
@@ -140,6 +153,7 @@ const IdolGroupFiltering = ({ onClick }) => {
             ))}
             <BtnBox
               onClick={() => {
+                dispatch(filteringActions.clearFiltering());
                 setShowEditModal(true);
               }}
             >

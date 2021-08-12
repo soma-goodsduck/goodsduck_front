@@ -9,8 +9,8 @@ import styles from "../itemUpload/itemUpload.module.css";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import { Flex, Text } from "../../elements";
 import { history } from "../../redux/configureStore";
-import { actionCreators as headerActions } from "../../redux/modules/header";
-import { grayText, grayBorder } from "../../shared/colors";
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
+import { grayText, grayBorder, red } from "../../shared/colors";
 
 const Filtering = (props) => {
   const dispatch = useDispatch();
@@ -25,28 +25,55 @@ const Filtering = (props) => {
   }, [screen]);
   const styleProps = { isMobile };
 
-  const idolMember = localStorage.getItem("filter_idolMember");
-  const idolMemberName = localStorage.getItem("filter_idolMemberName");
-  const itemCategory = localStorage.getItem("filter_category");
-  const itemStatus = localStorage.getItem("filter_status");
-  const { itemTradeType, itemPriceMin, itemPriceMax } = useSelector(
-    (state) => ({
-      itemTradeType: state.header.filterTradeType,
-      itemPriceMin: state.header.filterPriceMin,
-      itemPriceMax: state.header.filterPriceMax,
-    }),
-  );
+  const {
+    idolMember,
+    idolMemberName,
+    itemCategory,
+    itemCategoryName,
+    itemStatus,
+    itemTradeType,
+    itemTradeTypeKor,
+    itemPriceMin,
+    itemPriceMax,
+  } = useSelector((state) => ({
+    idolMember: state.filtering.filterIdolMemberId,
+    idolMemberName: state.filtering.filterIdolMember,
+    itemCategory: state.filtering.filterCategoryId,
+    itemCategoryName: state.filtering.filterCategory,
+    itemStatus: state.filtering.filterStatus,
+    itemTradeType: state.filtering.filterTradeType,
+    itemTradeTypeKor: state.filtering.filterTradeTypeKor,
+    itemPriceMin: state.filtering.filterPriceMin,
+    itemPriceMax: state.filtering.filterPriceMax,
+  }));
   const priceMinRef = useRef();
   const priceMaxRef = useRef();
+  const [isHigherThanMin, setIsHigherThanMin] = useState(true);
 
   const clickTradeType = (e) => {
     if (e.target.innerText === "전체") {
-      dispatch(headerActions.setFilterTradeType("all"));
+      dispatch(filteringActions.setFilterTradeType("ALL", "전체"));
     } else if (e.target.innerText === "구매") {
-      dispatch(headerActions.setFilterTradeType("buy"));
+      dispatch(filteringActions.setFilterTradeType("BUY", "구매"));
     } else if (e.target.innerText === "판매") {
-      dispatch(headerActions.setFilterTradeType("sell"));
+      dispatch(filteringActions.setFilterTradeType("SELL", "판매"));
     }
+  };
+
+  const next = () => {
+    const filteringInfo = {
+      idolMember,
+      idolMemberName,
+      tradeType: itemTradeType,
+      tradeTypeKor: itemTradeTypeKor,
+      category: itemCategory,
+      categoryName: itemCategoryName,
+      gradeStatus: itemStatus,
+      minPrice: itemPriceMin,
+      maxPrice: itemPriceMax,
+    };
+    localStorage.setItem("filtering", JSON.stringify(filteringInfo));
+    history.push("/");
   };
 
   return (
@@ -61,10 +88,10 @@ const Filtering = (props) => {
         >
           <div
             className={
-              idolMember !== null ? styles.selectDoneText : styles.selectText
+              idolMemberName !== "" ? styles.selectDoneText : styles.selectText
             }
           >
-            {idolMember !== null ? `${idolMemberName}` : "아이돌 멤버"}
+            {idolMemberName !== "" ? `${idolMemberName}` : "아이돌 멤버"}
           </div>
           <div
             className={idolMember ? styles.moreIconClick : styles.moreIcon}
@@ -78,7 +105,7 @@ const Filtering = (props) => {
             <TypeBtn
               {...styleProps}
               className={
-                itemTradeType === "all" ? styles.clickTypeBtn : styles.typeBtn
+                itemTradeType === "ALL" ? styles.clickTypeBtn : styles.typeBtn
               }
               onClick={(e) => clickTradeType(e)}
             >
@@ -87,7 +114,7 @@ const Filtering = (props) => {
             <TypeBtn
               {...styleProps}
               className={
-                itemTradeType === "sell" ? styles.clickTypeBtn : styles.typeBtn
+                itemTradeType === "SELL" ? styles.clickTypeBtn : styles.typeBtn
               }
               onClick={(e) => clickTradeType(e)}
             >
@@ -96,7 +123,7 @@ const Filtering = (props) => {
             <TypeBtn
               {...styleProps}
               className={
-                itemTradeType === "buy" ? styles.clickTypeBtn : styles.typeBtn
+                itemTradeType === "BUY" ? styles.clickTypeBtn : styles.typeBtn
               }
               onClick={(e) => clickTradeType(e)}
             >
@@ -113,10 +140,10 @@ const Filtering = (props) => {
         >
           <div
             className={
-              itemCategory !== null ? styles.selectDoneText : styles.selectText
+              itemCategory !== "" ? styles.selectDoneText : styles.selectText
             }
           >
-            {itemCategory !== null ? `${itemCategory}` : "카테고리"}
+            {itemCategory !== "" ? `${itemCategoryName}` : "카테고리"}
           </div>
           <div
             className={itemCategory ? styles.moreIconClick : styles.moreIcon}
@@ -130,10 +157,10 @@ const Filtering = (props) => {
         >
           <div
             className={
-              itemStatus !== null ? styles.selectDoneText : styles.selectText
+              itemStatus !== "" ? styles.selectDoneText : styles.selectText
             }
           >
-            {itemStatus !== null ? `${itemStatus}급` : "굿즈 상태"}
+            {itemStatus !== "" ? `${itemStatus}급` : "굿즈 상태"}
           </div>
           <div
             className={itemStatus ? styles.moreIconClick : styles.moreIcon}
@@ -152,7 +179,7 @@ const Filtering = (props) => {
               placeholder="최저 가격"
               onChange={() => {
                 dispatch(
-                  headerActions.setFilterPriceMin(priceMinRef.current.value),
+                  filteringActions.setFilterPriceMin(priceMinRef.current.value),
                 );
               }}
             />
@@ -166,14 +193,33 @@ const Filtering = (props) => {
               type="number"
               placeholder="최고 가격"
               onChange={() => {
+                if (Number(priceMaxRef.current.value) > Number(itemPriceMin)) {
+                  setIsHigherThanMin(true);
+                } else {
+                  setIsHigherThanMin(false);
+                }
                 dispatch(
-                  headerActions.setFilterPriceMax(priceMaxRef.current.value),
+                  filteringActions.setFilterPriceMax(priceMaxRef.current.value),
                 );
               }}
             />
           </Flex>
+          {!isHigherThanMin && (
+            <Text bold color={red} is_center margin="20px 0">
+              ⚠️ 최고 가격은 최저 가격보다 높아야 합니다.
+            </Text>
+          )}
           <Line />
         </PriceInputs>
+        <button
+          className={styles.filterNextOKBtn}
+          type="button"
+          onClick={() => {
+            next();
+          }}
+        >
+          적용
+        </button>
       </Flex>
     </>
   );

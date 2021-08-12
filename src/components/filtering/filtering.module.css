@@ -1,15 +1,54 @@
 @import "../../shared/colors.css";
 
+.filterBox,
+.filterCheckBox,
+.filterIdolBox,
+.filterPriceBox {
+  height: 25px;
+  padding: 5px 0;
+  border-radius: 100px;
+  margin-right: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+.filterCheckBox {
+  width: 90px;
+}
+.filterIdolBox {
+  width: 120px;
+}
+.filterPriceBox {
+  width: 170px;
+}
+.filterBox {
+  width: 100px;
+  background-color: var(--grayBtn);
+  color: var(--grayBtnText);
+}
+.filterCheckBox,
+.filterPriceBox,
+.filterIdolBox {
+  background-color: var(--blackBtn);
+  color: var(--white);
+}
+
 .categories,
 .filterings {
   display: flex;
   overflow-x: scroll;
-  margin: 10px;
   padding-right: 20px;
   cursor: pointer;
 }
 .categories {
+  margin: 10px;
   margin-top: 70px;
+}
+.filterings {
+  position: sticky;
+  top: 55px;
+  z-index: 10;
+  background-color: var(--white);
+  padding: 10px;
 }
 
 /* scroll bar 제거 ( chrome 환경) */

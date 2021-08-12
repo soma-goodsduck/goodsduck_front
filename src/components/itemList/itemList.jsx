@@ -8,8 +8,13 @@ import Item from "../item/item";
 import FilteringIdol from "../filtering/idolGroupFiltering";
 import DetailFiltering from "../filtering/filtering";
 
-import { getItems, getItemsByIdol, getItemsBySearch } from "../../shared/axios";
-import { actionCreators as headerActions } from "../../redux/modules/header";
+import {
+  getItems,
+  getItemsByIdol,
+  getItemsByFilter,
+  getItemsBySearch,
+} from "../../shared/axios";
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 
 const ItemList = ({ keyword }) => {
   const dispatch = useDispatch();
@@ -21,8 +26,9 @@ const ItemList = ({ keyword }) => {
   const [isIdolFilter, setIsIdolFilter] = useState(false);
   const [isDetailFilter, setIsDetailFilter] = useState(false);
   const [idolFilter, setIdolFilter] = useState(0);
+  const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
 
-  const idolItems = useSelector((state) => state.header.items);
+  const idolItems = useSelector((state) => state.filtering.items);
 
   const getItemsData = (num) => {
     setLoading(true);
@@ -41,7 +47,50 @@ const ItemList = ({ keyword }) => {
 
   const getItemsDataByIdol = (num, idolId) => {
     setLoading(true);
-    const getItemList = getItemsByIdol("items/filter", num, idolId);
+    const getItemList = getItemsByIdol(num, idolId);
+    getItemList.then((result) => {
+      const newItemData = result.response;
+      const newItem = [...idolItems, ...result.response];
+      setItems(newItem);
+      setHasNext(result.hasNext);
+      setLoading(false);
+      if (result.hasNext) {
+        setItemNum(newItemData[newItemData.length - 1].itemId);
+      }
+    });
+  };
+
+  const getFilteringQuery = (num, _filteringInfo) => {
+    const idolGroupId = localStorage.getItem("filter_idolGroup");
+    let query = `itemId=${num}&idolGroup=${idolGroupId}`;
+
+    if (_filteringInfo.category !== "") {
+      query = query.concat(`&category=${_filteringInfo.category}`);
+    }
+    if (_filteringInfo.gradeStatus !== "") {
+      query = query.concat(`&gradeStatus=${_filteringInfo.gradeStatus}`);
+    }
+    if (_filteringInfo.idolMember !== "") {
+      query = query.concat(`&idolMember=${_filteringInfo.idolMember}`);
+    }
+    if (_filteringInfo.minPrice !== 0) {
+      query = query.concat(`&minPrice=${_filteringInfo.minPrice}`);
+    }
+    if (_filteringInfo.maxPrice !== 0) {
+      query = query.concat(`&maxPrice=${_filteringInfo.maxPrice}`);
+    }
+    if (_filteringInfo.tradeType !== "") {
+      query = query.concat(`&tradeType=${_filteringInfo.tradeType}`);
+    }
+
+    return query;
+  };
+
+  const getItemsDataByFilter = (num, _filteringInfo) => {
+    const query = getFilteringQuery(num, _filteringInfo);
+
+    setLoading(true);
+    const getItemList = getItemsByFilter(query);
     getItemList.then((result) => {
       const newItemData = result.response;
       const newItem = [...idolItems, ...result.response];
@@ -56,7 +105,7 @@ const ItemList = ({ keyword }) => {
 
   const getItemsDataBySearch = (num, _keyword) => {
     setLoading(true);
-    const getItemList = getItemsBySearch("items/search", num, _keyword);
+    const getItemList = getItemsBySearch(num, _keyword);
     getItemList.then((result) => {
       const newItemData = result.response;
       const newItem = [...idolItems, ...result.response];
@@ -73,13 +122,23 @@ const ItemList = ({ keyword }) => {
     setIdolFilter(id);
     setIsIdolFilter(true);
     setIsDetailFilter(true);
-    dispatch(headerActions.setItems([]));
+    dispatch(filteringActions.setItems([]));
     getItemsDataByIdol(0, id);
   };
 
   useEffect(() => {
+    if (
+      localStorage.getItem("filter_idolGroup") &&
+      localStorage.getItem("filtering")
+    ) {
+      setIsIdolFilter(true);
+      setIsDetailFilter(true);
+    }
+
     if (keyword) {
       getItemsDataBySearch(itemNum, keyword);
+    } else if (filteringInfo) {
+      getItemsDataByFilter(itemNum, filteringInfo);
     } else {
       getItemsData(itemNum);
     }
@@ -106,6 +165,8 @@ const ItemList = ({ keyword }) => {
         getItemsDataByIdol(itemNum, idolFilter);
       } else if (keyword) {
         getItemsDataBySearch(itemNum, keyword);
+      } else if (filteringInfo) {
+        getItemsDataByFilter(itemNum, filteringInfo);
       } else {
         getItemsData(itemNum);
       }
