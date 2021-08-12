@@ -60,6 +60,10 @@ const Filtering = (props) => {
     }
   };
 
+  const filterReset = () => {
+    dispatch(filteringActions.clearFiltering());
+  };
+
   const next = () => {
     const filteringInfo = {
       idolMember,
@@ -83,7 +87,7 @@ const Filtering = (props) => {
         <div
           className={styles.selectBtn}
           onClick={() => {
-            history.replace("/filter-select-idol-member");
+            history.push("/filter-select-idol-member");
           }}
         >
           <div
@@ -135,7 +139,7 @@ const Filtering = (props) => {
         <div
           className={styles.selectBtn}
           onClick={() => {
-            history.replace("/filter-category");
+            history.push("/filter-category");
           }}
         >
           <div
@@ -152,7 +156,7 @@ const Filtering = (props) => {
         <div
           className={styles.selectBtn}
           onClick={() => {
-            history.replace("/filter-status");
+            history.push("/filter-status");
           }}
         >
           <div
@@ -167,10 +171,10 @@ const Filtering = (props) => {
           />
         </div>
         <PriceInputs {...styleProps}>
-          <Text color={grayText} margin="20px 12px">
+          <Text color={grayText} margin="20px 15px">
             가격대
           </Text>
-          <Flex is_flex justify="space-between" margin="0 10px">
+          <Flex is_flex justify="space-between" margin="0 15px">
             <PriceInput
               className={itemPriceMin ? "" : styles.priceInput}
               ref={priceMinRef}
@@ -212,7 +216,16 @@ const Filtering = (props) => {
           <Line />
         </PriceInputs>
         <button
-          className={styles.filterNextOKBtn}
+          className={styles.filterResetBtn}
+          type="button"
+          onClick={() => {
+            filterReset();
+          }}
+        >
+          필터 초기화
+        </button>
+        <button
+          className={styles.filterNextBtn}
           type="button"
           onClick={() => {
             next();

@@ -39,7 +39,7 @@ const ItemStatus = () => {
 
   return (
     <Outer>
-      <HeaderInfo text="굿즈 상태" />
+      <HeaderInfo isFiltering text="굿즈 상태" />
       <StatusContainer>
         <div>
           <div className={styles.detailText}>굿즈 상태 선택</div>

@@ -59,7 +59,7 @@ const IdolMemberSelect = ({ history }) => {
 
   return (
     <>
-      <HeaderInfo text="아이돌 그룹" padding="0 16px" />
+      <HeaderInfo isFiltering text="아이돌 그룹" padding="0 16px" />
       <IdolContainer>
         <div>
           <div className={styles.detailText}>전체 아이돌 멤버</div>

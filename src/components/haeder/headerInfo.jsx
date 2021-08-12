@@ -20,7 +20,15 @@ const HeaderInfo = (props) => {
     }
   }, [screen]);
 
-  const { text, margin, bg, borderRadius, isClear, isReviewClear } = props;
+  const {
+    text,
+    margin,
+    bg,
+    borderRadius,
+    isClear,
+    isReviewClear,
+    isFiltering,
+  } = props;
 
   const styles = {
     margin,
@@ -39,6 +47,8 @@ const HeaderInfo = (props) => {
     } else if (isReviewClear) {
       dispatch(userActions.clearReview());
       history.goBack();
+    } else if (isFiltering) {
+      history.push("/filtering");
     } else {
       history.goBack();
     }

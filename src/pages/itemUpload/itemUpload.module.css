@@ -146,15 +146,13 @@ input::-webkit-inner-spin-button {
   padding: 18px;
   border-radius: 5px;
 }
-.nextBtn,
-.filterNextBtn {
+.nextBtn {
   color: var(--white);
   background-color: var(--gray);
   cursor: auto;
 }
 
-.nextOKBtn,
-.filterNextOKBtn {
+.nextOKBtn {
   color: var(--blackBtn);
   background-color: var(--yellow);
 }
@@ -165,11 +163,20 @@ input::-webkit-inner-spin-button {
 }
 
 .filterNextBtn,
-.filterNextOKBtn {
+.filterResetBtn {
   width: 90%;
   padding: 18px;
   border-radius: 5px;
+}
+.filterResetBtn {
+  color: var(--white);
+  background-color: var(--gray);
   margin-top: 50px;
+}
+.filterNextBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
+  margin-top: 20px;
 }
 
 @media screen and (min-width: 415px) {

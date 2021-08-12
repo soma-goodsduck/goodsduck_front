@@ -24,7 +24,6 @@ const ItemCategory = () => {
   useEffect(() => {
     const getCategory = requestPublicData("v1/items/category");
     getCategory.then((result) => {
-      console.log(result);
       setCategories(result);
     });
   }, []);
@@ -36,7 +35,7 @@ const ItemCategory = () => {
 
   return (
     <CategoryContainer>
-      <HeaderInfo text="카테고리" padding="0 16px" />
+      <HeaderInfo isFiltering text="카테고리" padding="0 16px" />
       <div className={styles.detailText}>전체 카테고리</div>
       {categories &&
         categories.map((category) => (
