@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
@@ -35,11 +35,29 @@ import ReviewPage from "./pages/myProfilePage/reviewPage";
 import WritingReviewPage from "./pages/review/writingReviewPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
 
+import { Notification } from "./elements/index";
+import { firebaseMessaging } from "./shared/firebase";
+
 import { history } from "./redux/configureStore";
 
 function App() {
+  const [showNoti, setShotNoti] = useState(false);
+  const [notiInfo, setNotiInfo] = useState(null);
+  const [notiUrl, setNotiUrl] = useState("");
+
+  firebaseMessaging.onMessage((payload) => {
+    setShotNoti(true);
+    setNotiInfo(payload.notification.body);
+    setNotiUrl(payload.notification.click_action);
+
+    setTimeout(() => {
+      setShotNoti(false);
+    }, 5000);
+  });
+
   return (
     <div className={styles.app}>
+      {showNoti && <Notification data={notiInfo} clickUrl={notiUrl} />}
       <ConnectedRouter history={history}>
         <Route path="/" exact component={home} />
         <Route path="/login" exact component={Login} />

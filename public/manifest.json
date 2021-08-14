@@ -1,0 +1,12 @@
+{
+  "name": "GOODSDUCK",
+  "short_name": "GOODSDUCK",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
