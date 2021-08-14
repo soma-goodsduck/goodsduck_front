@@ -92,7 +92,7 @@ const Signup = () => {
   };
 
   const signup = () => {
-    if (!nextOK || !isUsedNick || !isEmailOk || !isPhoneOk) {
+    if (!nextOK || isUsedNick || !isEmailOk || !isPhoneOk) {
       return;
     }
 
