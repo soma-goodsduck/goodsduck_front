@@ -46,6 +46,15 @@ function App() {
   const [notiUrl, setNotiUrl] = useState("");
 
   firebaseMessaging.onMessage((payload) => {
+    const href = window.location.href.split("/");
+    const chatRoomId = String(href[href.length - 1]);
+
+    if (payload.data.type === "CHAT") {
+      if (chatRoomId === payload.data.chatRoomId) {
+        return;
+      }
+    }
+
     setShotNoti(true);
     setNotiInfo(payload.notification.body);
     setNotiUrl(payload.notification.click_action);
