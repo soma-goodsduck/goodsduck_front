@@ -30,12 +30,9 @@ const verifyLogin = (error) => {
 export const getItems = async (path, itemId) => {
   const jwt = verifyJwt();
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
 
   return result.data;
 };
@@ -44,12 +41,9 @@ export const getItems = async (path, itemId) => {
 export const getItemsByIdol = async (itemId, idolGroupId) => {
   const jwt = verifyJwt();
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v3/items/filter?idolGroup=${idolGroupId}&itemId=${itemId}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v3/items/filter?idolGroup=${idolGroupId}&itemId=${itemId}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
 
   return result.data;
 };
@@ -58,12 +52,9 @@ export const getItemsByIdol = async (itemId, idolGroupId) => {
 export const getItemsByFilter = async (path) => {
   const jwt = verifyJwt();
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v3/items/filters?${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v3/items/filters?${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
 
   return result.data;
 };
@@ -72,12 +63,9 @@ export const getItemsByFilter = async (path) => {
 export const getItemsBySearch = async (itemId, keyword) => {
   const jwt = verifyJwt();
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
 
   return result.data;
 };
@@ -86,12 +74,9 @@ export const getItemsBySearch = async (itemId, keyword) => {
 export const requestPublicData = async (path) => {
   const jwt = verifyJwt();
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
 
   return result.data.response;
 };
@@ -103,12 +88,10 @@ export const requestAuthData = async (path) => {
     return "login";
   }
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -124,12 +107,10 @@ export const checkLoginWithData = async (path) => {
     return "login";
   }
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -145,12 +126,10 @@ export const getAction = async (path) => {
     return "login";
   }
 
-  const result = await axios.get(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.get(url, options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -166,12 +145,10 @@ export const deleteAction = async (path) => {
     return "login";
   }
 
-  const result = await axios.delete(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.delete(url, options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -187,13 +164,10 @@ export const postAction = async (path, json) => {
     return "login";
   }
 
-  const result = await axios.post(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    JSON.stringify(json),
-    {
-      headers: { jwt, "Content-Type": "application/json" },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt, "Content-Type": "application/json" } };
+  const result = await axios.post(url, JSON.stringify(json), options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -204,13 +178,9 @@ export const postAction = async (path, json) => {
 
 // post 요청 (비회원)
 export const postActionForNonUser = async (path, json) => {
-  const result = await axios.post(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    JSON.stringify(json),
-    {
-      headers: { "Content-Type": "application/json" },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { "Content-Type": "application/json" } };
+  const result = await axios.post(url, JSON.stringify(json), options);
 
   return result.data;
 };
@@ -222,13 +192,10 @@ export const postImgAction = async (path, file) => {
     return "login";
   }
 
-  const result = await axios.post(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    file,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.post(url, file, options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -257,18 +224,16 @@ export const putAction = async (path, data) => {
 };
 
 // patch 요청
-export const patchAction = async (path, json) => {
+export const patchAction = async (path) => {
   const jwt = verifyJwt();
   if (jwt === "login") {
     return "login";
   }
 
-  const result = await axios.patch(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    {
-      headers: { jwt },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt } };
+  const result = await axios.patch(url, options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
@@ -284,13 +249,10 @@ export const patchJsonAction = async (path, json) => {
     return "login";
   }
 
-  const result = await axios.patch(
-    `${process.env.REACT_APP_BACK_URL}/api/${path}`,
-    JSON.stringify(json),
-    {
-      headers: { jwt, "Content-Type": "application/json" },
-    },
-  );
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt, "Content-Type": "application/json" } };
+  const result = await axios.patch(url, JSON.stringify(json), options);
+
   if (verifyLogin(result.data.error) === "login") {
     return "login";
   }
