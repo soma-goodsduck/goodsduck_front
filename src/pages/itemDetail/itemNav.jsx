@@ -34,6 +34,11 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
   const hidePriceDeletePopup = () => {
     setShowPriceDeletePopup(false);
   };
+  const [showCheckPriceDeletePopup, setShowCheckPriceDeletePopup] =
+    useState(null);
+  const hideCheckPriceDeletePopup = () => {
+    setShowCheckPriceDeletePopup(false);
+  };
 
   const [isHighPrice, setIsHighPrice] = useState(false);
   useEffect(() => {
@@ -48,9 +53,14 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
     getUserId.then((result) => {
       if (result === "login") {
         setShowPopup(true);
-      } else {
-        dispatch(chatActions.addChatRoomAciton(item));
+        return;
       }
+
+      if (item.myPricePropose !== null) {
+        setShowCheckPriceDeletePopup(true);
+        return;
+      }
+      dispatch(chatActions.addChatRoomAciton(item));
     });
   };
 
@@ -65,11 +75,22 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
       )}
       {showPriceDeletePopup && (
         <PriceProposeDeleteModal
-          priceId={item.proposedList[0].priceProposeId}
-          proposePrice={item.proposedList[0].proposedPrice}
+          priceId={item.myPricePropose.priceProposeId}
+          proposePrice={item.myPricePropose.proposedPrice}
           _onClick={() => {
             hidePriceDeletePopup();
           }}
+          type=""
+        />
+      )}
+      {showCheckPriceDeletePopup && (
+        <PriceProposeDeleteModal
+          priceId={item.myPricePropose.priceProposeId}
+          proposePrice={item.myPricePropose.proposedPrice}
+          _onClick={() => {
+            hideCheckPriceDeletePopup();
+          }}
+          type="beforeChat"
         />
       )}
       {showPopup && <LoginPopUp />}
@@ -121,11 +142,12 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 </Button>
               </Flex>
             )}
-          {/* 가격제안 한 적 있는 경우 */}
+          {/* 가격제안 한 적 있는 경우 (채팅방은 없음) */}
           {!isOwner &&
             item.myPricePropose !== null &&
             item.myPricePropose.status === "SUGGESTED" &&
-            tradeType !== "완료" && (
+            tradeType !== "완료" &&
+            item.chatId === null && (
               <Flex>
                 <Button
                   className={isHighPrice ? styles.btnChatCol : styles.btnChat}

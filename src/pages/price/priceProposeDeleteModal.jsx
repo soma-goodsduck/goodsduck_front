@@ -8,7 +8,7 @@ import { numberWithCommas } from "../../shared/functions";
 
 import { requestPublicData, deleteAction } from "../../shared/axios";
 
-const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick }) => {
+const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
   // 반응형
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
@@ -44,9 +44,20 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick }) => {
         <Info>
           <ExitBtn onClick={_onClick} />
           {itemData && <ItemRow item={itemData} />}
-          <Text size="20px" margin="20px 0 0 0" bold is_center>
-            기존 제시 금액 : {numberWithCommas(proposePrice)}원
-          </Text>
+          {type === "beforeChat" ? (
+            <div>
+              <Text size="15px" margin="10px 0 0 0" bold is_center>
+                [{numberWithCommas(proposePrice)}원] 가격 제시 기록이 있습니다.
+              </Text>
+              <Text size="17px" margin="5px 0 0 0" bold is_center color="red">
+                먼저 취소하신 후, 즉시 거래하시겠습니까?
+              </Text>
+            </div>
+          ) : (
+            <Text size="20px" margin="20px 0 0 0" bold is_center>
+              기존 제시 금액 : {numberWithCommas(proposePrice)}원
+            </Text>
+          )}
         </Info>
 
         <ProposeDeleteBtn
@@ -54,7 +65,7 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick }) => {
             handleDelete();
           }}
         >
-          취소하기
+          가격 제시 취소
         </ProposeDeleteBtn>
       </PriceProposeUpdateBox>
     </Screen>
