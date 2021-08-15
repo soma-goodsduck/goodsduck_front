@@ -10,7 +10,7 @@ import { connectRouter } from "connected-react-router";
 
 import User from "./modules/user";
 import Image from "./modules/image";
-import Header from "./modules/header";
+import Filtering from "./modules/filtering";
 import NewItem from "./modules/newItem";
 import Chat from "./modules/chat";
 
@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
   user: User,
   image: Image,
   newItem: NewItem,
-  header: Header,
+  filtering: Filtering,
   chat: Chat,
   router: connectRouter(history),
 });

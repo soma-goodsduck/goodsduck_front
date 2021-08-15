@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Text } from "../../elements";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 import { grayText } from "../../shared/colors";
 import { formatDate, numberWithCommas } from "../../shared/functions";
 
@@ -11,7 +11,7 @@ const PriceList = ({ id }) => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const getItems = getInfo(`items/${id}/price-propose`);
+    const getItems = requestPublicData(`v1/items/${id}/price-propose`);
     getItems.then((result) => {
       if (result !== null && result.length !== 0) {
         const sortData = result.reverse();

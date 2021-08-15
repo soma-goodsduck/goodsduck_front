@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "./idolSelect.module.css";
 
 const Idol = ({ idol, onCheck, onUncheck }) => {
+  const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
   const [checked, setChecked] = useState(false);
 
   const checkedItemHandler = (id, isChecked) => {
@@ -18,6 +19,20 @@ const Idol = ({ idol, onCheck, onUncheck }) => {
     setChecked(!checked);
     checkedItemHandler(idol.id, target.checked);
   };
+
+  useEffect(() => {
+    let likeIdolGroups;
+
+    if (likeIdolGroupsLS) {
+      likeIdolGroups = likeIdolGroupsLS.split(",").map(Number);
+      likeIdolGroups.forEach((idolId) => {
+        if (idol.id === idolId) {
+          setChecked(true);
+          checkedItemHandler(idol.id, true);
+        }
+      });
+    }
+  }, []);
 
   return (
     <IdolBox>

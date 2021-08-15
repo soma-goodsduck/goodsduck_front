@@ -5,12 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import styles from "./itemList.module.css";
 import Item from "../item/item";
-import FilteringIdol from "../idolFiltering/idolGroupFiltering";
+import FilteringIdol from "../filtering/idolGroupFiltering";
+import DetailFiltering from "../filtering/filtering";
 
-import { getList, getListByIdol } from "../../shared/axios";
-import { actionCreators as headerActions } from "../../redux/modules/header";
+import {
+  getItems,
+  getItemsByIdol,
+  getItemsByFilter,
+  getItemsBySearch,
+} from "../../shared/axios";
+import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 
-const ItemList = () => {
+const ItemList = ({ keyword }) => {
   const dispatch = useDispatch();
 
   const [items, setItems] = useState([]);
@@ -18,13 +24,15 @@ const ItemList = () => {
   const [loading, setLoading] = useState(false);
   const [itemNum, setItemNum] = useState(0);
   const [isIdolFilter, setIsIdolFilter] = useState(false);
+  const [isDetailFilter, setIsDetailFilter] = useState(false);
   const [idolFilter, setIdolFilter] = useState(0);
+  const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
 
-  const idolItems = useSelector((state) => state.header.items);
+  const idolItems = useSelector((state) => state.filtering.items);
 
-  const getItems = (num) => {
+  const getItemsData = (num) => {
     setLoading(true);
-    const getItemList = getList("items", num);
+    const getItemList = getItems("items", num);
     getItemList.then((result) => {
       const newItemData = result.response;
       const newItem = [...items, ...result.response];
@@ -37,9 +45,67 @@ const ItemList = () => {
     });
   };
 
-  const getItemsWithIdolFilter = (num, idolId) => {
+  const getItemsDataByIdol = (num, idolId) => {
     setLoading(true);
-    const getItemList = getListByIdol("items/filter", num, idolId);
+    const getItemList = getItemsByIdol(num, idolId);
+    getItemList.then((result) => {
+      const newItemData = result.response;
+      const newItem = [...idolItems, ...result.response];
+      setItems(newItem);
+      setHasNext(result.hasNext);
+      setLoading(false);
+      if (result.hasNext) {
+        setItemNum(newItemData[newItemData.length - 1].itemId);
+      }
+    });
+  };
+
+  const getFilteringQuery = (num, _filteringInfo) => {
+    const idolGroupId = localStorage.getItem("filter_idolGroup");
+    let query = `itemId=${num}&idolGroup=${idolGroupId}`;
+
+    if (_filteringInfo.category !== "") {
+      query = query.concat(`&category=${_filteringInfo.category}`);
+    }
+    if (_filteringInfo.gradeStatus !== "") {
+      query = query.concat(`&gradeStatus=${_filteringInfo.gradeStatus}`);
+    }
+    if (_filteringInfo.idolMember !== "") {
+      query = query.concat(`&idolMember=${_filteringInfo.idolMember}`);
+    }
+    if (_filteringInfo.minPrice !== 0) {
+      query = query.concat(`&minPrice=${_filteringInfo.minPrice}`);
+    }
+    if (_filteringInfo.maxPrice !== 0) {
+      query = query.concat(`&maxPrice=${_filteringInfo.maxPrice}`);
+    }
+    if (_filteringInfo.tradeType !== "") {
+      query = query.concat(`&tradeType=${_filteringInfo.tradeType}`);
+    }
+
+    return query;
+  };
+
+  const getItemsDataByFilter = (num, _filteringInfo) => {
+    const query = getFilteringQuery(num, _filteringInfo);
+
+    setLoading(true);
+    const getItemList = getItemsByFilter(query);
+    getItemList.then((result) => {
+      const newItemData = result.response;
+      const newItem = [...idolItems, ...result.response];
+      setItems(newItem);
+      setHasNext(result.hasNext);
+      setLoading(false);
+      if (result.hasNext) {
+        setItemNum(newItemData[newItemData.length - 1].itemId);
+      }
+    });
+  };
+
+  const getItemsDataBySearch = (num, _keyword) => {
+    setLoading(true);
+    const getItemList = getItemsBySearch(num, _keyword);
     getItemList.then((result) => {
       const newItemData = result.response;
       const newItem = [...idolItems, ...result.response];
@@ -55,12 +121,27 @@ const ItemList = () => {
   const handleFiltering = async (id) => {
     setIdolFilter(id);
     setIsIdolFilter(true);
-    dispatch(headerActions.setItems([]));
-    getItemsWithIdolFilter(0, id);
+    setIsDetailFilter(true);
+    dispatch(filteringActions.setItems([]));
+    getItemsDataByIdol(0, id);
   };
 
   useEffect(() => {
-    getItems(itemNum);
+    if (
+      localStorage.getItem("filter_idolGroup") &&
+      localStorage.getItem("filtering")
+    ) {
+      setIsIdolFilter(true);
+      setIsDetailFilter(true);
+    }
+
+    if (keyword) {
+      getItemsDataBySearch(itemNum, keyword);
+    } else if (filteringInfo) {
+      getItemsDataByFilter(itemNum, filteringInfo);
+    } else {
+      getItemsData(itemNum);
+    }
   }, []);
 
   // 무한 스크롤
@@ -81,9 +162,13 @@ const ItemList = () => {
       }
 
       if (isIdolFilter) {
-        getItemsWithIdolFilter(itemNum, idolFilter);
+        getItemsDataByIdol(itemNum, idolFilter);
+      } else if (keyword) {
+        getItemsDataBySearch(itemNum, keyword);
+      } else if (filteringInfo) {
+        getItemsDataByFilter(itemNum, filteringInfo);
       } else {
-        getItems(itemNum);
+        getItemsData(itemNum);
       }
     }
   }, [itemNum]);
@@ -104,7 +189,8 @@ const ItemList = () => {
 
   return (
     <>
-      <FilteringIdol onClick={handleFiltering} />
+      {!keyword && <FilteringIdol onClick={handleFiltering} />}
+      {!keyword && isDetailFilter && <DetailFiltering idolId={idolFilter} />}
 
       {items && (
         <ItemListBox>

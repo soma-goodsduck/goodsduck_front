@@ -7,25 +7,24 @@ import { Flex, Image, Text } from "../../elements";
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 
 import { actionCreators as chatActions } from "../../redux/modules/chat";
-import { getInfo, postAction } from "../../shared/axios";
+import { requestPublicData, postAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const PriceRow = ({ item }) => {
   const dispatch = useDispatch();
 
-  // 아이템 아이디
   const href = window.location.href.split("/");
   const itemId = Number(href[href.length - 1]);
-
-  // 가격제안 수락, 거절
   const proposeId = item.priceProposeId;
+
+  // 가격제안 수락
   const handleAccept = () => {
     const acceptPricePropose = postAction(
-      `items/${itemId}/price-propose/${proposeId}/accept`,
+      `v1/items/${itemId}/price-propose/${proposeId}/accept`,
     );
     acceptPricePropose.then((result) => {
       if (result.success === true) {
-        const getUserId = getInfo("/users/look-up-id");
+        const getUserId = requestPublicData("v1/users/look-up-id");
         getUserId.then((userResult) => {
           const user = {
             id: userResult.userId,
@@ -37,9 +36,10 @@ const PriceRow = ({ item }) => {
       }
     });
   };
+  // 가격제안 거절
   const handleRefuse = () => {
     const refusePricePropose = postAction(
-      `items/${itemId}/price-propose/${proposeId}/refuse`,
+      `v1/items/${itemId}/price-propose/${proposeId}/refuse`,
     );
     refusePricePropose.then((result) => {
       if (result.success === true) {
@@ -53,8 +53,10 @@ const PriceRow = ({ item }) => {
       <Flex is_flex>
         <Image
           shape="circle"
-          src="https://i.pinimg.com/originals/a8/7b/5d/a87b5da556f38ab9c7f7e143fbcb8201.jpg"
-          // src={item.proposer.imageUrl}
+          src={
+            item.proposer.imageUrl ||
+            "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+          }
           margin="0 10px 0 0"
           size="60px"
         />

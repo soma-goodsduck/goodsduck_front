@@ -2,7 +2,7 @@
 
 /* 전체적인 선택 버튼 */
 .selectBtn {
-  width: 380px;
+  width: 340px;
   height: 100%;
   display: flex;
   justify-content: space-between;
@@ -155,4 +155,32 @@ input::-webkit-inner-spin-button {
 .nextOKBtn {
   color: var(--blackBtn);
   background-color: var(--yellow);
+}
+
+/* 필터링 */
+.priceInput::placeholder {
+  text-align: center;
+}
+
+.filterNextBtn,
+.filterResetBtn {
+  width: 90%;
+  padding: 18px;
+  border-radius: 5px;
+}
+.filterResetBtn {
+  color: var(--white);
+  background-color: var(--gray);
+  margin-top: 50px;
+}
+.filterNextBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
+  margin-top: 20px;
+}
+
+@media screen and (min-width: 415px) {
+  .selectBtn {
+    width: 380px;
+  }
 }

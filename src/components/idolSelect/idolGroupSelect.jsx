@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
 import Idol from "./idolSelect";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const IdolGroups = ({ onUpdate }) => {
-  const dispatch = useDispatch();
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
   useEffect(() => {
-    const getIdolGroup = getInfo("idol-groups");
+    const getIdolGroup = requestPublicData("v1/idol-groups");
     getIdolGroup.then((result) => {
       setIdols(result);
     });
@@ -48,7 +46,7 @@ const IdolGroups = ({ onUpdate }) => {
 const IdolList = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 85px);
-  grid-auto-rows: 120px;
+  grid-auto-rows: 115px;
 `;
 
 export default IdolGroups;

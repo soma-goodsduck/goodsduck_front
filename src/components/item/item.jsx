@@ -12,10 +12,20 @@ import { postAction, deleteAction } from "../../shared/axios";
 
 const Item = ({ item, id }) => {
   let color;
-  if (item.tradeType === "판매") {
+  let tradeType;
+
+  if (item.tradeStatus === "SELLING") {
     color = "#e15b5b";
-  } else if (item.tradeType === "구매") {
+    tradeType = "판매";
+  } else if (item.tradeStatus === "BUYING") {
     color = "#299bff";
+    tradeType = "구매";
+  } else if (item.tradeStatus === "RESERVING") {
+    color = "#222222";
+    tradeType = "예약";
+  } else if (item.tradeStatus === "COMPLETE") {
+    color = "#222222";
+    tradeType = "완료";
   }
 
   const screen = window.screen.width;
@@ -36,9 +46,9 @@ const Item = ({ item, id }) => {
   const [isLike, setIsLike] = useState(item.isLike);
   const clickHeart = () => {
     if (!isLike) {
-      postAction(`items/${id}/like`);
+      postAction(`v1/items/${id}/like`);
     } else {
-      deleteAction(`items/${id}/like`);
+      deleteAction(`v1/items/${id}/like`);
     }
 
     setIsLike(!isLike);
@@ -49,7 +59,7 @@ const Item = ({ item, id }) => {
       <Flex className={styles.imgBox}>
         <Image
           shape="rectangle"
-          src={item.images[0].url}
+          src={item.imageUrl}
           size={isMobile ? "43vw" : "185px"}
           borderRadius="10px"
           className={styles.itemImg}
@@ -71,7 +81,7 @@ const Item = ({ item, id }) => {
             margin="0 5px 0 0"
             color={color}
           >
-            {item.tradeType}
+            {tradeType}
           </Text>
           <Title>
             <Text size={isMobile ? "4vw" : "16px"} is_long>
@@ -117,6 +127,7 @@ const ItemBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  cursor: pointer;
 `;
 
 const Title = styled.div`

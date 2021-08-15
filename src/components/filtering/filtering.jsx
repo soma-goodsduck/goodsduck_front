@@ -1,7 +1,20 @@
 import React, { useState, useRef } from "react";
+import styled from "styled-components";
 import styles from "./filtering.module.css";
 
-const Filtering = (props) => {
+import { Flex } from "../../elements";
+import { grayBorder } from "../../shared/colors";
+import { history } from "../../redux/configureStore";
+
+const Filtering = () => {
+  const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
+  const filteringIdolGroup = localStorage.getItem("filter_idolGroupName");
+
+  const handleFiltering = () => {
+    history.push("/filtering");
+  };
+
+  // 가로 스크롤
   const scrollRef = useRef(null);
 
   const [isDrag, setIsDrag] = useState(false);
@@ -25,35 +38,89 @@ const Filtering = (props) => {
 
   return (
     <>
-      <div className={styles.bar} />
+      <Line />
       <div
         aria-hidden
-        className={styles.categories}
+        className={styles.filterings}
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
         onMouseLeave={onDragEnd}
         ref={scrollRef}
+        onClick={() => {
+          handleFiltering();
+        }}
       >
-        <button type="button" className={styles.category}>
-          멤버 전체
-        </button>
-        <button type="button" className={styles.category}>
-          판매・구매
-        </button>
-        <button type="button" className={styles.category}>
-          카테고리
-        </button>
-        <button type="button" className={styles.category}>
-          상품상태
-        </button>
-        <button type="button" className={styles.category}>
-          가격대
-        </button>
+        {filteringInfo && (
+          <Flex justify="flex-start">
+            <div className={styles.filterIdolBox}>
+              {filteringIdolGroup !== ""
+                ? `${filteringIdolGroup} ${filteringInfo.idolMemberName}`
+                : filteringIdolGroup}
+            </div>
+            <div
+              className={
+                filteringInfo.tradeType !== "ALL"
+                  ? styles.filterCheckBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.tradeType !== "ALL"
+                ? filteringInfo.tradeTypeKor
+                : "판매/구매"}
+            </div>
+            <div
+              className={
+                filteringInfo.category
+                  ? styles.filterCheckBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.categoryName || "카테고리"}
+            </div>
+            <div
+              className={
+                filteringInfo.gradeStatus !== ""
+                  ? styles.filterCheckBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.gradeStatus !== ""
+                ? `${filteringInfo.gradeStatus}급`
+                : "굿즈 상태"}
+            </div>
+            <div
+              className={
+                filteringInfo.minPrice !== 0 && filteringInfo.maxPrice !== 0
+                  ? styles.filterPriceBox
+                  : styles.filterBox
+              }
+            >
+              {filteringInfo.minPrice !== 0 && filteringInfo.maxPrice !== 0
+                ? `${filteringInfo.minPrice}원 ~ ${filteringInfo.maxPrice}원`
+                : "가격대"}
+            </div>
+          </Flex>
+        )}
+        {!filteringInfo && (
+          <Flex justify="flex-start">
+            <div className={styles.filterIdolBox}>{filteringIdolGroup}</div>
+            <div className={styles.filterBox}>판매/구매</div>
+            <div className={styles.filterBox}>카테고리</div>
+            <div className={styles.filterBox}>굿즈 상태</div>
+            <div className={styles.filterBox}>가격대</div>
+          </Flex>
+        )}
       </div>
-      <div className={styles.bar} />
+      <Line />
     </>
   );
 };
+
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${grayBorder};
+`;
 
 export default Filtering;

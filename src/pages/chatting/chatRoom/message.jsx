@@ -5,7 +5,7 @@ import moment from "moment";
 import styled from "styled-components";
 import { Flex, Text, Image } from "../../../elements/index";
 
-import { getInfo } from "../../../shared/axios";
+import { requestPublicData } from "../../../shared/axios";
 import { gray, lightGray2, yellow } from "../../../shared/colors";
 
 const Message = ({ message }) => {
@@ -19,7 +19,7 @@ const Message = ({ message }) => {
   };
 
   useEffect(() => {
-    const getUserId = getInfo("/users/look-up-id");
+    const getUserId = requestPublicData("v1/users/look-up-id");
     getUserId.then((result) => {
       if (result.userId === message.user.id) {
         setIsMessageMine(true);

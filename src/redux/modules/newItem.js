@@ -17,6 +17,8 @@ const SET_TRADE_TYPE = "SET_TRADE_TYPE";
 const SET_CATEGORY = "SET_CATEGORY";
 const SET_STATUS = "SET_STATUS";
 const SET_DESC = "SET_DESC";
+const SET_FILES = "SET_FILES";
+const SET_IMAGES = "SET_IMAGES";
 const CLEAR = "CLEAR";
 
 // action creators
@@ -45,6 +47,8 @@ const setStatus = createAction(SET_STATUS, (status_grade) => ({
   status_grade,
 }));
 const setDesc = createAction(SET_DESC, (description) => ({ description }));
+const setFiles = createAction(SET_FILES, (files) => ({ files }));
+const setImages = createAction(SET_IMAGES, (images) => ({ images }));
 const clear = createAction(CLEAR, () => ({}));
 
 // initialState
@@ -53,7 +57,8 @@ const initialState = {
   item_id: 0,
   name: "",
   description: "",
-  images: [],
+  images: [], // image url
+  files: [], // image file data
   price: null,
   trade_type: "",
   status_grade: "",
@@ -123,7 +128,7 @@ const addItemAction = (item, fileList) => {
 const setItemAction = (item) => {
   return function (dispatch, getState, { history }) {
     dispatch(setItem(item));
-    history.push("/new");
+    history.push("/upload-item");
   };
 };
 
@@ -135,12 +140,14 @@ const clearAction = () => {
 };
 
 // 업데이트
-const updateItemAction = (item, id) => {
+const updateItemAction = (item, id, fileList) => {
   return function (dispatch, getState, { history }) {
+    console.log(item);
     const formData = new FormData();
-    // fileList.forEach((file) => {
-    //   formData.append("multipartFiles", file);
-    // });
+    fileList.forEach((file) => {
+      formData.append("multipartFiles", file);
+    });
+
     const itemDto = {
       name: item.dataName,
       price: item.dataPrice,
@@ -149,16 +156,15 @@ const updateItemAction = (item, id) => {
       gradeStatus: item.dataStatus,
       category: item.dataCategory,
       idolMember: item.idolMember,
+      imageUrls: item.images,
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
-    console.log(itemDto);
 
     axios
-      .put(`${process.env.REACT_APP_BACK_URL}/api/v1/items/${id}`, formData, {
+      .put(`${process.env.REACT_APP_BACK_URL}/api/v2/items/${id}`, formData, {
         headers: { jwt: `${item.userJwt}` },
       })
       .then((response) => {
-        console.log(response.data.success);
         if (response.data.success) {
           console.log("굿즈 수정 완료");
           history.replace(`/item/${id}`);
@@ -174,63 +180,14 @@ const updateItemAction = (item, id) => {
   };
 };
 
-// 아이템 등록할 때 필요한 정보들을 저장
-const setIdolAction = (idolGroup, idolGroupName) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setIdolGroup(idolGroup, idolGroupName));
-  };
-};
-
-const setIdolMemberAction = (idolMember, idolMemberName) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setIdolMember(idolMember, idolMemberName));
-  };
-};
-
-const setNameAction = (name) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setName(name));
-  };
-};
-
-const setPriceAction = (price) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setPrice(price));
-  };
-};
-
-const setTradeTypeAction = (tradeType) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setTradeType(tradeType));
-  };
-};
-
-const setCategoryAction = (category) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setCategory(category));
-    history.push("/new");
-  };
-};
-
-const setStatusAction = (status) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setStatus(status));
-  };
-};
-
-const setDescAction = (desc) => {
-  return function (dispatch, getState, { history }) {
-    dispatch(setDesc(desc));
-  };
-};
-
 // reducer
 export default handleActions(
   {
     [SET_ITEM]: (state, action) =>
       produce(state, (draft) => {
+        console.log(action.payload.item);
         draft.item_id = action.payload.item.id;
-        draft.images = action.payload.images;
+        draft.images = action.payload.item.images;
         draft.idol_group_id = action.payload.item.groupId;
         draft.idol_group_name = action.payload.item.groupName;
         draft.idol_member_id = action.payload.item.memberId;
@@ -276,6 +233,14 @@ export default handleActions(
       produce(state, (draft) => {
         draft.category = action.payload.category;
       }),
+    [SET_IMAGES]: (state, action) =>
+      produce(state, (draft) => {
+        draft.images = action.payload.images;
+      }),
+    [SET_FILES]: (state, action) =>
+      produce(state, (draft) => {
+        draft.files = action.payload.files;
+      }),
     [CLEAR]: (state, action) =>
       produce(state, (draft) => {
         draft.name = "";
@@ -288,6 +253,8 @@ export default handleActions(
         draft.idol_member_id = null;
         draft.idol_group_name = "";
         draft.idol_member_name = "";
+        draft.files = [];
+        draft.images = [];
       }),
   },
   initialState,
@@ -297,14 +264,16 @@ export default handleActions(
 const actionCreators = {
   setItemAction,
   addItemAction,
-  setIdolAction,
-  setIdolMemberAction,
-  setPriceAction,
-  setNameAction,
-  setCategoryAction,
-  setDescAction,
-  setTradeTypeAction,
-  setStatusAction,
+  setFiles,
+  setIdolGroup,
+  setIdolMember,
+  setPrice,
+  setName,
+  setCategory,
+  setDesc,
+  setTradeType,
+  setStatus,
+  setImages,
   clearAction,
   updateItemAction,
 };

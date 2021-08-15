@@ -5,14 +5,14 @@ import ItemList from "../../components/itemList/itemList";
 import { Grid } from "../../elements";
 import Nav from "../../components/nav/nav";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const Home = (props) => {
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
 
   useEffect(() => {
     if (!likeIdolGroupsLS) {
-      const getUserData = getInfo("/users/look-up");
+      const getUserData = requestPublicData("v1/users/look-up");
       getUserData.then((result) => {
         if (result) {
           const likeIdolGroups = [];

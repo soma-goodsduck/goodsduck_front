@@ -26,7 +26,7 @@ const Nav = (props) => {
       setIsChat(true);
     } else if (href.includes("/community")) {
       setIsCommunity(true);
-    } else if (href.includes("/mypage")) {
+    } else if (href.includes("/my-profile")) {
       setIsProfile(true);
     } else {
       setIsHome(true);
@@ -69,7 +69,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/new");
+            history.push("/upload-item");
           }}
         >
           <div className={styles.isNotNewIcon} />
@@ -99,7 +99,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/mypage");
+            history.push("/my-profile");
           }}
         >
           <div

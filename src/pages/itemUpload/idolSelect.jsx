@@ -11,7 +11,7 @@ import { Flex } from "../../elements";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
-import { getInfo } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const IdolSelect = ({ history }) => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const IdolSelect = ({ history }) => {
   const [idols, setIdols] = useState([]);
 
   useEffect(() => {
-    const getIdolGroup = getInfo("idol-groups");
+    const getIdolGroup = requestPublicData("v1/idol-groups");
     getIdolGroup.then((result) => {
       setIdols(result);
     });
@@ -45,14 +45,14 @@ const IdolSelect = ({ history }) => {
 
   const checkGroupHandler = (id, name) => {
     setGroupId(id);
-    dispatch(newItemActions.setIdolAction(id, name));
+    dispatch(newItemActions.setIdolGroup(id, name));
   };
 
   const selectGroup = () => {
     if (!groupId) {
       return;
     }
-    history.push("/idolMemberSelect");
+    history.push("/select-idol-member");
   };
 
   return (

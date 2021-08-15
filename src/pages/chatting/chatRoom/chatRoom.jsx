@@ -14,7 +14,7 @@ import MessageForm from "./messageForm";
 import Skeleton from "./skeleton";
 import { firebaseDatabase } from "../../../shared/firebase";
 
-import { getInfo } from "../../../shared/axios";
+import { postAction, requestPublicData } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
 
 export class ChatRoom extends Component {
@@ -23,19 +23,21 @@ export class ChatRoom extends Component {
   state = {
     createdByMe: false,
     chatRoomId: this.props.chatRoomId,
+    createdWithBcryptId: this.props.createdWithBcryptId,
     withChatNick: "",
+    itemId: 0,
     messages: [],
     messageLoading: true,
     messagesRef: firebaseDatabase.ref("messages"),
-    // chatRoomsRef: firebaseDatabase.ref("chatRooms"),
   };
 
   componentDidMount() {
-    const getUserId = getInfo("/users/look-up-id");
+    const getUserId = requestPublicData("v1/users/look-up-id");
 
     // 전달되는 props이 있을때 (ex. 채팅방을 클릭해서 들어온 경우)
     if (this.props.chatRoomId !== "") {
-      const { createdById, chatRoomId } = this.props;
+      const { createdById, chatRoomId, itemId } = this.props;
+      this.setState({ itemId });
       getUserId.then((result) => {
         if (result.userId === createdById) {
           this.setState({ createdByMe: true });
@@ -60,6 +62,9 @@ export class ChatRoom extends Component {
         .then((snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
+            this.setState({ itemId: data.item.id });
+
+            this.setState({ createdWithBcryptId: data.createdWith.bcryptId });
             getUserId.then((result) => {
               if (result.userId === data.createdBy.id) {
                 this.setState({ createdByMe: true });
@@ -118,6 +123,7 @@ export class ChatRoom extends Component {
         .ref(`chatRooms/${chatRoomId}/createdWith`)
         .update({ isPresented: false });
     }
+    postAction("v1/chat", { chatId: chatRoomId });
     localStorage.removeItem(chatRoomId);
     history.push("/chatting");
   };
@@ -138,7 +144,13 @@ export class ChatRoom extends Component {
     );
 
   render() {
-    const { messages, messageLoading, chatRoomId } = this.state;
+    const {
+      messages,
+      messageLoading,
+      chatRoomId,
+      createdWithBcryptId,
+      itemId,
+    } = this.state;
 
     return (
       <>
@@ -149,8 +161,13 @@ export class ChatRoom extends Component {
           _onClick={() => {
             this.leaveChatRoom(chatRoomId);
           }}
+          _nickClick={() => {
+            history.push(`/profile/${createdWithBcryptId}`);
+          }}
+          type="chat"
+          isClick
         />
-        <ItemInfo />
+        <ItemInfo id={itemId} />
         <div>
           {this.renderMessageSkeleton(messageLoading)}
           {!messageLoading && (
@@ -174,6 +191,8 @@ const mapStateToProps = (state) => {
     createdById: state.chat.createdById,
     createdByNickName: state.chat.createdByNickName,
     createdWithNickName: state.chat.createdWithNickName,
+    createdWithBcryptId: state.chat.createdWithBcryptId,
+    itemId: state.chat.itemId,
   };
 };
 

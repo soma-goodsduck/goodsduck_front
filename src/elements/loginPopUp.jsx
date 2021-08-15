@@ -11,7 +11,7 @@ const LoginPopUp = (props) => {
 
   const handleClick = () => {
     history.replace("/login");
-    dispatch(userActions.noShowPopupAction());
+    dispatch(userActions.noShowPopup());
   };
 
   return (

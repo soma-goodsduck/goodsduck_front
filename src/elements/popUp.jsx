@@ -38,7 +38,7 @@ const PopUp = (props) => {
   };
 
   const noLogin = () => {
-    dispatch(userActions.noShowPopupAction());
+    dispatch(userActions.noShowPopup());
     history.push("/");
   };
 
@@ -73,7 +73,7 @@ PopUp.defaultProps = {
 
 const PopUpBox = styled.div`
   position: fixed;
-  top: 30%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, 0);
   text-align: center;

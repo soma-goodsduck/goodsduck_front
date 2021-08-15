@@ -7,6 +7,7 @@ import { produce } from "immer";
 import axios from "axios";
 import * as Sentry from "@sentry/react";
 
+import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
 
 // actions
@@ -17,6 +18,12 @@ const GET_USER = "GET_USER";
 const SHOW_POPUP = "SHOW_POPUP";
 const NO_SHOW_POPUP = "NO_SHOW_POPUP";
 const UPDATE_JWT = "UPDATE_JWT";
+const SET_FAV_IDOL_GROUPS = "SET_FAV_IDOL_GROUPS";
+const SET_FILTERING_TYPE = "SET_FILTERING_TYPE";
+const SET_USER_FOR_REVIEW = "SET_USER_FOR_REVIEW";
+const SET_REVIEW = "SET_REVIEW";
+const SET_NUM_OF_STAR = "SET_NUM_OF_STAR";
+const CLEAR_REVIEW = "CLEAR_REVIEW";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -26,6 +33,22 @@ const getUser = createAction(GET_USER, (user) => ({ user }));
 const showPopup = createAction(SHOW_POPUP, () => ({}));
 const noShowPopup = createAction(NO_SHOW_POPUP, () => ({}));
 const updateJwt = createAction(UPDATE_JWT, () => ({}));
+const setFavIdolGroups = createAction(SET_FAV_IDOL_GROUPS, (favIdolGroups) => ({
+  favIdolGroups,
+}));
+const setFilteringType = createAction(SET_FILTERING_TYPE, (filteringType) => ({
+  filteringType,
+}));
+const setUserForReview = createAction(SET_USER_FOR_REVIEW, (userForReview) => ({
+  userForReview,
+}));
+const setReview = createAction(SET_REVIEW, (review) => ({
+  review,
+}));
+const setNumOfStar = createAction(SET_NUM_OF_STAR, (numOfStar) => ({
+  numOfStar,
+}));
+const clearReview = createAction(CLEAR_REVIEW, () => ({}));
 
 // initialState
 const initialState = {
@@ -34,6 +57,11 @@ const initialState = {
   type: null,
   isLogin: false,
   showPopup: false,
+  favIdolGroups: [],
+  filteringType: "SELLING",
+  userForReview: "",
+  review: "",
+  numOfStar: 0,
 };
 
 // middleware actions
@@ -41,6 +69,7 @@ const initialState = {
 const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
+    notification();
     history.replace("/");
   };
 };
@@ -84,6 +113,7 @@ const signupAction = (user) => {
       )
       .then((response) => {
         dispatch(logIn(response.data.jwt));
+        notification();
         history.push("/");
       })
       .catch((error) => {
@@ -91,18 +121,6 @@ const signupAction = (user) => {
         Sentry.captureException(error);
         history.replace("/login");
       });
-  };
-};
-
-const showPopupAction = () => {
-  return function (dispatch, getState, { history }) {
-    dispatch(showPopup());
-  };
-};
-
-const noShowPopupAction = () => {
-  return function (dispatch, getState, { history }) {
-    dispatch(noShowPopup());
   };
 };
 
@@ -126,6 +144,7 @@ export default handleActions(
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
         deleteLS("jwt");
+        deleteLS("likeIdolGroups");
         draft.user = null;
         draft.isLogin = false;
       }),
@@ -146,6 +165,32 @@ export default handleActions(
       produce(state, (draft) => {
         setLS("jwt", draft.user);
       }),
+    [SET_FAV_IDOL_GROUPS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.favIdolGroups = action.payload.favIdolGroups;
+      }),
+    [SET_FILTERING_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.filteringType = action.payload.filteringType;
+      }),
+    [SET_USER_FOR_REVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.userForReview = action.payload.userForReview;
+      }),
+    [SET_REVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.review = action.payload.review;
+      }),
+    [SET_NUM_OF_STAR]: (state, action) =>
+      produce(state, (draft) => {
+        draft.numOfStar = action.payload.numOfStar;
+      }),
+    [CLEAR_REVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.userForReview = "";
+        draft.numOfStar = 0;
+        draft.review = "";
+      }),
   },
   initialState,
 );
@@ -157,9 +202,15 @@ const actionCreators = {
   loginAction,
   nonUserAction,
   signupAction,
-  showPopupAction,
-  noShowPopupAction,
+  showPopup,
+  noShowPopup,
   updateJwt,
+  setFavIdolGroups,
+  setFilteringType,
+  setUserForReview,
+  setReview,
+  setNumOfStar,
+  clearReview,
 };
 
 export { actionCreators };

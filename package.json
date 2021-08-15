@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://d296jaxfebv337.cloudfront.net/",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@sentry/react": "^6.9.0",
     "@sentry/tracing": "^6.9.0",
     "@testing-library/jest-dom": "^5.11.4",
