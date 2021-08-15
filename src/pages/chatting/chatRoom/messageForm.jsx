@@ -9,7 +9,11 @@ import { Flex, Icon, Button, PopUp } from "../../../elements";
 
 import { grayBorder, white } from "../../../shared/colors";
 import { firebaseDatabase } from "../../../shared/firebase";
-import { requestAuthData, postImgAction } from "../../../shared/axios";
+import {
+  requestAuthData,
+  postImgAction,
+  postAction,
+} from "../../../shared/axios";
 
 const MessageForm = (props) => {
   const href = window.location.href.split("/");
@@ -114,6 +118,13 @@ const MessageForm = (props) => {
         `${chatRoomId}`,
         `${Math.round(new Date().getTime())}`,
       );
+
+      const notiJson = {
+        chatRoomId,
+        senderId: userId,
+        type: "CHAT",
+      };
+      postAction("v1/chat/notification", notiJson);
     } catch (error) {
       console.error(error.message);
       setErrors((prev) => prev.concat(error.message));
