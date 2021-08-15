@@ -25,6 +25,7 @@ export class ChatRoom extends Component {
     chatRoomId: this.props.chatRoomId,
     createdWithBcryptId: this.props.createdWithBcryptId,
     withChatNick: "",
+    itemId: 0,
     messages: [],
     messageLoading: true,
     messagesRef: firebaseDatabase.ref("messages"),
@@ -35,7 +36,8 @@ export class ChatRoom extends Component {
 
     // 전달되는 props이 있을때 (ex. 채팅방을 클릭해서 들어온 경우)
     if (this.props.chatRoomId !== "") {
-      const { createdById, chatRoomId } = this.props;
+      const { createdById, chatRoomId, itemId } = this.props;
+      this.setState({ itemId });
       getUserId.then((result) => {
         if (result.userId === createdById) {
           this.setState({ createdByMe: true });
@@ -60,6 +62,8 @@ export class ChatRoom extends Component {
         .then((snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
+            this.setState({ itemId: data.item.id });
+
             this.setState({ createdWithBcryptId: data.createdWith.bcryptId });
             getUserId.then((result) => {
               if (result.userId === data.createdBy.id) {
@@ -140,8 +144,13 @@ export class ChatRoom extends Component {
     );
 
   render() {
-    const { messages, messageLoading, chatRoomId, createdWithBcryptId } =
-      this.state;
+    const {
+      messages,
+      messageLoading,
+      chatRoomId,
+      createdWithBcryptId,
+      itemId,
+    } = this.state;
 
     return (
       <>
@@ -158,7 +167,7 @@ export class ChatRoom extends Component {
           type="chat"
           isClick
         />
-        <ItemInfo />
+        <ItemInfo id={itemId} />
         <div>
           {this.renderMessageSkeleton(messageLoading)}
           {!messageLoading && (
@@ -183,6 +192,7 @@ const mapStateToProps = (state) => {
     createdByNickName: state.chat.createdByNickName,
     createdWithNickName: state.chat.createdWithNickName,
     createdWithBcryptId: state.chat.createdWithBcryptId,
+    itemId: state.chat.itemId,
   };
 };
 

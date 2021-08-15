@@ -7,7 +7,9 @@ import { Image, Text } from "../../../elements";
 import { grayBorder } from "../../../shared/colors";
 import { numberWithCommas } from "../../../shared/functions";
 
-const ItemInfo = () => {
+import { history } from "../../../redux/configureStore";
+
+const ItemInfo = ({ id }) => {
   // chatRoomId
   const href = window.location.href.split("/");
   const chatRoomId = href[href.length - 1];
@@ -31,7 +33,11 @@ const ItemInfo = () => {
   return (
     <>
       {item && (
-        <ItemBox>
+        <ItemBox
+          onClick={() => {
+            history.push(`/item/${id}`);
+          }}
+        >
           <Image
             shape="rectangle"
             src={item.image}
@@ -60,6 +66,7 @@ const ItemBox = styled.div`
   display: flex;
   position: relative;
   border-bottom: 2px solid ${grayBorder};
+  cursor: pointer;
 `;
 
 const ItemRowBox = styled.div`
