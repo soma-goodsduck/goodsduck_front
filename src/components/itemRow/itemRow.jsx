@@ -33,7 +33,7 @@ const ItemRow = ({ item, isNotBtn }) => {
     <ItemBox
       {...styles}
       onClick={() => {
-        history.push(`/item/${item.id}`);
+        history.push(`/item/${item.itemId}`);
       }}
     >
       <Image

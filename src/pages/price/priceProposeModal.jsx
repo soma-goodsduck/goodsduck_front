@@ -37,15 +37,19 @@ const PriceProposeModal = ({ _onClick }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleClcik = () => {
+    if (price === 0) {
+      return;
+    }
+
     const postPrice = postAction(`v1/items/${itemId}/price-propose`, {
       price,
     });
     postPrice.then((result) => {
       if (result === "login") {
         setShowPopup(true);
-      } else {
-        window.location.reload();
+        return;
       }
+      window.location.reload();
     });
   };
 

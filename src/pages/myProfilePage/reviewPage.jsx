@@ -30,7 +30,9 @@ const ReviewPage = (props) => {
 };
 
 const ReviewBox = styled.div`
-  margin-top: 50px;
+  overflow-y: auto;
+  height: 95vh;
+  margin-top: 40px;
   padding: 20px;
 `;
 

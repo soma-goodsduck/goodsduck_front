@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
-import UserProfile from "./userProfile";
-
-import { requestPublicData } from "../../shared/axios";
-import { history } from "../../redux/configureStore";
 import HeaderInfo2 from "../../components/haeder/headerInfo2";
+import UserProfile from "./userProfile";
 import Btns from "./btns";
 import ItemList from "./itemList";
-import { grayBorder } from "../../shared/colors";
 import ReviewList from "./reviewList";
+
+import { grayBorder } from "../../shared/colors";
+import { requestPublicData } from "../../shared/axios";
 
 const OtherProfilePage = (props) => {
   const href = window.location.href.split("/");
@@ -28,7 +27,6 @@ const OtherProfilePage = (props) => {
   };
   const fnEffect = async () => {
     const userData = await requestProfileData();
-    console.log(userData);
 
     setUser(userData.user);
     setBtnsData({

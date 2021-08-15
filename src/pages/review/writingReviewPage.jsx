@@ -66,12 +66,13 @@ const WritingReviewPage = () => {
         postAction("v1/users/reviews", {
           chatRoomId: userChatIdForReview,
           content: review,
+          itemId,
           score: numOfStar,
         });
         patchJsonAction(`v1/items/${itemId}/trade-status`, {
           tradeStatus: "COMPLETE",
         });
-        history.push("/my-profile");
+        history.replace("/my-profile");
       } catch (error) {
         console.log(error);
       }

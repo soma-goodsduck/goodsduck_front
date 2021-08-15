@@ -43,7 +43,9 @@ const LikeItemList = () => {
 };
 
 const Box = styled.div`
-  margin-top: 65px;
+  overflow-y: auto;
+  height: 95vh;
+  margin-top: 40px;
   padding: 0 16px;
 `;
 

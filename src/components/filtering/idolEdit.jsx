@@ -67,7 +67,7 @@ const Screen = styled.div`
   justify-content: center;
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 9999;
   ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);

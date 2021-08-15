@@ -10,7 +10,7 @@ import { history } from "../../redux/configureStore";
 
 const PriceProposeRow = ({ item }) => {
   const handleClick = () => {
-    history.push(`/item/${item.item.id}`);
+    history.push(`/item/${item.item.itemId}`);
   };
 
   return (
@@ -24,14 +24,13 @@ const PriceProposeRow = ({ item }) => {
               "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
             }
             margin="0 10px 0 0"
-            size="55px"
+            size="50px"
           />
           <InfoBox>
             <Flex>
               <TextBox>
-                {item.proposer.nickName}님이 &quot;
-                <TextLongBox>{item.item.name}</TextLongBox>
-                &quot;글에 가격 제안을 했어요.
+                {item.proposer.nickName}님이 &quot;{item.item.name}&quot; 굿즈에
+                가격 제안을 했어요.
                 <TextPointBox>
                   [{numberWithCommas(item.proposedPrice)}원]
                 </TextPointBox>
@@ -42,7 +41,7 @@ const PriceProposeRow = ({ item }) => {
           <Image
             shape="rectangle"
             src={item.item.imageUrl}
-            size="55px"
+            size="50px"
             borderRadius="5px"
             margin="0 0 0 15px"
           />
@@ -63,7 +62,7 @@ const PriceRowBox = styled.div`
 
 const UserBox = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const InfoBox = styled.div`
@@ -73,18 +72,10 @@ const InfoBox = styled.div`
   align-items: center;
 `;
 
-const TextBox = styled.span`
+const TextBox = styled.div`
   font-size: 15px;
   font-weight: 400;
   line-height: 1.5;
-`;
-
-const TextLongBox = styled.span`
-  font-size: 15px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const TextPointBox = styled.span`
