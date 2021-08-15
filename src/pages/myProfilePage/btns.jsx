@@ -110,16 +110,18 @@ const Btns = ({ myProfile }) => {
             공지사항
           </Text>
         </Flex> */}
-            <Flex is_col>
-              <Icon
-                width="40px"
-                margin="0 auto"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
-              />
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                고객센터
-              </Text>
-            </Flex>
+            <a href="http://pf.kakao.com/_njxaWs">
+              <Flex is_col>
+                <Icon
+                  width="40px"
+                  margin="0 auto"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
+                />
+                <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                  고객센터
+                </Text>
+              </Flex>
+            </a>
           </BtnGrid>
         </Flex>
       )}
