@@ -33,6 +33,7 @@ import PriceProposeListPage from "./pages/price/priceProposeListPage";
 import PriceProposePage from "./pages/myProfilePage/priceProposePage";
 import ReviewPage from "./pages/myProfilePage/reviewPage";
 import WritingReviewPage from "./pages/review/writingReviewPage";
+import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
 
 import { Notification } from "./elements/index";
@@ -86,6 +87,11 @@ function App() {
         <Route path="/chat-room/:id" exact component={ChatRoom} />
         <Route path="/my-profile" exact component={MyProfile} />
         <Route path="/review/:id" exact component={WritingReviewPage} />
+        <Route
+          path="/review-back/:id"
+          exact
+          component={WritingReviewBackPage}
+        />
         <Route path="/setting" exact component={Setting} />
         <Route path="/edit-profile" exact component={EditProfile} />
         <Route path="/price-proposes" exact component={PriceProposePage} />
