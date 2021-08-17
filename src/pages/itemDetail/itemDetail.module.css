@@ -182,6 +182,16 @@
   margin-right: 5px;
 }
 
+/* 워터마크 */
+.watermark {
+  position: absolute;
+  top: 93vw;
+  left: 10px;
+  z-index: 2;
+  color: gray;
+  opacity: 0.5;
+}
+
 @media screen and (min-width: 415px) {
   .btnChat {
     font-size: 14px;
@@ -203,5 +213,17 @@
   .btnReChatCol,
   .btnSoldoutCol {
     width: 380px;
+  }
+
+  .backBtn,
+  .infoBtn,
+  .likeBtn,
+  .clickLikeBtn {
+    top: 20px;
+  }
+
+  /* 워터마크 */
+  .watermark {
+    top: 390px;
   }
 }

@@ -8,6 +8,7 @@ import { Flex, Image } from "../../elements/index";
 import { postAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
+  console.log(item);
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -101,6 +102,9 @@ const ItemImg = ({ id, item, onClick }) => {
         className={showNextImgBtn ? styles.nextImgBtn : ""}
         onClick={() => imgClickHandler("next")}
       />
+      <span className={styles.watermark}>
+        ⓒ GOODSDUCK ({item.itemOwner.nickName})
+      </span>
     </Flex>
   );
 };
