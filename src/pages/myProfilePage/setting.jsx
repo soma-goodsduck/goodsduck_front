@@ -31,7 +31,7 @@ const Setting = (props) => {
               src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
             />
           </BtnBox>
-          <BtnBox>
+          {/* <BtnBox>
             <Text color={blackBtn} size="18px" medium>
               배송지 및 계좌 설정
             </Text>
@@ -39,40 +39,46 @@ const Setting = (props) => {
               width="12px"
               src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
             />
-          </BtnBox>
+          </BtnBox> */}
         </SettingBtn>
         {/* 서비스 정보 */}
         <SettingBtn>
           <Text color={grayText} size="16px" margin="0px 0 15px 0">
             서비스 정보
           </Text>
-          <BtnBox>
-            <Text color={blackBtn} size="18px" medium>
-              이용 약관
-            </Text>
-            <Icon
-              width="12px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-            />
-          </BtnBox>
-          <BtnBox>
-            <Text color={blackBtn} size="18px" medium>
-              개인정보 처리방침
-            </Text>
-            <Icon
-              width="12px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-            />
-          </BtnBox>
-          <BtnBox>
-            <Text color={blackBtn} size="18px" medium>
-              버전 정보
-            </Text>
-            <Icon
-              width="12px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-            />
-          </BtnBox>
+          <a href="https://soma-goodsduck.github.io/terms/service-policy.html">
+            <BtnBox>
+              <Text color={blackBtn} size="18px" medium>
+                이용 약관
+              </Text>
+              <Icon
+                width="12px"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+              />
+            </BtnBox>
+          </a>
+          <a href="https://soma-goodsduck.github.io/terms/privacy.html">
+            <BtnBox>
+              <Text color={blackBtn} size="18px" medium>
+                개인정보 처리방침
+              </Text>
+              <Icon
+                width="12px"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+              />
+            </BtnBox>
+          </a>
+          <a href="https://soma-goodsduck.github.io/terms/marketing-policy.html">
+            <BtnBox>
+              <Text color={blackBtn} size="18px" medium>
+                마케팅 정보 활용 동의
+              </Text>
+              <Icon
+                width="12px"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+              />
+            </BtnBox>
+          </a>
         </SettingBtn>
         {/* 로그아웃 & 탈퇴 */}
         <SettingBtn>
