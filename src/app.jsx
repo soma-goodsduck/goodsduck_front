@@ -37,33 +37,48 @@ import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
 
 import { Notification } from "./elements/index";
-import { firebaseMessaging } from "./shared/firebase";
+import { firebaseApp } from "./shared/firebase";
 
 import { history } from "./redux/configureStore";
 
 function App() {
+  const userAgent = window.navigator.userAgent;
+  const isChrome = userAgent.indexOf("Chrome");
+  const isChromeMobile = userAgent.indexOf("CriOS");
+  const isKakaoTalk = userAgent.indexOf("KAKAOTALK");
+  const isIphone = userAgent.indexOf("iPhone");
+
   const [showNoti, setShotNoti] = useState(false);
   const [notiInfo, setNotiInfo] = useState(null);
   const [notiUrl, setNotiUrl] = useState("");
 
-  firebaseMessaging.onMessage((payload) => {
-    const href = window.location.href.split("/");
-    const chatRoomId = String(href[href.length - 1]);
+  if (isIphone === -1) {
+    if (isKakaoTalk === -1) {
+      if (isChrome !== -1 || isChromeMobile !== -1) {
+        const firebaseMessaging = firebaseApp.messaging();
 
-    if (payload.data.type === "CHAT") {
-      if (chatRoomId === payload.data.chatRoomId) {
-        return;
+        firebaseMessaging.onMessage((payload) => {
+          const href = window.location.href.split("/");
+          const chatRoomId = String(href[href.length - 1]);
+
+          if (payload.data.type === "CHAT") {
+            if (chatRoomId === payload.data.chatRoomId) {
+              return;
+            }
+          }
+          console.log(payload);
+
+          setShotNoti(true);
+          setNotiInfo(payload.notification.body);
+          setNotiUrl(payload.notification.click_action);
+
+          setTimeout(() => {
+            setShotNoti(false);
+          }, 5000);
+        });
       }
     }
-
-    setShotNoti(true);
-    setNotiInfo(payload.notification.body);
-    setNotiUrl(payload.notification.click_action);
-
-    setTimeout(() => {
-      setShotNoti(false);
-    }, 5000);
-  });
+  }
 
   return (
     <div className={styles.app}>
@@ -101,6 +116,7 @@ function App() {
         <Route path="/notification" exact component={NotificationPage} />
         <Route path="/item/:id" exact component={ItemDetailPage} />
         <Route path="/profile/:id" exact component={OtherProfilePage} />
+
         {/* 아이템 등록 */}
         <Route path="/upload-item" exact component={ItemUploadPage} />
         <Route path="/category" exact component={ItemCategory} />
