@@ -63,7 +63,6 @@ const Signup = () => {
       const postEmail = await postActionForNonUser("v1/users/email-check", {
         email: _email,
       });
-      console.log(postEmail);
       if (postEmail.response) {
         setIsUsedEmail(false); // 사용 가능한 이메일
       } else {
@@ -95,6 +94,7 @@ const Signup = () => {
   // 본인 인증 - 전송된 문자를 통해 인증 코드 검증
   const checkSmsCode = async () => {
     const postSmsCode = postActionForNonUser("v1/sms/authentication", {
+      phoneNumber: phone,
       authenticationNumber: smsCode,
     });
     postSmsCode.then((result) => {
@@ -103,6 +103,7 @@ const Signup = () => {
       } else {
         setShowTimer(false);
         setShowSmsValidateBtn(false);
+        setIsPhoneOk(true);
         window.alert("휴대폰 본인 인증에 실패했습니다. 다시 시도해주세요.");
       }
     });
