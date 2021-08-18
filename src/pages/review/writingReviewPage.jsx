@@ -39,9 +39,13 @@ const WritingReviewPage = () => {
   const [nextOK, setNextOK] = useState(false);
 
   const requestUsersByChat = async () => {
-    const result = await requestAuthData(`v1/users/items/${itemId}/chat`);
+    const result = await requestAuthData(`v2/users/items/${itemId}/chat`);
+    console.log(result);
     if (result === "login") {
       history.push("/login");
+    }
+    if (result.isExist) {
+      history.push("/my-profile");
     }
     return result;
   };
@@ -68,14 +72,16 @@ const WritingReviewPage = () => {
           content: review,
           itemId,
           score: numOfStar,
+          reviewType: "REVIEW_FIRST",
         });
-        patchJsonAction(`v1/items/${itemId}/trade-status`, {
-          tradeStatus: "COMPLETE",
-        });
-        history.replace("/my-profile");
       } catch (error) {
         console.log(error);
+        return;
       }
+      patchJsonAction(`v1/items/${itemId}/trade-status`, {
+        tradeStatus: "COMPLETE",
+      });
+      history.replace("/my-profile");
     }
     dispatch(userActions.clearReview());
   };
@@ -122,7 +128,10 @@ const WritingReviewPage = () => {
                     <label htmlFor={user.chatId} />
                     <Image
                       shape="circle"
-                      src={user.otherUser.imageUrl}
+                      src={
+                        user.otherUser.imageUrl ||
+                        "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/logo.png"
+                      }
                       margin="0 10px 0 0"
                       size="55px"
                     />

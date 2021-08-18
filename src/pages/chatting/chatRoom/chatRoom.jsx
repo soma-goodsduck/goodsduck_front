@@ -166,6 +166,7 @@ export class ChatRoom extends Component {
           }}
           type="chat"
           isClick
+          popup2
         />
         <ItemInfo id={itemId} />
         <div>

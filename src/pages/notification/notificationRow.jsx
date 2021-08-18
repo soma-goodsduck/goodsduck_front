@@ -1,22 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
-import { Flex, Image } from "../../elements";
+import { Flex, Image, Notification } from "../../elements";
 import { gray, grayBorder } from "../../shared/colors";
 
 import { timeForToday } from "../../shared/functions";
+import { requestAuthData } from "../../shared/axios";
 
 import { history } from "../../redux/configureStore";
 
 const NotificationRow = ({ notification }) => {
+  // 반응형
+  const screen = window.screen.width;
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (screen < 415) {
+      setIsMobile(true);
+    }
+  }, [screen]);
+  const styleProps = { isMobile };
+
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleClick = () => {
     if (notification.type === "PRICE_PROPOSE") {
-      history.push("/price-proposes");
+      const isValidPropose = requestAuthData(
+        `v1/items/${notification.itemId}/price-propose/${notification.priceProposeId}`,
+      );
+
+      isValidPropose.then((result) => {
+        if (result) {
+          history.push(notification.message.messageUri);
+        } else {
+          setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+          }, 2000);
+        }
+      });
+    } else {
+      history.push(notification.message.messageUri);
     }
   };
 
   return (
     <>
+      {showPopup && <Notification data="취소된 가격 제시입니다." />}
       {notification.type !== "CHAT" && notification.type !== "USER_ITEM" && (
         <div>
           <NotificationRowBox>
@@ -24,13 +53,13 @@ const NotificationRow = ({ notification }) => {
               <Image
                 shape="circle"
                 src={
-                  notification.senderImageUri ||
+                  notification.senderImageUrl ||
                   "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
                 }
                 margin="0 10px 0 0"
                 size="60px"
               />
-              <InfoBox onClick={() => handleClick()}>
+              <InfoBox {...styleProps} onClick={() => handleClick()}>
                 <Flex>
                   <TextBox>{notification.message.messageBody}</TextBox>
                 </Flex>
@@ -61,7 +90,7 @@ const UserBox = styled.div`
 `;
 
 const InfoBox = styled.div`
-  width: 300px;
+  ${(props) => (props.isMobile ? "width: 80%" : "width: 300px;")};
   display: flex;
   flex-direction: column;
   align-items: flex-start;

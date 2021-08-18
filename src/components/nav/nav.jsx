@@ -14,12 +14,11 @@ const Nav = (props) => {
   const [isChat, setIsChat] = useState(false);
   const [isCommunity, setIsCommunity] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
-  const [chatNotiCount, setChatNotiCount] = useState(false);
+  // const [newChatBadge, setNewChatBadge] = useState(false);
 
-  // FCM 알림이 올 경우
-  const getNewChat = () => {
-    setChatNotiCount(true);
-  };
+  // const getNewChat = () => {
+  //   setNewChatBadge(true);
+  // };
 
   useEffect(() => {
     if (href.includes("/chatting")) {
@@ -55,11 +54,11 @@ const Nav = (props) => {
             history.push("/chatting");
           }}
         >
-          <div
-            className={chatNotiCount ? styles.chatBadge : styles.chatBadgeZero}
+          {/* <div
+            className={newChatBadge ? styles.chatBadge : styles.chatBadgeZero}
           >
             N
-          </div>
+          </div> */}
           <div className={isChat ? styles.isChatIcon : styles.isNotChatIcon} />
           <span className={isChat ? styles.isChatText : styles.isNotChatText}>
             채팅

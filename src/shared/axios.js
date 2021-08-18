@@ -119,25 +119,6 @@ export const checkLoginWithData = async (path) => {
   return result.data;
 };
 
-// get 요청
-export const getAction = async (path) => {
-  const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
-  }
-
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
-  const options = { headers: { jwt } };
-  const result = await axios.get(url, options);
-
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
-  }
-  updateJwt(result.headers.jwt);
-
-  return result.data.response;
-};
-
 // delete 요청
 export const deleteAction = async (path) => {
   const jwt = verifyJwt();

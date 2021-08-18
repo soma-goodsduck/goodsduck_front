@@ -17,4 +17,3 @@ const firebaseConfig = {
 // Initialize Firebase
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const firebaseDatabase = firebaseApp.database();
-export const firebaseMessaging = firebaseApp.messaging();

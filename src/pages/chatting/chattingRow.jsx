@@ -105,7 +105,10 @@ const ChattingRow = ({ chatRoom, userId }) => {
         <UserBox>
           <Image
             shape="circle"
-            src={profileImg}
+            src={
+              profileImg ||
+              "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+            }
             margin="0 10px 0 0"
             size="55px"
           />

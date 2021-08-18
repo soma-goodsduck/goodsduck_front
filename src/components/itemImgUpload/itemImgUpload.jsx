@@ -18,21 +18,20 @@ const ItemImgUpload = (props) => {
     imgUrls: state.newItem.images,
     addedImg: state.image.fileList,
   }));
-  const fileList = [];
-  const fileObject = {};
 
   // 이미지 & 프리뷰 삭제
   const deletePreview = (_itemId, _imgUrl, event) => {
+    console.log(_itemId, _imgUrl, event);
+
     const previewContainer = document.getElementById("preview-container");
     const box = event.target.parentNode;
 
     if (_itemId === 0) {
-      delete fileObject[`${event.target.parentNode.id}`];
-      const newFileList = Object.values(fileObject);
-      dispatch(imgActions.saveImg(newFileList));
+      // 굿즈 등록
+      dispatch(imgActions.deleteImg(event.target.parentNode.id));
     } else {
-      const _imgUrls = imgUrls.filter((imgUrl) => imgUrl !== _imgUrl);
-      dispatch(newItemActions.setImages(_imgUrls));
+      // 굿즈 수정
+      dispatch(newItemActions.deleteImage(_imgUrl));
     }
     previewContainer.removeChild(box);
   };
@@ -43,6 +42,7 @@ const ItemImgUpload = (props) => {
 
     if (e) {
       const files = e.target.files;
+
       // 처음으로 이미지를 추가하는 경우
       for (let i = 0; i < files.length; i += 1) {
         const previewBox = document.createElement("div");
@@ -63,18 +63,15 @@ const ItemImgUpload = (props) => {
         };
         reader.readAsDataURL(files[i]);
 
-        fileList.push(files[i]);
-        fileObject[`${i}`] = files[i];
+        dispatch(imgActions.addImg(files[i]));
       }
-
-      dispatch(imgActions.saveImg(fileList));
     } else if (addedImg !== [] && addedImg !== undefined) {
       // 이미지를 추가한 후 다른 정보를 입력하는 중
       for (let i = 0; i < addedImg.length; i += 1) {
         const previewBox = document.createElement("div");
         const preview = document.createElement("img");
         const deleteBtn = document.createElement("button");
-        previewBox.id = `${i}`;
+        previewBox.id = `${addedImg[i].name}`;
         preview.className = `${styles.previewImg}`;
         deleteBtn.className = `${styles.deleteBtn}`;
         deleteBtn.onclick = (event) => {
@@ -111,8 +108,6 @@ const ItemImgUpload = (props) => {
       previewBox.append(preview, deleteBtn);
       previewContainer.appendChild(previewBox);
     }
-
-    dispatch(newItemActions.setImages(imgUrls));
   };
 
   useEffect(() => {

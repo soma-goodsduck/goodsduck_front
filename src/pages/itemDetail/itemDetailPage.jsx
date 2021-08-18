@@ -238,14 +238,14 @@ const ItemDetailPage = ({ history }) => {
                   </Flex>
                 </Flex>
                 {/* <Flex is_flex>
-                판매자의 다른 상품 구경하기
-                <Icon
-                  width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_go.svg"
-                  alt="go seller/buyer shop"
-                  margin="0 0 5px 10px"
-                />
-              </Flex> */}
+                  판매자의 다른 상품 구경하기
+                  <Icon
+                    width="12px"
+                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_go.svg"
+                    alt="go seller/buyer shop"
+                    margin="0 0 5px 10px"
+                  />
+                </Flex> */}
               </Flex>
             </button>
           </InfoBox>
