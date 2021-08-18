@@ -12,6 +12,7 @@ import { setLS, deleteLS } from "../../shared/localStorage";
 
 // actions
 const SIGN_UP = "SIGN_UP";
+const SET_IDOLS_FOR_SIGNUP = "SET_IDOLS_FOR_SIGNUP";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
@@ -27,6 +28,12 @@ const CLEAR_REVIEW = "CLEAR_REVIEW";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
+const setIdolsForSignup = createAction(
+  SET_IDOLS_FOR_SIGNUP,
+  (idolsForSignup) => ({
+    idolsForSignup,
+  }),
+);
 const logIn = createAction(LOG_IN, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
@@ -55,6 +62,7 @@ const initialState = {
   user: "",
   id: null,
   type: null,
+  idolsForSignup: 0,
   isLogin: false,
   showPopup: false,
   favIdolGroups: [],
@@ -97,7 +105,7 @@ const signupAction = (user) => {
     phoneNumber: user.phone,
     socialAccountId: user.id,
     socialAccountType: user.type,
-    idols: user.idols,
+    likeIdolGroupsId: user.idols,
   };
   return function (dispatch, getState, { history }) {
     axios
@@ -112,7 +120,7 @@ const signupAction = (user) => {
         { withCredentials: true },
       )
       .then((response) => {
-        dispatch(logIn(response.data.jwt));
+        dispatch(logIn(response.data.response.jwt));
         notification();
         history.push("/");
       })
@@ -120,6 +128,7 @@ const signupAction = (user) => {
         console.log("error", error);
         Sentry.captureException(error);
         history.replace("/login");
+        window.alert("회원가입에 실패했습니다.");
       });
   };
 };
@@ -133,6 +142,10 @@ export default handleActions(
         draft.type = action.payload.type;
         draft.isLogin = true;
         draft.show_popup = false;
+      }),
+    [SET_IDOLS_FOR_SIGNUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.idolsForSignup = action.payload.idolsForSignup;
       }),
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
@@ -197,11 +210,12 @@ export default handleActions(
 
 // action creator export
 const actionCreators = {
+  signupAction,
+  setIdolsForSignup,
+  loginAction,
   logoutAction,
   getUser,
-  loginAction,
   nonUserAction,
-  signupAction,
   showPopup,
   noShowPopup,
   updateJwt,
