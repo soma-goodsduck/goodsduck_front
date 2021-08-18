@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
-import { Flex, Text, Icon, PopUp3 } from "../../elements/index";
+import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
 import { history } from "../../redux/configureStore";
 
@@ -25,7 +25,8 @@ const HeaderInfo2 = (props) => {
     bg,
     borderRadius,
     isClear,
-    isNotReport,
+    popup1,
+    popup2,
   } = props;
 
   const styles = {
@@ -33,13 +34,19 @@ const HeaderInfo2 = (props) => {
     bg,
     borderRadius,
     isMobile,
-    isNotReport,
     isClick,
+    popup1,
+    popup2,
   };
 
-  const [showPopup, setShowPopup] = useState(false);
-  const hidePopup = () => {
-    setShowPopup(false);
+  const [showPopup1, setShowPopup1] = useState(false); // 옵션 1개
+  const [showPopup2, setShowPopup2] = useState(false); // 옵션 2개
+
+  const hidePopup1 = () => {
+    setShowPopup1(false);
+  };
+  const hidePopup2 = () => {
+    setShowPopup2(false);
   };
 
   const goBack = () => {
@@ -51,31 +58,54 @@ const HeaderInfo2 = (props) => {
   };
 
   const handleClick = () => {
-    setShowPopup(true);
+    if (props.popup1) {
+      setShowPopup1(true);
+    } else if (props.popup2) {
+      setShowPopup2(true);
+    }
   };
 
   return (
     <>
-      {showPopup && (
+      {showPopup1 && (
         <PopUp3
-          text={text1}
+          text="신고하기"
           _onClick1={() => {
-            _onClick();
-            hidePopup();
+            console.log("신고");
+            hidePopup1();
           }}
-          _onClick2={() => hidePopup()}
+          _onClick2={() => {
+            hidePopup1();
+          }}
         />
       )}
-      {!showPopup && (
+      {showPopup2 && (
+        <PopUp2
+          text1="신고하기"
+          text2={text1}
+          _onClick1={() => {
+            console.log("신고");
+            hidePopup2();
+          }}
+          _onClick2={() => {
+            _onClick();
+            hidePopup2();
+          }}
+          _onClick3={() => hidePopup2()}
+          isRed
+        />
+      )}
+      {!showPopup2 && (
         <HeaderBox {...styles}>
           <Flex is_flex padding="15px 0">
-            <Column1>
+            <Column1
+              onClick={() => {
+                goBack();
+              }}
+            >
               <Icon
                 width="12px"
                 src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
-                _onClick={() => {
-                  goBack();
-                }}
               />
             </Column1>
             <Column2
@@ -90,13 +120,14 @@ const HeaderInfo2 = (props) => {
                 {text2}
               </Text>
             </Column2>
-            <Column3 {...styles}>
+            <Column3
+              onClick={() => {
+                handleClick();
+              }}
+            >
               <Icon
                 width="12px"
                 src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg"
-                _onClick={() => {
-                  handleClick();
-                }}
               />
             </Column3>
           </Flex>
@@ -127,6 +158,8 @@ const HeaderBox = styled.div`
 
 const Column1 = styled.div`
   float: left;
+  width: 50px;
+  cursor: pointer;
 `;
 const Column2 = styled.div`
   width: 100%;
@@ -136,7 +169,9 @@ const Column2 = styled.div`
 
 const Column3 = styled.div`
   float: right;
-  ${(props) => props.isNotReport && "display:none;"};
+  width: 50px;
+  text-align: right;
+  cursor: pointer;
 `;
 
 export default HeaderInfo2;

@@ -12,16 +12,20 @@ const PopUp2 = (props) => {
     }
   }, [screen]);
 
-  const { text1, text2, _onClick1, _onClick2, _onClick3 } = props;
+  const { text1, text2, _onClick1, _onClick2, _onClick3, isRed } = props;
 
-  const styles = { isMobile };
+  const styles = { isMobile, isRed };
 
   return (
     <PopUpBox {...styles}>
       <BtnBox>
         <Btns>
-          <Button1 onClick={_onClick1}>{text1}</Button1>
-          <Button2 onClick={_onClick2}>{text2}</Button2>
+          <Button1 {...styles} onClick={_onClick1}>
+            {text1}
+          </Button1>
+          <Button2 {...styles} onClick={_onClick2}>
+            {text2}
+          </Button2>
         </Btns>
         <ExitBtn onClick={_onClick3}>닫기</ExitBtn>
       </BtnBox>
@@ -75,6 +79,8 @@ const Button1 = styled.button`
 
 const Button2 = styled.button`
   padding: 15px;
+  ${(props) => (props.isRed ? "color: #e33e3e;" : "")};
+
   &:hover {
     color: #e33e3e;
     font-weight: bold;
