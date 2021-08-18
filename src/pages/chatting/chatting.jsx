@@ -29,6 +29,9 @@ export class Chatting extends Component {
         this.setState({ userId: result.userId });
       }
     });
+
+    // LS에 채팅에 방문한 시각 저장
+    localStorage.setItem("chatting", `${Math.round(new Date().getTime())}`);
   }
 
   componentWillUnmount() {
