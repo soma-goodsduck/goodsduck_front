@@ -40,7 +40,7 @@ const Item = ({ item, id }) => {
     if (e.target.tagName !== "DIV") {
       return;
     }
-    history.push(`item/${id}`);
+    history.push(`/item/${id}`);
   };
 
   const [isLike, setIsLike] = useState(item.isLike);
