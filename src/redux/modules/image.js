@@ -7,7 +7,8 @@ import { produce } from "immer";
 
 // actions
 const SAVE_IMG = "SAVE_IMG";
-const SAVE_FILE_OBJECT = "SAVE_FILE_OBJECT";
+const ADD_IMG = "ADD_IMG";
+const DELETE_IMG = "DELETE_IMG";
 const SET_PREVIEW = "SET_PREVIEW";
 const CLEAR_IMG = "CLEAR_IMG";
 
@@ -15,8 +16,11 @@ const CLEAR_IMG = "CLEAR_IMG";
 const saveImg = createAction(SAVE_IMG, (fileList) => ({
   fileList,
 }));
-const saveFileObject = createAction(SAVE_FILE_OBJECT, (fileObj) => ({
-  fileObj,
+const addImg = createAction(ADD_IMG, (img) => ({
+  img,
+}));
+const deleteImg = createAction(DELETE_IMG, (imgName) => ({
+  imgName,
 }));
 const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
 const clearImg = createAction(CLEAR_IMG, () => ({}));
@@ -24,7 +28,6 @@ const clearImg = createAction(CLEAR_IMG, () => ({}));
 // initialState
 const initialState = {
   fileList: [],
-  fileObj: {},
   preview: null,
 };
 
@@ -38,13 +41,20 @@ const clearImgAction = () => {
 // reducer
 export default handleActions(
   {
-    [SAVE_FILE_OBJECT]: (state, action) =>
-      produce(state, (draft) => {
-        draft.fileObj = action.payload.fileObj;
-      }),
     [SAVE_IMG]: (state, action) =>
       produce(state, (draft) => {
         draft.fileList = action.payload.fileList;
+      }),
+    [ADD_IMG]: (state, action) =>
+      produce(state, (draft) => {
+        draft.fileList.push(action.payload.img);
+      }),
+    [DELETE_IMG]: (state, action) =>
+      produce(state, (draft) => {
+        const idx = draft.fileList.findIndex(
+          (img) => img.name === action.payload.imgName,
+        );
+        draft.fileList.splice(idx, 1);
       }),
     [SET_PREVIEW]: (state, action) =>
       produce(state, (draft) => {
@@ -63,7 +73,8 @@ export default handleActions(
 // action creator export
 const actionCreators = {
   saveImg,
-  saveFileObject,
+  addImg,
+  deleteImg,
   setPreview,
   clearImgAction,
 };

@@ -19,6 +19,7 @@ const SET_STATUS = "SET_STATUS";
 const SET_DESC = "SET_DESC";
 const SET_FILES = "SET_FILES";
 const SET_IMAGES = "SET_IMAGES";
+const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
 
 // action creators
@@ -49,6 +50,7 @@ const setStatus = createAction(SET_STATUS, (status_grade) => ({
 const setDesc = createAction(SET_DESC, (description) => ({ description }));
 const setFiles = createAction(SET_FILES, (files) => ({ files }));
 const setImages = createAction(SET_IMAGES, (images) => ({ images }));
+const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
 
 // initialState
@@ -237,6 +239,12 @@ export default handleActions(
       produce(state, (draft) => {
         draft.images = action.payload.images;
       }),
+    [DELETE_IMAGE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.images = draft.images.filter(
+          (imgUrl) => imgUrl !== action.payload.image,
+        );
+      }),
     [SET_FILES]: (state, action) =>
       produce(state, (draft) => {
         draft.files = action.payload.files;
@@ -255,6 +263,7 @@ export default handleActions(
         draft.idol_member_name = "";
         draft.files = [];
         draft.images = [];
+        draft.item_id = 0;
       }),
   },
   initialState,
@@ -274,6 +283,7 @@ const actionCreators = {
   setTradeType,
   setStatus,
   setImages,
+  deleteImage,
   clearAction,
   updateItemAction,
 };
