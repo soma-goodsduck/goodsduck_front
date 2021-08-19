@@ -158,6 +158,8 @@ export default handleActions(
       produce(state, (draft) => {
         deleteLS("jwt");
         deleteLS("likeIdolGroups");
+        deleteLS("filtering");
+        deleteLS("filter_idolGroup");
         draft.user = null;
         draft.isLogin = false;
       }),

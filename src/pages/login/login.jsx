@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styled from "styled-components";
 import { Flex, Button } from "../../elements";
@@ -6,6 +6,13 @@ import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from "../../shared/OAuth";
 import { history } from "../../redux/configureStore";
 
 const Login = (props) => {
+  useEffect(() => {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("likeIdolGroups");
+    localStorage.removeItem("filtering");
+    localStorage.removeItem("filter_idolGroup");
+  }, []);
+
   return (
     <Flex is_col>
       <Logo />
