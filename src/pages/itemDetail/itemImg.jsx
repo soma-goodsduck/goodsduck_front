@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
 import { Flex, Image } from "../../elements/index";
@@ -15,6 +16,7 @@ const ItemImg = ({ id, item, onClick }) => {
       setIsMobile(true);
     }
   }, [screen]);
+  const styleProps = { isMobile };
 
   const history = useHistory();
   const goBack = () => {
@@ -63,12 +65,17 @@ const ItemImg = ({ id, item, onClick }) => {
 
   return (
     <Flex className={styles.imgBox}>
-      <Image
-        shape="rectangle"
-        src={item.images[imgNumber].url}
-        size={isMobile ? `${screen}px` : "415px"}
-        className={styles.itemImg}
-      />
+      <div className={styles.imgDataBox}>
+        <Image
+          shape="rectangle"
+          src={item.images[imgNumber].url}
+          size={isMobile ? `${screen}px` : "415px"}
+          className={styles.itemImg}
+        />
+        <span className={styles.watermark}>
+          ⓒ GOODSDUCK ({item.itemOwner.nickName})
+        </span>
+      </div>
       <button
         type="button"
         aria-label="back"
@@ -101,9 +108,6 @@ const ItemImg = ({ id, item, onClick }) => {
         className={showNextImgBtn ? styles.nextImgBtn : ""}
         onClick={() => imgClickHandler("next")}
       />
-      <span className={styles.watermark}>
-        ⓒ GOODSDUCK ({item.itemOwner.nickName})
-      </span>
     </Flex>
   );
 };

@@ -183,6 +183,9 @@
 }
 
 /* 워터마크 */
+.imgDataBox {
+  position: relative;
+}
 .watermark {
   position: absolute;
   top: 93vw;
