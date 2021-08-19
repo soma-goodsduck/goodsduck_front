@@ -32,8 +32,7 @@ const ItemCategory = () => {
 
   return (
     <CategoryContainer>
-      <HeaderInfo text="카테고리" padding="0 16px" />
-      <div className={styles.detailText}>전체 카테고리</div>
+      <HeaderInfo text="카테고리" padding="0 16px" isUploading />
       {categories.map((category) => (
         <CategoryBox
           key={category.categoryItemId}

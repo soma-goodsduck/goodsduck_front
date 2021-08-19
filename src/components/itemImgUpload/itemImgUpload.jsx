@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-loop-func */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -13,16 +13,15 @@ import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
 const ItemImgUpload = (props) => {
   const dispatch = useDispatch();
-  const { itemId, imgUrls, addedImg } = useSelector((state) => ({
+  const { itemId, imgUrls, addedImg, isNotice } = useSelector((state) => ({
     itemId: state.newItem.item_id,
     imgUrls: state.newItem.images,
     addedImg: state.image.fileList,
+    isNotice: state.image.isNotice,
   }));
 
   // 이미지 & 프리뷰 삭제
   const deletePreview = (_itemId, _imgUrl, event) => {
-    console.log(_itemId, _imgUrl, event);
-
     const previewContainer = document.getElementById("preview-container");
     const box = event.target.parentNode;
 
@@ -41,6 +40,7 @@ const ItemImgUpload = (props) => {
     const previewContainer = document.getElementById("preview-container");
 
     if (e) {
+      dispatch(imgActions.hideImgNotice());
       const files = e.target.files;
 
       // 처음으로 이미지를 추가하는 경우
@@ -113,6 +113,7 @@ const ItemImgUpload = (props) => {
   useEffect(() => {
     if (itemId !== 0) {
       showPreviewForEdit();
+      dispatch(imgActions.hideImgNotice());
     }
 
     if (addedImg !== []) {
@@ -144,6 +145,7 @@ const ItemImgUpload = (props) => {
             onChange={showPreview}
           />
         </form>
+        {isNotice && <div>⚠️ 정사각형 사이즈로 업로드됩니다!</div>}
         <div id="preview-container" className={styles.previewContainer} />
       </Flex>
     </>

@@ -30,18 +30,14 @@ const ItemStatus = () => {
     console.log(statusValue, grade);
     dispatch(newItemActions.setStatus(grade));
     setNextOK(true);
-  };
-
-  const next = () => {
     history.push("/upload-item");
   };
 
   return (
     <Outer>
-      <HeaderInfo text="굿즈 상태" />
+      <HeaderInfo text="굿즈 상태" isUploading />
       <StatusContainer>
         <div>
-          <div className={styles.detailText}>굿즈 상태 선택</div>
           {statuses.map((status) => (
             <StatusBox
               key={status.gradeStatus}
@@ -64,15 +60,6 @@ const ItemStatus = () => {
             </StatusBox>
           ))}
         </div>
-        <button
-          className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-          type="button"
-          onClick={() => {
-            next();
-          }}
-        >
-          완료
-        </button>
       </StatusContainer>
     </Outer>
   );

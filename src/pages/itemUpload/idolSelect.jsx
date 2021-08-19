@@ -46,21 +46,14 @@ const IdolSelect = ({ history }) => {
   const checkGroupHandler = (id, name) => {
     setGroupId(id);
     dispatch(newItemActions.setIdolGroup(id, name));
-  };
-
-  const selectGroup = () => {
-    if (!groupId) {
-      return;
-    }
     history.push("/select-idol-member");
   };
 
   return (
     <>
-      <HeaderInfo text="아이돌 그룹" padding="0 16px" />
+      <HeaderInfo text="아이돌 그룹" padding="0 16px" isUploading />
       <IdolContainer>
         <div>
-          <div className={styles.detailText}>전체 아이돌 그룹</div>
           <Flex is_flex is_wrap>
             {idols.map((idol) => (
               <IdolBox key={idol.id}>
@@ -89,17 +82,6 @@ const IdolSelect = ({ history }) => {
             ))}
           </Flex>
         </div>
-        <ButtonBox>
-          <button
-            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-            type="button"
-            onClick={() => {
-              selectGroup();
-            }}
-          >
-            다음
-          </button>
-        </ButtonBox>
       </IdolContainer>
     </>
   );

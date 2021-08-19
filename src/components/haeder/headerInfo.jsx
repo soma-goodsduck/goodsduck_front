@@ -28,6 +28,7 @@ const HeaderInfo = (props) => {
     isClear,
     isReviewClear,
     isFiltering,
+    isUploading,
   } = props;
 
   const styles = {
@@ -44,6 +45,8 @@ const HeaderInfo = (props) => {
       dispatch(newItemActions.clearAction());
       dispatch(imgActions.clearImgAction());
       history.replace("/");
+    } else if (isUploading) {
+      history.push("/upload-item");
     } else if (isReviewClear) {
       dispatch(userActions.clearReview());
       history.goBack();

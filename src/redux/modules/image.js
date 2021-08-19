@@ -11,6 +11,7 @@ const ADD_IMG = "ADD_IMG";
 const DELETE_IMG = "DELETE_IMG";
 const SET_PREVIEW = "SET_PREVIEW";
 const CLEAR_IMG = "CLEAR_IMG";
+const HIDE_IMG_NOTICE = "HIDE_IMG_NOTICE";
 
 // action creators
 const saveImg = createAction(SAVE_IMG, (fileList) => ({
@@ -24,11 +25,13 @@ const deleteImg = createAction(DELETE_IMG, (imgName) => ({
 }));
 const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
 const clearImg = createAction(CLEAR_IMG, () => ({}));
+const hideImgNotice = createAction(HIDE_IMG_NOTICE, () => ({}));
 
 // initialState
 const initialState = {
   fileList: [],
   preview: null,
+  isNotice: true,
 };
 
 // middleware actions
@@ -65,6 +68,11 @@ export default handleActions(
         draft.fileList = [];
         draft.preview = null;
         draft.isImgAdded = false;
+        draft.isNotice = true;
+      }),
+    [HIDE_IMG_NOTICE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isNotice = false;
       }),
   },
   initialState,
@@ -77,6 +85,7 @@ const actionCreators = {
   deleteImg,
   setPreview,
   clearImgAction,
+  hideImgNotice,
 };
 
 export { actionCreators };

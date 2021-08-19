@@ -49,21 +49,14 @@ const IdolMemberSelect = ({ history }) => {
     console.log(id, name);
     setMemberId(id);
     dispatch(newItemActions.setIdolMember(id, name));
-  };
-
-  const selectFin = () => {
-    if (!memberId) {
-      return;
-    }
     history.push("/upload-item");
   };
 
   return (
     <>
-      <HeaderInfo text="아이돌 그룹" padding="0 16px" />
+      <HeaderInfo text="아이돌 그룹" padding="0 16px" isUploading />
       <IdolContainer>
         <div>
-          <div className={styles.detailText}>전체 아이돌 멤버</div>
           <Flex is_flex is_wrap>
             {members.map((member) => (
               <IdolMemberBox key={member.id}>
@@ -92,17 +85,6 @@ const IdolMemberSelect = ({ history }) => {
             ))}
           </Flex>
         </div>
-        <ButtonBox>
-          <button
-            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-            type="button"
-            onClick={() => {
-              selectFin();
-            }}
-          >
-            다음
-          </button>
-        </ButtonBox>
       </IdolContainer>
     </>
   );
