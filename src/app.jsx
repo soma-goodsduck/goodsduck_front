@@ -35,11 +35,13 @@ import ReviewPage from "./pages/myProfilePage/reviewPage";
 import WritingReviewPage from "./pages/review/writingReviewPage";
 import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
+import OtherItemsPage from "./pages/otherProfilePage/otherItemsPage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
 
 import { history } from "./redux/configureStore";
+import ReportPage from "./pages/report/reportPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -116,6 +118,8 @@ function App() {
         <Route path="/notification" exact component={NotificationPage} />
         <Route path="/item/:id" exact component={ItemDetailPage} />
         <Route path="/profile/:id" exact component={OtherProfilePage} />
+        <Route path="/profile/:id/items" exact component={OtherItemsPage} />
+        <Route path="/report/:id" exact component={ReportPage} />
 
         {/* 아이템 등록 */}
         <Route path="/upload-item" exact component={ItemUploadPage} />
