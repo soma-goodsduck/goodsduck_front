@@ -10,13 +10,15 @@ import { postAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
   const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
+  const [imgSize, setImgSize] = useState(0);
+
   useEffect(() => {
     if (screen < 415) {
-      setIsMobile(true);
+      setImgSize(screen);
+    } else {
+      setImgSize(415);
     }
   }, [screen]);
-  const styleProps = { isMobile };
 
   const history = useHistory();
   const goBack = () => {
@@ -69,7 +71,7 @@ const ItemImg = ({ id, item, onClick }) => {
         <Image
           shape="rectangle"
           src={item.images[imgNumber].url}
-          size={isMobile ? `${screen}px` : "415px"}
+          size={`${imgSize}px`}
           className={styles.itemImg}
         />
         <span className={styles.watermark}>

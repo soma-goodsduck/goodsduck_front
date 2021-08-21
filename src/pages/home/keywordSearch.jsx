@@ -13,7 +13,7 @@ const KeywordSearch = (props) => {
   return (
     <>
       <Grid>
-        <HeaderInfo text={keyword} />
+        <HeaderInfo text={`검색한 단어: ${keyword}`} />
         <ItemListBox>
           <ItemList keyword={keyword} />
         </ItemListBox>

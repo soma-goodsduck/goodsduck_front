@@ -40,7 +40,6 @@ const WritingReviewPage = () => {
 
   const requestUsersByChat = async () => {
     const result = await requestAuthData(`v2/users/items/${itemId}/chat`);
-    console.log(result);
     if (result === "login") {
       history.push("/login");
     }
