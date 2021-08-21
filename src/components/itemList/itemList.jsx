@@ -1,64 +1,25 @@
-/* eslint-disable consistent-return */
-import React, { useEffect, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable indent */
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import styles from "./itemList.module.css";
 import Item from "../item/item";
 import FilteringIdol from "../filtering/idolGroupFiltering";
 import DetailFiltering from "../filtering/filtering";
+import InfinityScroll from "./infinityScroll";
 
-import {
-  getItems,
-  getItemsByIdol,
-  getItemsByFilter,
-  getItemsBySearch,
-} from "../../shared/axios";
-import { actionCreators as filteringActions } from "../../redux/modules/filtering";
+import { actionCreators as homeActions } from "../../redux/modules/home";
 
 const ItemList = ({ keyword }) => {
   const dispatch = useDispatch();
-
-  const [items, setItems] = useState([]);
-  const [hasNext, setHasNext] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [itemNum, setItemNum] = useState(0);
+  const items = useSelector((state) => state.home.items);
+  const isLoading = useSelector((state) => state.home.isLoading);
+  const hasNext = useSelector((state) => state.home.hasNext);
+  const itemNum = useSelector((state) => state.home.itemNum);
   const [isIdolFilter, setIsIdolFilter] = useState(false);
   const [isDetailFilter, setIsDetailFilter] = useState(false);
   const [idolFilter, setIdolFilter] = useState(0);
   const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
-
-  const idolItems = useSelector((state) => state.filtering.items);
-
-  const getItemsData = (num) => {
-    setLoading(true);
-    const getItemList = getItems("items", num);
-    getItemList.then((result) => {
-      const newItemData = result.response;
-      const newItem = [...items, ...result.response];
-      setItems(newItem);
-      setHasNext(result.hasNext);
-      setLoading(false);
-      if (result.hasNext) {
-        setItemNum(newItemData[newItemData.length - 1].itemId);
-      }
-    });
-  };
-
-  const getItemsDataByIdol = (num, idolId) => {
-    setLoading(true);
-    const getItemList = getItemsByIdol(num, idolId);
-    getItemList.then((result) => {
-      const newItemData = result.response;
-      const newItem = [...idolItems, ...result.response];
-      setItems(newItem);
-      setHasNext(result.hasNext);
-      setLoading(false);
-      if (result.hasNext) {
-        setItemNum(newItemData[newItemData.length - 1].itemId);
-      }
-    });
-  };
 
   const getFilteringQuery = (num, _filteringInfo) => {
     const idolGroupId = localStorage.getItem("filter_idolGroup");
@@ -86,46 +47,6 @@ const ItemList = ({ keyword }) => {
     return query;
   };
 
-  const getItemsDataByFilter = (num, _filteringInfo) => {
-    const query = getFilteringQuery(num, _filteringInfo);
-
-    setLoading(true);
-    const getItemList = getItemsByFilter(query);
-    getItemList.then((result) => {
-      const newItemData = result.response;
-      const newItem = [...idolItems, ...result.response];
-      setItems(newItem);
-      setHasNext(result.hasNext);
-      setLoading(false);
-      if (result.hasNext) {
-        setItemNum(newItemData[newItemData.length - 1].itemId);
-      }
-    });
-  };
-
-  const getItemsDataBySearch = (num, _keyword) => {
-    setLoading(true);
-    const getItemList = getItemsBySearch(num, _keyword);
-    getItemList.then((result) => {
-      const newItemData = result.response;
-      const newItem = [...idolItems, ...result.response];
-      setItems(newItem);
-      setHasNext(result.hasNext);
-      setLoading(false);
-      if (result.hasNext) {
-        setItemNum(newItemData[newItemData.length - 1].itemId);
-      }
-    });
-  };
-
-  const handleFiltering = async (id) => {
-    setIdolFilter(id);
-    setIsIdolFilter(true);
-    setIsDetailFilter(true);
-    dispatch(filteringActions.setItems([]));
-    getItemsDataByIdol(0, id);
-  };
-
   useEffect(() => {
     if (
       localStorage.getItem("filter_idolGroup") &&
@@ -135,70 +56,74 @@ const ItemList = ({ keyword }) => {
       setIsDetailFilter(true);
     }
 
+    dispatch(homeActions.clearItems());
     if (keyword) {
-      getItemsDataBySearch(itemNum, keyword);
+      dispatch(homeActions.getItemsDataBySearch(0, keyword));
     } else if (filteringInfo) {
-      getItemsDataByFilter(itemNum, filteringInfo);
+      const query = getFilteringQuery(0, filteringInfo);
+      dispatch(homeActions.getItemsDataByFilter(query));
+    } else if (localStorage.getItem("filter_idolGroup")) {
+      setIsIdolFilter(true);
+      setIsDetailFilter(true);
+      dispatch(
+        homeActions.getItemsDataByIdol(
+          0,
+          localStorage.getItem("filter_idolGroup"),
+        ),
+      );
     } else {
-      getItemsData(itemNum);
+      dispatch(homeActions.getItemsData());
     }
   }, []);
 
-  // 무한 스크롤
-  const infiniteScroll = useCallback(() => {
-    const scrollHeight = Math.max(
-      document.documentElement.scrollHeight,
-      document.body.scrollHeight,
-    );
-    const scrollTop = Math.max(
-      document.documentElement.scrollTop,
-      document.body.scrollTop,
-    );
-    const clientHeight = document.documentElement.clientHeight;
-
-    if (scrollHeight === scrollTop + clientHeight) {
-      if (loading) {
-        return;
-      }
-
-      if (isIdolFilter) {
-        getItemsDataByIdol(itemNum, idolFilter);
-      } else if (keyword) {
-        getItemsDataBySearch(itemNum, keyword);
-      } else if (filteringInfo) {
-        getItemsDataByFilter(itemNum, filteringInfo);
-      } else {
-        getItemsData(itemNum);
-      }
+  const handleCallNext = (_type) => {
+    if (_type === "home") {
+      dispatch(homeActions.getItemsData(itemNum));
+    } else if (_type === "idol") {
+      dispatch(
+        homeActions.getItemsDataByIdol(
+          itemNum,
+          localStorage.getItem("filter_idolGroup"),
+        ),
+      );
+    } else if (_type === "keyword") {
+      dispatch(homeActions.getItemsDataBySearch(itemNum, keyword));
+    } else if (_type === "filtering") {
+      const query = getFilteringQuery(itemNum, filteringInfo);
+      dispatch(homeActions.getItemsDataByFilter(query));
     }
-  }, [itemNum]);
+  };
 
-  useEffect(() => {
-    if (loading) {
-      return;
-    }
-
-    if (hasNext) {
-      window.addEventListener("scroll", infiniteScroll, true);
-    } else {
-      window.removeEventListener("scroll", infiniteScroll, true);
-    }
-
-    return () => window.removeEventListener("scroll", infiniteScroll, true);
-  }, [hasNext, itemNum]);
+  const handleFiltering = async (id) => {
+    setIdolFilter(id);
+    setIsIdolFilter(true);
+    setIsDetailFilter(true);
+    dispatch(homeActions.clearItems());
+    dispatch(homeActions.getItemsDataByIdol(0, id));
+  };
 
   return (
     <>
       {!keyword && <FilteringIdol onClick={handleFiltering} />}
       {!keyword && isDetailFilter && <DetailFiltering idolId={idolFilter} />}
 
-      {items && (
-        <ItemListBox>
-          {items.map((item) => (
-            <Item key={item.itemId} id={item.itemId} item={item} />
-          ))}
-        </ItemListBox>
-      )}
+      <InfinityScroll
+        callNext={(_type) => {
+          handleCallNext(_type);
+        }}
+        hasNext={hasNext}
+        loading={isLoading}
+        keyword={keyword}
+        isIdolFilter={isIdolFilter}
+      >
+        {items && (
+          <ItemListBox>
+            {items.map((item) => (
+              <Item key={item.itemId} id={item.itemId} item={item} />
+            ))}
+          </ItemListBox>
+        )}
+      </InfinityScroll>
     </>
   );
 };

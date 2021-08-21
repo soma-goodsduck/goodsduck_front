@@ -9,6 +9,7 @@ import { createBrowserHistory } from "history";
 import { connectRouter } from "connected-react-router";
 
 import User from "./modules/user";
+import Home from "./modules/home";
 import Image from "./modules/image";
 import Filtering from "./modules/filtering";
 import NewItem from "./modules/newItem";
@@ -18,6 +19,7 @@ export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
   user: User,
+  home: Home,
   image: Image,
   newItem: NewItem,
   filtering: Filtering,
