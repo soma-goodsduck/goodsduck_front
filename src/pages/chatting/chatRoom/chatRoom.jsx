@@ -125,7 +125,7 @@ export class ChatRoom extends Component {
     }
     postAction("v1/chat", { chatId: chatRoomId });
     localStorage.removeItem(chatRoomId);
-    history.push("/chatting");
+    history.replace("/chatting");
   };
 
   renderMessages = (messages) =>
@@ -167,6 +167,7 @@ export class ChatRoom extends Component {
           type="chat"
           isClick
           popup2
+          userIdForReport={createdWithBcryptId}
         />
         <ItemInfo id={itemId} />
         <div>

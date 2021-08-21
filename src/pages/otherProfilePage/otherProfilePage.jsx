@@ -44,7 +44,12 @@ const OtherProfilePage = (props) => {
     <>
       {user && (
         <ProfilePageBox>
-          <HeaderInfo2 text1="신고하기" text2="프로필 정보" popup1 />
+          <HeaderInfo2
+            text1="신고하기"
+            text2="프로필 정보"
+            popup1
+            userIdForReport={bcrypt}
+          />
           <UserProfile user={user} />
           <Btns data={btnsData} />
           <Line />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
@@ -6,6 +7,8 @@ import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
 import { history } from "../../redux/configureStore";
 
 const HeaderInfo2 = (props) => {
+  const dispatch = useDispatch();
+
   const screen = window.screen.width;
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -27,6 +30,7 @@ const HeaderInfo2 = (props) => {
     isClear,
     popup1,
     popup2,
+    userIdForReport,
   } = props;
 
   const styles = {
@@ -71,8 +75,7 @@ const HeaderInfo2 = (props) => {
         <PopUp3
           text="신고하기"
           _onClick1={() => {
-            console.log("신고");
-            hidePopup1();
+            history.push(`/report/${userIdForReport}`);
           }}
           _onClick2={() => {
             hidePopup1();
@@ -84,8 +87,7 @@ const HeaderInfo2 = (props) => {
           text1="신고하기"
           text2={text1}
           _onClick1={() => {
-            console.log("신고");
-            hidePopup2();
+            history.push(`/report/${userIdForReport}`);
           }}
           _onClick2={() => {
             _onClick();

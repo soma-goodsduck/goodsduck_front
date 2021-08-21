@@ -8,6 +8,7 @@ import ItemImg from "./itemImg";
 import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
+import { actionCreators as homeActions } from "../../redux/modules/home";
 
 import { timeForToday } from "../../shared/functions";
 import { requestPublicData, deleteAction } from "../../shared/axios";
@@ -32,7 +33,6 @@ const ItemDetailPage = ({ history }) => {
     const getItemDetail = requestPublicData(`v1/items/${itemId}`);
     getItemDetail.then((result) => {
       setItemData(result);
-
       setItemOwnerId(result.itemOwner.bcryptId);
 
       if (result.isOwner) {
@@ -96,8 +96,15 @@ const ItemDetailPage = ({ history }) => {
 
   // 등록한 아이템 삭제
   const deleteItem = () => {
-    deleteAction(`v1/items/${itemId}`);
-    history.replace("/");
+    const deleteItemAction = deleteAction(`v1/items/${itemId}`);
+    deleteItemAction.then((result) => {
+      if (result.success) {
+        dispatch(homeActions.deleteItem(itemId));
+        history.replace("/");
+      } else {
+        window.alert("굿즈 삭제에 실패했습니다.");
+      }
+    });
   };
 
   // 판매자/구매자의 마이페이지로 이동
@@ -130,14 +137,14 @@ const ItemDetailPage = ({ history }) => {
         <PopUp3
           text="신고하기"
           _onClick1={() => {
-            console.log("신고");
+            history.push(`/report/${itemOwnerId}`);
           }}
           _onClick2={() => {
             hidePopup();
           }}
         />
       )}
-      {itemData ? (
+      {itemData && (
         <>
           <ItemImg id={itemId} item={itemData} onClick={() => clickDots()} />
           <InfoBox>
@@ -259,7 +266,7 @@ const ItemDetailPage = ({ history }) => {
             tradeType={tradeType}
           />
         </>
-      ) : null}
+      )}
     </>
   );
 };
