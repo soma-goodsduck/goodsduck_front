@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 
 import styled from "styled-components";
 import { Flex, Button } from "../../elements";
-import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from "../../shared/OAuth";
+import {
+  NAVER_AUTH_URL_PROD,
+  NAVER_AUTH_URL_DEV,
+  KAKAO_AUTH_URL,
+} from "../../shared/OAuth";
 import { history } from "../../redux/configureStore";
 
 const Login = (props) => {
@@ -17,7 +21,13 @@ const Login = (props) => {
     <Flex is_col>
       <Logo />
       <Flex is_flex>
-        <a href={NAVER_AUTH_URL}>
+        <a
+          href={
+            process.env.REACT_APP_TYPE === "DEV"
+              ? NAVER_AUTH_URL_DEV
+              : NAVER_AUTH_URL_PROD
+          }
+        >
           <Button
             width="60px"
             height="60px"
