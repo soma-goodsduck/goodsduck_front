@@ -28,12 +28,22 @@ const ItemDetailPage = ({ history }) => {
   const [isOwner, setIsOwner] = useState(false);
   const [color, setColor] = useState("");
   const [tradeType, setTradeType] = useState("");
+  const [descData, setDescData] = useState("");
+  const [descHeight, setDescHegiht] = useState(0);
 
   useEffect(() => {
     const getItemDetail = requestPublicData(`v1/items/${itemId}`);
     getItemDetail.then((result) => {
+      console.log(result);
       setItemData(result);
       setItemOwnerId(result.itemOwner.bcryptId);
+      setDescData(result.description);
+
+      const findEnter = result.description.match(/[\n]/g);
+      if (findEnter) {
+        const NumOfEnter = findEnter.length;
+        setDescHegiht(NumOfEnter);
+      }
 
       if (result.isOwner) {
         setIsOwner(true);
@@ -210,7 +220,11 @@ const ItemDetailPage = ({ history }) => {
             </Flex>
             {/* 상품 설명 */}
             <Flex justify="flex-start" padding=" 0 7px">
-              <Text>{itemData.description}</Text>
+              <DescBox
+                value={descData}
+                readOnly
+                style={{ height: `${30 + descHeight * 25}px` }}
+              />
             </Flex>
             <div className={styles.line} />
             {/* 가격 제시 목록 */}
@@ -244,15 +258,6 @@ const ItemDetailPage = ({ history }) => {
                     </UserName>
                   </Flex>
                 </Flex>
-                {/* <Flex is_flex>
-                  판매자의 다른 상품 구경하기
-                  <Icon
-                    width="12px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_go.svg"
-                    alt="go seller/buyer shop"
-                    margin="0 0 5px 10px"
-                  />
-                </Flex> */}
               </Flex>
             </button>
           </InfoBox>
@@ -285,6 +290,12 @@ const UserName = styled.div`
 const InfoBox = styled.div`
   width: 100%;
   padding: 16px 16px 0 16px;
+`;
+
+const DescBox = styled.textarea`
+  width: 100%;
+  resize: none;
+  line-height: 1.5;
 `;
 
 export default ItemDetailPage;
