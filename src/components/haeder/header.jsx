@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
@@ -6,9 +7,11 @@ import styles from "./header.module.css";
 import { Flex, Icon } from "../../elements";
 
 import { history } from "../../redux/configureStore";
+import { green } from "../../shared/colors";
 
 const Header = () => {
   const inputRef = useRef();
+  const hasNewNoti = useSelector((state) => state.home.hasNewNoti);
 
   const onSearch = (name) => {
     history.push(`/search/item/${name}`);
@@ -46,14 +49,17 @@ const Header = () => {
               history.push("/favorites");
             }}
           />
-          <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notification.svg"
-            alt="notice"
-            width="20px"
-            _onClick={() => {
-              history.push("/notification");
-            }}
-          />
+          <NotiBox>
+            <Icon
+              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notification.svg"
+              alt="notice"
+              width="20px"
+              _onClick={() => {
+                history.push("/notification");
+              }}
+            />
+            {hasNewNoti && <NewBadge />}
+          </NotiBox>
         </Flex>
       </HeaderBox>
     </div>
@@ -67,6 +73,21 @@ const HeaderBox = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 10px 15px;
+`;
+
+const NotiBox = styled.div`
+  position: relative;
+`;
+
+const NewBadge = styled.div`
+  position: absolute;
+  top: 1px;
+  right: -4px;
+
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background-color: ${green};
 `;
 
 export default Header;

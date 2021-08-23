@@ -18,12 +18,12 @@
 }
 
 .chatBadge {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background-color: var(--green);
   color: var(--white);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 800;
   display: flex;
   justify-content: center;
@@ -128,9 +128,9 @@
   }
 
   .chatBadge {
-    width: 22px;
-    height: 22px;
-    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
     bottom: -15px;
     right: -3px;
   }

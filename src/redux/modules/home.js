@@ -17,6 +17,7 @@ const ADD_ITEM = "ADD_ITEM";
 const DELETE_ITEM = "DELETE_ITEM";
 const LOADING = "LOADING";
 const CLEAR_ITEMS = "CLEAR_ITEMS";
+const SET_NEW_NOTI = "SET_NEW_NOTI";
 
 // action creators
 const setHomeItems = createAction(
@@ -35,6 +36,10 @@ const deleteItem = createAction(DELETE_ITEM, (itemId) => ({
 }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 const clearItems = createAction(CLEAR_ITEMS, () => ({}));
+const setNewNoti = createAction(SET_NEW_NOTI, (hasNewChat, hasNewNoti) => ({
+  hasNewChat,
+  hasNewNoti,
+}));
 
 // initialState
 const initialState = {
@@ -42,6 +47,8 @@ const initialState = {
   hasNext: true,
   isLoading: false,
   itemNum: 0,
+  hasNewChat: false,
+  hasNewNoti: false,
 };
 
 // middleware actions
@@ -68,6 +75,10 @@ const getItemsData = (_itemNum = 0) => {
       } else {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
+
+      dispatch(
+        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
+      );
     });
   };
 };
@@ -99,6 +110,10 @@ const getItemsDataByIdol = (num, idolId) => {
       } else {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
+
+      dispatch(
+        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
+      );
     });
   };
 };
@@ -130,6 +145,10 @@ const getItemsDataByFilter = (query) => {
       } else {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
+
+      dispatch(
+        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
+      );
     });
   };
 };
@@ -161,6 +180,10 @@ const getItemsDataBySearch = (num, _keyword) => {
       } else {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
+
+      dispatch(
+        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
+      );
     });
   };
 };
@@ -196,6 +219,11 @@ export default handleActions(
     [LOADING]: (state, action) =>
       produce(state, (draft) => {
         draft.isLoading = action.payload.isLoading;
+      }),
+    [SET_NEW_NOTI]: (state, action) =>
+      produce(state, (draft) => {
+        draft.hasNewChat = action.payload.hasNewChat;
+        draft.hasNewNoti = action.payload.hasNewNoti;
       }),
   },
   initialState,

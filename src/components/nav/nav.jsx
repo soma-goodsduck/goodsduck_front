@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import styles from "./nav.module.css";
 
@@ -14,11 +15,7 @@ const Nav = (props) => {
   const [isChat, setIsChat] = useState(false);
   const [isCommunity, setIsCommunity] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
-  // const [newChatBadge, setNewChatBadge] = useState(false);
-
-  // const getNewChat = () => {
-  //   setNewChatBadge(true);
-  // };
+  const hasNewChat = useSelector((state) => state.home.hasNewChat);
 
   useEffect(() => {
     if (href.includes("/chatting")) {
@@ -34,7 +31,12 @@ const Nav = (props) => {
 
   return (
     <div className={styles.nav}>
-      <Flex is_flex justify="space-around" align="flex-end" margin="0 0 15px 0">
+      <Flex
+        is_flex
+        justify="space-around"
+        align="flex-end"
+        margin="10px 0 15px 0"
+      >
         <button
           type="button"
           className={styles.iconBtn}
@@ -54,11 +56,9 @@ const Nav = (props) => {
             history.push("/chatting");
           }}
         >
-          {/* <div
-            className={newChatBadge ? styles.chatBadge : styles.chatBadgeZero}
-          >
+          <div className={hasNewChat ? styles.chatBadge : styles.chatBadgeZero}>
             N
-          </div> */}
+          </div>
           <div className={isChat ? styles.isChatIcon : styles.isNotChatIcon} />
           <span className={isChat ? styles.isChatText : styles.isNotChatText}>
             채팅
