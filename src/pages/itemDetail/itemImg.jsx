@@ -5,21 +5,10 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
-import { Flex, Image } from "../../elements/index";
+import { Flex } from "../../elements/index";
 import { postAction, deleteAction } from "../../shared/axios";
 
 const ItemImg = ({ id, item, onClick }) => {
-  const screen = window.screen.width;
-  const [imgSize, setImgSize] = useState(0);
-
-  useEffect(() => {
-    if (screen < 415) {
-      setImgSize(screen);
-    } else {
-      setImgSize(415);
-    }
-  }, [screen]);
-
   const history = useHistory();
   const goBack = () => {
     history.push("/");
@@ -68,12 +57,7 @@ const ItemImg = ({ id, item, onClick }) => {
   return (
     <Flex className={styles.imgBox}>
       <div className={styles.imgDataBox}>
-        <Image
-          shape="rectangle"
-          src={item.images[imgNumber].url}
-          size={`${imgSize}px`}
-          className={styles.itemImg}
-        />
+        <Img src={item.images[imgNumber].url} className={styles.itemImg} />
         <span className={styles.watermark}>
           ⓒ GOODSDUCK ({item.itemOwner.nickName})
         </span>
@@ -113,5 +97,18 @@ const ItemImg = ({ id, item, onClick }) => {
     </Flex>
   );
 };
+
+const Img = styled.div`
+  width: 100vw;
+  height: 100vw;
+
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+    height: 415px;
+  }
+`;
 
 export default ItemImg;

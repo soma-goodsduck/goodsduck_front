@@ -9,7 +9,7 @@ const Btns = ({ data }) => {
     <>
       {data && (
         <Flex>
-          <BtnGrid isMobile>
+          <BtnGrid>
             <Flex is_col>
               <Text bold size="22px">
                 {data.itemCount}

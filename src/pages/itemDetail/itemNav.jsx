@@ -7,7 +7,7 @@ import styles from "./itemDetail.module.css";
 
 import PriceProposeModal from "../price/priceProposeModal";
 import PriceProposeDeleteModal from "../price/priceProposeDeleteModal";
-import { Flex, Text, Icon, LoginPopUp } from "../../elements/index";
+import { Flex, Icon, LoginPopUp } from "../../elements/index";
 
 import { history } from "../../redux/configureStore";
 import { actionCreators as chatActions } from "../../redux/modules/chat";
@@ -17,14 +17,6 @@ import { numberWithCommas } from "../../shared/functions";
 
 const ItemNav = ({ item, id, isOwner, tradeType }) => {
   const dispatch = useDispatch();
-
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
 
   const [showPricePopup, setShowPricePopup] = useState(null);
   const hidePricePopup = () => {
@@ -98,9 +90,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
         <ItemNavBox
           className={isHighPrice ? styles.itemNavCol : styles.itemNavRow}
         >
-          <Text bold size={isMobile ? "20px" : "25px"}>
-            {numberWithCommas(item.price)}원
-          </Text>
+          <Text>{numberWithCommas(item.price)}원</Text>
           {/* 상품 주인일 경우 */}
           {isOwner && tradeType !== "완료" && (
             <Button
@@ -277,6 +267,15 @@ const Button = styled.div`
   border-radius: 5px;
   padding: 12px;
   cursor: pointer;
+`;
+
+const Text = styled.p`
+  font-size: 20px;
+  font-weight: 600;
+
+  @media screen and (min-width: 415px) {
+    font-size: 25px;
+  }
 `;
 
 export default ItemNav;

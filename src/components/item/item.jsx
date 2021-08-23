@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components";
 import styles from "./item.module.css";
 
-import { Image, Flex, Text } from "../../elements";
+import { Flex } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
@@ -28,14 +28,6 @@ const Item = ({ item, id }) => {
     tradeType = "완료";
   }
 
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
   const clickItem = (e) => {
     if (e.target.tagName !== "DIV") {
       return;
@@ -57,13 +49,7 @@ const Item = ({ item, id }) => {
   return (
     <ItemBox onClick={(e) => clickItem(e)}>
       <Flex className={styles.imgBox}>
-        <Image
-          shape="rectangle"
-          src={item.imageUrl}
-          size={isMobile ? "43vw" : "185px"}
-          borderRadius="10px"
-          className={styles.itemImg}
-        />
+        <ItemImg src={item.imageUrl} className={styles.itemImg} />
         <div className={styles.likeBox}>
           <button
             type="button"
@@ -75,43 +61,33 @@ const Item = ({ item, id }) => {
       </Flex>
       <InfoBox>
         <Flex justify="flex-start" padding="5px">
-          <Text
-            size={isMobile ? "4vw" : "16px"}
-            bold
-            margin="0 5px 0 0"
-            color={color}
-          >
+          <Text bold margin="0 5px 0 0" color={color}>
             {tradeType}
           </Text>
           <Title>
-            <Text size={isMobile ? "4vw" : "16px"} is_long>
-              {item.name}
-            </Text>
+            <Text isLong>{item.name}</Text>
           </Title>
         </Flex>
         <Flex justify="flex-start" padding="5px 7px">
-          <Text size={isMobile ? "5vw" : "18px"} bold is_long>
+          <Text priceSize bold isLong>
             {numberWithCommas(item.price)}원
           </Text>
         </Flex>
         <Flex justify="space-between" padding="5px 5px 20px 3px">
           <Flex>
-            <Image
-              shape="circle"
+            <UserImg
               src={
                 item.itemOwner.imageUrl ||
                 "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
               }
-              size={isMobile ? "6.5vw" : "24px"}
-              margin="0 5px 0 0"
             />
             <UserName>
-              <Text is_long size={isMobile ? "4.3vw" : "17px"}>
+              <Text isLong nickSize>
                 {item.itemOwner.nickName}
               </Text>
             </UserName>
           </Flex>
-          <Text color="#bbbbbb" size={isMobile ? "3.5vw" : "16px"}>
+          <Text color="#bbbbbb" timeSize>
             {timeForToday(item.itemCreatedAt)}
           </Text>
         </Flex>
@@ -141,6 +117,59 @@ const UserName = styled.div`
 const InfoBox = styled.div`
   width: 100%;
   padding: 5px;
+`;
+
+const Text = styled.p`
+  color: ${(props) => props.color};
+  font-size: 4vw;
+  font-size: ${(props) => props.priceSize && "5vw"};
+  font-size: ${(props) => props.nickSize && "4.3vw"};
+  font-size: ${(props) => props.timeSize && "3.5vw"};
+  font-weight: ${(props) => (props.bold ? "600" : "")};
+  font-weight: ${(props) => (props.medium ? "500" : "")};
+  margin: ${(props) => props.margin};
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
+  ${(props) =>
+    props.isLong
+      ? "white-space: nowrap; overflow:hidden; text-overflow: ellipsis; "
+      : ""}
+
+  @media screen and (min-width: 415px) {
+    font-size: 16px;
+    font-size: ${(props) => props.priceSize && "18px"};
+    font-size: ${(props) => props.nickSize && "17px"};
+    font-size: ${(props) => props.timeSize && "16px"};
+  }
+`;
+
+const ItemImg = styled.div`
+  width: 165px;
+  height: 165px;
+  border-radius: 10px;
+
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+
+  @media screen and (min-width: 415px) {
+    width: 185px;
+    height: 185px;
+  }
+`;
+
+const UserImg = styled.div`
+  width: 6.5vw;
+  height: 6.5vw;
+  border-radius: 6.5vw;
+  margin: 0 5px 0 0;
+
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+  object-fit: cover;
+
+  @media screen and (min-width: 415px) {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 export default Item;

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import styles from "../../components/item/item.module.css";
 
-import { Image, Flex, Text } from "../../elements";
+import { Flex } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
@@ -27,14 +27,6 @@ const Item = ({ item }) => {
     tradeType = "완료";
   }
 
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
   const clickItem = (e) => {
     if (e.target.tagName !== "DIV") {
       return;
@@ -45,32 +37,21 @@ const Item = ({ item }) => {
   return (
     <ItemBox onClick={(e) => clickItem(e)}>
       <Flex className={styles.imgBox}>
-        <Image
-          shape="rectangle"
-          src={item.imageUrl}
-          size={isMobile ? "28vw" : "115px"}
-          borderRadius="10px"
-          className={styles.itemImg}
-        />
+        <ItemImg src={item.imageUrl} className={styles.itemImg} />
       </Flex>
       <InfoBox>
         <Flex justify="space-between" padding="5px">
-          <Text
-            size={isMobile ? "4vw" : "15px"}
-            bold
-            margin="0 2px 0 0"
-            color={color}
-          >
+          <Text typeSize bold margin="0 2px 0 0" color={color}>
             {tradeType}
           </Text>
           <Title>
-            <Text size={isMobile ? "4vw" : "14px"} is_long>
+            <Text namesize isLong>
               {item.name}
             </Text>
           </Title>
         </Flex>
         <Flex justify="flex-start" padding="3px 6px">
-          <Text size={isMobile ? "5vw" : "16px"} bold is_long>
+          <Text prciesize bold isLong>
             {numberWithCommas(item.price)}원
           </Text>
         </Flex>
@@ -96,6 +77,43 @@ const Title = styled.div`
 const InfoBox = styled.div`
   width: 100%;
   padding: 5px;
+`;
+
+const ItemImg = styled.div`
+  width: 28vw;
+  height: 28vw;
+  border-radius: 10px;
+
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+
+  @media screen and (min-width: 415px) {
+    width: 115px;
+    height: 115px;
+  }
+`;
+
+const Text = styled.p`
+  color: ${(props) => props.color};
+  font-size: 4vw;
+  font-size: ${(props) => props.typeSize && "4vw"};
+  font-size: ${(props) => props.namesize && "4vw"};
+  font-size: ${(props) => props.prciesize && "5vw"};
+  font-weight: ${(props) => (props.bold ? "600" : "")};
+  font-weight: ${(props) => (props.medium ? "500" : "")};
+  margin: ${(props) => props.margin};
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
+  ${(props) =>
+    props.isLong
+      ? "white-space: nowrap; overflow:hidden; text-overflow: ellipsis; "
+      : ""}
+
+  @media screen and (min-width: 415px) {
+    font-size: 16px;
+    font-size: ${(props) => props.typeSize && "15px"};
+    font-size: ${(props) => props.namesize && "14px"};
+    font-size: ${(props) => props.prciesize && "16px"};
+  }
 `;
 
 export default Item;

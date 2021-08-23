@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components";
 
@@ -7,16 +7,6 @@ import IdolGroups from "../idolSelect/idolGroupSelect";
 import { putAction } from "../../shared/axios";
 
 const IdolEdit = ({ _onClick }) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   const [showPopup, setShowPopup] = useState(false);
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
   let idols = [];
@@ -42,7 +32,7 @@ const IdolEdit = ({ _onClick }) => {
     <>
       {showPopup && <LoginPopUp />}
       {!showPopup && (
-        <Screen {...styleProps}>
+        <Screen>
           <IdolEditBox>
             <Info>
               <ExitBtn onClick={_onClick} />
@@ -68,10 +58,14 @@ const Screen = styled.div`
   position: fixed;
   top: 0;
   z-index: 9999;
-  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
   color: #222222;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 const IdolEditBox = styled.div`

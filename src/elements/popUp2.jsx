@@ -1,20 +1,12 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import styled from "styled-components";
 
 const PopUp2 = (props) => {
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
   const { text1, text2, _onClick1, _onClick2, _onClick3, isRed } = props;
 
-  const styles = { isMobile, isRed };
+  const styles = { isRed };
 
   return (
     <PopUpBox {...styles}>
@@ -46,10 +38,14 @@ const PopUpBox = styled.div`
   justify-content: center;
   position: fixed;
   z-index: 10;
-  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  width: 100%;
   height: 150%;
   background-color: rgba(0, 0, 0, 0.3);
   color: #222222;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 const BtnBox = styled.div`
