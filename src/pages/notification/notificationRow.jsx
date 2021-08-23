@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import { Flex, Image, Notification } from "../../elements";
-import { gray, grayBorder } from "../../shared/colors";
+import { gray, grayBorder, white } from "../../shared/colors";
 
 import { timeForToday } from "../../shared/functions";
 import { requestAuthData } from "../../shared/axios";
@@ -11,6 +11,16 @@ import { history } from "../../redux/configureStore";
 
 const NotificationRow = ({ notification }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [isRead, setIsRead] = useState(false);
+  const styleProps = {
+    isRead,
+  };
+
+  useEffect(() => {
+    if (notification.isRead) {
+      setIsRead(true);
+    }
+  }, []);
 
   const handleClick = () => {
     if (notification.type === "PRICE_PROPOSE") {
@@ -38,7 +48,7 @@ const NotificationRow = ({ notification }) => {
       {showPopup && <Notification data="취소된 가격 제시입니다." />}
       {notification.type !== "CHAT" && notification.type !== "USER_ITEM" && (
         <div>
-          <NotificationRowBox>
+          <NotificationRowBox {...styleProps}>
             <UserBox>
               <Image
                 shape="circle"
@@ -51,7 +61,9 @@ const NotificationRow = ({ notification }) => {
               />
               <InfoBox onClick={() => handleClick()}>
                 <Flex>
-                  <TextBox>{notification.message.messageBody}</TextBox>
+                  <TextBox {...styleProps}>
+                    {notification.message.messageBody}
+                  </TextBox>
                 </Flex>
                 <TextTimeBox>
                   {timeForToday(notification.createdAt)}
@@ -70,8 +82,9 @@ const NotificationRowBox = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 20px 0;
+  padding: 20px 16px;
   cursor: pointer;
+  background-color: ${(props) => (props.isRead ? white : grayBorder)};
 `;
 
 const UserBox = styled.div`
@@ -94,6 +107,8 @@ const TextBox = styled.span`
   font-size: 15px;
   font-weight: 400;
   line-height: 1.5;
+
+  background-color: ${(props) => (props.isRead ? white : grayBorder)};
 `;
 
 const TextTimeBox = styled.div`

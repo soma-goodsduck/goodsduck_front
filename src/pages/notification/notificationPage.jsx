@@ -44,7 +44,6 @@ const NotificationRowBox = styled.div`
   overflow-y: auto;
   height: 95vh;
   margin-top: 40px;
-  padding: 0 16px;
 `;
 
 export default NotificationPage;
