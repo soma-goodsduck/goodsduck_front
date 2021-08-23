@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
+import styles from "./header.module.css";
 import { Flex, Text, Icon } from "../../elements/index";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
@@ -11,14 +12,6 @@ import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 
 const HeaderInfo = (props) => {
   const dispatch = useDispatch();
-
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
 
   const {
     text,
@@ -31,11 +24,10 @@ const HeaderInfo = (props) => {
     isUploading,
   } = props;
 
-  const styles = {
+  const styleProps = {
     margin,
     bg,
     borderRadius,
-    isMobile,
   };
 
   const history = useHistory();
@@ -58,7 +50,7 @@ const HeaderInfo = (props) => {
   };
 
   return (
-    <HeaderBox {...styles}>
+    <HeaderBox {...styleProps} className={styles.headerInfoBox}>
       <Flex is_flex padding="15px 0">
         <Column1>
           <Icon
@@ -86,15 +78,28 @@ HeaderInfo.defaultProps = {
 };
 
 const HeaderBox = styled.div`
-  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  width: 100%
   padding: 0 20px;
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};
   border-radius: ${(props) => props.borderRadius};
   position: fixed;
   top: 0;
-  ${(props) => (props.isMobile ? "left: 0;" : "left: 30%;")};
+  left: 0;
   z-index: 3;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+    left: 30%;
+  }
+
+  @media screen and (min-width: 500px) {
+    left: 10%;
+  }
+
+  @media screen and (min-width: 850px) {
+    left: 50%;
+  }
 `;
 
 const Column1 = styled.div`

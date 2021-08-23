@@ -20,16 +20,6 @@ const MessageForm = (props) => {
   const chatRoomId = href[href.length - 1];
   const chatRoomRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
 
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
-  const styles = { isMobile };
-
   const [userId, setUserId] = useState("");
   const [userNick, setUserNick] = useState("");
   const [content, setContent] = useState("");
@@ -153,7 +143,7 @@ const MessageForm = (props) => {
   return (
     <>
       {showPopup && <PopUp width="250px" text1="상대방이 존재하지 않습니다." />}
-      <MessageFormBox {...styles} onSubmit={handleSubmit}>
+      <MessageFormBox onSubmit={handleSubmit}>
         <div>
           {errors.map((errorMsg) => (
             <p style={{ color: "red" }} key={errorMsg}>
@@ -208,8 +198,22 @@ const MessageFormBox = styled.div`
   left: 0;
   background-color: ${white};
   z-index: 3;
-  ${(props) =>
-    props.isMobile ? " width: 100%; left: 0;" : "width: 415px; left: 30%;"}
+
+  width: 100%;
+  left: 0;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+    left: 30%;
+  }
+
+  @media screen and (min-width: 500px) {
+    left: 10%;
+  }
+
+  @media screen and (min-width: 850px) {
+    left: 50%;
+  }
 `;
 
 const InputBox = styled.input`

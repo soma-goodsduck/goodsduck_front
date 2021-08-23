@@ -83,61 +83,64 @@ function App() {
   }
 
   return (
-    <div className={styles.app}>
-      {showNoti && <Notification data={notiInfo} clickUrl={notiUrl} />}
-      <ConnectedRouter history={history}>
-        <Route path="/" exact component={home} />
-        <Route path="/login" exact component={Login} />
-        <Route path="/signup" exact component={Signup} />
-        <Route
-          path="/auth/kakao/callback"
-          exact
-          component={OAuth2RedirectHandler}
-        />
-        <Route
-          path="/auth/naver/callback"
-          exact
-          component={OAuth2RedirectHandler}
-        />
-        <Route path="/search/item/:name" exact component={KeywordSearch} />
-        <Route path="/chatting" exact component={Chatting} />
-        <Route path="/chat-room/:id" exact component={ChatRoom} />
-        <Route path="/my-profile" exact component={MyProfile} />
-        <Route path="/review/:id" exact component={WritingReviewPage} />
-        <Route
-          path="/review-back/:id"
-          exact
-          component={WritingReviewBackPage}
-        />
-        <Route path="/setting" exact component={Setting} />
-        <Route path="/edit-profile" exact component={EditProfile} />
-        <Route path="/price-proposes" exact component={PriceProposePage} />
-        <Route path="/reviews" exact component={ReviewPage} />
-        <Route path="/favorites" exact component={LikeItemList} />
-        <Route path="/price/:id" exact component={PriceProposeListPage} />
-        <Route path="/notification" exact component={NotificationPage} />
-        <Route path="/item/:id" exact component={ItemDetailPage} />
-        <Route path="/profile/:id" exact component={OtherProfilePage} />
-        <Route path="/profile/:id/items" exact component={OtherItemsPage} />
-        <Route path="/report/:id" exact component={ReportPage} />
+    <>
+      <div className={styles.appImg} />
+      <div className={styles.app}>
+        {showNoti && <Notification data={notiInfo} clickUrl={notiUrl} />}
+        <ConnectedRouter history={history}>
+          <Route path="/" exact component={home} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/signup" exact component={Signup} />
+          <Route
+            path="/auth/kakao/callback"
+            exact
+            component={OAuth2RedirectHandler}
+          />
+          <Route
+            path="/auth/naver/callback"
+            exact
+            component={OAuth2RedirectHandler}
+          />
+          <Route path="/search/item/:name" exact component={KeywordSearch} />
+          <Route path="/chatting" exact component={Chatting} />
+          <Route path="/chat-room/:id" exact component={ChatRoom} />
+          <Route path="/my-profile" exact component={MyProfile} />
+          <Route path="/review/:id" exact component={WritingReviewPage} />
+          <Route
+            path="/review-back/:id"
+            exact
+            component={WritingReviewBackPage}
+          />
+          <Route path="/setting" exact component={Setting} />
+          <Route path="/edit-profile" exact component={EditProfile} />
+          <Route path="/price-proposes" exact component={PriceProposePage} />
+          <Route path="/reviews" exact component={ReviewPage} />
+          <Route path="/favorites" exact component={LikeItemList} />
+          <Route path="/price/:id" exact component={PriceProposeListPage} />
+          <Route path="/notification" exact component={NotificationPage} />
+          <Route path="/item/:id" exact component={ItemDetailPage} />
+          <Route path="/profile/:id" exact component={OtherProfilePage} />
+          <Route path="/profile/:id/items" exact component={OtherItemsPage} />
+          <Route path="/report/:id" exact component={ReportPage} />
 
-        {/* 아이템 등록 */}
-        <Route path="/upload-item" exact component={ItemUploadPage} />
-        <Route path="/category" exact component={ItemCategory} />
-        <Route path="/status" exact component={ItemStatus} />
-        <Route path="/select-idol" exact component={IdolGroup} />
-        <Route path="/select-idol-member" exact component={IdolMember} />
-        {/* 필터링 */}
-        <Route path="/filtering" exact component={Filtering} />
-        <Route path="/filter-category" exact component={FilterItemCategory} />
-        <Route path="/filter-status" exact component={FilterItemStatus} />
-        <Route
-          path="/filter-select-idol-member"
-          exact
-          component={FilterIdolMember}
-        />
-      </ConnectedRouter>
-    </div>
+          {/* 아이템 등록 */}
+          <Route path="/upload-item" exact component={ItemUploadPage} />
+          <Route path="/category" exact component={ItemCategory} />
+          <Route path="/status" exact component={ItemStatus} />
+          <Route path="/select-idol" exact component={IdolGroup} />
+          <Route path="/select-idol-member" exact component={IdolMember} />
+          {/* 필터링 */}
+          <Route path="/filtering" exact component={Filtering} />
+          <Route path="/filter-category" exact component={FilterItemCategory} />
+          <Route path="/filter-status" exact component={FilterItemStatus} />
+          <Route
+            path="/filter-select-idol-member"
+            exact
+            component={FilterIdolMember}
+          />
+        </ConnectedRouter>
+      </div>
+    </>
   );
 }
 

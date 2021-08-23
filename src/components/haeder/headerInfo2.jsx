@@ -1,22 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 
 import styled from "styled-components";
+import styles from "./header.module.css";
 import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
 import { history } from "../../redux/configureStore";
 
 const HeaderInfo2 = (props) => {
-  const dispatch = useDispatch();
-
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
   const {
     text1,
     text2,
@@ -33,11 +23,10 @@ const HeaderInfo2 = (props) => {
     userIdForReport,
   } = props;
 
-  const styles = {
+  const styleProps = {
     margin,
     bg,
     borderRadius,
-    isMobile,
     isClick,
     popup1,
     popup2,
@@ -98,7 +87,7 @@ const HeaderInfo2 = (props) => {
         />
       )}
       {!showPopup2 && (
-        <HeaderBox {...styles}>
+        <HeaderBox {...styleProps} className={styles.headerInfoBox}>
           <Flex is_flex padding="15px 0">
             <Column1
               onClick={() => {
@@ -111,7 +100,7 @@ const HeaderInfo2 = (props) => {
               />
             </Column1>
             <Column2
-              {...styles}
+              {...styleProps}
               onClick={() => {
                 if (type === "chat") {
                   _nickClick();
@@ -147,15 +136,28 @@ HeaderInfo2.defaultProps = {
 };
 
 const HeaderBox = styled.div`
-  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  width: 100%;
   padding: 0 20px;
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};
   border-radius: ${(props) => props.borderRadius};
   position: fixed;
   top: 0;
-  ${(props) => (props.isMobile ? "left: 0;" : "left: 30%;")};
+  left: 0;
   z-index: 3;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+    left: 30%;
+  }
+
+  @media screen and (min-width: 500px) {
+    left: 10%;
+  }
+
+  @media screen and (min-width: 850px) {
+    left: 50%;
+  }
 `;
 
 const Column1 = styled.div`

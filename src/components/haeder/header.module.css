@@ -32,14 +32,26 @@
 @media screen and (min-width: 415px) {
   .header {
     width: 415px;
-    left: 30%;
   }
   .filteringHeader {
     width: 415px;
     left: 30%;
   }
-
   .search {
     width: 270px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .header,
+  .headerInfoBox {
+    left: 10%;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .header,
+  .headerInfoBox {
+    left: 50%;
   }
 }

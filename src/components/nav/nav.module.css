@@ -125,7 +125,6 @@
 @media screen and (min-width: 415px) {
   .nav {
     width: 415px;
-    left: 30%;
   }
 
   .chatBadge {
@@ -170,5 +169,17 @@
   .isProfileText,
   .isNotProfileText {
     font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .nav {
+    left: 10%;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .nav {
+    left: 50%;
   }
 }
