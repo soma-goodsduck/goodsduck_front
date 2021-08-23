@@ -1,20 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Text, Image } from "../../elements";
 import { gray, grayBorder, yellow } from "../../shared/colors";
 import { timeForToday } from "../../shared/functions";
 
 const ReviewRow = ({ review }) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   const starRendering = () => {
     const result = [];
     for (let i = 0; i < review.score; i += 1) {
@@ -38,7 +28,7 @@ const ReviewRow = ({ review }) => {
           margin="0 10px 0 0"
           size="55px"
         />
-        <InfoBox {...styleProps}>
+        <InfoBox>
           <Text medium>{review.writerNickName}</Text>
           <Row>
             <RatingBox>{starRendering()}</RatingBox>
@@ -59,8 +49,12 @@ const ReviewBox = styled.div`
 `;
 
 const InfoBox = styled.div`
-  ${(props) => (props.isMobile ? "width: 200px;" : "width: 250px;")};
+  width: 200px;
   margin-left: 10px;
+
+  @media screen and (min-width: 415px) {
+    width: 250px;
+  }
 `;
 
 const Row = styled.div`

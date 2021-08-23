@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import { Flex, Text } from "../../elements";
 import { grayText } from "../../shared/colors";
 
 const Btns = ({ data }) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   return (
     <>
       {data && (
-        <Flex {...styleProps}>
+        <Flex>
           <BtnGrid isMobile>
             <Flex is_col>
               <Text bold size="22px">
@@ -53,11 +43,12 @@ const Btns = ({ data }) => {
 
 const BtnGrid = styled.div`
   display: grid;
-  ${(props) =>
-    props.isMobile
-      ? "grid-template-columns: repeat(2, 85px);"
-      : "grid-template-columns: repeat(2, 100px);"};
+  grid-template-columns: repeat(2, 85px);
   grid-auto-rows: 50px;
+
+  @media screen and (min-width: 415px) {
+    grid-template-columns: repeat(2, 100px);
+  }
 `;
 
 export default Btns;

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import styled from "styled-components";
 
@@ -9,18 +9,8 @@ const PriceFilteringModal = ({
   sortingHighPrice,
   clickExit,
 }) => {
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-
-  const styles = { isMobile };
-
   return (
-    <PopUpBox {...styles}>
+    <PopUpBox>
       <BtnBox>
         <Btns>
           <Button1 onClick={sortingNew}>최신순</Button1>
@@ -38,10 +28,14 @@ const PopUpBox = styled.div`
   justify-content: center;
   position: fixed;
   z-index: 5;
-  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  width: 100%;
   height: 150%;
   background-color: rgba(0, 0, 0, 0.3);
   color: #222222;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 const BtnBox = styled.div`

@@ -16,16 +16,6 @@ import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const ItemUpload = (props) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   const dispatch = useDispatch();
 
   const [userJwt, setUserJwt] = useState("");
@@ -166,7 +156,7 @@ const ItemUpload = (props) => {
       {!showPopup && (
         <div>
           <HeaderInfo text="굿즈 등록" isClear />
-          <ItemUploadBox {...styleProps}>
+          <ItemUploadBox>
             <div>
               <Flex is_flex justify="flex-start">
                 <ItemImgUpload />
@@ -327,13 +317,17 @@ const ItemUpload = (props) => {
 };
 
 const ItemUploadBox = styled.div`
-  ${(props) => (props.isMobile ? "height: 90vh;" : "height: 93vh;")};
+  height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
   margin-top: 65px;
+
+  @media screen and (min-width: 415px) {
+    height: 93vh;
+  }
 `;
 
 const TypeBtn = styled.button`

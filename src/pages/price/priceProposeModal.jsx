@@ -9,16 +9,6 @@ import { Input, Flex, LoginPopUp } from "../../elements";
 import { requestPublicData, postAction } from "../../shared/axios";
 
 const PriceProposeModal = ({ _onClick }) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   // 아이템 아이디
   const href = window.location.href.split("/");
   const itemId = Number(href[href.length - 1]);
@@ -57,7 +47,7 @@ const PriceProposeModal = ({ _onClick }) => {
     <>
       {showPopup && <LoginPopUp />}
       {!showPopup && (
-        <Screen {...styleProps}>
+        <Screen>
           <PriceProposeBox>
             <Info>
               <ExitBtn onClick={_onClick} />
@@ -95,10 +85,14 @@ const Screen = styled.div`
   position: fixed;
   top: 0;
   z-index: 3;
-  ${(props) => (props.isMobile ? "width: 100%" : "width: 415px")};
+  width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
   color: #222222;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 const PriceProposeBox = styled.div`

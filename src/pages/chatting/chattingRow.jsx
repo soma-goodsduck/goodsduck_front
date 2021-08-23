@@ -24,16 +24,6 @@ const ChattingRow = ({ chatRoom, userId }) => {
   const [chatCount, setChatCount] = useState(0);
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
 
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   const clickChatRow = () => {
     // LS에 채팅방에 방문한 시각 저장
     localStorage.setItem(
@@ -112,7 +102,7 @@ const ChattingRow = ({ chatRoom, userId }) => {
             margin="0 10px 0 0"
             size="55px"
           />
-          <InfoBox {...styleProps}>
+          <InfoBox>
             <Text medium>
               {isCreatedByUser
                 ? chatRoom.createdWith.nickName
@@ -155,13 +145,15 @@ const UserBox = styled.div`
 `;
 
 const InfoBox = styled.div`
-  ${(props) => (props.isMobile ? "width: 200px;" : "width: 250px;")};
+  width: 200px;
   display: grid;
-  ${(props) =>
-    props.isMobile
-      ? "grid-template-columns: 140px 80px;"
-      : "grid-template-columns: 175px 80px;"};
+  grid-template-columns: 140px 80px;
   gap: 10px;
+
+  @media screen and (min-width: 415px) {
+    width: 250px;
+    grid-template-columns: 175px 80px;
+  }
 `;
 
 const Badge = styled.div`

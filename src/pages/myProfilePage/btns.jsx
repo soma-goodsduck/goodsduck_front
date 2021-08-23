@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import { Icon, Flex, Text } from "../../elements";
@@ -7,21 +7,11 @@ import { grayText } from "../../shared/colors";
 import { history } from "../../redux/configureStore";
 
 const Btns = ({ myProfile }) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   return (
     <>
       {myProfile && (
-        <Flex {...styleProps}>
-          <BtnGrid isMobile>
+        <Flex>
+          <BtnGrid>
             <Flex
               is_col
               pointer
@@ -131,12 +121,13 @@ const Btns = ({ myProfile }) => {
 
 const BtnGrid = styled.div`
   display: grid;
-  ${(props) =>
-    props.isMobile
-      ? "grid-template-columns: repeat(4, 85px);"
-      : "grid-template-columns: repeat(4, 100px);"};
+  grid-template-columns: repeat(4, 85px);
   grid-auto-rows: 80px;
   margin-top: 20px;
+
+  @media screen and (min-width: 415px) {
+    grid-template-columns: repeat(4, 100px);
+  }
 `;
 
 export default Btns;

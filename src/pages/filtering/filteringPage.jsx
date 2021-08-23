@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -14,16 +14,6 @@ import { grayText, grayBorder, red } from "../../shared/colors";
 
 const Filtering = (props) => {
   const dispatch = useDispatch();
-
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
 
   const {
     idolMember,
@@ -101,13 +91,12 @@ const Filtering = (props) => {
             className={idolMember ? styles.moreIconClick : styles.moreIcon}
           />
         </div>
-        <TypeBtns {...styleProps}>
+        <TypeBtns>
           <Text color={grayText} margin="20px 12px">
             상품 구분
           </Text>
           <Flex is_flex justify="space-between" margin="0 10px">
             <TypeBtn
-              {...styleProps}
               className={
                 itemTradeType === "ALL" ? styles.clickTypeBtn : styles.typeBtn
               }
@@ -116,7 +105,6 @@ const Filtering = (props) => {
               전체
             </TypeBtn>
             <TypeBtn
-              {...styleProps}
               className={
                 itemTradeType === "SELL" ? styles.clickTypeBtn : styles.typeBtn
               }
@@ -125,7 +113,6 @@ const Filtering = (props) => {
               판매
             </TypeBtn>
             <TypeBtn
-              {...styleProps}
               className={
                 itemTradeType === "BUY" ? styles.clickTypeBtn : styles.typeBtn
               }
@@ -170,7 +157,7 @@ const Filtering = (props) => {
             className={itemStatus ? styles.moreIconClick : styles.moreIcon}
           />
         </div>
-        <PriceInputs {...styleProps}>
+        <PriceInputs>
           <Text color={grayText} margin="20px 15px">
             가격대
           </Text>
@@ -239,17 +226,27 @@ const Filtering = (props) => {
 };
 
 const TypeBtns = styled.div`
-  ${(props) => (props.isMobile ? "width: 340px;" : "width: 380px;")};
+  width: 340px;
+  @media screen and (min-width: 415px) {
+    width: 380px;
+  }
 `;
 
 const TypeBtn = styled.button`
-  ${(props) => (props.isMobile ? "width: 30vw;" : "width: 110px;")};
+  width: 30vw;
   padding: 15px;
   margin-right: 10px;
+
+  @media screen and (min-width: 415px) {
+    width: 110px;
+  }
 `;
 
 const PriceInputs = styled.div`
-  ${(props) => (props.isMobile ? "width: 340px;" : "width: 380px;")};
+  width: 340px;
+  @media screen and (min-width: 415px) {
+    width: 380px;
+  }
 `;
 const PriceInput = styled.input`
   width: 50%;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components";
 import { Flex, Image, Notification } from "../../elements";
@@ -10,16 +10,6 @@ import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const NotificationRow = ({ notification }) => {
-  // 반응형
-  const screen = window.screen.width;
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (screen < 415) {
-      setIsMobile(true);
-    }
-  }, [screen]);
-  const styleProps = { isMobile };
-
   const [showPopup, setShowPopup] = useState(false);
 
   const handleClick = () => {
@@ -59,7 +49,7 @@ const NotificationRow = ({ notification }) => {
                 margin="0 10px 0 0"
                 size="60px"
               />
-              <InfoBox {...styleProps} onClick={() => handleClick()}>
+              <InfoBox onClick={() => handleClick()}>
                 <Flex>
                   <TextBox>{notification.message.messageBody}</TextBox>
                 </Flex>
@@ -90,10 +80,14 @@ const UserBox = styled.div`
 `;
 
 const InfoBox = styled.div`
-  ${(props) => (props.isMobile ? "width: 80%" : "width: 300px;")};
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media screen and (min-width: 415px) {
+    width: 300px;
+  }
 `;
 
 const TextBox = styled.span`
