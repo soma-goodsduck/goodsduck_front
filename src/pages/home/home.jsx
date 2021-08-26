@@ -8,6 +8,7 @@ import Nav from "../../components/nav/nav";
 import { requestPublicData } from "../../shared/axios";
 
 const Home = (props) => {
+  const isApp = localStorage.getItem("isApp");
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const Home = (props) => {
     <Grid>
       <Header />
       <ItemList />
-      <Nav />
+      {!isApp && <Nav />}
     </Grid>
   );
 };

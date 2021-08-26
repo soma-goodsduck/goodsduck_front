@@ -13,6 +13,7 @@ import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const MyProfilePage = () => {
+  const isApp = localStorage.getItem("isApp");
   // 해당 유저 데이터 받아오기
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -69,7 +70,7 @@ const MyProfilePage = () => {
               <UserProfile user={user} />
               <Btns myProfile={myProfile} />
               <ItemList items={items} />
-              <Nav />
+              {!isApp && <Nav />}
             </MyPageBox>
           )}
         </div>

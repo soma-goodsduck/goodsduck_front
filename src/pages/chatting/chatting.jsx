@@ -17,6 +17,7 @@ export class Chatting extends Component {
     chatRooms: [],
     userId: "",
     showPopup: false,
+    isApp: localStorage.getItem("isApp"),
   };
 
   componentDidMount() {
@@ -63,7 +64,7 @@ export class Chatting extends Component {
   };
 
   render() {
-    const { userId, chatRooms, showPopup } = this.state;
+    const { userId, chatRooms, showPopup, isApp } = this.state;
 
     return (
       <>
@@ -86,7 +87,7 @@ export class Chatting extends Component {
                 ))}
               </div>
             )}
-            <Nav />
+            {!isApp && <Nav />}
           </ChattingBox>
         )}
       </>

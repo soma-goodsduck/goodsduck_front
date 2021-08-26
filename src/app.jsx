@@ -45,41 +45,55 @@ import ReportPage from "./pages/report/reportPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
+  window.alert(userAgent);
+
   const isChrome = userAgent.indexOf("Chrome");
   const isChromeMobile = userAgent.indexOf("CriOS");
   const isKakaoTalk = userAgent.indexOf("KAKAOTALK");
   const isIphone = userAgent.indexOf("iPhone");
+  const isApp = userAgent.indexOf("GOODSDUCK APP");
+  const isIOSApp = userAgent.indexOf("GOODSDUCK iOS");
 
   const [showNoti, setShotNoti] = useState(false);
   const [notiInfo, setNotiInfo] = useState(null);
   const [notiUrl, setNotiUrl] = useState("");
 
-  if (isIphone === -1) {
-    if (isKakaoTalk === -1) {
-      if (isChrome !== -1 || isChromeMobile !== -1) {
-        const firebaseMessaging = firebaseApp.messaging();
+  if (isApp === -1) {
+    localStorage.removeItem("isApp");
 
-        firebaseMessaging.onMessage((payload) => {
-          const href = window.location.href.split("/");
-          const chatRoomId = String(href[href.length - 1]);
+    if (isIphone === -1) {
+      if (isKakaoTalk === -1) {
+        if (isChrome !== -1 || isChromeMobile !== -1) {
+          const firebaseMessaging = firebaseApp.messaging();
 
-          if (payload.data.type === "CHAT") {
-            if (chatRoomId === payload.data.chatRoomId) {
-              return;
+          firebaseMessaging.onMessage((payload) => {
+            console.log(payload);
+
+            const href = window.location.href.split("/");
+            const chatRoomId = String(href[href.length - 1]);
+
+            if (payload.data.type === "CHAT") {
+              if (chatRoomId === payload.data.chatRoomId) {
+                return;
+              }
             }
-          }
-          console.log(payload);
 
-          setShotNoti(true);
-          setNotiInfo(payload.notification.body);
-          setNotiUrl(payload.notification.click_action);
+            setShotNoti(true);
+            setNotiInfo(payload.notification.body);
+            setNotiUrl(payload.notification.click_action);
 
-          setTimeout(() => {
-            setShotNoti(false);
-          }, 5000);
-        });
+            setTimeout(() => {
+              setShotNoti(false);
+            }, 5000);
+          });
+        }
       }
     }
+  }
+
+  // APP
+  if (isApp !== -1) {
+    localStorage.setItem("isApp", true);
   }
 
   return (
