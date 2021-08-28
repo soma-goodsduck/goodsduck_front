@@ -1,18 +1,23 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 
 import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
 
 import EditIdolGroup from "./editIdolGroup";
-import { Image } from "../../elements/index";
+import { Image, Text } from "../../elements/index";
 import HeaderInfo from "../../components/haeder/headerInfo";
-import { grayBorder, yellow } from "../../shared/colors";
+import { grayBorder, yellow, red } from "../../shared/colors";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
-import { requestAuthData, putAction } from "../../shared/axios";
+import {
+  requestAuthData,
+  putAction,
+  postActionForNonUser,
+} from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const EditProfilePage = (props) => {
@@ -22,11 +27,13 @@ const EditProfilePage = (props) => {
   const [user, setUser] = useState(null);
   const nickRef = useRef();
   const [nick, setNick] = useState("");
+  const [isUsedNick, setIsUsedNick] = useState(false);
   const [img, setImg] = useState(
     "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
   );
   const [imgFile, setImgFile] = useState();
   const idols = useSelector((state) => state.user.favIdolGroups);
+  const [nextOK, setNextOK] = useState(false);
 
   useEffect(() => {
     const idolsFromUser = [];
@@ -45,6 +52,14 @@ const EditProfilePage = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (nick !== "" && !isUsedNick) {
+      setNextOK(true);
+    } else {
+      setNextOK(false);
+    }
+  }, [nick, isUsedNick]);
+
   const updateImg = (e) => {
     const reader = new FileReader();
     const file = e.target.files[0];
@@ -58,7 +73,37 @@ const EditProfilePage = (props) => {
     };
   };
 
+  // 닉네임 중복체크
+  const nickCheckPost = _.debounce(async (_nick) => {
+    try {
+      const postNick = await postActionForNonUser("v1/users/nickname-check", {
+        nickName: _nick,
+      });
+      if (postNick.response) {
+        setIsUsedNick(false); // 닉네임 사용 가능
+      } else {
+        setIsUsedNick(true); // 이미 사용중인 닉네임
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, 500);
+  const nickCheck = useCallback(nickCheckPost, []);
+
+  const updateIdols = (isCheck, idolId) => {
+    if (isCheck) {
+      dispatch(userActions.setFavIdolGroups([...idols, idolId]));
+    } else {
+      const newIdols = idols.filter((idol) => idol !== idolId);
+      dispatch(userActions.setFavIdolGroups(newIdols));
+    }
+  };
+
   const updateProfile = () => {
+    if (!nextOK) {
+      return;
+    }
+
     const formData = new FormData();
     // 프로필 이미지 수정
     if (imgFile) {
@@ -80,15 +125,6 @@ const EditProfilePage = (props) => {
         history.replace("/my-profile");
         history.go(0);
       }
-    }
-  };
-
-  const updateIdols = (isCheck, idolId) => {
-    if (isCheck) {
-      dispatch(userActions.setFavIdolGroups([...idols, idolId]));
-    } else {
-      const newIdols = idols.filter((idol) => idol !== idolId);
-      dispatch(userActions.setFavIdolGroups(newIdols));
     }
   };
 
@@ -125,21 +161,29 @@ const EditProfilePage = (props) => {
                 value={nick}
                 onChange={(e) => {
                   setNick(e.target.value);
+                  nickCheck(e.target.value);
                 }}
               />
+              {isUsedNick && (
+                <Text color={red} bold height="3">
+                  이미 존재하는 닉네임입니다.
+                </Text>
+              )}
             </NicknameBox>
             <IdolBox>
               <LabelText>좋아하는 아이돌</LabelText>
               <EditIdolGroup onUpdate={updateIdols} />
             </IdolBox>
           </div>
-          <SaveBtn
+          <button
+            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
+            type="button"
             onClick={() => {
               updateProfile();
             }}
           >
             저장
-          </SaveBtn>
+          </button>
         </MyProfileBox>
       )}
     </>

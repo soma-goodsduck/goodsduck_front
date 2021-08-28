@@ -32,7 +32,7 @@
   margin-left: 105vw;
 }
 
-/* 아이돌 수정 */
+/* 내 프로필 수정 */
 .label {
   font-size: 14px;
   color: var(--grayBtnText);
@@ -52,6 +52,23 @@
   height: 60px;
   border-radius: 50%;
   margin: 5px;
+}
+
+.nextBtn,
+.nextOKBtn {
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+.nextBtn {
+  color: var(--white);
+  background-color: var(--gray);
+  cursor: auto;
+}
+
+.nextOKBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
 }
 
 @media screen and (min-width: 415px) {
