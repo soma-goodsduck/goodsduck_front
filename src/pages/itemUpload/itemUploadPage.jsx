@@ -131,6 +131,7 @@ const ItemUpload = (props) => {
     dataCategory,
     idolMember,
     fileList,
+    images,
   ]);
 
   const uploadItem = () => {
