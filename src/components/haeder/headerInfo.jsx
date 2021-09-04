@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -74,11 +74,11 @@ const HeaderInfo = (props) => {
 HeaderInfo.defaultProps = {
   margin: "",
   bg: "#ffffff",
-  borderRadius: "10px",
+  borderRadius: "",
 };
 
 const HeaderBox = styled.div`
-  width: 100%
+  width: 100%;
   padding: 0 20px;
   margin: ${(props) => props.margin};
   background-color: ${(props) => props.bg};

@@ -31,12 +31,7 @@ const Nav = (props) => {
 
   return (
     <div className={styles.nav}>
-      <Flex
-        is_flex
-        justify="space-around"
-        align="flex-end"
-        margin="10px 0 15px 0"
-      >
+      <Flex is_flex justify="space-around" align="flex-end" margin="0 0 15px 0">
         <button
           type="button"
           className={styles.iconBtn}

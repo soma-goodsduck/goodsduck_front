@@ -282,7 +282,6 @@ const Title = styled.div`
 `;
 
 const UserName = styled.div`
-  width: 100px;
   text-align: left;
   margin-top: 5px;
 `;

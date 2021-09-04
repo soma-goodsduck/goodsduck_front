@@ -40,6 +40,9 @@ const Header = () => {
           <Icon
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
             alt="search"
+            _onClick={(event) => {
+              onSubmit(event);
+            }}
           />
           <Icon
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart2.svg"

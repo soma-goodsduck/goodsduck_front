@@ -11,8 +11,6 @@ import InfinityScroll from "./infinityScroll";
 import { actionCreators as homeActions } from "../../redux/modules/home";
 
 const ItemList = ({ keyword }) => {
-  const screen = window.screen.width;
-
   const dispatch = useDispatch();
   const items = useSelector((state) => state.home.items);
   const isLoading = useSelector((state) => state.home.isLoading);
@@ -132,8 +130,8 @@ const ItemList = ({ keyword }) => {
 
 const ItemListBox = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 165px);
-  grid-auto-rows: 280px;
+  grid-template-columns: repeat(2, 45vw);
+  grid-auto-rows: 73vw;
   grid-column-gap: 15px;
   justify-content: center;
   padding: 10px;

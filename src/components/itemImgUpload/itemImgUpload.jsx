@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-loop-func */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -140,7 +140,7 @@ const ItemImgUpload = (props) => {
             type="file"
             id="chooseFile"
             name="chooseFile"
-            accept="image/*"
+            accept=".jpg, .png, .jpeg"
             multiple
             onChange={showPreview}
           />

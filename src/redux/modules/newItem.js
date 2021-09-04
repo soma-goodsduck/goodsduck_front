@@ -110,12 +110,11 @@ const addItemAction = (item, fileList) => {
         headers: { jwt: `${item.userJwt}` },
       })
       .then((response) => {
-        console.log(response.data);
-        if (response.data !== -1) {
+        if (response.data.response !== -1) {
           console.log("굿즈 등록 완료");
           history.replace(`/item/${response.data.response}`);
         } else {
-          console.log("굿즈 등록 실패");
+          window.alert("굿즈 등록 실패");
         }
       })
       .catch((error) => {

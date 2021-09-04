@@ -7,9 +7,10 @@ import UserProfile from "./userProfile";
 import Btns from "./btns";
 import ItemList from "./itemList";
 import ReviewList from "./reviewList";
+import { LoginPopUp } from "../../elements";
 
 import { grayBorder } from "../../shared/colors";
-import { requestPublicData } from "../../shared/axios";
+import { requestAuthData } from "../../shared/axios";
 
 const OtherProfilePage = (props) => {
   const href = window.location.href.split("/");
@@ -20,9 +21,13 @@ const OtherProfilePage = (props) => {
   const [reviews, setReviews] = useState([]);
   const [items, setItems] = useState([]);
   const [itemCount, setItemCount] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
 
   const requestProfileData = async () => {
-    const result = await requestPublicData(`v1/users/${bcrypt}`);
+    const result = await requestAuthData(`v1/users/${bcrypt}`);
+    if (result === "login") {
+      setShowPopup(true);
+    }
     return result;
   };
   const fnEffect = async () => {
@@ -42,21 +47,26 @@ const OtherProfilePage = (props) => {
 
   return (
     <>
-      {user && (
-        <ProfilePageBox>
-          <HeaderInfo2
-            text1="신고하기"
-            text2="프로필 정보"
-            popup1
-            userIdForReport={bcrypt}
-          />
-          <UserProfile user={user} />
-          <Btns data={btnsData} />
-          <Line />
-          <ItemList items={items} itemCount={itemCount} />
-          <Line />
-          <ReviewList reviews={reviews} />
-        </ProfilePageBox>
+      {showPopup && <LoginPopUp />}
+      {!showPopup && (
+        <div>
+          {user && (
+            <ProfilePageBox>
+              <HeaderInfo2
+                text1="신고하기"
+                text2="프로필 정보"
+                popup1
+                userIdForReport={bcrypt}
+              />
+              <UserProfile user={user} />
+              <Btns data={btnsData} />
+              <Line />
+              <ItemList items={items} itemCount={itemCount} />
+              <Line />
+              <ReviewList reviews={reviews} />
+            </ProfilePageBox>
+          )}
+        </div>
       )}
     </>
   );

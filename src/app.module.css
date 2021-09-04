@@ -44,12 +44,12 @@ body {
   }
   .appImg {
     position: absolute;
-    top: 10%;
+    top: 0;
     left: 10%;
 
     display: block;
-    width: 400px;
-    height: 800px;
+    width: 350px;
+    height: 700px;
 
     background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/sample.png");
     background-size: cover;

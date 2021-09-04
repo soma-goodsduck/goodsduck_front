@@ -60,7 +60,7 @@ const Item = ({ item, id }) => {
         </div>
       </Flex>
       <InfoBox>
-        <Flex justify="flex-start" padding="5px">
+        <Flex justify="flex-start" padding="5px 0">
           <Text bold margin="0 5px 0 0" color={color}>
             {tradeType}
           </Text>
@@ -68,12 +68,12 @@ const Item = ({ item, id }) => {
             <Text isLong>{item.name}</Text>
           </Title>
         </Flex>
-        <Flex justify="flex-start" padding="5px 7px">
+        <Flex justify="flex-start" padding="5px 0">
           <Text priceSize bold isLong>
             {numberWithCommas(item.price)}원
           </Text>
         </Flex>
-        <Flex justify="space-between" padding="5px 5px 20px 3px">
+        <Flex justify="space-between" padding="5px 0 20px 0">
           <Flex>
             <UserImg
               src={
@@ -107,7 +107,10 @@ const ItemBox = styled.div`
 `;
 
 const Title = styled.div`
-  width: 75%;
+  width: 30vw;
+  @media screen and (min-width: 415px) {
+    width: 140px;
+  }
 `;
 
 const UserName = styled.div`
@@ -121,10 +124,10 @@ const InfoBox = styled.div`
 
 const Text = styled.p`
   color: ${(props) => props.color};
-  font-size: 4vw;
-  font-size: ${(props) => props.priceSize && "5vw"};
-  font-size: ${(props) => props.nickSize && "4.3vw"};
-  font-size: ${(props) => props.timeSize && "3.5vw"};
+  font-size: 15px;
+  font-size: ${(props) => props.priceSize && "16px"};
+  font-size: ${(props) => props.nickSize && "15px"};
+  font-size: ${(props) => props.timeSize && "13px"};
   font-weight: ${(props) => (props.bold ? "600" : "")};
   font-weight: ${(props) => (props.medium ? "500" : "")};
   margin: ${(props) => props.margin};
@@ -143,8 +146,8 @@ const Text = styled.p`
 `;
 
 const ItemImg = styled.div`
-  width: 165px;
-  height: 165px;
+  width: 45vw;
+  height: 45vw;
   border-radius: 10px;
 
   background-image: url("${(props) => props.src}");
@@ -157,9 +160,9 @@ const ItemImg = styled.div`
 `;
 
 const UserImg = styled.div`
-  width: 6.5vw;
-  height: 6.5vw;
-  border-radius: 6.5vw;
+  width: 22px;
+  height: 22px;
+  border-radius: 22px;
   margin: 0 5px 0 0;
 
   background-image: url("${(props) => props.src}");
