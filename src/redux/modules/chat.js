@@ -10,11 +10,15 @@ import { postAction } from "../../shared/axios";
 
 // actions
 const SET_CHAT_ROOM = "SET_CHAT_ROOM";
+const SET_ITEM_IS_EXISTED = "SET_ITEM_IS_EXISTED";
+const SET_ITEM_IS_NOT_EXISTED = "SET_ITEM_IS_NOT_EXISTED";
 
 // action creators
 const setChatRoom = createAction(SET_CHAT_ROOM, (chatRoom) => ({
   chatRoom,
 }));
+const setItemIsExisted = createAction(SET_ITEM_IS_EXISTED, () => ({}));
+const setItemIsNotExisted = createAction(SET_ITEM_IS_NOT_EXISTED, () => ({}));
 
 // initialState
 const initialState = {
@@ -30,6 +34,7 @@ const initialState = {
   itemImg: "",
   itemName: "",
   itemPrice: 0,
+  isItemExist: true,
 };
 
 // middleware actions
@@ -41,7 +46,7 @@ const addChatRoomAciton = (item) => {
     timestamp: firebase.database.ServerValue.TIMESTAMP,
     item: {
       id: item.itemId, // 아이템 ID
-      image: item.images[0].url, // 아이템 이미지
+      imageUrl: item.images[0].url, // 아이템 이미지
       name: item.name, // 아이템 이름
       price: item.price, // 아이템 가격
     },
@@ -66,7 +71,7 @@ const addChatRoomAciton = (item) => {
     postAction(`v1/chat/items/${newChatRoom.item.id}`, {
       chatId: key,
     });
-    history.push(`/chat-room/${key}`);
+    history.push(`/chat-room/${item.itemId}/${key}`);
   };
 };
 
@@ -79,7 +84,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
     timestamp: firebase.database.ServerValue.TIMESTAMP,
     item: {
       id: item.item.itemId, // 아이템 ID
-      image: item.item.imageUrl, // 아이템 이미지
+      imageUrl: item.item.imageUrl, // 아이템 이미지
       name: item.item.name, // 아이템 이름
       price: item.proposedPrice, // 제안된 아이템 가격
     },
@@ -103,7 +108,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
     postAction(`v1/chat/price-propose/${item.priceProposeId}`, {
       chatId: key,
     });
-    history.push(`/chat-room/${key}`);
+    history.push(`/chat-room/${item.itemId}/${key}`);
   };
 };
 
@@ -112,7 +117,6 @@ export default handleActions(
   {
     [SET_CHAT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload);
         draft.chatRoomId = action.payload.chatRoom.id;
         draft.createdById = action.payload.chatRoom.createdBy.id;
         draft.createdByNickName = action.payload.chatRoom.createdBy.nickName;
@@ -127,6 +131,15 @@ export default handleActions(
         draft.itemImg = action.payload.chatRoom.item.image;
         draft.itemName = action.payload.chatRoom.item.name;
         draft.itemPrice = action.payload.chatRoom.item.price;
+        draft.isItemExist = action.payload.chatRoom.item.isExist;
+      }),
+    [SET_ITEM_IS_EXISTED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isItemExist = true;
+      }),
+    [SET_ITEM_IS_NOT_EXISTED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isItemExist = false;
       }),
   },
   initialState,
@@ -137,6 +150,8 @@ const actionCreators = {
   addChatRoomAciton,
   setChatRoom,
   addChatRoomAtPropseAciton,
+  setItemIsExisted,
+  setItemIsNotExisted,
 };
 
 export { actionCreators };

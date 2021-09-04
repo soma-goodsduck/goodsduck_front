@@ -85,17 +85,17 @@ export const requestPublicData = async (path) => {
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
-  try {
-    const result = await axios.get(url, options);
-    return result.data.response;
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   const result = await axios.get(url, options);
+  //   return result.data.response;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 
   // return verifyError(err.response.data.error);
-  // const result = await axios.get(url, options);
+  const result = await axios.get(url, options);
 
-  // return result.data.response;
+  return result.data.response;
 };
 
 // JWT를 리턴하는 데이터 (회원 전용)

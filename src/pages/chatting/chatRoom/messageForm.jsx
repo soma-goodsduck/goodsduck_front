@@ -1,11 +1,13 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable dot-notation */
 import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+
 import firebase from "firebase/app";
 
 import styled from "styled-components";
 
-import { Flex, Icon, Button, PopUp } from "../../../elements";
+import { Flex, Icon, Button, Notification } from "../../../elements";
 
 import { grayBorder, white } from "../../../shared/colors";
 import { firebaseDatabase } from "../../../shared/firebase";
@@ -28,6 +30,7 @@ const MessageForm = (props) => {
   const [loading, setLoading] = useState(false);
   const inputOpenImageRef = useRef();
   const [showPopup, setShowPopup] = useState(false);
+  const isItemExist = useSelector((state) => state.chat.isItemExist);
 
   useEffect(() => {
     const getUserId = requestAuthData("v1/users/look-up-id");
@@ -40,7 +43,7 @@ const MessageForm = (props) => {
   useEffect(() => {
     setTimeout(() => {
       setShowPopup(false);
-    }, 2000);
+    }, 5000);
   }, [showPopup]);
 
   const handleOpenImageRef = () => {
@@ -74,7 +77,7 @@ const MessageForm = (props) => {
       .ref(`chatRooms/${chatRoomId}`)
       .update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
 
-    // 만약 상대방이 존재하지 않는 채팅방이라면 메세지를 보낼 수 없도록 알림
+    // 만약 상대방이 존재하지 않거나 아이템이 삭제된 채팅방이라면 메세지를 보낼 수 없도록 알림
     let isNotChatRoom;
     chatRoomRef.on("value", (snapshot) => {
       const data = snapshot.val();
@@ -82,13 +85,14 @@ const MessageForm = (props) => {
         (data.createdBy.id !== userId &&
           data.createdBy.isPresented === false) ||
         (data.createdWith.id !== userId &&
-          data.createdWith.isPresented === false)
+          data.createdWith.isPresented === false) ||
+        !isItemExist
       ) {
         isNotChatRoom = true;
         setShowPopup(true);
       }
     });
-    if (isNotChatRoom) {
+    if (isNotChatRoom || !isItemExist) {
       return;
     }
     if (!content) {
@@ -142,7 +146,9 @@ const MessageForm = (props) => {
 
   return (
     <>
-      {showPopup && <PopUp width="250px" text1="상대방이 존재하지 않습니다." />}
+      {showPopup && (
+        <Notification data="상대방이 존재하지 않거나 굿즈가 삭제되어 메세지를 보낼 수 없습니다." />
+      )}
       <MessageFormBox onSubmit={handleSubmit}>
         <div>
           {errors.map((errorMsg) => (
