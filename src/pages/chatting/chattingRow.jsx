@@ -32,7 +32,7 @@ const ChattingRow = ({ chatRoom, userId }) => {
     );
 
     dispatch(chatActions.setChatRoom(chatRoom));
-    history.push(`/chat-room/${chatRoom.id}`);
+    history.push(`/chat-room/${chatRoom.item.id}/${chatRoom.id}`);
   };
 
   const getLastMessage = () => {
@@ -121,7 +121,7 @@ const ChattingRow = ({ chatRoom, userId }) => {
         </UserBox>
         <Image
           shape="rectangle"
-          src={chatRoom.item.image}
+          src={chatRoom.item.imageUrl}
           size="55px"
           borderRadius="5px"
         />

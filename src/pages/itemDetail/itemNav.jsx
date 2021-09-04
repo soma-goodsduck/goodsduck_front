@@ -175,7 +175,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                   }
                   onClick={() => {
                     console.log("채팅방으로 이동");
-                    history.push(`/chat-room/${item.chatId}`);
+                    history.push(`/chat-room/${id}/${item.chatId}`);
                   }}
                 >
                   <Icon
@@ -200,7 +200,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                   }
                   onClick={() => {
                     console.log("채팅방으로 이동");
-                    history.push(`/chat-room/${item.chatId}`);
+                    history.push(`/chat-room/${id}/${item.chatId}`);
                   }}
                 >
                   <Icon
@@ -225,7 +225,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                     isHighPrice ? styles.btnReChatCol : styles.btnReChat
                   }
                   onClick={() => {
-                    history.push(`/chat-room/${item.chatId}`);
+                    history.push(`/chat-room/${id}/${item.chatId}`);
                   }}
                 >
                   <Icon
