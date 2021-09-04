@@ -26,6 +26,14 @@ const verifyLogin = (error) => {
   }
 };
 
+const verifyError = (error) => {
+  return "no item";
+  // if (error !== null && error.status === 401) {
+  //   // 로그인 만료
+  //   return "login";
+  // }
+};
+
 // 무한 스크롤 (홈 데이터)
 export const getItems = async (path, itemId) => {
   const jwt = verifyJwt();
@@ -76,9 +84,18 @@ export const requestPublicData = async (path) => {
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
-  const result = await axios.get(url, options);
 
-  return result.data.response;
+  try {
+    const result = await axios.get(url, options);
+    return result.data.response;
+  } catch (error) {
+    console.log(error);
+  }
+
+  // return verifyError(err.response.data.error);
+  // const result = await axios.get(url, options);
+
+  // return result.data.response;
 };
 
 // JWT를 리턴하는 데이터 (회원 전용)
@@ -98,25 +115,6 @@ export const requestAuthData = async (path) => {
   updateJwt(result.headers.jwt);
 
   return result.data.response;
-};
-
-// 회원인지, 비회원인지 체크
-export const checkLoginWithData = async (path) => {
-  const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
-  }
-
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
-  const options = { headers: { jwt } };
-  const result = await axios.get(url, options);
-
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
-  }
-  updateJwt(result.headers.jwt);
-
-  return result.data;
 };
 
 // delete 요청
@@ -233,6 +231,34 @@ export const patchJsonAction = async (path, json) => {
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt, "Content-Type": "application/json" } };
   const result = await axios.patch(url, JSON.stringify(json), options);
+
+  if (verifyLogin(result.data.error) === "login") {
+    return "login";
+  }
+  updateJwt(result.headers.jwt);
+
+  return result.data;
+};
+
+// FCM TOKEN 전송
+export const sendToken = async (token) => {
+  const jwt = verifyJwt();
+  if (jwt === "login") {
+    return "login";
+  }
+
+  const json = {
+    body: token,
+  };
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/users/device`;
+  const options = {
+    headers: {
+      jwt,
+      registrationToken: `${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const result = await axios.post(url, JSON.stringify(json), options);
 
   if (verifyLogin(result.data.error) === "login") {
     return "login";
