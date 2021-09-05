@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
@@ -7,8 +8,11 @@ import { Text } from "../../elements";
 import { numberWithCommas } from "../../shared/functions";
 
 import { requestPublicData, deleteAction } from "../../shared/axios";
+import { actionCreators as chatActions } from "../../redux/modules/chat";
 
 const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
+  const dispatch = useDispatch();
+
   // 아이템 아이디
   const href = window.location.href.split("/");
   const itemId = Number(href[href.length - 1]);
@@ -16,16 +20,23 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
   useEffect(() => {
-    const getItemDetail = requestPublicData(`v1/items/${itemId}/summary`);
-    getItemDetail.then((result) => {
+    const getItemSummary = requestPublicData(`v1/items/${itemId}/summary`);
+    getItemSummary.then((result) => {
       setItemData(result);
     });
   }, []);
 
-  // 가격 제안 취소
   const handleDelete = () => {
     deleteAction(`v1/items/${itemId}/price-propose/${priceId}`);
-    window.location.reload();
+
+    if (type === "beforeChat") {
+      const getItemDetail = requestPublicData(`v1/items/${itemId}`);
+      getItemDetail.then((result) => {
+        dispatch(chatActions.addChatRoomAciton(result));
+      });
+    } else {
+      window.location.reload();
+    }
   };
 
   return (
@@ -36,10 +47,10 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
           {itemData && <ItemRow item={itemData} />}
           {type === "beforeChat" ? (
             <div>
-              <Text size="15px" margin="10px 0 0 0" bold is_center>
-                [{numberWithCommas(proposePrice)}원] 가격 제시 기록이 있습니다.
+              <Text size="17px" margin="5px 0" bold is_center>
+                기존 제시 금액 : {numberWithCommas(proposePrice)}원
               </Text>
-              <Text size="17px" margin="5px 0 0 0" bold is_center color="red">
+              <Text size="17px" margin="10px 0 0 0" bold is_center color="red">
                 먼저 취소하신 후, 즉시 거래하시겠습니까?
               </Text>
             </div>
@@ -55,7 +66,9 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
             handleDelete();
           }}
         >
-          가격 제시 취소
+          {type === "beforeChat"
+            ? "가격 제시 취소 후 즉시 거래"
+            : "가격 제시 취소"}
         </ProposeDeleteBtn>
       </PriceProposeUpdateBox>
     </Screen>
