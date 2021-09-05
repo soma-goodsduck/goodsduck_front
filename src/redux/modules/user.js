@@ -77,7 +77,6 @@ const initialState = {
 const loginAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
-    notification();
     history.replace("/");
   };
 };
@@ -121,7 +120,15 @@ const signupAction = (user) => {
       )
       .then((response) => {
         dispatch(logIn(response.data.response.jwt));
-        notification();
+
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+          );
+        } else {
+          notification();
+        }
+
         history.push("/");
       })
       .catch((error) => {

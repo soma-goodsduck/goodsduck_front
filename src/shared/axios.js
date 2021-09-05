@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable consistent-return */
 import axios from "axios";
 
@@ -19,19 +20,17 @@ const updateJwt = (newJwt) => {
   localStorage.setItem("jwt", newJwt);
 };
 
-const verifyLogin = (error) => {
-  if (error !== null && error.status === 401) {
-    // 로그인 만료
-    return "login";
-  }
-};
-
 const verifyError = (error) => {
-  return "no item";
-  // if (error !== null && error.status === 401) {
-  //   // 로그인 만료
-  //   return "login";
-  // }
+  if (error !== null) {
+    const statusCode = error.status;
+
+    switch (statusCode) {
+      case 401:
+        return "login";
+      default:
+        return "login";
+    }
+  }
 };
 
 // 무한 스크롤 (홈 데이터)
@@ -109,8 +108,11 @@ export const requestAuthData = async (path) => {
   const options = { headers: { jwt } };
   const result = await axios.get(url, options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  // if (verifyError(result.data.error) === "login") {
+  //   return "login";
+  // }
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -128,8 +130,8 @@ export const deleteAction = async (path) => {
   const options = { headers: { jwt } };
   const result = await axios.delete(url, options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -147,8 +149,8 @@ export const postAction = async (path, json) => {
   const options = { headers: { jwt, "Content-Type": "application/json" } };
   const result = await axios.post(url, JSON.stringify(json), options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -175,8 +177,8 @@ export const postImgAction = async (path, file) => {
   const options = { headers: { jwt } };
   const result = await axios.post(url, file, options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -194,8 +196,8 @@ export const putAction = async (path, data) => {
   const options = { headers: { jwt } };
   const result = await axios.put(url, data, options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -213,8 +215,8 @@ export const patchAction = async (path) => {
   const options = { headers: { jwt } };
   const result = await axios.patch(url, options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -232,8 +234,8 @@ export const patchJsonAction = async (path, json) => {
   const options = { headers: { jwt, "Content-Type": "application/json" } };
   const result = await axios.patch(url, JSON.stringify(json), options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 
@@ -241,7 +243,7 @@ export const patchJsonAction = async (path, json) => {
 };
 
 // FCM TOKEN 전송
-export const sendToken = async (token) => {
+export const sendTokenAction = async (token) => {
   const jwt = verifyJwt();
   if (jwt === "login") {
     return "login";
@@ -260,8 +262,8 @@ export const sendToken = async (token) => {
   };
   const result = await axios.post(url, JSON.stringify(json), options);
 
-  if (verifyLogin(result.data.error) === "login") {
-    return "login";
+  if (result.data.error) {
+    return verifyError(result.data.error);
   }
   updateJwt(result.headers.jwt);
 

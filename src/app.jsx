@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
@@ -36,65 +36,83 @@ import WritingReviewPage from "./pages/review/writingReviewPage";
 import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
 import OtherItemsPage from "./pages/otherProfilePage/otherItemsPage";
+import ReportPage from "./pages/report/reportPage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
+import { sendTokenAction } from "./shared/axios";
 
 import { history } from "./redux/configureStore";
-import ReportPage from "./pages/report/reportPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
-  window.alert(userAgent);
 
   const isChrome = userAgent.indexOf("Chrome");
   const isChromeMobile = userAgent.indexOf("CriOS");
   const isKakaoTalk = userAgent.indexOf("KAKAOTALK");
-  const isIphone = userAgent.indexOf("iPhone");
-  const isApp = userAgent.indexOf("GOODSDUCK APP");
-  const isIOSApp = userAgent.indexOf("GOODSDUCK iOS");
+  const isApp = userAgent.indexOf("APP");
 
   const [showNoti, setShotNoti] = useState(false);
   const [notiInfo, setNotiInfo] = useState(null);
   const [notiUrl, setNotiUrl] = useState("");
 
+  // WEB
   if (isApp === -1) {
-    localStorage.removeItem("isApp");
+    if (isKakaoTalk === -1) {
+      if (isChrome !== -1 || isChromeMobile !== -1) {
+        const firebaseMessaging = firebaseApp.messaging();
 
-    if (isIphone === -1) {
-      if (isKakaoTalk === -1) {
-        if (isChrome !== -1 || isChromeMobile !== -1) {
-          const firebaseMessaging = firebaseApp.messaging();
+        firebaseMessaging.onMessage((payload) => {
+          console.log(payload);
 
-          firebaseMessaging.onMessage((payload) => {
-            console.log(payload);
+          const href = window.location.href.split("/");
+          const chatRoomId = String(href[href.length - 1]);
 
-            const href = window.location.href.split("/");
-            const chatRoomId = String(href[href.length - 1]);
-
-            if (payload.data.type === "CHAT") {
-              if (chatRoomId === payload.data.chatRoomId) {
-                return;
-              }
+          if (payload.data.type === "CHAT") {
+            if (chatRoomId === payload.data.chatRoomId) {
+              return;
             }
 
-            setShotNoti(true);
-            setNotiInfo(payload.notification.body);
-            setNotiUrl(payload.notification.click_action);
+            if (chatRoomId !== "chatting") {
+              localStorage.setItem("hasNewChat", true);
+            }
+          }
 
-            setTimeout(() => {
-              setShotNoti(false);
-            }, 5000);
-          });
-        }
+          setShotNoti(true);
+          setNotiInfo(payload.notification.body);
+          setNotiUrl(payload.notification.click_action);
+
+          setTimeout(() => {
+            setShotNoti(false);
+          }, 5000);
+        });
       }
     }
   }
 
-  // APP
-  if (isApp !== -1) {
-    localStorage.setItem("isApp", true);
-  }
+  const RNListener = () => {
+    const listener = (event) => {
+      const { data, type } = JSON.parse(event.data);
+      if (type === "TOKEN") {
+        const sendFcmToken = sendTokenAction(data);
+        sendFcmToken.then((result) => {
+          if (result === "login") {
+            history.push("/login");
+          }
+        });
+      }
+    };
+
+    if (isApp !== -1) {
+      /** android */
+      document.addEventListener("message", listener);
+      /** ios */
+      window.addEventListener("message", listener);
+    }
+  };
+  useEffect(() => {
+    RNListener();
+  });
 
   return (
     <>
@@ -117,7 +135,7 @@ function App() {
           />
           <Route path="/search/item/:name" exact component={KeywordSearch} />
           <Route path="/chatting" exact component={Chatting} />
-          <Route path="/chat-room/:id" exact component={ChatRoom} />
+          <Route path="/chat-room/:id/:id" exact component={ChatRoom} />
           <Route path="/my-profile" exact component={MyProfile} />
           <Route path="/review/:id" exact component={WritingReviewPage} />
           <Route
