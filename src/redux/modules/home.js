@@ -36,8 +36,7 @@ const deleteItem = createAction(DELETE_ITEM, (itemId) => ({
 }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 const clearItems = createAction(CLEAR_ITEMS, () => ({}));
-const setNewNoti = createAction(SET_NEW_NOTI, (hasNewChat, hasNewNoti) => ({
-  hasNewChat,
+const setNewNoti = createAction(SET_NEW_NOTI, (hasNewNoti) => ({
   hasNewNoti,
 }));
 
@@ -47,7 +46,6 @@ const initialState = {
   hasNext: true,
   isLoading: false,
   itemNum: 0,
-  hasNewChat: false,
   hasNewNoti: false,
 };
 
@@ -76,9 +74,7 @@ const getItemsData = (_itemNum = 0) => {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
 
-      dispatch(
-        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
-      );
+      dispatch(setNewNoti(response.noty.hasNewNotification));
     });
   };
 };
@@ -111,9 +107,7 @@ const getItemsDataByIdol = (num, idolId) => {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
 
-      dispatch(
-        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
-      );
+      dispatch(setNewNoti(response.noty.hasNewNotification));
     });
   };
 };
@@ -146,9 +140,7 @@ const getItemsDataByFilter = (query) => {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
 
-      dispatch(
-        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
-      );
+      dispatch(setNewNoti(response.noty.hasNewNotification));
     });
   };
 };
@@ -181,9 +173,7 @@ const getItemsDataBySearch = (num, _keyword) => {
         dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
       }
 
-      dispatch(
-        setNewNoti(response.noty.hasNewChat, response.noty.hasNewNotification),
-      );
+      dispatch(setNewNoti(response.noty.hasNewNotification));
     });
   };
 };
@@ -222,7 +212,6 @@ export default handleActions(
       }),
     [SET_NEW_NOTI]: (state, action) =>
       produce(state, (draft) => {
-        draft.hasNewChat = action.payload.hasNewChat;
         draft.hasNewNoti = action.payload.hasNewNoti;
       }),
   },

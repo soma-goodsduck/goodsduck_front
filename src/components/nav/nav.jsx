@@ -1,9 +1,7 @@
 /* eslint-disable indent */
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 import styles from "./nav.module.css";
-
 import { Flex } from "../../elements";
 
 import { history } from "../../redux/configureStore";
@@ -15,7 +13,7 @@ const Nav = (props) => {
   const [isChat, setIsChat] = useState(false);
   const [isCommunity, setIsCommunity] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
-  const hasNewChat = useSelector((state) => state.home.hasNewChat);
+  const [hasNewChat, setHasNewChat] = useState(false);
 
   useEffect(() => {
     if (href.includes("/chatting")) {
@@ -26,6 +24,11 @@ const Nav = (props) => {
       setIsProfile(true);
     } else {
       setIsHome(true);
+    }
+
+    const newChat = localStorage.getItem("hasNewChat");
+    if (newChat) {
+      setHasNewChat(newChat);
     }
   });
 
@@ -51,7 +54,11 @@ const Nav = (props) => {
             history.push("/chatting");
           }}
         >
-          <div className={hasNewChat ? styles.chatBadge : styles.chatBadgeZero}>
+          <div
+            className={
+              hasNewChat === "true" ? styles.chatBadge : styles.chatBadgeZero
+            }
+          >
             N
           </div>
           <div className={isChat ? styles.isChatIcon : styles.isNotChatIcon} />

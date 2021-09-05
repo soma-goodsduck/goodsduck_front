@@ -64,8 +64,10 @@ const ChattingRow = ({ chatRoom, userId }) => {
       if (DataSnapshot.val() !== null) {
         const messageValues = Object.values(DataSnapshot.val());
         messageValues.forEach((data) => {
-          if (data.timestamp > lastVisitTime) {
-            count += 1;
+          if (data.user.id !== userId) {
+            if (data.timestamp > lastVisitTime) {
+              count += 1;
+            }
           }
         });
       }

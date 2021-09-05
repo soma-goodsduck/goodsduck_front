@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
@@ -7,6 +7,17 @@ import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
 import { history } from "../../redux/configureStore";
 
 const HeaderInfo2 = (props) => {
+  const href = window.location.href;
+  const isChatRoom = href.indexOf("chat-room");
+  const [chatRoomId, setChatRoomId] = useState("");
+
+  useEffect(() => {
+    if (isChatRoom !== -1) {
+      const hrefList = href.split("/");
+      setChatRoomId(hrefList[hrefList.length - 1]);
+    }
+  }, []);
+
   const {
     text1,
     text2,
@@ -46,6 +57,13 @@ const HeaderInfo2 = (props) => {
     if (isClear) {
       history.replace("/");
       return;
+    }
+
+    if (chatRoomId !== "") {
+      localStorage.setItem(
+        `${chatRoomId}`,
+        `${Math.round(new Date().getTime())}`,
+      );
     }
     history.goBack();
   };

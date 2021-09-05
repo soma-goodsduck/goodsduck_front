@@ -21,6 +21,8 @@ export class Chatting extends Component {
   };
 
   componentDidMount() {
+    localStorage.setItem("hasNewChat", false);
+
     const getUserId = requestPublicData("v1/users/look-up-id");
     getUserId.then((result) => {
       if (result === null) {
@@ -30,9 +32,6 @@ export class Chatting extends Component {
         this.setState({ userId: result.userId });
       }
     });
-
-    // LS에 채팅에 방문한 시각 저장
-    localStorage.setItem("chatting", `${Math.round(new Date().getTime())}`);
   }
 
   componentWillUnmount() {
