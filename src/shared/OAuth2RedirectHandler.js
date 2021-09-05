@@ -4,6 +4,8 @@ import * as Sentry from "@sentry/react";
 
 import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
+
+import { notification } from "./notification";
 import Spinner from "./spinner";
 
 const OAuth2RedirectHandler = () => {
@@ -26,6 +28,16 @@ const OAuth2RedirectHandler = () => {
           ),
         );
       } else {
+        if (result.data.response.isAgreeToNotification) {
+          if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(
+              JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+            );
+          } else {
+            notification();
+          }
+        }
+
         dispatch(userActions.loginAction(result.data.response.jwt));
       }
     } catch (error) {
@@ -39,7 +51,6 @@ const OAuth2RedirectHandler = () => {
       const result = await axios.get(
         `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/naver?code=${code}&state=${state}&clientId=${clientId}`,
       );
-
       if (result.data.response.role === "ANONYMOUS") {
         dispatch(
           userActions.nonUserAction(
@@ -48,6 +59,16 @@ const OAuth2RedirectHandler = () => {
           ),
         );
       } else {
+        if (result.data.response.isAgreeToNotification) {
+          if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(
+              JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+            );
+          } else {
+            notification();
+          }
+        }
+
         dispatch(userActions.loginAction(result.data.response.jwt));
       }
     } catch (error) {
