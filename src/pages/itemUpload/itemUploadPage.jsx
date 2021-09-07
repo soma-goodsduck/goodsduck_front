@@ -81,10 +81,8 @@ const ItemUpload = (props) => {
     fileList,
   };
 
-  // 입력값이 변할때마다 상태값에 저장
+  // 판매하기와 구매하기 선택값 유지
   useEffect(() => {
-    dispatch(newItemActions.setTradeType(tradeType));
-    // 판매하기와 구매하기 선택값 유지
     if (dataTradeType === "BUY") {
       setIsSelling(false);
     } else if (dataTradeType === "SELL") {
@@ -96,9 +94,11 @@ const ItemUpload = (props) => {
     if (e.target.innerText === "구매하기") {
       setTradeType("BUY");
       setIsSelling(false);
+      dispatch(newItemActions.setTradeType("BUY"));
     } else {
       setTradeType("SELL");
       setIsSelling(true);
+      dispatch(newItemActions.setTradeType("SELL"));
     }
   };
 
