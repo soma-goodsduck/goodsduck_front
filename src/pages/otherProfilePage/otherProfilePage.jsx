@@ -10,7 +10,7 @@ import ReviewList from "./reviewList";
 import { LoginPopUp } from "../../elements";
 
 import { grayBorder } from "../../shared/colors";
-import { requestAuthData } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const OtherProfilePage = (props) => {
   const href = window.location.href.split("/");
@@ -24,7 +24,7 @@ const OtherProfilePage = (props) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const requestProfileData = async () => {
-    const result = await requestAuthData(`v1/users/${bcrypt}`);
+    const result = await requestPublicData(`v1/users/${bcrypt}`);
     if (result === "login") {
       setShowPopup(true);
     }

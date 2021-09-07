@@ -6,7 +6,7 @@ import styles from "../myProfilePage/myProfilePage.module.css";
 import Item from "./otherItemRow";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
-import { requestAuthData } from "../../shared/axios";
+import { requestPublicData } from "../../shared/axios";
 
 const OtherItemsPage = (props) => {
   const href = window.location.href.split("/");
@@ -20,7 +20,7 @@ const OtherItemsPage = (props) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
   const requestItems = async () => {
-    const result = await requestAuthData(
+    const result = await requestPublicData(
       `v1/users/${bcrypt}/items?tradeStatus=${filteringType}`,
     );
 
