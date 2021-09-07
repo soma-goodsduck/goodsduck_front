@@ -94,7 +94,7 @@ const HeaderInfo2 = (props) => {
           text1="신고하기"
           text2={text1}
           _onClick1={() => {
-            history.push(`/report/${userIdForReport}`);
+            history.push(`/report/chat/${chatRoomId}/${userIdForReport}`);
           }}
           _onClick2={() => {
             _onClick();

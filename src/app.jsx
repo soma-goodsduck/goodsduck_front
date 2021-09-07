@@ -36,7 +36,9 @@ import WritingReviewPage from "./pages/review/writingReviewPage";
 import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
 import OtherItemsPage from "./pages/otherProfilePage/otherItemsPage";
-import ReportPage from "./pages/report/reportPage";
+import UserReportPage from "./pages/report/userReportPage";
+import ItemReportPage from "./pages/report/itemReportPage";
+import ChattingReportPage from "./pages/report/chattingReportPage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
@@ -133,6 +135,11 @@ function App() {
             exact
             component={OAuth2RedirectHandler}
           />
+          <Route
+            path="/auth/apple/callback"
+            exact
+            component={OAuth2RedirectHandler}
+          />
           <Route path="/search/item/:name" exact component={KeywordSearch} />
           <Route path="/chatting" exact component={Chatting} />
           <Route path="/chat-room/:id/:id" exact component={ChatRoom} />
@@ -153,7 +160,13 @@ function App() {
           <Route path="/item/:id" exact component={ItemDetailPage} />
           <Route path="/profile/:id" exact component={OtherProfilePage} />
           <Route path="/profile/:id/items" exact component={OtherItemsPage} />
-          <Route path="/report/:id" exact component={ReportPage} />
+          <Route path="/report/:id" exact component={UserReportPage} />
+          <Route path="/report/item/:id/:id" exact component={ItemReportPage} />
+          <Route
+            path="/report/chat/:id/:id"
+            exact
+            component={ChattingReportPage}
+          />
 
           {/* 아이템 등록 */}
           <Route path="/upload-item" exact component={ItemUploadPage} />
