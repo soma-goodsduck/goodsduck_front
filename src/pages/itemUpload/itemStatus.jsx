@@ -27,7 +27,6 @@ const ItemStatus = () => {
   const [nextOK, setNextOK] = useState(false);
 
   const checkHandler = (grade) => {
-    console.log(statusValue, grade);
     dispatch(newItemActions.setStatus(grade));
     setNextOK(true);
     history.push("/upload-item");

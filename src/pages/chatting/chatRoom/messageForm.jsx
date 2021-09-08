@@ -101,7 +101,8 @@ const MessageForm = (props) => {
     setLoading(true);
 
     try {
-      await messagesRef.child(chatRoomId).push().set(createMessage());
+      const key = messagesRef.child(chatRoomId).push().key;
+      await messagesRef.child(chatRoomId).child(key).update(createMessage());
 
       setErrors([]);
       setContent("");
@@ -114,11 +115,12 @@ const MessageForm = (props) => {
       );
 
       const notiJson = {
+        chatMessageId: key,
         chatRoomId,
         senderId: userId,
         type: "CHAT",
       };
-      postAction("v1/chat/notification", notiJson);
+      postAction("v2/chat/notification", notiJson);
     } catch (error) {
       console.error(error.message);
       setErrors((prev) => prev.concat(error.message));

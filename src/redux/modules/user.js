@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
@@ -154,6 +155,7 @@ export default handleActions(
       produce(state, (draft) => {
         draft.idolsForSignup = action.payload.idolsForSignup;
       }),
+
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;

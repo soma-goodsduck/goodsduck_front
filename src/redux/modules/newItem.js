@@ -62,27 +62,13 @@ const initialState = {
   images: [], // image url
   files: [], // image file data
   price: null,
-  trade_type: "",
+  trade_type: "SELL",
   status_grade: "",
   idol_group_id: null,
   idol_member_id: null,
   idol_group_name: "",
   idol_member_name: "",
   category: "",
-};
-
-// 아이템 등록에 필요한 정보
-const initialItem = {
-  user_id: 0,
-  name: "마크 포토카드 팔아요",
-  description: "NCT 마크 맛 Hot Sauce 포카 팔아요",
-  images: ["https://pbs.twimg.com/media/D8JNRkpUwAACjz6.jpg"],
-  price: 20000,
-  trade_type: "판매",
-  status_grade: "A",
-  idol_group_id: "NCT",
-  idol_member_id: "마크",
-  category: "포토카드",
 };
 
 // middleware actions

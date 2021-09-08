@@ -84,7 +84,7 @@ const NotificationRowBox = styled.div`
   justify-content: space-between;
   padding: 20px 16px;
   cursor: pointer;
-  background-color: ${(props) => (props.isRead ? white : grayBorder)};
+  background-color: ${(props) => (props.isRead ? white : "#FFF9CC")};
 `;
 
 const UserBox = styled.div`
@@ -108,7 +108,7 @@ const TextBox = styled.span`
   font-weight: 400;
   line-height: 1.5;
 
-  background-color: ${(props) => (props.isRead ? white : grayBorder)};
+  background-color: ${(props) => (props.isRead ? white : "#FFF9CC")};
 `;
 
 const TextTimeBox = styled.div`

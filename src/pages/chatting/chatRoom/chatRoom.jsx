@@ -141,13 +141,8 @@ export class ChatRoom extends Component {
     );
 
   render() {
-    const {
-      messages,
-      messageLoading,
-      chatRoomId,
-      createdWithBcryptId,
-      itemId,
-    } = this.state;
+    const { messages, messageLoading, chatRoomId, createdWithBcryptId } =
+      this.state;
 
     return (
       <>
@@ -167,7 +162,7 @@ export class ChatRoom extends Component {
           userIdForReport={createdWithBcryptId}
         />
         <ItemInfo />
-        <div>
+        <div style={{ marginTop: "150px" }}>
           {this.renderMessageSkeleton(messageLoading)}
           {!messageLoading && (
             <MessageBox>{this.renderMessages(messages)}</MessageBox>

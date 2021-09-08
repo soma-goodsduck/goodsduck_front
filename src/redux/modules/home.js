@@ -66,7 +66,11 @@ const getItemsData = (_itemNum = 0) => {
       const response = result.response;
       const newItemData = response.list;
       const hasNext = response.hasNext;
-      const itemNum = newItemData[newItemData.length - 1].itemId;
+
+      let itemNum;
+      if (newItemData.length !== 0) {
+        itemNum = newItemData[newItemData.length - 1].itemId;
+      }
 
       if (response.hasNext) {
         dispatch(setHomeItems(newItemData, hasNext, itemNum));
