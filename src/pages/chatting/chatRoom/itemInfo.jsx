@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { firebaseDatabase } from "../../../shared/firebase";
 
 import { Image, Text, Flex } from "../../../elements";
-import { black, grayBorder, gray } from "../../../shared/colors";
+import { black, grayBorder, gray, white } from "../../../shared/colors";
 import { numberWithCommas } from "../../../shared/functions";
 import { requestPublicData } from "../../../shared/axios";
 
@@ -22,32 +22,33 @@ const ItemInfo = () => {
   const [isNotExist, setIsNotExist] = useState(false);
   const [color, setColor] = useState(black);
 
-  useEffect(() => {
-    const getItemInfo = requestPublicData(`v1/items/${itemId}/summary`);
-    getItemInfo
-      .then((result) => {
-        setItem(result);
-        dispatch(chatActions.setItemIsExisted());
-        console.log(result);
-      })
-      .catch(() => {
-        dispatch(chatActions.setItemIsNotExisted());
-        setIsNotExist(true);
-        setColor(gray);
+  const requestItemData = async () => {
+    const result = await requestPublicData(`v1/items/${itemId}/summary`);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemData = await requestItemData();
+    dispatch(chatActions.setItemIsExisted());
 
-        const chatRoomInfoRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
-        chatRoomInfoRef
-          .get()
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              setItem(snapshot.val().item);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+    const chatRoomInfoRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
+    chatRoomInfoRef
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setItem(snapshot.val().item);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
-  }, []);
+
+    if (getItemData === "no item") {
+      dispatch(chatActions.setItemIsNotExisted());
+      setIsNotExist(true);
+      setColor(gray);
+    }
+  };
+  useEffect(fnEffect, []);
 
   return (
     <>
@@ -84,11 +85,19 @@ const ItemInfo = () => {
 
 const ItemBox = styled.div`
   margin: 0 20px;
-  margin-top: 70px;
+  margin-top: 55px;
   display: flex;
   position: relative;
   border-bottom: 2px solid ${grayBorder};
   cursor: pointer;
+
+  width: 90%;
+  position: fixed;
+  background-color: ${white};
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 const ItemRowBox = styled.div`
