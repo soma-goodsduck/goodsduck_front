@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 
@@ -38,7 +39,7 @@ const initialState = {
 };
 
 // middleware actions
-const addChatRoomAciton = (item) => {
+const addChatRoomAciton = (item, user) => {
   const chatRoomsRef = firebaseDatabase.ref("chatRooms");
   const key = chatRoomsRef.push().key;
   const newChatRoom = {
@@ -58,9 +59,10 @@ const addChatRoomAciton = (item) => {
       isPresented: true, // 현재 채팅방에 참여하고 있는지
     },
     createdBy: {
-      id: item.loginUser.userId, // 유저 아이디
-      nickName: item.loginUser.nickName, // 로그인 유저의 닉네임
-      profileImg: item.loginUser.imageUrl, // 로그인 유저의 프로필 이미지
+      id: user.id, // 글쓴이(로그인 유저)의 아이디
+      nickName: user.nickName, // 글쓴이(로그인 유저)의 닉네임
+      profileImg: user.profileImg, // 글쓴이(로그인 유저)의 프로필 이미지
+      bcryptId: user.bcryptId, // 로그인 유저의 bcrypt
       isPresented: true, // 현재 채팅방에 참여하고 있는지
     },
   };
@@ -99,6 +101,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
       id: user.id, // 글쓴이(로그인 유저)의 아이디
       nickName: user.nickName, // 글쓴이(로그인 유저)의 닉네임
       profileImg: user.profileImg, // 글쓴이(로그인 유저)의 프로필 이미지
+      bcryptId: user.bcryptId, // 로그인 유저의 bcrypt
       isPresented: true, // 현재 채팅방에 참여하고 있는지
     },
   };
@@ -108,7 +111,7 @@ const addChatRoomAtPropseAciton = (item, user) => {
     postAction(`v1/chat/price-propose/${item.priceProposeId}`, {
       chatId: key,
     });
-    history.push(`/chat-room/${item.itemId}/${key}`);
+    history.push(`/chat-room/${item.item.itemId}/${key}`);
   };
 };
 

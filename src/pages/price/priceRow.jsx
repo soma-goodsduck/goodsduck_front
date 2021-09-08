@@ -30,6 +30,7 @@ const PriceRow = ({ item }) => {
             id: userResult.userId,
             nickName: userResult.nickName,
             profileImg: userResult.imageUrl,
+            bcryptId: userResult.bcryptId,
           };
           dispatch(chatActions.addChatRoomAtPropseAciton(item, user));
         });

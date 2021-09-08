@@ -3,7 +3,6 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/state-in-constructor */
 import React, { Component, createRef } from "react";
-import { connect } from "react-redux";
 
 import styled from "styled-components";
 
@@ -22,9 +21,9 @@ export class ChatRoom extends Component {
 
   state = {
     createdByMe: false,
-    chatRoomId: this.props.chatRoomId,
-    createdWithBcryptId: this.props.createdWithBcryptId,
+    chatRoomId: "",
     withChatNick: "",
+    withChatBcrypt: "",
     messages: [],
     messageLoading: true,
     messagesRef: firebaseDatabase.ref("messages"),
@@ -33,51 +32,34 @@ export class ChatRoom extends Component {
   componentDidMount() {
     const getUserId = requestPublicData("v1/users/look-up-id");
 
-    // 전달되는 props이 있을때 (ex. 채팅방을 클릭해서 들어온 경우)
-    if (this.props.chatRoomId !== "") {
-      const { createdById, chatRoomId } = this.props;
-      getUserId.then((result) => {
-        if (result.userId === createdById) {
-          this.setState({ createdByMe: true });
-          this.setState({ withChatNick: this.props.createdWithNickName });
-        } else {
-          this.setState({ withChatNick: this.props.createdByNickName });
+    const href = window.location.href.split("/");
+    const _ChatRoomId = href[href.length - 1];
+    this.setState({ chatRoomId: _ChatRoomId });
+
+    const chatRoomInfoRef = firebaseDatabase.ref(`chatRooms/${_ChatRoomId}`);
+    chatRoomInfoRef
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+
+          getUserId.then((result) => {
+            if (result.userId === data.createdBy.id) {
+              this.setState({ createdByMe: true });
+              this.setState({ withChatNick: data.createdWith.nickName });
+              this.setState({ withChatBcrypt: data.createdWith.bcryptId });
+            } else {
+              this.setState({ withChatNick: data.createdBy.nickName });
+              this.setState({ withChatBcrypt: data.createdBy.bcryptId });
+            }
+          });
+
+          this.addMessagesListeners(data.id);
         }
+      })
+      .catch((error) => {
+        console.error(error);
       });
-
-      this.addMessagesListeners(chatRoomId);
-    } else {
-      // 전달되는 props이 없을때 (ex. 새로고침)
-      const href = window.location.href.split("/");
-      const newChatRoomId = href[href.length - 1];
-      this.setState({ chatRoomId: newChatRoomId });
-
-      const chatRoomInfoRef = firebaseDatabase.ref(
-        `chatRooms/${newChatRoomId}`,
-      );
-      chatRoomInfoRef
-        .get()
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-
-            this.setState({ createdWithBcryptId: data.createdWith.bcryptId });
-            getUserId.then((result) => {
-              if (result.userId === data.createdBy.id) {
-                this.setState({ createdByMe: true });
-                this.setState({ withChatNick: data.createdWith.nickName });
-              } else {
-                this.setState({ withChatNick: data.createdBy.nickName });
-              }
-            });
-
-            this.addMessagesListeners(data.id);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
 
     setTimeout(() => {
       this.setState({
@@ -141,8 +123,7 @@ export class ChatRoom extends Component {
     );
 
   render() {
-    const { messages, messageLoading, chatRoomId, createdWithBcryptId } =
-      this.state;
+    const { messages, messageLoading, chatRoomId, withChatBcrypt } = this.state;
 
     return (
       <>
@@ -154,12 +135,12 @@ export class ChatRoom extends Component {
             this.leaveChatRoom(chatRoomId);
           }}
           _nickClick={() => {
-            history.push(`/profile/${createdWithBcryptId}`);
+            history.push(`/profile/${withChatBcrypt}`);
           }}
           type="chat"
           isClick
           popup2
-          userIdForReport={createdWithBcryptId}
+          userIdForReport={withChatBcrypt}
         />
         <ItemInfo />
         <div style={{ marginTop: "150px" }}>
@@ -179,14 +160,15 @@ const MessageBox = styled.div`
   margin-bottom: 80px;
 `;
 
-const mapStateToProps = (state) => {
-  return {
-    chatRoomId: state.chat.chatRoomId,
-    createdById: state.chat.createdById,
-    createdByNickName: state.chat.createdByNickName,
-    createdWithNickName: state.chat.createdWithNickName,
-    createdWithBcryptId: state.chat.createdWithBcryptId,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     chatRoomId: state.chat.chatRoomId,
+//     createdById: state.chat.createdById,
+//     createdByNickName: state.chat.createdByNickName,
+//     createdWithNickName: state.chat.createdWithNickName,
+//     createdWithBcryptId: state.chat.createdWithBcryptId,
+//   };
+// };
 
-export default connect(mapStateToProps)(ChatRoom);
+// export default connect(mapStateToProps)(ChatRoom);
+export default ChatRoom;

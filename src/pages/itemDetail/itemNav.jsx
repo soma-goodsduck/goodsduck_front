@@ -52,7 +52,14 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
         setShowCheckPriceDeletePopup(true);
         return;
       }
-      dispatch(chatActions.addChatRoomAciton(item));
+
+      const user = {
+        id: result.userId,
+        nickName: result.nickName,
+        profileImg: result.imageUrl,
+        bcryptId: result.bcryptId,
+      };
+      dispatch(chatActions.addChatRoomAciton(item, user));
     });
   };
 
@@ -174,7 +181,6 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                     isHighPrice ? styles.btnReChatCol : styles.btnReChat
                   }
                   onClick={() => {
-                    console.log("채팅방으로 이동");
                     history.push(`/chat-room/${id}/${item.chatId}`);
                   }}
                 >
@@ -199,7 +205,6 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                     isHighPrice ? styles.btnReChatCol : styles.btnReChat
                   }
                   onClick={() => {
-                    console.log("채팅방으로 이동");
                     history.push(`/chat-room/${id}/${item.chatId}`);
                   }}
                 >
