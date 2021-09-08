@@ -3,9 +3,7 @@ import styled from "styled-components";
 import styles from "../myProfilePage/myProfilePage.module.css";
 
 import { Flex, Text, Image } from "../../elements";
-import { yellow, blackBtn } from "../../shared/colors";
-
-import { history } from "../../redux/configureStore";
+import { yellow, blackBtn, gray } from "../../shared/colors";
 
 const UserProfile = ({ user }) => {
   return (
@@ -27,8 +25,10 @@ const UserProfile = ({ user }) => {
             size="25px"
             margin="0 10px 0 0"
           />
-          <Text bold size="18px">
-            {user.nickName}
+          <Text bold size="18px" color={user.role === "RESIGNED" ? gray : ""}>
+            {user.role === "RESIGNED"
+              ? `${user.nickName}(탈퇴)`
+              : user.nickName}
           </Text>
         </Flex>
         <div className={styles.gaugeBox}>

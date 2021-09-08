@@ -33,11 +33,22 @@ const OtherProfilePage = (props) => {
   const fnEffect = async () => {
     const userData = await requestProfileData();
 
+    if (userData.user.role === "RESIGNED") {
+      setUser(userData.user);
+      setBtnsData({
+        itemCount: 0,
+        reviewCount: 0,
+      });
+      setReviews([]);
+      setItems([]);
+      setItemCount(0);
+      return;
+    }
+
     setUser(userData.user);
     setBtnsData({
       itemCount: userData.itemCount,
       reviewCount: userData.reviewCount,
-      stampCount: userData.stampCount,
     });
     setReviews(userData.reviews);
     setItems(userData.items);
