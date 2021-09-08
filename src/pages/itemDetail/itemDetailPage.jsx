@@ -14,6 +14,7 @@ import { timeForToday } from "../../shared/functions";
 import { requestPublicData, deleteAction } from "../../shared/axios";
 import ItemNav from "./itemNav";
 import PriceList from "./priceList";
+import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
 
 const ItemDetailPage = ({ history }) => {
   const dispatch = useDispatch();
@@ -28,21 +29,42 @@ const ItemDetailPage = ({ history }) => {
   const [isOwner, setIsOwner] = useState(false);
   const [color, setColor] = useState("");
   const [tradeType, setTradeType] = useState("");
+  const [korTradeType, setKorTradeType] = useState("");
   const [descData, setDescData] = useState("");
   const [descHeight, setDescHegiht] = useState(0);
 
   useEffect(() => {
     const getItemDetail = requestPublicData(`v1/items/${itemId}`);
     getItemDetail.then((result) => {
-      console.log(result);
       setItemData(result);
       setItemOwnerId(result.itemOwner.bcryptId);
       setDescData(result.description);
 
+      if (result.tradeType === "BUY") {
+        setKorTradeType("구매");
+      } else {
+        setKorTradeType("판매");
+      }
+
       const findEnter = result.description.match(/[\n]/g);
       if (findEnter) {
+        let _descHeingt = 0;
+        const _desc = result.description.split("\n");
         const NumOfEnter = findEnter.length;
-        setDescHegiht(NumOfEnter);
+
+        for (let i = 0; i < NumOfEnter + 1; i += 1) {
+          if (_desc[i].length / 20 > 1) {
+            _descHeingt += Math.ceil(_desc[0].length / 20);
+          }
+        }
+
+        _descHeingt += NumOfEnter;
+        setDescHegiht(_descHeingt);
+      } else {
+        const countOfLetter = result.description.length;
+        if (countOfLetter / 20 > 1) {
+          setDescHegiht(Math.floor(countOfLetter / 20));
+        }
       }
 
       if (result.isOwner) {
@@ -72,6 +94,10 @@ const ItemDetailPage = ({ history }) => {
   const [showUserPopup, setShowUserPopup] = useState(null);
   const hidePopup = () => {
     setShowUserPopup(false);
+  };
+  const [showDeleteCheckModal, setShowDeleteCheckModal] = useState(null);
+  const hideDeleteCheckModal = () => {
+    setShowDeleteCheckModal(false);
   };
 
   const clickDots = () => {
@@ -105,6 +131,11 @@ const ItemDetailPage = ({ history }) => {
   };
 
   // 등록한 아이템 삭제
+  const handleDelete = () => {
+    setShowDeleteCheckModal(true);
+    setShowWriterPopup(false);
+  };
+
   const deleteItem = () => {
     const deleteItemAction = deleteAction(`v1/items/${itemId}`);
     deleteItemAction.then((result) => {
@@ -128,6 +159,14 @@ const ItemDetailPage = ({ history }) => {
 
   return (
     <>
+      {showDeleteCheckModal && (
+        <DeleteDoubleCheckModal
+          text1="굿즈 삭제 후에는 관련 채팅방, 가격제시 정보 등이 모두 삭제됩니다."
+          text2="진짜로 삭제하시겠습니까?"
+          onOkClick={deleteItem}
+          onNoClick={hideDeleteCheckModal}
+        />
+      )}
       {showWriterPopup && (
         <PopUp2
           text1="수정하기"
@@ -136,7 +175,7 @@ const ItemDetailPage = ({ history }) => {
             editItem();
           }}
           _onClick2={() => {
-            deleteItem();
+            handleDelete();
           }}
           _onClick3={() => {
             hideWriterPopup();
@@ -147,7 +186,7 @@ const ItemDetailPage = ({ history }) => {
         <PopUp3
           text="신고하기"
           _onClick1={() => {
-            history.push(`/report/${itemOwnerId}`);
+            history.push(`/report/item/${itemId}/${itemOwnerId}`);
           }}
           _onClick2={() => {
             hidePopup();
@@ -213,7 +252,7 @@ const ItemDetailPage = ({ history }) => {
                 {itemData.idolMember.memberName}
               </div>
               <div className={styles.filteringBtn}>{itemData.categoryName}</div>
-              <div className={styles.filteringBtn}>{itemData.tradeType}</div>
+              <div className={styles.filteringBtn}>{korTradeType}</div>
               <div className={styles.filteringBtn}>
                 {itemData.gradeStatus}급
               </div>
