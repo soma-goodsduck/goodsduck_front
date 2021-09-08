@@ -10,16 +10,20 @@ const NotificationPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [notifications, setNotifications] = useState(null);
 
-  useEffect(() => {
-    const getNotifications = requestAuthData("v1/users/notifications");
-    getNotifications.then((result) => {
-      if (result === "login") {
-        setShowPopup(true);
-        return;
-      }
-      setNotifications(result);
-    });
-  }, []);
+  const requestNotifications = async () => {
+    const result = await requestAuthData("v2/users/notifications");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getNotifications = await requestNotifications();
+
+    if (getNotifications === "login") {
+      setShowPopup(true);
+      return;
+    }
+    setNotifications(getNotifications);
+  };
+  useEffect(fnEffect, []);
 
   return (
     <>

@@ -7,6 +7,7 @@ import ItemRow from "../../components/itemRow/itemRow";
 import { Input, Flex, LoginPopUp } from "../../elements";
 
 import { requestPublicData, postAction } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const PriceProposeModal = ({ _onClick }) => {
   // 아이템 아이디
@@ -15,32 +16,38 @@ const PriceProposeModal = ({ _onClick }) => {
 
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
-  useEffect(() => {
-    const getItemDetail = requestPublicData(`v1/items/${itemId}/summary`);
-    getItemDetail.then((result) => {
-      setItemData(result);
-    });
-  }, []);
+  const requestItemData = async () => {
+    const result = await requestPublicData(`v1/items/${itemId}/summary`);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemDetail = await requestItemData();
+    setItemData(getItemDetail);
+  };
+  useEffect(fnEffect, []);
 
   // 가격 제안 요청
   const [price, setPrice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleClcik = () => {
+  const handleClcik = async () => {
     if (price === 0) {
       return;
     }
 
-    const postPrice = postAction(`v1/items/${itemId}/price-propose`, {
+    const postPrice = await postAction(`v1/items/${itemId}/price-propose`, {
       price,
     });
-    postPrice.then((result) => {
-      if (result === "login") {
-        setShowPopup(true);
-        return;
-      }
-      window.location.reload();
-    });
+    if (postPrice === "error") {
+      history.push("/error");
+      return;
+    }
+    if (postPrice === "login") {
+      setShowPopup(true);
+      return;
+    }
+
+    window.location.reload();
   };
 
   return (

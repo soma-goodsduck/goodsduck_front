@@ -33,59 +33,68 @@ const ItemDetailPage = ({ history }) => {
   const [descData, setDescData] = useState("");
   const [descHeight, setDescHegiht] = useState(0);
 
-  useEffect(() => {
-    const getItemDetail = requestPublicData(`v1/items/${itemId}`);
-    getItemDetail.then((result) => {
-      setItemData(result);
-      setItemOwnerId(result.itemOwner.bcryptId);
-      setDescData(result.description);
+  const requestItemData = async () => {
+    const result = await requestPublicData(`v1/items/${itemId}`);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemDetail = await requestItemData();
 
-      if (result.tradeType === "BUY") {
-        setKorTradeType("구매");
-      } else {
-        setKorTradeType("판매");
-      }
+    if (getItemDetail === "error") {
+      history.push("/not-found");
+      return;
+    }
 
-      const findEnter = result.description.match(/[\n]/g);
-      if (findEnter) {
-        let _descHeingt = 0;
-        const _desc = result.description.split("\n");
-        const NumOfEnter = findEnter.length;
+    setItemData(getItemDetail);
+    setItemOwnerId(getItemDetail.itemOwner.bcryptId);
+    setDescData(getItemDetail.description);
 
-        for (let i = 0; i < NumOfEnter + 1; i += 1) {
-          if (_desc[i].length / 20 > 1) {
-            _descHeingt += Math.ceil(_desc[0].length / 20);
-          }
+    if (getItemDetail.tradeType === "BUY") {
+      setKorTradeType("구매");
+    } else {
+      setKorTradeType("판매");
+    }
+
+    const findEnter = getItemDetail.description.match(/[\n]/g);
+    if (findEnter) {
+      let _descHeingt = 0;
+      const _desc = getItemDetail.description.split("\n");
+      const NumOfEnter = findEnter.length;
+
+      for (let i = 0; i < NumOfEnter + 1; i += 1) {
+        if (_desc[i].length / 20 > 1) {
+          _descHeingt += Math.ceil(_desc[0].length / 20);
         }
-
-        _descHeingt += NumOfEnter;
-        setDescHegiht(_descHeingt);
-      } else {
-        const countOfLetter = result.description.length;
-        if (countOfLetter / 20 > 1) {
-          setDescHegiht(Math.floor(countOfLetter / 20));
-        }
       }
 
-      if (result.isOwner) {
-        setIsOwner(true);
+      _descHeingt += NumOfEnter;
+      setDescHegiht(_descHeingt);
+    } else {
+      const countOfLetter = getItemDetail.description.length;
+      if (countOfLetter / 20 > 1) {
+        setDescHegiht(Math.floor(countOfLetter / 20));
       }
+    }
 
-      if (result.tradeStatus === "SELLING") {
-        setColor("#e15b5b");
-        setTradeType("판매");
-      } else if (result.tradeStatus === "BUYING") {
-        setColor("#299bff");
-        setTradeType("구매");
-      } else if (result.tradeStatus === "RESERVING") {
-        setColor("#222222");
-        setTradeType("예약");
-      } else if (result.tradeStatus === "COMPLETE") {
-        setColor("#222222");
-        setTradeType("완료");
-      }
-    });
-  }, []);
+    if (getItemDetail.isOwner) {
+      setIsOwner(true);
+    }
+
+    if (getItemDetail.tradeStatus === "SELLING") {
+      setColor("#e15b5b");
+      setTradeType("판매");
+    } else if (getItemDetail.tradeStatus === "BUYING") {
+      setColor("#299bff");
+      setTradeType("구매");
+    } else if (getItemDetail.tradeStatus === "RESERVING") {
+      setColor("#222222");
+      setTradeType("예약");
+    } else if (getItemDetail.tradeStatus === "COMPLETE") {
+      setColor("#222222");
+      setTradeType("완료");
+    }
+  };
+  useEffect(fnEffect, []);
 
   const [showWriterPopup, setShowWriterPopup] = useState(null);
   const hideWriterPopup = () => {
