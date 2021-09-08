@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 
 import styles from "./app.module.css";
@@ -39,6 +39,8 @@ import OtherItemsPage from "./pages/otherProfilePage/otherItemsPage";
 import UserReportPage from "./pages/report/userReportPage";
 import ItemReportPage from "./pages/report/itemReportPage";
 import ChattingReportPage from "./pages/report/chattingReportPage";
+import ErrorPage from "./pages/error/errorPage";
+import NotFoundPage from "./pages/error/notFoundPage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
@@ -122,67 +124,80 @@ function App() {
       <div className={styles.app}>
         {showNoti && <Notification data={notiInfo} clickUrl={notiUrl} />}
         <ConnectedRouter history={history}>
-          <Route path="/" exact component={home} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/signup" exact component={Signup} />
-          <Route
-            path="/auth/kakao/callback"
-            exact
-            component={OAuth2RedirectHandler}
-          />
-          <Route
-            path="/auth/naver/callback"
-            exact
-            component={OAuth2RedirectHandler}
-          />
-          <Route
-            path="/auth/apple/callback"
-            exact
-            component={OAuth2RedirectHandler}
-          />
-          <Route path="/search/item/:name" exact component={KeywordSearch} />
-          <Route path="/chatting" exact component={Chatting} />
-          <Route path="/chat-room/:id/:id" exact component={ChatRoom} />
-          <Route path="/my-profile" exact component={MyProfile} />
-          <Route path="/review/:id" exact component={WritingReviewPage} />
-          <Route
-            path="/review-back/:id"
-            exact
-            component={WritingReviewBackPage}
-          />
-          <Route path="/setting" exact component={Setting} />
-          <Route path="/edit-profile" exact component={EditProfile} />
-          <Route path="/price-proposes" exact component={PriceProposePage} />
-          <Route path="/reviews" exact component={ReviewPage} />
-          <Route path="/favorites" exact component={LikeItemList} />
-          <Route path="/price/:id" exact component={PriceProposeListPage} />
-          <Route path="/notification" exact component={NotificationPage} />
-          <Route path="/item/:id" exact component={ItemDetailPage} />
-          <Route path="/profile/:id" exact component={OtherProfilePage} />
-          <Route path="/profile/:id/items" exact component={OtherItemsPage} />
-          <Route path="/report/:id" exact component={UserReportPage} />
-          <Route path="/report/item/:id/:id" exact component={ItemReportPage} />
-          <Route
-            path="/report/chat/:id/:id"
-            exact
-            component={ChattingReportPage}
-          />
+          <Switch>
+            <Route path="/" exact component={home} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/signup" exact component={Signup} />
+            <Route
+              path="/auth/kakao/callback"
+              exact
+              component={OAuth2RedirectHandler}
+            />
+            <Route
+              path="/auth/naver/callback"
+              exact
+              component={OAuth2RedirectHandler}
+            />
+            <Route
+              path="/auth/apple/callback"
+              exact
+              component={OAuth2RedirectHandler}
+            />
+            <Route path="/search/item/:name" exact component={KeywordSearch} />
+            <Route path="/chatting" exact component={Chatting} />
+            <Route path="/chat-room/:id/:id" exact component={ChatRoom} />
+            <Route path="/my-profile" exact component={MyProfile} />
+            <Route path="/review/:id" exact component={WritingReviewPage} />
+            <Route
+              path="/review-back/:id"
+              exact
+              component={WritingReviewBackPage}
+            />
+            <Route path="/setting" exact component={Setting} />
+            <Route path="/edit-profile" exact component={EditProfile} />
+            <Route path="/price-proposes" exact component={PriceProposePage} />
+            <Route path="/reviews" exact component={ReviewPage} />
+            <Route path="/favorites" exact component={LikeItemList} />
+            <Route path="/price/:id" exact component={PriceProposeListPage} />
+            <Route path="/notification" exact component={NotificationPage} />
+            <Route path="/item/:id" exact component={ItemDetailPage} />
+            <Route path="/profile/:id" exact component={OtherProfilePage} />
+            <Route path="/profile/:id/items" exact component={OtherItemsPage} />
+            <Route path="/report/:id" exact component={UserReportPage} />
+            <Route
+              path="/report/item/:id/:id"
+              exact
+              component={ItemReportPage}
+            />
+            <Route
+              path="/report/chat/:id/:id"
+              exact
+              component={ChattingReportPage}
+            />
 
-          {/* 아이템 등록 */}
-          <Route path="/upload-item" exact component={ItemUploadPage} />
-          <Route path="/category" exact component={ItemCategory} />
-          <Route path="/status" exact component={ItemStatus} />
-          <Route path="/select-idol" exact component={IdolGroup} />
-          <Route path="/select-idol-member" exact component={IdolMember} />
-          {/* 필터링 */}
-          <Route path="/filtering" exact component={Filtering} />
-          <Route path="/filter-category" exact component={FilterItemCategory} />
-          <Route path="/filter-status" exact component={FilterItemStatus} />
-          <Route
-            path="/filter-select-idol-member"
-            exact
-            component={FilterIdolMember}
-          />
+            {/* 아이템 등록 */}
+            <Route path="/upload-item" exact component={ItemUploadPage} />
+            <Route path="/category" exact component={ItemCategory} />
+            <Route path="/status" exact component={ItemStatus} />
+            <Route path="/select-idol" exact component={IdolGroup} />
+            <Route path="/select-idol-member" exact component={IdolMember} />
+            {/* 필터링 */}
+            <Route path="/filtering" exact component={Filtering} />
+            <Route
+              path="/filter-category"
+              exact
+              component={FilterItemCategory}
+            />
+            <Route path="/filter-status" exact component={FilterItemStatus} />
+            <Route
+              path="/filter-select-idol-member"
+              exact
+              component={FilterIdolMember}
+            />
+            {/* 에러 페이지 */}
+            <Route path="/error" exact component={ErrorPage} />
+            <Route path="/*" component={NotFoundPage} />
+          </Switch>
         </ConnectedRouter>
       </div>
     </>
