@@ -22,8 +22,6 @@ const ItemUpload = (props) => {
   const nameRef = useRef();
   const priceRef = useRef();
   const descriptionRef = useRef();
-  const [tradeType, setTradeType] = useState("SELL");
-  const [isSelling, setIsSelling] = useState(true);
   const [nextOK, setNextOK] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -81,23 +79,10 @@ const ItemUpload = (props) => {
     fileList,
   };
 
-  // 판매하기와 구매하기 선택값 유지
-  useEffect(() => {
-    if (dataTradeType === "BUY") {
-      setIsSelling(false);
-    } else if (dataTradeType === "SELL") {
-      setIsSelling(true);
-    }
-  }, [tradeType]);
-
   const clickTradeType = (e) => {
     if (e.target.innerText === "구매하기") {
-      setTradeType("BUY");
-      setIsSelling(false);
       dispatch(newItemActions.setTradeType("BUY"));
-    } else {
-      setTradeType("SELL");
-      setIsSelling(true);
+    } else if (e.target.innerText === "판매하기") {
       dispatch(newItemActions.setTradeType("SELL"));
     }
   };
@@ -106,15 +91,15 @@ const ItemUpload = (props) => {
     if (
       (dataName &&
         dataPrice &&
-        dataTradeType &&
         dataStatus &&
+        dataTradeType &&
         dataCategory &&
         idolMember &&
         fileList.length !== 0) ||
       (dataName &&
         dataPrice &&
-        dataTradeType &&
         dataStatus &&
+        dataTradeType &&
         dataCategory &&
         idolMember &&
         images.length !== 0)
@@ -126,8 +111,8 @@ const ItemUpload = (props) => {
   }, [
     dataName,
     dataPrice,
-    dataTradeType,
     dataStatus,
+    dataTradeType,
     dataCategory,
     idolMember,
     fileList,
@@ -164,13 +149,21 @@ const ItemUpload = (props) => {
               </Flex>
               <Flex is_flex justify="space-between">
                 <TypeBtn
-                  className={isSelling ? styles.clickTypeBtn : styles.typeBtn}
+                  className={
+                    dataTradeType === "SELL"
+                      ? styles.clickTypeBtn
+                      : styles.typeBtn
+                  }
                   onClick={(e) => clickTradeType(e)}
                 >
                   판매하기
                 </TypeBtn>
                 <TypeBtn
-                  className={isSelling ? styles.typeBtn : styles.clickTypeBtn}
+                  className={
+                    dataTradeType === "BUY"
+                      ? styles.clickTypeBtn
+                      : styles.typeBtn
+                  }
                   onClick={(e) => clickTradeType(e)}
                 >
                   구매하기

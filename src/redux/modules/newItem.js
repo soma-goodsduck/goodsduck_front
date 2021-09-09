@@ -5,7 +5,6 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
-import * as Sentry from "@sentry/react";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -62,7 +61,7 @@ const initialState = {
   images: [], // image url
   files: [], // image file data
   price: null,
-  trade_type: "SELL",
+  trade_type: "",
   status_grade: "",
   idol_group_id: null,
   idol_member_id: null,
@@ -75,7 +74,7 @@ const initialState = {
 
 // 아이템 정보를 백으로 전송
 const addItemAction = (item, fileList) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("multipartFiles", file);
@@ -91,23 +90,38 @@ const addItemAction = (item, fileList) => {
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
-    axios
-      .post(`${process.env.REACT_APP_BACK_URL}/api/v1/items`, formData, {
+    const uploadItem = await axios.post(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/items`,
+      formData,
+      {
         headers: { jwt: `${item.userJwt}` },
-      })
-      .then((response) => {
-        if (response.data.response !== -1) {
-          console.log("굿즈 등록 완료");
-          history.replace(`/item/${response.data.response}`);
-        } else {
-          window.alert("굿즈 등록 실패");
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-        Sentry.captureException(error);
-        history.replace("/");
-      });
+      },
+    );
+
+    if (uploadItem === "error") {
+      history.push("/error");
+      return;
+    }
+
+    if (window.ReactNativeWebView) {
+      console.log(uploadItem);
+      if (uploadItem.data.response !== -1) {
+        console.log("굿즈 등록 완료");
+        history.replace(`/item/${uploadItem.data.response}`);
+      } else {
+        window.alert("굿즈 등록 실패");
+        history.push("/");
+      }
+      return;
+    }
+
+    if (uploadItem.data.response !== -1) {
+      console.log("굿즈 등록 완료");
+      history.replace(`/item/${uploadItem.data.response}`);
+    } else {
+      window.alert("굿즈 등록 실패");
+      history.push("/");
+    }
   };
 };
 
@@ -128,7 +142,7 @@ const clearAction = () => {
 
 // 업데이트
 const updateItemAction = (item, id, fileList) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     console.log(item);
     const formData = new FormData();
     fileList.forEach((file) => {
@@ -147,23 +161,25 @@ const updateItemAction = (item, id, fileList) => {
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
-    axios
-      .put(`${process.env.REACT_APP_BACK_URL}/api/v2/items/${id}`, formData, {
+    const updateItem = await axios.put(
+      `${process.env.REACT_APP_BACK_URL}/api/v2/items/${id}`,
+      formData,
+      {
         headers: { jwt: `${item.userJwt}` },
-      })
-      .then((response) => {
-        if (response.data.success) {
-          console.log("굿즈 수정 완료");
-          history.replace(`/item/${id}`);
-        } else {
-          console.log("굿즈 수정 실패");
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-        Sentry.captureException(error);
-        history.replace(`/item/${id}`);
-      });
+      },
+    );
+
+    if (updateItem === "error") {
+      history.push("/error");
+      return;
+    }
+
+    if (updateItem.data.success) {
+      console.log("굿즈 수정 완료");
+      history.replace(`/item/${id}`);
+    } else {
+      console.log("굿즈 수정 실패");
+    }
   };
 };
 
