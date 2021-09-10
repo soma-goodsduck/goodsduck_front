@@ -13,6 +13,7 @@ import PopUp2 from "./popUp2";
 import PopUp3 from "./popUp3";
 import LoginPopUp from "./loginPopUp";
 import Notification from "./notification";
+import ItemStatusBox from "./itemStatusBox";
 
 export {
   Grid,
@@ -28,4 +29,5 @@ export {
   PopUp3,
   LoginPopUp,
   Notification,
+  ItemStatusBox,
 };

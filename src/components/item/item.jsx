@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import styles from "./item.module.css";
 
-import { Flex } from "../../elements";
+import { Flex, ItemStatusBox } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
@@ -49,15 +49,21 @@ const Item = ({ item, id }) => {
   return (
     <ItemBox onClick={(e) => clickItem(e)}>
       <Flex className={styles.imgBox}>
-        <ItemImg src={item.imageUrl} className={styles.itemImg} />
-        <div className={styles.likeBox}>
-          <button
-            type="button"
-            aria-label="like"
-            className={isLike ? styles.clickLikeBtn : styles.likeBtn}
-            onClick={() => clickHeart()}
-          />
+        <div style={{ position: "relative" }}>
+          {tradeType === "예약" && <ItemStatusBox text="예약 완료" />}
+          {tradeType === "완료" && <ItemStatusBox text="거래 완료" />}
+          <ItemImg src={item.imageUrl} className={styles.itemImg} />
         </div>
+        {(tradeType === "구매" || tradeType === "판매") && (
+          <div className={styles.likeBox}>
+            <button
+              type="button"
+              aria-label="like"
+              className={isLike ? styles.clickLikeBtn : styles.likeBtn}
+              onClick={() => clickHeart()}
+            />
+          </div>
+        )}
       </Flex>
       <InfoBox>
         <Flex justify="flex-start" padding="5px 0">

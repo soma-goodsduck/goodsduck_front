@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 import { blackBtn, orange, darkRed, grayText } from "../../shared/colors";
-import { Image, Text } from "../../elements";
+import { ItemStatusBox, Text } from "../../elements";
 
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 import { history } from "../../redux/configureStore";
@@ -36,12 +36,27 @@ const ItemRow = ({ item, isNotBtn }) => {
         history.push(`/item/${item.itemId}`);
       }}
     >
-      <Image
-        shape="rectangle"
-        src={item.imageUrl}
-        size="100px"
-        borderRadius="5px"
-      />
+      <div style={{ position: "relative" }}>
+        {tradeStatus === "예약중" && (
+          <ItemStatusBox
+            text="예약 완료"
+            size="100px"
+            mSize="24vw"
+            fontSize="14px"
+            radius="5px"
+          />
+        )}
+        {tradeStatus === "거래완료" && (
+          <ItemStatusBox
+            text="거래 완료"
+            size="100px"
+            mSize="24vw"
+            fontSize="14px"
+            radius="5px"
+          />
+        )}
+        <ItemImg src={item.imageUrl} />
+      </div>
       <ItemRowBox>
         <div>
           <Text bold color={color} size="14px">
@@ -86,6 +101,20 @@ const TimeText = styled.div`
   justify-content: flex-end;
   color: ${grayText};
   font-size: 14px;
+`;
+
+const ItemImg = styled.div`
+  width: 24vw;
+  height: 24vw;
+  border-radius: 5px;
+
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+
+  @media screen and (min-width: 415px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 export default ItemRow;

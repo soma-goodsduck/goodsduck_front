@@ -1,15 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Image, Text } from "../../elements";
-import {
-  grayBtnBorder,
-  yellow,
-  blackBtn,
-  orange,
-  darkRed,
-  grayText,
-} from "../../shared/colors";
+import { Text, ItemStatusBox } from "../../elements";
+import { blackBtn, orange, darkRed, grayText } from "../../shared/colors";
 
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 import { history } from "../../redux/configureStore";
@@ -46,12 +39,27 @@ const OtherItemRow = ({ item }) => {
         history.push(`/item/${item.itemId}`);
       }}
     >
-      <Image
-        shape="rectangle"
-        src={item.imageUrl}
-        size="100px"
-        borderRadius="5px"
-      />
+      <div style={{ position: "relative" }}>
+        {tradeStatus === "예약중" && (
+          <ItemStatusBox
+            text="예약 완료"
+            size="100px"
+            mSize="24vw"
+            fontSize="14px"
+            radius="5px"
+          />
+        )}
+        {tradeStatus === "거래완료" && (
+          <ItemStatusBox
+            text="거래 완료"
+            size="100px"
+            mSize="24vw"
+            fontSize="14px"
+            radius="5px"
+          />
+        )}
+        <ItemImg src={item.imageUrl} />
+      </div>
       <ItemRowBox>
         <div>
           <Text bold color={color} size="14px">
@@ -94,20 +102,17 @@ const TimeText = styled.div`
   font-size: 14px;
 `;
 
-const StatusBtn = styled.button`
-  width: 48%;
-  padding: 12px;
-  margin-bottom: 20px;
+const ItemImg = styled.div`
+  width: 24vw;
+  height: 24vw;
   border-radius: 5px;
-  border: 1px solid ${grayBtnBorder};
-  font-weight: bold;
-  font-size: 14px;
-  box-sizing: border-box;
 
-  &:hover {
-    padding: 13px;
-    background-color: ${yellow};
-    border: none;
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+
+  @media screen and (min-width: 415px) {
+    width: 100px;
+    height: 100px;
   }
 `;
 

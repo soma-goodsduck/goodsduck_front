@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import styles from "../../components/item/item.module.css";
 
-import { Flex } from "../../elements";
+import { Flex, ItemStatusBox } from "../../elements";
 
 import { history } from "../../redux/configureStore";
 
@@ -37,7 +37,25 @@ const Item = ({ item }) => {
   return (
     <ItemBox onClick={(e) => clickItem(e)}>
       <Flex className={styles.imgBox}>
-        <ItemImg src={item.imageUrl} className={styles.itemImg} />
+        <div style={{ position: "relative" }}>
+          {tradeType === "예약" && (
+            <ItemStatusBox
+              text="예약 완료"
+              size="115px"
+              mSize="28vw"
+              fontSize="14px"
+            />
+          )}
+          {tradeType === "완료" && (
+            <ItemStatusBox
+              text="거래 완료"
+              size="115px"
+              mSize="28vw"
+              fontSize="14px"
+            />
+          )}
+          <ItemImg src={item.imageUrl} className={styles.itemImg} />
+        </div>
       </Flex>
       <InfoBox>
         <Flex justify="space-between" padding="5px">
