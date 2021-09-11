@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Icon, Text } from "../../elements";
-import { grayBorder } from "../../shared/colors";
+import { Icon, Text, Flex } from "../../elements";
+import { grayBorder, grayText } from "../../shared/colors";
 
-const Notice = ({ notice }) => {
+const Notice = ({ notice, date }) => {
   const [iconUrl, setIconUrl] = useState("noticeDown");
   const [isOpen, setIsOpen] = useState(false);
   const [descHeight, setDescHegiht] = useState(0);
@@ -24,7 +24,6 @@ const Notice = ({ notice }) => {
       let _descHeingt = 0;
       const _desc = notice.content.split("\n");
       const numOfEnter = findEnter.length;
-      console.log(_desc, numOfEnter);
 
       for (let i = 0; i < numOfEnter + 1; i += 1) {
         if (_desc[i].length / 20 > 1) {
@@ -50,9 +49,14 @@ const Notice = ({ notice }) => {
         }}
       >
         <NoticeTitle>
-          <Text>{notice.title}</Text>
+          <Flex is_col align="flex-start">
+            <Text color={grayText} size="13px" margin="0 0 8px 0">
+              {date}
+            </Text>
+            <Text>{notice.title}</Text>
+          </Flex>
           <Icon
-            width="16px"
+            width="18px"
             src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${iconUrl}.svg`}
           />
         </NoticeTitle>
