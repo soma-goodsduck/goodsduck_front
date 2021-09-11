@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
 import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
 
@@ -8,6 +10,11 @@ import { yellow, blackBtn } from "../../shared/colors";
 import { history } from "../../redux/configureStore";
 
 const UserProfile = ({ user }) => {
+  const { userNick, userImg } = useSelector((state) => ({
+    userNick: state.user.userNick,
+    userImg: state.user.userImg,
+  }));
+
   return (
     <UserProfileBox
       onClick={() => {
@@ -17,8 +24,10 @@ const UserProfile = ({ user }) => {
       <Image
         shape="circle"
         src={
-          user.imageUrl ||
+          userImg ===
           "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+            ? user.imageUrl
+            : userImg
         }
         margin="0 7px 0 0"
         size="80px"
@@ -27,17 +36,17 @@ const UserProfile = ({ user }) => {
         <Flex is_flex>
           <Image
             shape="circle"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level.svg"
+            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${user.level}.png`}
             size="25px"
             margin="0 10px 0 0"
           />
           <Text bold size="18px">
-            {user.nickName}
+            {userNick === "" ? user.nickName : userNick}
           </Text>
         </Flex>
         <div className={styles.gaugeBox}>
-          <Gauge>
-            <GaugePercent>준비중 😉</GaugePercent>
+          <Gauge style={{ width: `${user.exp}%` }}>
+            <GaugePercent>{user.exp}%</GaugePercent>{" "}
           </Gauge>
         </div>
       </Flex>
@@ -52,7 +61,6 @@ const UserProfileBox = styled.div`
 `;
 
 const Gauge = styled.div`
-  width: 57%;
   height: 20px;
   border-radius: 10px;
   background: ${yellow};

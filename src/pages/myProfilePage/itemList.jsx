@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
@@ -13,6 +13,7 @@ const ItemList = ({ items }) => {
   const [isSelling, setIsSelling] = useState(true);
   const [isBuying, setIsBuying] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const _items = useSelector((state) => state.user.items);
 
   const clickSelling = () => {
     setIsSelling(true);
@@ -71,7 +72,13 @@ const ItemList = ({ items }) => {
         </Filtering>
       </FilteringBox>
       <Line />
-      {items !== null && (
+      {_items !== [] ? (
+        <div>
+          {_items.map((item) => (
+            <ItemRow item={item} key={item.itemId} />
+          ))}
+        </div>
+      ) : (
         <div>
           {items.map((item) => (
             <ItemRow item={item} key={item.itemId} />

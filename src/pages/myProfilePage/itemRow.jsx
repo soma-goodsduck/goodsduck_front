@@ -1,6 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
+import styled from "styled-components";
 import { Flex, ItemStatusBox, Text } from "../../elements";
 import {
   grayBtnBorder,
@@ -10,12 +11,16 @@ import {
   darkRed,
   grayText,
 } from "../../shared/colors";
-
 import { timeForToday, numberWithCommas } from "../../shared/functions";
+
 import { patchJsonAction } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const ItemRow = ({ item }) => {
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.user.items);
+
   let color;
   let updateStatusKR; // 변경할 상태 (한국어)
   let updateStatus; // 변경할 상태 (영어)
@@ -51,11 +56,30 @@ const ItemRow = ({ item }) => {
     updateStatus = "RESERVING";
   }
 
-  const handleUpdate = (_updateStatus) => {
-    patchJsonAction(`v1/items/${item.itemId}/trade-status`, {
+  const handleUpdate = async (_updateStatus) => {
+    const updateTradeStatus = await patchJsonAction(
+      `v1/items/${item.itemId}/trade-status`,
+      {
+        tradeStatus: _updateStatus,
+      },
+    );
+    if (updateTradeStatus === "UnknownException") {
+      history.push("/error");
+      return;
+    }
+
+    const _item = {
+      itemId: item.itemId,
+      itemCreatedAt: item.itemCreatedAt,
+      imageUrl: item.imageUrl,
+      name: item.name,
+      price: item.price,
       tradeStatus: _updateStatus,
-    });
-    window.location.reload();
+      tradeType: item.tradeType,
+    };
+    const _items = items.filter((i) => i.itemId !== item.itemId);
+    _items.unshift(_item);
+    dispatch(userActions.setUserItems(_items));
   };
 
   return (

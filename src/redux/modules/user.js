@@ -26,6 +26,8 @@ const SET_USER_FOR_REVIEW = "SET_USER_FOR_REVIEW";
 const SET_REVIEW = "SET_REVIEW";
 const SET_NUM_OF_STAR = "SET_NUM_OF_STAR";
 const CLEAR_REVIEW = "CLEAR_REVIEW";
+const SET_USER_INFO = "SET_USER_INFO";
+const SET_USER_ITEMS = "SET_USER_ITEMS";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -57,6 +59,13 @@ const setNumOfStar = createAction(SET_NUM_OF_STAR, (numOfStar) => ({
   numOfStar,
 }));
 const clearReview = createAction(CLEAR_REVIEW, () => ({}));
+const setUserInfo = createAction(SET_USER_INFO, (userNick, userImg) => ({
+  userNick,
+  userImg,
+}));
+const setUserItems = createAction(SET_USER_ITEMS, (items) => ({
+  items,
+}));
 
 // initialState
 const initialState = {
@@ -71,6 +80,10 @@ const initialState = {
   userForReview: "",
   review: "",
   numOfStar: 0,
+  userNick: "",
+  userImg:
+    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
+  items: [],
 };
 
 // middleware actions
@@ -215,6 +228,15 @@ export default handleActions(
         draft.numOfStar = 0;
         draft.review = "";
       }),
+    [SET_USER_INFO]: (state, action) =>
+      produce(state, (draft) => {
+        draft.userNick = action.payload.userNick;
+        draft.userImg = action.payload.userImg;
+      }),
+    [SET_USER_ITEMS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.items = action.payload.items;
+      }),
   },
   initialState,
 );
@@ -236,6 +258,8 @@ const actionCreators = {
   setReview,
   setNumOfStar,
   clearReview,
+  setUserInfo,
+  setUserItems,
 };
 
 export { actionCreators };

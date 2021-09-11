@@ -35,22 +35,26 @@ const EditProfilePage = (props) => {
   const idols = useSelector((state) => state.user.favIdolGroups);
   const [nextOK, setNextOK] = useState(false);
 
-  useEffect(() => {
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up");
+    return result;
+  };
+  const fnEffect = async () => {
     const idolsFromUser = [];
-    const getUserData = requestAuthData("v1/users/look-up");
-    getUserData.then((result) => {
-      setUser(result);
-      setNick(result.nickName);
-      if (result.imageUrl !== null) {
-        setImg(result.imageUrl);
-      }
-      result.likeIdolGroups.forEach((idolId) => {
-        idolsFromUser.push(idolId.idolGroupId);
-        dispatch(userActions.setFavIdolGroups([...idols, idolId.idolGroupId]));
-      });
-      dispatch(userActions.setFavIdolGroups(idolsFromUser));
+    const getUserData = await reqUserData();
+
+    setUser(getUserData);
+    setNick(getUserData.nickName);
+    if (getUserData.imageUrl !== null) {
+      setImg(getUserData.imageUrl);
+    }
+    getUserData.likeIdolGroups.forEach((idolId) => {
+      idolsFromUser.push(idolId.idolGroupId);
+      dispatch(userActions.setFavIdolGroups([...idols, idolId.idolGroupId]));
     });
-  }, []);
+    dispatch(userActions.setFavIdolGroups(idolsFromUser));
+  };
+  useEffect(fnEffect, []);
 
   useEffect(() => {
     if (nick !== "" && !isUsedNick) {
@@ -121,9 +125,17 @@ const EditProfilePage = (props) => {
         formData.append("stringProfileDto", JSON.stringify(profileDto));
         localStorage.setItem("likeIdolGroups", newIdols);
 
+        let _img = img;
+        if (imgFile) {
+          const reader = new FileReader();
+          reader.readAsDataURL(imgFile);
+          reader.onloadend = () => {
+            _img = reader.result;
+          };
+        }
+        dispatch(userActions.setUserInfo(nick, _img));
         putAction("v1/users/profile", formData);
         history.replace("/my-profile");
-        history.go(0);
       }
     }
   };

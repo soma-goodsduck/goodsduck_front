@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import ItemList from "./itemList";
@@ -10,9 +10,12 @@ import UserProfile from "./userProfile";
 import Nav from "../../components/nav/nav";
 
 import { requestAuthData } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const MyProfilePage = () => {
+  const dispatch = useDispatch();
+
   const isApp = localStorage.getItem("isApp");
   // 해당 유저 데이터 받아오기
   const [user, setUser] = useState(null);
@@ -23,27 +26,30 @@ const MyProfilePage = () => {
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
-    if (result === "login") {
-      setShowPopup(true);
-    }
     return result;
   };
   const requestMyProfileData = async () => {
     const result = await requestAuthData(
       `v1/users/items?tradeStatus=${tradeStatus}`,
     );
-    if (result === "login") {
-      setShowPopup(true);
-    }
     return result;
   };
   const fnEffect = async () => {
     const userData = await requestUserData();
     const myProfileData = await requestMyProfileData();
 
+    if (userData < 0 || myProfileData < 0) {
+      if (userData === -201 || myProfileData === -201) {
+        setShowPopup(true);
+        return;
+      }
+      history.push("/error");
+    }
+
     setUser(userData);
     setMyProfile(myProfileData);
     setItems(myProfileData.items);
+    dispatch(userActions.setUserItems(myProfileData.items));
   };
   useEffect(fnEffect, [tradeStatus]);
 
