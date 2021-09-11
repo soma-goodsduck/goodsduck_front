@@ -41,12 +41,16 @@ import ItemReportPage from "./pages/report/itemReportPage";
 import ChattingReportPage from "./pages/report/chattingReportPage";
 import ErrorPage from "./pages/error/errorPage";
 import NotFoundPage from "./pages/error/notFoundPage";
+import NoticePage from "./pages/notice/noticePage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
 import { sendTokenAction } from "./shared/axios";
 
 import { history } from "./redux/configureStore";
+import TermServicePage from "./pages/myProfilePage/termServicePage";
+import TermPrivacyPage from "./pages/myProfilePage/termPrivacyPage";
+import TermMarketingPage from "./pages/myProfilePage/termMarketingPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -100,6 +104,7 @@ function App() {
       if (type === "TOKEN") {
         const sendFcmToken = sendTokenAction(data);
         sendFcmToken.then((result) => {
+          console.log(result);
           if (result === "login") {
             history.push("/login");
           }
@@ -174,6 +179,14 @@ function App() {
               exact
               component={ChattingReportPage}
             />
+            <Route path="/notice" exact component={NoticePage} />
+            <Route path="/service-policy" exact component={TermServicePage} />
+            <Route
+              path="/marketing-policy"
+              exact
+              component={TermMarketingPage}
+            />
+            <Route path="/privacy" exact component={TermPrivacyPage} />
 
             {/* 아이템 등록 */}
             <Route path="/upload-item" exact component={ItemUploadPage} />

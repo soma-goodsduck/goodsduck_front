@@ -92,7 +92,7 @@ const Setting = () => {
               <Text color={grayText} size="16px" margin="0px 0 15px 0">
                 서비스 정보
               </Text>
-              <a href="https://soma-goodsduck.github.io/terms/service-policy.html">
+              <a href="/service-policy">
                 <BtnBox>
                   <Text color={blackBtn} size="18px" medium>
                     이용 약관
@@ -103,7 +103,7 @@ const Setting = () => {
                   />
                 </BtnBox>
               </a>
-              <a href="https://soma-goodsduck.github.io/terms/privacy.html">
+              <a href="/privacy">
                 <BtnBox>
                   <Text color={blackBtn} size="18px" medium>
                     개인정보 처리방침
@@ -114,7 +114,7 @@ const Setting = () => {
                   />
                 </BtnBox>
               </a>
-              <a href="https://soma-goodsduck.github.io/terms/marketing-policy.html">
+              <a href="/marketing-policy">
                 <BtnBox>
                   <Text color={blackBtn} size="18px" medium>
                     마케팅 정보 활용 동의
