@@ -4,17 +4,25 @@ import styled from "styled-components";
 import Idol from "./editIdolBox";
 
 import { requestPublicData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const EditIdolGroup = ({ onUpdate }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
-  useEffect(() => {
-    const getIdolGroup = requestPublicData("v1/idol-groups");
-    getIdolGroup.then((result) => {
-      setIdols(result);
-    });
-  }, []);
+  const reqIdol = async () => {
+    const result = await requestPublicData("v1/idol-groups");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getIdol = await reqIdol();
+    if (getIdol < 0) {
+      history.push("/error");
+      return;
+    }
+    setIdols(getIdol);
+  };
+  useEffect(fnEffect, []);
 
   if (!idols) {
     return null;

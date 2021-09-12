@@ -14,6 +14,7 @@ import { notification } from "../../shared/notification";
 import { requestAuthData, deleteAction } from "../../shared/axios";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
+import { history } from "../../redux/configureStore";
 
 const Setting = () => {
   const dispatch = useDispatch();
@@ -23,14 +24,19 @@ const Setting = () => {
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
-    if (result === "login") {
-      setShowPopup(true);
-    }
     return result;
   };
   const fnEffect = async () => {
-    const userData = await requestUserData();
-    setIsNotificationOn(userData.isAgreeToNotification);
+    const getUserData = await requestUserData();
+    if (getUserData < 0) {
+      if (getUserData === -201) {
+        setShowPopup(true);
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+    setIsNotificationOn(getUserData.isAgreeToNotification);
   };
   useEffect(fnEffect, []);
 
@@ -45,9 +51,22 @@ const Setting = () => {
       notification();
     }
   };
-  const notificationOff = () => {
+
+  const reqNotificationOff = async () => {
+    const result = await deleteAction("v1/users/device");
+    return result;
+  };
+  const notificationOff = async () => {
+    const getUserData = await reqNotificationOff();
+    if (getUserData < 0) {
+      if (getUserData === -201) {
+        setShowPopup(true);
+        return;
+      }
+      history.push("/error");
+      return;
+    }
     setIsNotificationOn(false);
-    deleteAction("v1/users/device");
   };
 
   return (

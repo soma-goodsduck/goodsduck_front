@@ -98,20 +98,8 @@ const addItemAction = (item, fileList) => {
       },
     );
 
-    if (uploadItem === "error") {
+    if (uploadItem < 0) {
       history.push("/error");
-      return;
-    }
-
-    if (window.ReactNativeWebView) {
-      console.log(uploadItem);
-      if (uploadItem.data.response !== -1) {
-        console.log("굿즈 등록 완료");
-        history.replace(`/item/${uploadItem.data.response}`);
-      } else {
-        window.alert("굿즈 등록 실패");
-        history.push("/");
-      }
       return;
     }
 
@@ -143,7 +131,6 @@ const clearAction = () => {
 // 업데이트
 const updateItemAction = (item, id, fileList) => {
   return async function (dispatch, getState, { history }) {
-    console.log(item);
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("multipartFiles", file);
@@ -169,7 +156,7 @@ const updateItemAction = (item, id, fileList) => {
       },
     );
 
-    if (updateItem === "error") {
+    if (updateItem < 0) {
       history.push("/error");
       return;
     }

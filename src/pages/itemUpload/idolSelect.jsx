@@ -6,11 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
 import HeaderInfo from "../../components/haeder/headerInfo";
-
 import { Flex } from "../../elements";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
-
 import { requestPublicData } from "../../shared/axios";
 
 const IdolSelect = ({ history }) => {
@@ -20,12 +18,19 @@ const IdolSelect = ({ history }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
-  useEffect(() => {
-    const getIdolGroup = requestPublicData("v1/idol-groups");
-    getIdolGroup.then((result) => {
-      setIdols(result);
-    });
-  }, []);
+  const reqIdol = async () => {
+    const result = await requestPublicData("v1/idol-groups");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getIdol = await reqIdol();
+    if (getIdol < 0) {
+      history.push("/error");
+      return;
+    }
+    setIdols(getIdol);
+  };
+  useEffect(fnEffect, []);
 
   if (!idols) {
     return null;
@@ -33,15 +38,6 @@ const IdolSelect = ({ history }) => {
 
   // 아이돌 선택
   const [groupId, setGroupId] = useState(0);
-  const [nextOK, setNextOK] = useState(false);
-
-  useEffect(() => {
-    if (groupId) {
-      setNextOK(true);
-    } else {
-      setNextOK(false);
-    }
-  }, [groupId]);
 
   const checkGroupHandler = (id, name) => {
     setGroupId(id);

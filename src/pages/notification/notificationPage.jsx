@@ -6,6 +6,8 @@ import LoginPopUp from "../../elements/loginPopUp";
 import NotificationRow from "./notificationRow";
 import { requestAuthData } from "../../shared/axios";
 
+import { history } from "../../redux/configureStore";
+
 const NotificationPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [notifications, setNotifications] = useState(null);
@@ -17,10 +19,15 @@ const NotificationPage = () => {
   const fnEffect = async () => {
     const getNotifications = await requestNotifications();
 
-    if (getNotifications === "login") {
-      setShowPopup(true);
+    if (getNotifications < 0) {
+      if (getNotifications === -201) {
+        setShowPopup(true);
+        return;
+      }
+      history.push("/error");
       return;
     }
+
     setNotifications(getNotifications);
   };
   useEffect(fnEffect, []);

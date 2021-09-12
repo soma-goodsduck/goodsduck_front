@@ -9,6 +9,7 @@ import Nav from "../../components/nav/nav";
 
 import { requestPublicData } from "../../shared/axios";
 import { firebaseDatabase } from "../../shared/firebase";
+import { history } from "../../redux/configureStore";
 
 export class Chatting extends Component {
   state = {
@@ -25,12 +26,17 @@ export class Chatting extends Component {
 
     const getUserId = requestPublicData("v1/users/look-up-id");
     getUserId.then((result) => {
-      if (result === null) {
-        this.setState({ showPopup: true });
-      } else {
-        this.AddChatRoomsListeners(result.userId);
-        this.setState({ userId: result.userId });
+      if (result < 0) {
+        if (result === -201) {
+          this.setState({ showPopup: true });
+          return;
+        }
+        history.push("/error");
+        return;
       }
+
+      this.AddChatRoomsListeners(result.userId);
+      this.setState({ userId: result.userId });
     });
   }
 

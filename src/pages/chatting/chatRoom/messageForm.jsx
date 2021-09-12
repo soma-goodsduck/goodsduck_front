@@ -16,6 +16,7 @@ import {
   postImgAction,
   postAction,
 } from "../../../shared/axios";
+import { history } from "../../../redux/configureStore";
 
 const MessageForm = (props) => {
   const href = window.location.href.split("/");
@@ -32,13 +33,21 @@ const MessageForm = (props) => {
   const [showPopup, setShowPopup] = useState(false);
   const isItemExist = useSelector((state) => state.chat.isItemExist);
 
-  useEffect(() => {
-    const getUserId = requestAuthData("v1/users/look-up-id");
-    getUserId.then((result) => {
-      setUserId(result.userId);
-      setUserNick(result.nickName);
-    });
-  });
+  const reqUserId = async () => {
+    const result = await requestAuthData("v1/users/look-up-id");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getUserId = await reqUserId();
+    if (getUserId < 0) {
+      history.push("/error");
+      return;
+    }
+
+    setUserId(getUserId.userId);
+    setUserNick(getUserId.nickName);
+  };
+  useEffect(fnEffect, []);
 
   useEffect(() => {
     setTimeout(() => {

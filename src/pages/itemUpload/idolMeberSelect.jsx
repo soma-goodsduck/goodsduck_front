@@ -20,14 +20,21 @@ const IdolMemberSelect = ({ history }) => {
   const groupId = useSelector((state) => state.newItem.idol_group_id);
   const [members, setMembers] = useState([]);
 
-  useEffect(() => {
-    const getIdolMember = requestPublicData(
+  const reqIdolMemeber = async () => {
+    const result = await requestPublicData(
       `v1/idol-members/idol-groups/${groupId}`,
     );
-    getIdolMember.then((result) => {
-      setMembers(result);
-    });
-  }, []);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getIdolMember = await reqIdolMemeber();
+    if (getIdolMember < 0) {
+      history.push("/error");
+      return;
+    }
+    setMembers(getIdolMember);
+  };
+  useEffect(fnEffect, []);
 
   if (!members) {
     return null;
@@ -35,15 +42,6 @@ const IdolMemberSelect = ({ history }) => {
 
   // 아이돌 멤버 선택
   const [memberId, setMemberId] = useState(0);
-  const [nextOK, setNextOK] = useState(false);
-
-  useEffect(() => {
-    if (memberId) {
-      setNextOK(true);
-    } else {
-      setNextOK(false);
-    }
-  }, [memberId]);
 
   const checkMemberHandler = (id, name) => {
     console.log(id, name);

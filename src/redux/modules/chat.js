@@ -67,12 +67,20 @@ const addChatRoomAciton = (item, user) => {
     },
   };
 
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     chatRoomsRef.child(key).update(newChatRoom);
 
-    postAction(`v1/chat/items/${newChatRoom.item.id}`, {
-      chatId: key,
-    });
+    const saveChatId = await postAction(
+      `v1/chat/items/${newChatRoom.item.id}`,
+      {
+        chatId: key,
+      },
+    );
+    if (saveChatId < 0) {
+      history.push("/error");
+      return;
+    }
+
     history.push(`/chat-room/${item.itemId}/${key}`);
   };
 };
@@ -106,11 +114,20 @@ const addChatRoomAtPropseAciton = (item, user) => {
     },
   };
 
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     chatRoomsRef.child(key).update(newChatRoom);
-    postAction(`v1/chat/price-propose/${item.priceProposeId}`, {
-      chatId: key,
-    });
+
+    const saveChatId = await postAction(
+      `v1/chat/price-propose/${item.priceProposeId}`,
+      {
+        chatId: key,
+      },
+    );
+    if (saveChatId < 0) {
+      history.push("/error");
+      return;
+    }
+
     history.push(`/chat-room/${item.item.itemId}/${key}`);
   };
 };

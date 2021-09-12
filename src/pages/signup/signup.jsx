@@ -8,13 +8,14 @@ import styled from "styled-components";
 import styles from "./signup.module.css";
 import { Grid, Input, Flex, Text } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
+import IdolGroups from "./idolGroups";
+import Timer from "./timer";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { postActionForNonUser } from "../../shared/axios";
 import { red, green } from "../../shared/colors";
-import Timer from "./timer";
 
-import IdolGroups from "./idolGroups";
+import { history } from "../../redux/configureStore";
 
 const Signup = () => {
   localStorage.removeItem("likeIdolGroups");
@@ -58,18 +59,23 @@ const Signup = () => {
   }, [isUsedEmail, nick, isUsedNick, isIdolSelected, isValidated]);
 
   // 이메일 중복 체크
+  const reqUsedEmailCheckPost = async (_email) => {
+    const result = await postActionForNonUser("v1/users/email-check", {
+      email: _email,
+    });
+    return result;
+  };
   const usedEmailCheckPost = _.debounce(async (_email) => {
-    try {
-      const postEmail = await postActionForNonUser("v1/users/email-check", {
-        email: _email,
-      });
-      if (postEmail.response) {
-        setIsUsedEmail(false); // 사용 가능한 이메일
-      } else {
-        setIsUsedEmail(true); // 이미 사용중인 이메일
-      }
-    } catch (e) {
-      console.log(e);
+    const _usedEmailCheckPost = await reqUsedEmailCheckPost(_email);
+
+    if (_usedEmailCheckPost < 0) {
+      history.push("/error");
+      return;
+    }
+    if (_usedEmailCheckPost.response) {
+      setIsUsedEmail(false); // 사용 가능한 이메일
+    } else {
+      setIsUsedEmail(true); // 이미 사용중인 이메일
     }
   }, 500);
   const usedEmailCheck = useCallback(usedEmailCheckPost, []);
@@ -92,59 +98,82 @@ const Signup = () => {
   };
 
   // 본인 인증 - 전송된 문자를 통해 인증 코드 검증
-  const checkSmsCode = async () => {
-    const postSmsCode = postActionForNonUser("v1/sms/authentication", {
+  const reqCheckSmsCode = async () => {
+    const result = await postActionForNonUser("v1/sms/authentication", {
       phoneNumber: phone,
       authenticationNumber: smsCode,
     });
-    postSmsCode.then((result) => {
-      if (result.response) {
-        setisValidated(true); // code가 일치하다면 OK
-      } else {
-        setShowTimer(false);
-        setShowSmsValidateBtn(false);
-        setIsPhoneOk(true);
-        window.alert("휴대폰 본인 인증에 실패했습니다. 다시 시도해주세요.");
-      }
-    });
+    return result;
   };
+  const checkSmsCode = async () => {
+    const _checkSmsCode = await reqCheckSmsCode();
+
+    if (_checkSmsCode < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_checkSmsCode.response) {
+      setisValidated(true); // code가 일치하다면 OK
+    } else {
+      setShowTimer(false);
+      setShowSmsValidateBtn(false);
+      setIsPhoneOk(true);
+      window.alert("휴대폰 본인 인증에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
   // 문자 전송
-  const sendSmsCode = () => {
-    const postSms = postActionForNonUser("v1/sms", {
+  const reqSendSmsCode = async () => {
+    const result = await postActionForNonUser("v1/sms", {
       phoneNumber: phone,
     });
-    postSms.then((result) => {
-      if (result.response) {
-        setIsPhoneOk(false);
-        setShowSmsValidateBtn(true);
-        setisValidated(false);
-        setShowTimer(true);
-      } else {
-        setShowSmsValidateBtn(false);
-        window.alert("인증 문자 발송에 실패했습니다.");
-      }
-    });
+    return result;
+  };
+  const sendSmsCode = async () => {
+    const _sendSmsCode = await reqSendSmsCode();
+
+    if (_sendSmsCode < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_sendSmsCode.response) {
+      setIsPhoneOk(false);
+      setShowSmsValidateBtn(true);
+      setisValidated(false);
+      setShowTimer(true);
+    } else {
+      setShowSmsValidateBtn(false);
+      window.alert("인증 문자 발송에 실패했습니다.");
+    }
   };
 
   // 이전에 다른 SNS을 통해 가입한 적이 있는 휴대폰 번호인지 확인
+  const reqUsedPhCheckPost = async (_ph) => {
+    const result = await postActionForNonUser("v1/users/phone-number-check", {
+      phoneNumber: _ph,
+    });
+    return result;
+  };
   const usedPhCheckPost = _.debounce(async (_ph) => {
-    try {
-      const postPhone = await postActionForNonUser(
-        "v1/users/phone-number-check",
-        {
-          phoneNumber: _ph,
-        },
-      );
-      if (postPhone.response === "NAVER" || postPhone.response === "KAKAO") {
-        setIsUsedPhone(true); // 이미 가입한 적 있는 번호
-        setIsPhoneOk(false);
-        setSnsType(postPhone.response);
-      } else {
-        setIsUsedPhone(false); // 휴대폰 번호 가입한 적 없음
-        setIsPhoneOk(true); // 가입한 적 없으므로 인증 요청 가능
-      }
-    } catch (e) {
-      console.log(e);
+    const _usedPhCheckPost = await reqUsedPhCheckPost();
+
+    if (_usedPhCheckPost < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (
+      _usedPhCheckPost.response === "NAVER" ||
+      _usedPhCheckPost.response === "KAKAO"
+    ) {
+      setIsUsedPhone(true); // 이미 가입한 적 있는 번호
+      setIsPhoneOk(false);
+      setSnsType(_usedPhCheckPost.response);
+    } else {
+      setIsUsedPhone(false); // 휴대폰 번호 가입한 적 없음
+      setIsPhoneOk(true); // 가입한 적 없으므로 인증 요청 가능
     }
   }, 500);
   const usedPhCheck = useCallback(usedPhCheckPost, []);
@@ -160,18 +189,24 @@ const Signup = () => {
     }
   };
 
+  const reqNickCheckPost = async (_nick) => {
+    const result = await postActionForNonUser("v1/users/nickname-check", {
+      nickName: _nick,
+    });
+    return result;
+  };
   const nickCheckPost = _.debounce(async (_nick) => {
-    try {
-      const postNick = await postActionForNonUser("v1/users/nickname-check", {
-        nickName: _nick,
-      });
-      if (postNick.response) {
-        setIsUsedNick(false); // 닉네임 사용 가능
-      } else {
-        setIsUsedNick(true); // 이미 사용중인 닉네임
-      }
-    } catch (e) {
-      console.log(e);
+    const _nickCheckPost = await reqNickCheckPost(_nick);
+
+    if (_nickCheckPost < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_nickCheckPost.response) {
+      setIsUsedNick(false); // 닉네임 사용 가능
+    } else {
+      setIsUsedNick(true); // 이미 사용중인 닉네임
     }
   }, 500);
   const nickCheck = useCallback(nickCheckPost, []);

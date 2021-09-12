@@ -27,13 +27,20 @@ const ItemUpload = (props) => {
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
-    if (result === "login") {
-      setShowPopup(true);
-    }
     return result;
   };
   const fnEffect = async () => {
     const userData = await requestUserData();
+
+    if (userData < 0) {
+      if (userData === -201) {
+        setShowPopup(true);
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
     setUserJwt(userData.jwt);
   };
   useEffect(fnEffect, []);

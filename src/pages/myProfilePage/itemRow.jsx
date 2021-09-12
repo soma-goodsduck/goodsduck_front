@@ -56,14 +56,19 @@ const ItemRow = ({ item }) => {
     updateStatus = "RESERVING";
   }
 
-  const handleUpdate = async (_updateStatus) => {
-    const updateTradeStatus = await patchJsonAction(
+  const reqUpdateTradeStatus = async (_updateStatus) => {
+    const result = await patchJsonAction(
       `v1/items/${item.itemId}/trade-status`,
       {
         tradeStatus: _updateStatus,
       },
     );
-    if (updateTradeStatus === "UnknownException") {
+    return result;
+  };
+  const handleUpdate = async (_updateStatus) => {
+    const updateTradeStatus = await reqUpdateTradeStatus();
+
+    if (updateTradeStatus < 0) {
       history.push("/error");
       return;
     }

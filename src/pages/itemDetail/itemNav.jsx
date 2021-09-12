@@ -40,27 +40,34 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
   }, []);
 
   const [showPopup, setShowPopup] = useState(false);
-  const clickChatBtn = () => {
-    const getUserId = requestAuthData("v1/users/look-up-id");
-    getUserId.then((result) => {
-      if (result === "login") {
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up-id");
+    return result;
+  };
+  const clickChatBtn = async () => {
+    const getUserData = await reqUserData();
+
+    if (getUserData < 0) {
+      if (getUserData === -201) {
         setShowPopup(true);
         return;
       }
+      history.push("/error");
+      return;
+    }
 
-      if (item.myPricePropose !== null) {
-        setShowCheckPriceDeletePopup(true);
-        return;
-      }
+    if (item.myPricePropose !== null) {
+      setShowCheckPriceDeletePopup(true);
+      return;
+    }
 
-      const user = {
-        id: result.userId,
-        nickName: result.nickName,
-        profileImg: result.imageUrl,
-        bcryptId: result.bcryptId,
-      };
-      dispatch(chatActions.addChatRoomAciton(item, user));
-    });
+    const user = {
+      id: getUserData.userId,
+      nickName: getUserData.nickName,
+      profileImg: getUserData.imageUrl,
+      bcryptId: getUserData.bcryptId,
+    };
+    dispatch(chatActions.addChatRoomAciton(item, user));
   };
 
   return (
@@ -139,6 +146,36 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 </Button>
               </Flex>
             )}
+          {/* 기존에 채팅방 나가기를 한 이후 */}
+          {!isOwner &&
+            item.myPricePropose?.status === "CANCLED" &&
+            item.chatId === null &&
+            tradeType !== "완료" && (
+              <Flex>
+                <Button
+                  className={isHighPrice ? styles.btnChatCol : styles.btnChat}
+                  onClick={() => {
+                    clickChatBtn();
+                  }}
+                >
+                  <Icon
+                    width="18px"
+                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    alt="go chat"
+                    margin="0 5px 2px 0"
+                  />
+                  즉시 {item.tradeType === "판매" ? "구매" : "판매"} 가능
+                </Button>
+                <Button
+                  className={isHighPrice ? styles.btnPriceCol : styles.btnPrice}
+                  onClick={() => {
+                    setShowPricePopup(true);
+                  }}
+                >
+                  가격 제시하기
+                </Button>
+              </Flex>
+            )}
           {/* 가격제안 한 적 있는 경우 (채팅방은 없음) */}
           {!isOwner &&
             item.myPricePropose !== null &&
@@ -172,6 +209,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
             )}
           {/* 가격제안이 수락된 경우 */}
           {!isOwner &&
+            item.chatId &&
             item.myPricePropose !== null &&
             item.myPricePropose.status === "ACCEPTED" &&
             tradeType !== "완료" && (

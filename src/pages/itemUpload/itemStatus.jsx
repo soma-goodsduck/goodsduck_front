@@ -17,18 +17,22 @@ const ItemStatus = () => {
   // 상품상태 데이터 받아오기
   const [statuses, setStatuses] = useState([]);
 
-  useEffect(() => {
-    const getCategory = requestPublicData("v1/items/grade-status");
-    getCategory.then((result) => {
-      setStatuses(result);
-    });
-  }, []);
-
-  const [nextOK, setNextOK] = useState(false);
+  const reqItemStatusCategory = async () => {
+    const result = await requestPublicData("v1/items/grade-status");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemStatusCategory = await reqItemStatusCategory();
+    if (getItemStatusCategory < 0) {
+      history.push("/error");
+      return;
+    }
+    setStatuses(getItemStatusCategory);
+  };
+  useEffect(fnEffect, []);
 
   const checkHandler = (grade) => {
     dispatch(newItemActions.setStatus(grade));
-    setNextOK(true);
     history.push("/upload-item");
   };
 

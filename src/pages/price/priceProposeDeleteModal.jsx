@@ -7,8 +7,14 @@ import ItemRow from "../../components/itemRow/itemRow";
 import { Text } from "../../elements";
 import { numberWithCommas } from "../../shared/functions";
 
-import { requestPublicData, deleteAction } from "../../shared/axios";
+import {
+  requestPublicData,
+  requestAuthData,
+  deleteAction,
+} from "../../shared/axios";
 import { actionCreators as chatActions } from "../../redux/modules/chat";
+
+import { history } from "../../redux/configureStore";
 
 const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
   const dispatch = useDispatch();
@@ -19,21 +25,60 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
 
   // 해당 아이템 데이터 받아오기
   const [itemData, setItemData] = useState(null);
-  useEffect(() => {
-    const getItemSummary = requestPublicData(`v1/items/${itemId}/summary`);
-    getItemSummary.then((result) => {
-      setItemData(result);
-    });
-  }, []);
+  const reqItemSummary = async () => {
+    const result = await requestPublicData(`v1/items/${itemId}/summary`);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemSummary = await reqItemSummary();
+    if (getItemSummary < 0) {
+      history.push("/error");
+      return;
+    }
+    setItemData(getItemSummary);
+  };
+  useEffect(fnEffect, []);
 
-  const handleDelete = () => {
-    deleteAction(`v1/items/${itemId}/price-propose/${priceId}`);
+  // 가격제시 취소
+  const reqDeletePricePropose = async () => {
+    const result = await deleteAction(
+      `v1/items/${itemId}/price-propose/${priceId}`,
+    );
+    return result;
+  };
+  const reqItemDetail = async () => {
+    const result = await requestPublicData(`v1/items/${itemId}`);
+    return result;
+  };
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up-id");
+    return result;
+  };
+  const handleDelete = async () => {
+    const deletePricePropose = await reqDeletePricePropose();
+
+    if (deletePricePropose < 0) {
+      history.push("/error");
+      return;
+    }
 
     if (type === "beforeChat") {
-      const getItemDetail = requestPublicData(`v1/items/${itemId}`);
-      getItemDetail.then((result) => {
-        dispatch(chatActions.addChatRoomAciton(result));
-      });
+      const getItemDetail = await reqItemDetail();
+      const getUserData = await reqUserData();
+
+      if (getItemDetail < 0 || getUserData < 0) {
+        history.push("/error");
+        return;
+      }
+
+      const user = {
+        id: getUserData.userId,
+        nickName: getUserData.nickName,
+        profileImg: getUserData.imageUrl,
+        bcryptId: getUserData.bcryptId,
+      };
+
+      dispatch(chatActions.addChatRoomAciton(getItemDetail, user));
     } else {
       window.location.reload();
     }

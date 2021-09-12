@@ -11,6 +11,7 @@ import { LoginPopUp } from "../../elements";
 
 import { grayBorder } from "../../shared/colors";
 import { requestPublicData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const OtherProfilePage = (props) => {
   const href = window.location.href.split("/");
@@ -25,13 +26,19 @@ const OtherProfilePage = (props) => {
 
   const requestProfileData = async () => {
     const result = await requestPublicData(`v1/users/${bcrypt}`);
-    if (result === "login") {
-      setShowPopup(true);
-    }
     return result;
   };
   const fnEffect = async () => {
     const userData = await requestProfileData();
+
+    if (userData < 0) {
+      if (userData === -201) {
+        setShowPopup(true);
+        return;
+      }
+      history.push("/error");
+      return;
+    }
 
     if (userData.user.role === "RESIGNED") {
       setUser(userData.user);

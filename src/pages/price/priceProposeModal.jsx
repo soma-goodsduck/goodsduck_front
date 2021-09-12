@@ -22,6 +22,10 @@ const PriceProposeModal = ({ _onClick }) => {
   };
   const fnEffect = async () => {
     const getItemDetail = await requestItemData();
+    if (getItemDetail < 0) {
+      history.push("/error");
+      return;
+    }
     setItemData(getItemDetail);
   };
   useEffect(fnEffect, []);
@@ -30,20 +34,26 @@ const PriceProposeModal = ({ _onClick }) => {
   const [price, setPrice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
 
+  const reqPricePropose = async () => {
+    const result = await postAction(`v1/items/${itemId}/price-propose`, {
+      price,
+    });
+    return result;
+  };
   const handleClcik = async () => {
-    if (price === 0) {
+    if (price <= 0) {
+      window.alert("최소한 0원 이상의 금액을 입력하세요!");
       return;
     }
 
-    const postPrice = await postAction(`v1/items/${itemId}/price-propose`, {
-      price,
-    });
-    if (postPrice === "error") {
+    const postPrice = await reqPricePropose();
+
+    if (postPrice < 0) {
+      if (postPrice === -201) {
+        setShowPopup(true);
+        return;
+      }
       history.push("/error");
-      return;
-    }
-    if (postPrice === "login") {
-      setShowPopup(true);
       return;
     }
 

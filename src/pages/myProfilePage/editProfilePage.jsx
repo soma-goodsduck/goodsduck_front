@@ -43,6 +43,11 @@ const EditProfilePage = (props) => {
     const idolsFromUser = [];
     const getUserData = await reqUserData();
 
+    if (getUserData < 0) {
+      history.push("/error");
+      return;
+    }
+
     setUser(getUserData);
     setNick(getUserData.nickName);
     if (getUserData.imageUrl !== null) {
@@ -78,18 +83,24 @@ const EditProfilePage = (props) => {
   };
 
   // 닉네임 중복체크
+  const reqNickCheckPost = async (_nick) => {
+    const result = await postActionForNonUser("v1/users/nickname-check", {
+      nickName: _nick,
+    });
+    return result;
+  };
   const nickCheckPost = _.debounce(async (_nick) => {
-    try {
-      const postNick = await postActionForNonUser("v1/users/nickname-check", {
-        nickName: _nick,
-      });
-      if (postNick.response) {
-        setIsUsedNick(false); // 닉네임 사용 가능
-      } else {
-        setIsUsedNick(true); // 이미 사용중인 닉네임
-      }
-    } catch (e) {
-      console.log(e);
+    const _nickCheckPost = await reqNickCheckPost(_nick);
+
+    if (_nickCheckPost < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_nickCheckPost.response) {
+      setIsUsedNick(false); // 닉네임 사용 가능
+    } else {
+      setIsUsedNick(true); // 이미 사용중인 닉네임
     }
   }, 500);
   const nickCheck = useCallback(nickCheckPost, []);
@@ -103,7 +114,11 @@ const EditProfilePage = (props) => {
     }
   };
 
-  const updateProfile = () => {
+  const reqUpdateProfile = async (formData) => {
+    const result = await putAction("v1/users/profile", formData);
+    return result;
+  };
+  const updateProfile = async () => {
     if (!nextOK) {
       return;
     }
@@ -134,7 +149,12 @@ const EditProfilePage = (props) => {
           };
         }
         dispatch(userActions.setUserInfo(nick, _img));
-        putAction("v1/users/profile", formData);
+
+        const _updateProfile = await reqUpdateProfile(formData);
+        if (_updateProfile < 0) {
+          history.push("/error");
+          return;
+        }
         history.replace("/my-profile");
       }
     }

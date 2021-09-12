@@ -4,15 +4,24 @@ import { requestAuthData } from "../../shared/axios";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
 import PriceProposeRow from "./priceProposeRow";
+import { history } from "../../redux/configureStore";
 
 const PriceProposePage = (props) => {
   const [items, setItems] = useState([]);
-  useEffect(() => {
-    const getItems = requestAuthData("v1/users/items/price-propose");
-    getItems.then((result) => {
-      setItems(result);
-    });
-  }, []);
+
+  const reqPricePropseList = async () => {
+    const result = await requestAuthData("v1/users/items/price-propose");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getPricePropseList = await reqPricePropseList();
+    if (getPricePropseList < 0) {
+      history.push("/error");
+      return;
+    }
+    setItems(getPricePropseList);
+  };
+  useEffect(fnEffect, []);
 
   return (
     <>

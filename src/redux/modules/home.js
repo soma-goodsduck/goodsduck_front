@@ -52,7 +52,7 @@ const initialState = {
 // middleware actions
 // 전체 홈 데이터
 const getItemsData = (_itemNum = 0) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
     if (!_hasNext) {
@@ -61,31 +61,34 @@ const getItemsData = (_itemNum = 0) => {
 
     dispatch(loading(true));
 
-    const getItemList = getItems("items", _itemNum);
-    getItemList.then((result) => {
-      const response = result.response;
-      const newItemData = response.list;
-      const hasNext = response.hasNext;
+    const getItemList = await getItems("items", _itemNum);
+    if (getItemList < 0) {
+      history.push("/error");
+      return;
+    }
 
-      let itemNum;
-      if (newItemData.length !== 0) {
-        itemNum = newItemData[newItemData.length - 1].itemId;
-      }
+    const response = getItemList.response;
+    const newItemData = response.list;
+    const hasNext = response.hasNext;
 
-      if (response.hasNext) {
-        dispatch(setHomeItems(newItemData, hasNext, itemNum));
-      } else {
-        dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
-      }
+    let itemNum;
+    if (newItemData.length !== 0) {
+      itemNum = newItemData[newItemData.length - 1].itemId;
+    }
 
-      dispatch(setNewNoti(response.noty.hasNewNotification));
-    });
+    if (response.hasNext) {
+      dispatch(setHomeItems(newItemData, hasNext, itemNum));
+    } else {
+      dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
+    }
+
+    dispatch(setNewNoti(response.noty.hasNewNotification));
   };
 };
 
 // 아이돌 그룹별 필터링
 const getItemsDataByIdol = (num, idolId) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
     if (!_hasNext) {
@@ -94,31 +97,33 @@ const getItemsDataByIdol = (num, idolId) => {
 
     dispatch(loading(true));
 
-    const getItemList = getItemsByIdol(num, idolId);
-    getItemList.then((result) => {
-      const response = result.response;
-      const newItemData = response.list;
-      const hasNext = response.hasNext;
+    const getItemList = await getItemsByIdol(num, idolId);
+    if (getItemList < 0) {
+      history.push("/error");
+      return;
+    }
+    const response = getItemList.response;
+    const newItemData = response.list;
+    const hasNext = response.hasNext;
 
-      let itemNum;
-      if (newItemData.length !== 0) {
-        itemNum = newItemData[newItemData.length - 1].itemId;
-      }
+    let itemNum;
+    if (newItemData.length !== 0) {
+      itemNum = newItemData[newItemData.length - 1].itemId;
+    }
 
-      if (response.hasNext) {
-        dispatch(setHomeItems(newItemData, hasNext, itemNum));
-      } else {
-        dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
-      }
+    if (response.hasNext) {
+      dispatch(setHomeItems(newItemData, hasNext, itemNum));
+    } else {
+      dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
+    }
 
-      dispatch(setNewNoti(response.noty.hasNewNotification));
-    });
+    dispatch(setNewNoti(response.noty.hasNewNotification));
   };
 };
 
 // 상세 필터링
 const getItemsDataByFilter = (query) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
     if (!_hasNext) {
@@ -127,31 +132,33 @@ const getItemsDataByFilter = (query) => {
 
     dispatch(loading(true));
 
-    const getItemList = getItemsByFilter(query);
-    getItemList.then((result) => {
-      const response = result.response;
-      const newItemData = response.list;
-      const hasNext = response.hasNext;
+    const getItemList = await getItemsByFilter(query);
+    if (getItemList < 0) {
+      history.push("/error");
+      return;
+    }
+    const response = getItemList.response;
+    const newItemData = response.list;
+    const hasNext = response.hasNext;
 
-      let itemNum;
-      if (newItemData.length !== 0) {
-        itemNum = newItemData[newItemData.length - 1].itemId;
-      }
+    let itemNum;
+    if (newItemData.length !== 0) {
+      itemNum = newItemData[newItemData.length - 1].itemId;
+    }
 
-      if (response.hasNext) {
-        dispatch(setHomeItems(newItemData, hasNext, itemNum));
-      } else {
-        dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
-      }
+    if (response.hasNext) {
+      dispatch(setHomeItems(newItemData, hasNext, itemNum));
+    } else {
+      dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
+    }
 
-      dispatch(setNewNoti(response.noty.hasNewNotification));
-    });
+    dispatch(setNewNoti(response.noty.hasNewNotification));
   };
 };
 
 // 검색 필터링
 const getItemsDataBySearch = (num, _keyword) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
     if (!_hasNext) {
@@ -160,25 +167,27 @@ const getItemsDataBySearch = (num, _keyword) => {
 
     dispatch(loading(true));
 
-    const getItemList = getItemsBySearch(num, _keyword);
-    getItemList.then((result) => {
-      const response = result.response;
-      const newItemData = response.list;
-      const hasNext = response.hasNext;
+    const getItemList = await getItemsBySearch(num, _keyword);
+    if (getItemList < 0) {
+      history.push("/error");
+      return;
+    }
+    const response = getItemList.response;
+    const newItemData = response.list;
+    const hasNext = response.hasNext;
 
-      let itemNum;
-      if (newItemData.length !== 0) {
-        itemNum = newItemData[newItemData.length - 1].itemId;
-      }
+    let itemNum;
+    if (newItemData.length !== 0) {
+      itemNum = newItemData[newItemData.length - 1].itemId;
+    }
 
-      if (response.hasNext) {
-        dispatch(setHomeItems(newItemData, hasNext, itemNum));
-      } else {
-        dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
-      }
+    if (response.hasNext) {
+      dispatch(setHomeItems(newItemData, hasNext, itemNum));
+    } else {
+      dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
+    }
 
-      dispatch(setNewNoti(response.noty.hasNewNotification));
-    });
+    dispatch(setNewNoti(response.noty.hasNewNotification));
   };
 };
 

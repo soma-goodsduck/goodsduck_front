@@ -26,12 +26,17 @@ const ChattingReportPage = (props) => {
   const fnEffect = async () => {
     const getCategoryOfReport = await requestCategoryOfReport();
 
+    if (getCategoryOfReport < 0) {
+      history.push("/error");
+      return;
+    }
+
     setReports(getCategoryOfReport.reportCategoryList);
     setNick(getCategoryOfReport.receiverNickName);
   };
   useEffect(fnEffect, []);
 
-  const reportHandler = () => {
+  const reqReport = async () => {
     const json = {
       reportCategoryId: reportId,
       id: chatroomId,
@@ -39,29 +44,29 @@ const ChattingReportPage = (props) => {
       receiverBcryptId: bcrypt,
       type: "ChatReport",
     };
+    const result = await postAction("v1/users/report", json);
+    return result;
+  };
+  const reportHandler = async () => {
+    const report = await reqReport();
 
-    const report = postAction("v1/users/report", json);
-    report
-      .then((result) => {
-        if (result.response.isExist) {
-          window.alert("이미 신고된 채팅방입니다.");
-          history.goBack();
-          return;
-        }
+    if (report < 0) {
+      history.push("/error");
+      return;
+    }
 
-        if (result.success) {
-          window.alert(`${nick}님과의 채팅을 신고했습니다.`);
-          history.goBack();
-        } else {
-          window.alert("신고 등록에 실패했습니다.");
-        }
-      })
-      .catch(() => {
-        window.alert(
-          "네트워크 장애가 발생했습니다. 잠시 후 다시 시도해주세요.",
-        );
-        history.goBack();
-      });
+    if (report.response.isExist) {
+      window.alert("이미 신고된 채팅방입니다.");
+      history.goBack();
+      return;
+    }
+
+    if (report.success) {
+      window.alert(`${nick}님과의 채팅을 신고했습니다.`);
+      history.goBack();
+    } else {
+      window.alert("신고 등록에 실패했습니다.");
+    }
   };
 
   return (

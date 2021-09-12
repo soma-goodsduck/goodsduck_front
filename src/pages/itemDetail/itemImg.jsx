@@ -15,11 +15,28 @@ const ItemImg = ({ id, item, onClick }) => {
   };
 
   const [isLike, setIsLike] = useState(item.isLike);
-  const clickHeart = () => {
+  const reqClickHeart = async () => {
+    const result = await postAction(`v1/items/${id}/like`);
+    return result;
+  };
+  const reqUnclickHeart = async () => {
+    const result = await deleteAction(`v1/items/${id}/like`);
+    return result;
+  };
+
+  const clickHeart = async () => {
     if (!isLike) {
-      postAction(`v1/items/${id}/like`);
+      const clickAction = await reqClickHeart();
+      if (clickAction < 0) {
+        history.push("/error");
+        return;
+      }
     } else {
-      deleteAction(`v1/items/${id}/like`);
+      const clickAction = await reqUnclickHeart();
+      if (clickAction < 0) {
+        history.push("/error");
+        return;
+      }
     }
 
     setIsLike(!isLike);

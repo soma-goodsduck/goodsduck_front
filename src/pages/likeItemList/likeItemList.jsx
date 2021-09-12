@@ -7,21 +7,31 @@ import ItemRow from "../../components/itemRow/itemRow";
 import LoginPopUp from "../../elements/loginPopUp";
 
 import { requestAuthData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const LikeItemList = () => {
   const [favoriteItems, setFavoriteItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    const getLikeItemList = requestAuthData("v2/items/like");
-    getLikeItemList.then((result) => {
-      if (result === "login") {
+  const requestLikeItemList = async () => {
+    const result = await requestAuthData("v2/items/like");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getLikeItemList = await requestLikeItemList();
+
+    if (getLikeItemList < 0) {
+      if (getLikeItemList === -201) {
         setShowPopup(true);
-      } else {
-        setFavoriteItems(result);
+        return;
       }
-    });
-  }, []);
+      history.push("/error");
+      return;
+    }
+
+    setFavoriteItems(getLikeItemList);
+  };
+  useEffect(fnEffect, []);
 
   return (
     <>

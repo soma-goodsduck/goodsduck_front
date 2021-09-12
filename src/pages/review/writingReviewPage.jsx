@@ -40,16 +40,22 @@ const WritingReviewPage = () => {
 
   const requestUsersByChat = async () => {
     const result = await requestAuthData(`v2/users/items/${itemId}/chat`);
-    if (result === "login") {
-      history.push("/login");
-    }
-    if (result.isExist) {
-      history.push("/my-profile");
-    }
     return result;
   };
   const fnEffect = async () => {
     const usersByChat = await requestUsersByChat();
+    if (usersByChat < 0) {
+      if (usersByChat === -201) {
+        history.push("/login");
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+    if (usersByChat.isExist) {
+      history.push("/my-profile");
+    }
+
     if (usersByChat.chatRooms !== []) {
       setUsers(usersByChat.chatRooms);
     }
@@ -62,24 +68,32 @@ const WritingReviewPage = () => {
     setSelectedUser(true);
   };
 
-  const onFinReview = () => {
+  const reqReview = async () => {
+    const result = await postAction("v1/users/reviews", {
+      chatRoomId: userChatIdForReview,
+      content: review,
+      itemId,
+      score: numOfStar,
+      reviewType: "REVIEW_FIRST",
+    });
+    return result;
+  };
+  const reqUpdateTradeType = async () => {
+    const result = await patchJsonAction(`v1/items/${itemId}/trade-status`, {
+      tradeStatus: "COMPLETE",
+    });
+    return result;
+  };
+  const onFinReview = async () => {
     // 리뷰 작성 요청
     if (nextOK) {
-      try {
-        postAction("v1/users/reviews", {
-          chatRoomId: userChatIdForReview,
-          content: review,
-          itemId,
-          score: numOfStar,
-          reviewType: "REVIEW_FIRST",
-        });
-      } catch (error) {
-        console.log(error);
+      const postReview = await reqReview();
+      const updateTradeType = await reqUpdateTradeType();
+      if (postReview < 0 || updateTradeType < 0) {
+        history.push("/error");
         return;
       }
-      patchJsonAction(`v1/items/${itemId}/trade-status`, {
-        tradeStatus: "COMPLETE",
-      });
+
       history.replace("/my-profile");
     }
     dispatch(userActions.clearReview());

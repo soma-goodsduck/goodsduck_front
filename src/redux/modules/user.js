@@ -120,37 +120,66 @@ const signupAction = (user) => {
     socialAccountType: user.type,
     likeIdolGroupsId: user.idols,
   };
-  return function (dispatch, getState, { history }) {
-    axios
-      .post(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/users/sign-up`,
-        JSON.stringify(json),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+  return async function (dispatch, getState, { history }) {
+    const signup = await axios.post(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/users/sign-up`,
+      JSON.stringify(json),
+      {
+        headers: {
+          "Content-Type": "application/json",
         },
-        { withCredentials: true },
-      )
-      .then((response) => {
-        dispatch(logIn(response.data.response.jwt));
+      },
+      { withCredentials: true },
+    );
 
-        if (window.ReactNativeWebView) {
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({ type: "REQ_FCM_TOKEN" }),
-          );
-        } else {
-          notification();
-        }
+    if (signup < 0) {
+      history.replace("/login");
+      window.alert("회원가입에 실패했습니다.");
+      return;
+    }
 
-        history.push("/");
-      })
-      .catch((error) => {
-        console.log("error", error);
-        Sentry.captureException(error);
-        history.replace("/login");
-        window.alert("회원가입에 실패했습니다.");
-      });
+    dispatch(logIn(signup.data.response.jwt));
+
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+      );
+    } else {
+      notification();
+    }
+
+    history.push("/");
+
+    // axios
+    //   .post(
+    //     `${process.env.REACT_APP_BACK_URL}/api/v1/users/sign-up`,
+    //     JSON.stringify(json),
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     },
+    //     { withCredentials: true },
+    //   )
+    //   .then((response) => {
+    //     dispatch(logIn(response.data.response.jwt));
+
+    //     if (window.ReactNativeWebView) {
+    //       window.ReactNativeWebView.postMessage(
+    //         JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+    //       );
+    //     } else {
+    //       notification();
+    //     }
+
+    //     history.push("/");
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error);
+    //     Sentry.captureException(error);
+    //     history.replace("/login");
+    //     window.alert("회원가입에 실패했습니다.");
+    //   });
   };
 };
 

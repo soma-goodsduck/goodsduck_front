@@ -39,9 +39,10 @@ const ItemDetailPage = ({ history }) => {
   };
   const fnEffect = async () => {
     const getItemDetail = await requestItemData();
+    console.log(getItemDetail);
 
-    if (getItemDetail === "error") {
-      history.push("/not-found");
+    if (getItemDetail < 0) {
+      history.push("/error");
       return;
     }
 
@@ -59,15 +60,15 @@ const ItemDetailPage = ({ history }) => {
     if (findEnter) {
       let _descHeingt = 0;
       const _desc = getItemDetail.description.split("\n");
-      const NumOfEnter = findEnter.length;
+      const numOfEnter = findEnter.length;
 
-      for (let i = 0; i < NumOfEnter + 1; i += 1) {
+      for (let i = 0; i < numOfEnter + 1; i += 1) {
         if (_desc[i].length / 20 > 1) {
-          _descHeingt += Math.ceil(_desc[0].length / 20);
+          _descHeingt += Math.ceil(_desc[i].length / 20);
         }
       }
 
-      _descHeingt += NumOfEnter;
+      _descHeingt += numOfEnter;
       setDescHegiht(_descHeingt);
     } else {
       const countOfLetter = getItemDetail.description.length;
@@ -145,16 +146,20 @@ const ItemDetailPage = ({ history }) => {
     setShowWriterPopup(false);
   };
 
-  const deleteItem = () => {
-    const deleteItemAction = deleteAction(`v1/items/${itemId}`);
-    deleteItemAction.then((result) => {
-      if (result.success) {
-        dispatch(homeActions.deleteItem(itemId));
-        history.replace("/");
-      } else {
-        window.alert("굿즈 삭제에 실패했습니다.");
-      }
-    });
+  const deleteItem = async () => {
+    const reqDeleteItem = await deleteAction(`v1/items/${itemId}`);
+
+    if (reqDeleteItem === "error") {
+      history.push("/error");
+      return;
+    }
+
+    if (reqDeleteItem.success) {
+      dispatch(homeActions.deleteItem(itemId));
+      history.replace("/");
+    } else {
+      window.alert("굿즈 삭제에 실패했습니다.");
+    }
   };
 
   // 판매자/구매자의 마이페이지로 이동
@@ -300,7 +305,11 @@ const ItemDetailPage = ({ history }) => {
                     size="50px"
                   />
                   <Flex is_col align="flex-start">
-                    <Image shape="circle" size="20px" />
+                    <Image
+                      shape="circle"
+                      size="20px"
+                      src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${itemData.itemOwner.level}.png`}
+                    />
                     <UserName>
                       <Text size="18px">{itemData.itemOwner.nickName}</Text>
                     </UserName>

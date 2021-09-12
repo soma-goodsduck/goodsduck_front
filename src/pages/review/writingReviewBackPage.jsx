@@ -36,35 +36,48 @@ const WritingReviewBackPage = () => {
 
   const requestFirstReviewData = async () => {
     const result = await requestAuthData(`v1/items/${itemId}/review-back`);
-    if (result === "login") {
-      history.push("/login");
-    }
-    if (result.isExist) {
-      history.push("/");
-    }
     return result;
   };
   const fnEffect = async () => {
     const firstReviewData = await requestFirstReviewData();
+
+    if (firstReviewData < 0) {
+      if (firstReviewData === -201) {
+        history.push("/login");
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
+    if (firstReviewData.isExist) {
+      history.push("/");
+      return;
+    }
+
     dispatch(userActions.setUserForReview(firstReviewData.chatRoomId));
     setFirstReview(firstReviewData.review);
     setItem(firstReviewData.item);
   };
   useEffect(fnEffect, []);
 
-  const onFinReview = () => {
+  const reqReview = async () => {
+    const result = await postAction("v1/users/reviews", {
+      chatRoomId: userChatIdForReview,
+      content: review,
+      itemId,
+      score: numOfStar,
+      reviewType: "REVIEW",
+    });
+    return result;
+  };
+
+  const onFinReview = async () => {
     // 리뷰 작성 요청
     if (nextOK) {
-      try {
-        postAction("v1/users/reviews", {
-          chatRoomId: userChatIdForReview,
-          content: review,
-          itemId,
-          score: numOfStar,
-          reviewType: "REVIEW",
-        });
-      } catch (error) {
-        console.log(error);
+      const postReview = await reqReview();
+      if (postReview < 0) {
+        history.push("/error");
         return;
       }
       history.replace("/");

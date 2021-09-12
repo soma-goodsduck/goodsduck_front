@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-
 import axios from "axios";
-import * as Sentry from "@sentry/react";
-
-import { actionCreators as userActions } from "../redux/modules/user";
 
 import { notification } from "./notification";
 import Spinner from "./spinner";
+
+import { actionCreators as userActions } from "../redux/modules/user";
+import { history } from "../redux/configureStore";
 
 const OAuth2RedirectHandler = () => {
   const userAgent = window.navigator.userAgent;
@@ -29,65 +28,75 @@ const OAuth2RedirectHandler = () => {
     appleToken = appleTokenHref[appleTokenHref.length - 1];
   }
 
+  const reqKakaoLogin = async () => {
+    const result = await axios.get(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/kakao?code=${code}`,
+    );
+    return result;
+  };
   const kakaoLogin = async () => {
-    try {
-      const result = await axios.get(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/kakao?code=${code}`,
-      );
-      if (result.data.response.role === "ANONYMOUS") {
-        dispatch(
-          userActions.nonUserAction(
-            result.data.response.socialAccountId,
-            "KAKAO",
-          ),
-        );
-      } else {
-        if (result.data.response.isAgreeToNotification) {
-          if (window.ReactNativeWebView) {
-            window.ReactNativeWebView.postMessage(
-              JSON.stringify({ type: "REQ_FCM_TOKEN" }),
-            );
-          } else {
-            notification();
-          }
-        }
+    const _kakaoLogin = await reqKakaoLogin();
 
-        dispatch(userActions.loginAction(result.data.response.jwt));
+    if (_kakaoLogin < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_kakaoLogin.data.response.role === "ANONYMOUS") {
+      dispatch(
+        userActions.nonUserAction(
+          _kakaoLogin.data.response.socialAccountId,
+          "KAKAO",
+        ),
+      );
+    } else {
+      if (_kakaoLogin.data.response.isAgreeToNotification) {
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+          );
+        } else {
+          notification();
+        }
       }
-    } catch (error) {
-      console.log("error", error);
-      Sentry.captureException(error);
+
+      dispatch(userActions.loginAction(_kakaoLogin.data.response.jwt));
     }
   };
 
+  const reqNaverLogin = async (clientId) => {
+    const result = await axios.get(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/naver?code=${code}&state=${state}&clientId=${clientId}`,
+    );
+    return result;
+  };
   const naverLogin = async (clientId) => {
-    try {
-      const result = await axios.get(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/naver?code=${code}&state=${state}&clientId=${clientId}`,
-      );
-      if (result.data.response.role === "ANONYMOUS") {
-        dispatch(
-          userActions.nonUserAction(
-            result.data.response.socialAccountId,
-            "NAVER",
-          ),
-        );
-      } else {
-        if (result.data.response.isAgreeToNotification) {
-          if (window.ReactNativeWebView) {
-            window.ReactNativeWebView.postMessage(
-              JSON.stringify({ type: "REQ_FCM_TOKEN" }),
-            );
-          } else {
-            notification();
-          }
-        }
+    const _naverLogin = await reqNaverLogin(clientId);
 
-        dispatch(userActions.loginAction(result.data.response.jwt));
+    if (_naverLogin < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_naverLogin.data.response.role === "ANONYMOUS") {
+      dispatch(
+        userActions.nonUserAction(
+          _naverLogin.data.response.socialAccountId,
+          "NAVER",
+        ),
+      );
+    } else {
+      if (_naverLogin.data.response.isAgreeToNotification) {
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+          );
+        } else {
+          notification();
+        }
       }
-    } catch (error) {
-      console.log("error", error);
-      Sentry.captureException(error);
+
+      dispatch(userActions.loginAction(_naverLogin.data.response.jwt));
     }
   };
 
@@ -101,38 +110,39 @@ const OAuth2RedirectHandler = () => {
     }
   };
 
+  const reqAppleLogin = async () => {
+    const result = await axios.get(
+      `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/apple?code=${appleCode}&idToken=${appleToken}&state=${process.env.REACT_APP_APPLE_STATE}`,
+    );
+    return result;
+  };
   const appleLogin = async () => {
-    console.log(appleCode, appleToken);
+    const _appleLogin = await reqAppleLogin();
 
-    try {
-      const result = await axios.get(
-        `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/apple?code=${appleCode}&idToken=${appleToken}&state=${process.env.REACT_APP_APPLE_STATE}`,
+    if (_appleLogin < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_appleLogin.data.response.role === "ANONYMOUS") {
+      dispatch(
+        userActions.nonUserAction(
+          _appleLogin.data.response.socialAccountId,
+          "APPLE",
+        ),
       );
-
-      console.log(result);
-      if (result.data.response.role === "ANONYMOUS") {
-        dispatch(
-          userActions.nonUserAction(
-            result.data.response.socialAccountId,
-            "APPLE",
-          ),
-        );
-      } else {
-        if (result.data.response.isAgreeToNotification) {
-          if (window.ReactNativeWebView) {
-            window.ReactNativeWebView.postMessage(
-              JSON.stringify({ type: "REQ_FCM_TOKEN" }),
-            );
-          } else {
-            notification();
-          }
+    } else {
+      if (_appleLogin.data.response.isAgreeToNotification) {
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+          );
+        } else {
+          notification();
         }
-
-        dispatch(userActions.loginAction(result.data.response.jwt));
       }
-    } catch (error) {
-      console.log("error", error);
-      Sentry.captureException(error);
+
+      dispatch(userActions.loginAction(_appleLogin.data.response.jwt));
     }
   };
 

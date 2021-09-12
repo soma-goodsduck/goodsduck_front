@@ -6,22 +6,33 @@ import { Text } from "../../elements";
 import { requestPublicData } from "../../shared/axios";
 import { grayText } from "../../shared/colors";
 import { formatDate, numberWithCommas } from "../../shared/functions";
+import { history } from "../../redux/configureStore";
 
 const PriceList = ({ id }) => {
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    const getItems = requestPublicData(`v1/items/${id}/price-propose`);
-    getItems.then((result) => {
-      if (result !== null && result.length !== 0) {
-        const sortData = result.reverse();
-        if (sortData.length > 5) {
-          sortData.slice(0, 5);
-        }
-        setItems(sortData);
+  const reqPriceProposeList = async () => {
+    const result = await requestPublicData(`v1/items/${id}/price-propose`);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getPriceProposeList = await reqPriceProposeList();
+    console.log(getPriceProposeList);
+
+    if (getPriceProposeList < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (getPriceProposeList !== null && getPriceProposeList.length !== 0) {
+      const sortData = getPriceProposeList.reverse();
+      if (sortData.length > 5) {
+        sortData.slice(0, 5);
       }
-    });
-  }, []);
+      setItems(sortData);
+    }
+  };
+  useEffect(fnEffect, []);
 
   return (
     <>

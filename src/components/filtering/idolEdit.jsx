@@ -18,10 +18,25 @@ const IdolEdit = ({ _onClick }) => {
     }
   };
 
-  const onEdit = () => {
+  const reqEditIdol = async () => {
+    const result = await putAction("v1/users/idol-groups", {
+      likeIdolGroupsId: idols,
+    });
+    return result;
+  };
+
+  const onEdit = async () => {
     if (likeIdolGroupsLS && likeIdolGroupsLS.split(",").map(Number) !== idols) {
       if (idols.length > 0) {
-        putAction("v1/users/idol-groups", { likeIdolGroupsId: idols });
+        const _editIdol = await reqEditIdol();
+        if (_editIdol < 0) {
+          if (_editIdol === -201) {
+            setShowPopup(true);
+            return;
+          }
+          _editIdol.push("/error");
+          return;
+        }
         localStorage.setItem("likeIdolGroups", idols);
       }
     }

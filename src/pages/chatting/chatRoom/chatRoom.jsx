@@ -31,6 +31,11 @@ export class ChatRoom extends Component {
 
   componentDidMount() {
     const getUserId = requestPublicData("v1/users/look-up-id");
+    getUserId.then((result) => {
+      if (result < 0) {
+        history.push("/error");
+      }
+    });
 
     const href = window.location.href.split("/");
     const _ChatRoomId = href[href.length - 1];

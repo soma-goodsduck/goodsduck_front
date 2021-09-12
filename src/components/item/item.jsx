@@ -36,11 +36,29 @@ const Item = ({ item, id }) => {
   };
 
   const [isLike, setIsLike] = useState(item.isLike);
-  const clickHeart = () => {
+
+  const reqClickHeart = async () => {
+    const result = await postAction(`v1/items/${id}/like`);
+    return result;
+  };
+  const reqUnclickHeart = async () => {
+    const result = await deleteAction(`v1/items/${id}/like`);
+    return result;
+  };
+
+  const clickHeart = async () => {
     if (!isLike) {
-      postAction(`v1/items/${id}/like`);
+      const clickAction = await reqClickHeart();
+      if (clickAction < 0) {
+        history.push("/error");
+        return;
+      }
     } else {
-      deleteAction(`v1/items/${id}/like`);
+      const clickAction = await reqUnclickHeart();
+      if (clickAction < 0) {
+        history.push("/error");
+        return;
+      }
     }
 
     setIsLike(!isLike);
@@ -120,7 +138,11 @@ const Title = styled.div`
 `;
 
 const UserName = styled.div`
-  width: 65px;
+  width: 70px;
+
+  @media screen and (min-width: 415px) {
+    width: 85px;
+  }
 `;
 
 const InfoBox = styled.div`
@@ -132,8 +154,8 @@ const Text = styled.p`
   color: ${(props) => props.color};
   font-size: 15px;
   font-size: ${(props) => props.priceSize && "16px"};
-  font-size: ${(props) => props.nickSize && "15px"};
-  font-size: ${(props) => props.timeSize && "13px"};
+  font-size: ${(props) => props.nickSize && "14px"};
+  font-size: ${(props) => props.timeSize && "12px"};
   font-weight: ${(props) => (props.bold ? "600" : "")};
   font-weight: ${(props) => (props.medium ? "500" : "")};
   margin: ${(props) => props.margin};
@@ -146,8 +168,8 @@ const Text = styled.p`
   @media screen and (min-width: 415px) {
     font-size: 16px;
     font-size: ${(props) => props.priceSize && "18px"};
-    font-size: ${(props) => props.nickSize && "17px"};
-    font-size: ${(props) => props.timeSize && "16px"};
+    font-size: ${(props) => props.nickSize && "15px"};
+    font-size: ${(props) => props.timeSize && "14px"};
   }
 `;
 
@@ -166,8 +188,8 @@ const ItemImg = styled.div`
 `;
 
 const UserImg = styled.div`
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border-radius: 22px;
   margin: 0 5px 0 0;
 
@@ -176,8 +198,8 @@ const UserImg = styled.div`
   object-fit: cover;
 
   @media screen and (min-width: 415px) {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 `;
 

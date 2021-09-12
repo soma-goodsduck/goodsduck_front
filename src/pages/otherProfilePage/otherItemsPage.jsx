@@ -7,6 +7,7 @@ import Item from "./otherItemRow";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { requestPublicData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const OtherItemsPage = (props) => {
   const href = window.location.href.split("/");
@@ -28,6 +29,10 @@ const OtherItemsPage = (props) => {
   };
   const fnEffect = async () => {
     const itemData = await requestItems();
+    if (itemData < 0) {
+      history.push("/error");
+      return;
+    }
     setItems(itemData);
   };
   useEffect(fnEffect, [filteringType]);

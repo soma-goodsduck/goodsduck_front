@@ -44,6 +44,7 @@ const MyProfilePage = () => {
         return;
       }
       history.push("/error");
+      return;
     }
 
     setUser(userData);

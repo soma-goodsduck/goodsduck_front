@@ -34,14 +34,18 @@ const ItemReportPage = (props) => {
   const fnEffect = async () => {
     const getCategoryOfReport = await requestCategoryOfReport();
     const getItemData = await requestItemData();
-    console.log(getCategoryOfReport);
+
+    if (getCategoryOfReport < 0 || getItemData < 0) {
+      history.push("/error");
+      return;
+    }
 
     setReports(getCategoryOfReport.reportCategoryList);
     setItemData(getItemData);
   };
   useEffect(fnEffect, []);
 
-  const reportHandler = () => {
+  const reqReport = async () => {
     const json = {
       reportCategoryId: reportId,
       id: String(itemId),
@@ -49,29 +53,29 @@ const ItemReportPage = (props) => {
       receiverBcryptId: bcrypt,
       type: "ItemReport",
     };
+    const result = await postAction("v1/users/report", json);
+    return result;
+  };
+  const reportHandler = async () => {
+    const report = await reqReport();
 
-    const report = postAction("v1/users/report", json);
-    report
-      .then((result) => {
-        if (result.response.isExist) {
-          window.alert("이미 신고된 굿즈입니다.");
-          history.goBack();
-          return;
-        }
+    if (report < 0) {
+      history.push("/error");
+      return;
+    }
 
-        if (result.success) {
-          window.alert(`${itemData.name} 굿즈를 신고했습니다.`);
-          history.goBack();
-        } else {
-          window.alert("신고 등록에 실패했습니다.");
-        }
-      })
-      .catch(() => {
-        window.alert(
-          "네트워크 장애가 발생했습니다. 잠시 후 다시 시도해주세요.",
-        );
-        history.goBack();
-      });
+    if (report.response.isExist) {
+      window.alert("이미 신고된 굿즈입니다.");
+      history.goBack();
+      return;
+    }
+
+    if (report.success) {
+      window.alert(`${itemData.name} 굿즈를 신고했습니다.`);
+      history.goBack();
+    } else {
+      window.alert("신고 등록에 실패했습니다.");
+    }
   };
 
   return (

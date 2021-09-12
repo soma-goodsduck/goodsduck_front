@@ -9,6 +9,7 @@ import IdolEdit from "./idolEdit";
 
 import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 import { requestPublicData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
 
 const IdolGroupFiltering = ({ onClick }) => {
   const dispatch = useDispatch();
@@ -27,23 +28,30 @@ const IdolGroupFiltering = ({ onClick }) => {
 
   const requestIdolGroup = async () => {
     const result = await requestPublicData("v1/idol-groups");
+    return result;
+  };
+  const fnEffect = async () => {
+    let idolGroups = await requestIdolGroup();
+
+    if (idolGroups < 0) {
+      history.push("/error");
+      return;
+    }
+
     if (likeIdolGroupsLS) {
       const likeIdolGroups = likeIdolGroupsLS.split(",").map(Number);
 
       const idolData = [];
       likeIdolGroups.forEach((idolId) => {
-        result.forEach((idol) => {
+        idolGroups.forEach((idol) => {
           if (idol.id === idolId) {
             idolData.push(idol);
           }
         });
       });
-      return idolData;
+      idolGroups = idolData;
     }
-    return result;
-  };
-  const fnEffect = async () => {
-    const idolGroups = await requestIdolGroup();
+
     setIdols(idolGroups);
     setGroupId(localStorage.getItem("filter_idolGroup"));
   };

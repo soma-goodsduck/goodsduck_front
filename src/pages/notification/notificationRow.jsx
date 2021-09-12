@@ -22,22 +22,29 @@ const NotificationRow = ({ notification }) => {
     }
   }, []);
 
-  const handleClick = () => {
+  const reqIsValidPropose = async () => {
+    const result = await requestAuthData(
+      `v1/items/${notification.itemId}/price-propose/${notification.priceProposeId}`,
+    );
+    return result;
+  };
+  const handleClick = async () => {
     if (notification.type === "PRICE_PROPOSE") {
-      const isValidPropose = requestAuthData(
-        `v1/items/${notification.itemId}/price-propose/${notification.priceProposeId}`,
-      );
+      const isValidPropose = await reqIsValidPropose();
 
-      isValidPropose.then((result) => {
-        if (result) {
-          history.push(notification.message.messageUri);
-        } else {
-          setShowPopup(true);
-          setTimeout(() => {
-            setShowPopup(false);
-          }, 2000);
-        }
-      });
+      if (isValidPropose < 0) {
+        history.push("/error");
+        return;
+      }
+
+      if (isValidPropose) {
+        history.push(notification.message.messageUri);
+      } else {
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 2000);
+      }
     } else {
       history.push(notification.message.messageUri);
     }

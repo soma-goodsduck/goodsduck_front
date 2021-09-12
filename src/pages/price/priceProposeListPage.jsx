@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
@@ -7,8 +7,6 @@ import ItemRow from "../../components/itemRow/itemRow";
 import PriceRow from "./priceRow";
 import { Text, PopUp } from "../../elements";
 import PriceFilteringModal from "./priceFilteringModal";
-
-import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { grayBorder, grayBtnText } from "../../shared/colors";
@@ -22,24 +20,35 @@ const PriceProposeListPage = ({ history }) => {
   const dispatch = useDispatch();
   const [itemData, setItemData] = useState(null);
   const [priceList, setPriceLists] = useState([]);
-  const showPopup = useSelector((state) => state.user.show_popup);
+  const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    const getItemData = requestPublicData(`v1/items/${itemId}/summary`);
-    getItemData.then((result) => {
-      setItemData(result);
-    });
+  const requestItemData = async () => {
+    const result = await requestPublicData(`v1/items/${itemId}/summary`);
+    return result;
+  };
+  const requestPriceList = async () => {
+    const result = await requestAuthData(`v1/items/${itemId}/price-propose`);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemSummary = await requestItemData();
+    const getPriceList = await requestPriceList();
 
-    const getPriceList = requestAuthData(`v1/items/${itemId}/price-propose`);
-    getPriceList.then((result) => {
-      const newResult = result.filter((x) => x.status === "SUGGESTED");
-      setPriceLists(newResult);
-
-      if (result === "login") {
-        dispatch(userActions.showPopupAction());
+    if (getItemSummary < 0 || getPriceList < 0) {
+      if (getPriceList === -201) {
+        setShowPopup(true);
+        return;
       }
-    });
-  }, []);
+      history.push("/error");
+      return;
+    }
+
+    setItemData(getItemSummary);
+
+    const newPriceList = getPriceList.filter((x) => x.status === "SUGGESTED");
+    setPriceLists(newPriceList);
+  };
+  useEffect(fnEffect, []);
 
   const [showFilteringPopup, setShowFilteringPopup] = useState(false);
   const clickFiltering = () => {
@@ -103,22 +112,24 @@ const PriceProposeListPage = ({ history }) => {
           sortingHighPrice={sortingHighPrice}
         />
       )}
-      <PriceProposeBox>
-        <HeaderInfo text="가격 제안 보기" />
-        {itemData !== null && <ItemRow item={itemData} />}
-        <Line />
-        <Filtering onClick={() => clickFiltering()}>
-          <Text color={grayBtnText}>{filtering}</Text>
-          <Dropdown />
-        </Filtering>
-        {priceList !== [] && (
-          <div>
-            {priceList.map((priceItem) => (
-              <PriceRow key={priceItem.priceProposeId} item={priceItem} />
-            ))}
-          </div>
-        )}
-      </PriceProposeBox>
+      {!showPopup && (
+        <PriceProposeBox>
+          <HeaderInfo text="가격 제안 보기" />
+          {itemData !== null && <ItemRow item={itemData} />}
+          <Line />
+          <Filtering onClick={() => clickFiltering()}>
+            <Text color={grayBtnText}>{filtering}</Text>
+            <Dropdown />
+          </Filtering>
+          {priceList !== [] && (
+            <div>
+              {priceList.map((priceItem) => (
+                <PriceRow key={priceItem.priceProposeId} item={priceItem} />
+              ))}
+            </div>
+          )}
+        </PriceProposeBox>
+      )}
     </>
   );
 };

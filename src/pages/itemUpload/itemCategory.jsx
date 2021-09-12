@@ -18,12 +18,19 @@ const ItemCategory = () => {
   // 카테고리 데이터 받아오기
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    const getCategory = requestPublicData("v1/items/category");
-    getCategory.then((result) => {
-      setCategories(result);
-    });
-  }, []);
+  const reqItemCategory = async () => {
+    const result = await requestPublicData("v1/items/category");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getItemCategory = await reqItemCategory();
+    if (getItemCategory < 0) {
+      history.push("/error");
+      return;
+    }
+    setCategories(getItemCategory);
+  };
+  useEffect(fnEffect, []);
 
   const checkHandler = (name) => {
     dispatch(newItemActions.setCategory(name));

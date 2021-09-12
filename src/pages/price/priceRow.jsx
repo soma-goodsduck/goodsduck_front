@@ -18,35 +18,55 @@ const PriceRow = ({ item }) => {
   const proposeId = item.priceProposeId;
 
   // 가격제안 수락
-  const handleAccept = () => {
-    const acceptPricePropose = postAction(
+  const reqAcceptPricePropose = async () => {
+    const result = await postAction(
       `v1/items/${itemId}/price-propose/${proposeId}/accept`,
     );
-    acceptPricePropose.then((result) => {
-      if (result.success === true) {
-        const getUserId = requestPublicData("v1/users/look-up-id");
-        getUserId.then((userResult) => {
-          const user = {
-            id: userResult.userId,
-            nickName: userResult.nickName,
-            profileImg: userResult.imageUrl,
-            bcryptId: userResult.bcryptId,
-          };
-          dispatch(chatActions.addChatRoomAtPropseAciton(item, user));
-        });
-      }
-    });
+    return result;
   };
+  const reqUserData = async () => {
+    const result = await requestPublicData("v1/users/look-up-id");
+    return result;
+  };
+  const handleAccept = async () => {
+    const acceptPricePropose = await reqAcceptPricePropose();
+
+    if (acceptPricePropose < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (acceptPricePropose.success === true) {
+      const getUserId = await reqUserData();
+
+      const user = {
+        id: getUserId.userId,
+        nickName: getUserId.nickName,
+        profileImg: getUserId.imageUrl,
+        bcryptId: getUserId.bcryptId,
+      };
+      dispatch(chatActions.addChatRoomAtPropseAciton(item, user));
+    }
+  };
+
   // 가격제안 거절
-  const handleRefuse = () => {
-    const refusePricePropose = postAction(
+  const reqRefusePricePropose = async () => {
+    const result = await postAction(
       `v1/items/${itemId}/price-propose/${proposeId}/refuse`,
     );
-    refusePricePropose.then((result) => {
-      if (result.success === true) {
-        history.go(0);
-      }
-    });
+    return result;
+  };
+  const handleRefuse = async () => {
+    const refusePricePropose = await reqRefusePricePropose();
+
+    if (refusePricePropose < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (refusePricePropose.success === true) {
+      history.go(0);
+    }
   };
 
   return (
@@ -63,7 +83,12 @@ const PriceRow = ({ item }) => {
         />
         <Flex is_col align="flex-start">
           <Flex>
-            <Image shape="circle" size="15px" margin="0 5px 0 0" />
+            <Image
+              shape="circle"
+              size="15px"
+              margin="0 5px 0 0"
+              src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${item.proposer.level}.png`}
+            />
             <Text is_long>{item.proposer.nickName}</Text>
           </Flex>
           <Text size="20px" bold margin="5px 0">

@@ -7,6 +7,7 @@ import { Flex, Text, Image } from "../../../elements/index";
 
 import { requestPublicData } from "../../../shared/axios";
 import { gray, lightGray2, yellow } from "../../../shared/colors";
+import { history } from "../../../redux/configureStore";
 
 const Message = ({ message }) => {
   const [isMessageMine, setIsMessageMine] = useState(true);
@@ -18,16 +19,24 @@ const Message = ({ message }) => {
     );
   };
 
-  useEffect(() => {
-    const getUserId = requestPublicData("v1/users/look-up-id");
-    getUserId.then((result) => {
-      if (result.userId === message.user.id) {
-        setIsMessageMine(true);
-      } else {
-        setIsMessageMine(false);
-      }
-    });
-  });
+  const reqUserId = async () => {
+    const result = await requestPublicData("v1/users/look-up-id");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getUserId = await reqUserId();
+    if (getUserId < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (getUserId.userId === message.user.id) {
+      setIsMessageMine(true);
+    } else {
+      setIsMessageMine(false);
+    }
+  };
+  useEffect(fnEffect, []);
 
   return (
     <>

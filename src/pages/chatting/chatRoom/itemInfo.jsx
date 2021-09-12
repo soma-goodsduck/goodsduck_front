@@ -40,12 +40,17 @@ const ItemInfo = () => {
       })
       .catch((error) => {
         console.error(error);
+        history.push("/error");
       });
 
-    if (getItemData === "no item") {
-      dispatch(chatActions.setItemIsNotExisted());
-      setIsNotExist(true);
-      setColor(gray);
+    if (getItemData < 0) {
+      if (getItemData === -101) {
+        dispatch(chatActions.setItemIsNotExisted());
+        setIsNotExist(true);
+        setColor(gray);
+        return;
+      }
+      history.push("/error");
     }
   };
   useEffect(fnEffect, []);

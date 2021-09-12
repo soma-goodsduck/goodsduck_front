@@ -7,6 +7,7 @@ import styles from "./signup.module.css";
 
 import { requestPublicData } from "../../shared/axios";
 import { actionCreators as userActions } from "../../redux/modules/user";
+import { history } from "../../redux/configureStore";
 
 const IdolGroups = ({ onUpdate }) => {
   const dispatch = useDispatch();
@@ -15,12 +16,19 @@ const IdolGroups = ({ onUpdate }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
 
-  useEffect(() => {
-    const getIdolGroup = requestPublicData("v1/idol-groups");
-    getIdolGroup.then((result) => {
-      setIdols(result);
-    });
-  }, []);
+  const reqIdol = async () => {
+    const result = await requestPublicData("v1/idol-groups");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getIdol = await reqIdol();
+    if (getIdol < 0) {
+      history.push("/error");
+      return;
+    }
+    setIdols(getIdol);
+  };
+  useEffect(fnEffect, []);
 
   if (!idols) {
     return null;

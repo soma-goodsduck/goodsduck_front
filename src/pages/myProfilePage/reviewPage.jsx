@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
+import Review from "../../components/review/review";
 
 import { requestAuthData } from "../../shared/axios";
-import Review from "../../components/review/review";
+import { history } from "../../redux/configureStore";
 
 const ReviewPage = (props) => {
   const [reviews, setReviews] = useState([]);
@@ -14,6 +15,10 @@ const ReviewPage = (props) => {
   };
   const fnEffect = async () => {
     const _reviews = await requestReviews();
+    if (_reviews < 0) {
+      history.push("/error");
+      return;
+    }
     setReviews(_reviews);
   };
   useEffect(fnEffect, []);
