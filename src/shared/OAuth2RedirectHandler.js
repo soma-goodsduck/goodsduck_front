@@ -9,24 +9,11 @@ import { actionCreators as userActions } from "../redux/modules/user";
 import { history } from "../redux/configureStore";
 
 const OAuth2RedirectHandler = () => {
-  const userAgent = window.navigator.userAgent;
-  const isIOSApp = userAgent.indexOf("IOS APP");
-
   const dispatch = useDispatch();
   const href = window.location.href;
   const params = new URL(document.location).searchParams;
   const code = params.get("code");
   const state = params.get("state");
-  let appleCode;
-  let appleToken;
-
-  if (isIOSApp !== -1) {
-    const appleHref = window.location.href.split("&");
-    const appleCodeHref = appleHref[appleHref.length - 2].split("=");
-    appleCode = appleCodeHref[appleCodeHref.length - 1];
-    const appleTokenHref = appleHref[appleHref.length - 1].split("=");
-    appleToken = appleTokenHref[appleTokenHref.length - 1];
-  }
 
   const reqKakaoLogin = async () => {
     const result = await axios.get(
@@ -110,14 +97,20 @@ const OAuth2RedirectHandler = () => {
     }
   };
 
-  const reqAppleLogin = async () => {
+  const reqAppleLogin = async (appleCode, appleToken) => {
     const result = await axios.get(
       `${process.env.REACT_APP_BACK_URL}/api/v1/users/login/apple?code=${appleCode}&idToken=${appleToken}&state=${process.env.REACT_APP_APPLE_STATE}`,
     );
     return result;
   };
   const appleLogin = async () => {
-    const _appleLogin = await reqAppleLogin();
+    const appleHref = window.location.href.split("&");
+    const appleCodeHref = appleHref[appleHref.length - 2].split("=");
+    const appleCode = appleCodeHref[appleCodeHref.length - 1];
+    const appleTokenHref = appleHref[appleHref.length - 1].split("=");
+    const appleToken = appleTokenHref[appleTokenHref.length - 1];
+
+    const _appleLogin = await reqAppleLogin(appleCode, appleToken);
 
     if (_appleLogin < 0) {
       history.push("/error");
