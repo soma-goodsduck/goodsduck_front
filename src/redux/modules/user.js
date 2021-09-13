@@ -6,7 +6,6 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
-import * as Sentry from "@sentry/react";
 
 import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
@@ -28,6 +27,15 @@ const SET_NUM_OF_STAR = "SET_NUM_OF_STAR";
 const CLEAR_REVIEW = "CLEAR_REVIEW";
 const SET_USER_INFO = "SET_USER_INFO";
 const SET_USER_ITEMS = "SET_USER_ITEMS";
+const SET_ADDRESS = "SET_ADDRESS";
+const SET_NAME = "SET_NAME";
+const SET_PH_NUM = "SET_PH_NUM";
+const SET_BANK_ACCOUNT = "SET_BANK_ACCOUNT";
+const SET_BANK_NAME = "SET_BANK_NAME";
+const SET_BANK_USER_NAME = "SET_BANK_USER_NAME";
+const CLEAR_SETTING_INFO = "CLEAR_SETTING_INFO";
+const SET_SHOW_NOTIFICATION = "SET_SHOW_NOTIFICATION";
+const SET_NOTIFICATION_BODY = "SET_NOTIFICATION_BODY";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -66,6 +74,33 @@ const setUserInfo = createAction(SET_USER_INFO, (userNick, userImg) => ({
 const setUserItems = createAction(SET_USER_ITEMS, (items) => ({
   items,
 }));
+const setAddress = createAction(SET_ADDRESS, (address) => ({
+  address,
+}));
+const setName = createAction(SET_NAME, (name) => ({
+  name,
+}));
+const setPhNum = createAction(SET_PH_NUM, (phNum) => ({
+  phNum,
+}));
+const setBankAccount = createAction(SET_BANK_ACCOUNT, (bankAccount) => ({
+  bankAccount,
+}));
+const setBankName = createAction(SET_BANK_NAME, (bankName) => ({
+  bankName,
+}));
+const setBankUserName = createAction(SET_BANK_USER_NAME, (bankUserName) => ({
+  bankUserName,
+}));
+const clearSettingInfo = createAction(CLEAR_SETTING_INFO, () => ({}));
+const setShowNotification = createAction(
+  SET_SHOW_NOTIFICATION,
+  (showNotification) => ({ showNotification }),
+);
+const setNotificationBody = createAction(
+  SET_NOTIFICATION_BODY,
+  (notificationBody) => ({ notificationBody }),
+);
 
 // initialState
 const initialState = {
@@ -84,6 +119,14 @@ const initialState = {
   userImg:
     "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
   items: [],
+  address: "",
+  name: "",
+  phNum: "",
+  bankAccount: "",
+  bankName: "",
+  bankUserName: "",
+  showNotification: false,
+  notificationBody: "",
 };
 
 // middleware actions
@@ -149,37 +192,6 @@ const signupAction = (user) => {
     }
 
     history.push("/");
-
-    // axios
-    //   .post(
-    //     `${process.env.REACT_APP_BACK_URL}/api/v1/users/sign-up`,
-    //     JSON.stringify(json),
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     },
-    //     { withCredentials: true },
-    //   )
-    //   .then((response) => {
-    //     dispatch(logIn(response.data.response.jwt));
-
-    //     if (window.ReactNativeWebView) {
-    //       window.ReactNativeWebView.postMessage(
-    //         JSON.stringify({ type: "REQ_FCM_TOKEN" }),
-    //       );
-    //     } else {
-    //       notification();
-    //     }
-
-    //     history.push("/");
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error);
-    //     Sentry.captureException(error);
-    //     history.replace("/login");
-    //     window.alert("회원가입에 실패했습니다.");
-    //   });
   };
 };
 
@@ -266,6 +278,47 @@ export default handleActions(
       produce(state, (draft) => {
         draft.items = action.payload.items;
       }),
+    [SET_ADDRESS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.address = action.payload.address;
+      }),
+    [SET_NAME]: (state, action) =>
+      produce(state, (draft) => {
+        draft.name = action.payload.name;
+      }),
+    [SET_PH_NUM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.phNum = action.payload.phNum;
+      }),
+    [SET_BANK_ACCOUNT]: (state, action) =>
+      produce(state, (draft) => {
+        draft.bankAccount = action.payload.bankAccount;
+      }),
+    [SET_BANK_NAME]: (state, action) =>
+      produce(state, (draft) => {
+        draft.bankName = action.payload.bankName;
+      }),
+    [SET_BANK_USER_NAME]: (state, action) =>
+      produce(state, (draft) => {
+        draft.bankUserName = action.payload.bankUserName;
+      }),
+    [CLEAR_SETTING_INFO]: (state, action) =>
+      produce(state, (draft) => {
+        draft.address = "";
+        draft.name = "";
+        draft.phNum = "";
+        draft.bankAccount = "";
+        draft.bankName = "";
+        draft.bankUserName = "";
+      }),
+    [SET_SHOW_NOTIFICATION]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showNotification = action.payload.showNotification;
+      }),
+    [SET_NOTIFICATION_BODY]: (state, action) =>
+      produce(state, (draft) => {
+        draft.notificationBody = action.payload.notificationBody;
+      }),
   },
   initialState,
 );
@@ -289,6 +342,15 @@ const actionCreators = {
   clearReview,
   setUserInfo,
   setUserItems,
+  setAddress,
+  setName,
+  setPhNum,
+  setBankAccount,
+  setBankName,
+  setBankUserName,
+  clearSettingInfo,
+  setShowNotification,
+  setNotificationBody,
 };
 
 export { actionCreators };

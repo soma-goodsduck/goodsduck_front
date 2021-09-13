@@ -156,6 +156,8 @@ const EditProfilePage = (props) => {
           return;
         }
         history.replace("/my-profile");
+        dispatch(userActions.setShowNotification(true));
+        dispatch(userActions.setNotificationBody("내 정보를 수정했습니다."));
       }
     }
   };
@@ -274,14 +276,6 @@ const InputBox = styled.input`
 
 const IdolBox = styled.div`
   margin-top: 40px;
-`;
-
-const SaveBtn = styled.button`
-  width: 100%;
-  padding: 15px;
-  background-color: ${yellow};
-  border-radius: 10px;
-  margin-bottom: 15px;
 `;
 
 export default EditProfilePage;

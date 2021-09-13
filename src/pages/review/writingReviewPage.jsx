@@ -95,6 +95,8 @@ const WritingReviewPage = () => {
       }
 
       history.replace("/my-profile");
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("리뷰를 작성했습니다."));
     }
     dispatch(userActions.clearReview());
   };

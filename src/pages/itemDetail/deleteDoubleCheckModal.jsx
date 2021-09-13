@@ -1,14 +1,18 @@
 /* eslint-disable import/no-cycle */
 import React from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import { red } from "../../shared/colors";
+import { blackBtn, grayBtn, white } from "../../shared/colors";
+import { actionCreators as userActions } from "../../redux/modules/user";
 
-const DeleteDoubleCheckModal = (props) => {
-  const { text1, text2, onOkClick, onNoClick } = props;
+const DeleteDoubleCheckModal = ({ text1, text2, onOkClick, onNoClick }) => {
+  const dispatch = useDispatch();
 
   const handleOkClcik = () => {
     onOkClick();
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("굿즈를 삭제했습니다."));
   };
 
   const handleNoClcik = () => {
@@ -19,24 +23,25 @@ const DeleteDoubleCheckModal = (props) => {
     <Screen>
       <ModalBox>
         <Info>
-          <Text>{text1}</Text>
-          <Text style={{ marginTop: "10px" }}>{text2}</Text>
+          <Text1 style={{ marginBottom: "10px" }}>⚠️</Text1>
+          <Text1>{text1}</Text1>
+          <Text2 style={{ margin: "10px 0" }}>{text2}</Text2>
         </Info>
         <Btns>
-          <OKBtn
-            onClick={() => {
-              handleOkClcik();
-            }}
-          >
-            네
-          </OKBtn>
           <NOBtn
             onClick={() => {
               handleNoClcik();
             }}
           >
-            아니오
+            취소
           </NOBtn>
+          <OKBtn
+            onClick={() => {
+              handleOkClcik();
+            }}
+          >
+            확인
+          </OKBtn>
         </Btns>
       </ModalBox>
     </Screen>
@@ -81,19 +86,23 @@ const ModalBox = styled.div`
 
 const Info = styled.div`
   position: relative;
-  height: 120px;
+  height: 150px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 10px;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
 `;
 
-const Text = styled.button`
+const Text1 = styled.div`
+  font-size: 16px;
+  text-align: center;
+`;
+const Text2 = styled.div`
   font-size: 18px;
   font-weight: bold;
+  text-align: center;
 `;
 
 const Btns = styled.div`
@@ -107,15 +116,9 @@ const OKBtn = styled.button`
   font-size: 16px;
   font-weight: bold;
   padding: 15px;
-  background-color: #ffffff;
-  color: ${red};
-  border-radius: 5px;
-  margin-right: 15px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  background-color: ${blackBtn};
+  color: ${white};
+  border-radius: 0 0 5px 0;
 `;
 
 const NOBtn = styled.button`
@@ -123,13 +126,8 @@ const NOBtn = styled.button`
   font-size: 16px;
   font-weight: bold;
   padding: 15px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  background-color: ${grayBtn};
+  border-radius: 0 0 0 5px;
 `;
 
 export default DeleteDoubleCheckModal;

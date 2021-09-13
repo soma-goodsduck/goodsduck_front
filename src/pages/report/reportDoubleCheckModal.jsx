@@ -2,12 +2,10 @@
 import React from "react";
 
 import styled from "styled-components";
-import { green } from "../../shared/colors";
+import { blackBtn, grayBtn, white } from "../../shared/colors";
 import { history } from "../../redux/configureStore";
 
-const ReportDoubleCheckModal = (props) => {
-  const { text, onOkClick } = props;
-
+const ReportDoubleCheckModal = ({ text, onOkClick }) => {
   const handleOkClcik = () => {
     onOkClick();
   };
@@ -23,20 +21,20 @@ const ReportDoubleCheckModal = (props) => {
           <Text>{text}</Text>
         </Info>
         <Btns>
-          <OKBtn
-            onClick={() => {
-              handleOkClcik();
-            }}
-          >
-            네
-          </OKBtn>
           <NOBtn
             onClick={() => {
               handleNoClcik();
             }}
           >
-            아니오
+            취소
           </NOBtn>
+          <OKBtn
+            onClick={() => {
+              handleOkClcik();
+            }}
+          >
+            확인
+          </OKBtn>
         </Btns>
       </ModalBox>
     </Screen>
@@ -86,9 +84,8 @@ const Info = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 10px;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
 `;
 
 const Text = styled.button`
@@ -107,15 +104,9 @@ const OKBtn = styled.button`
   font-size: 16px;
   font-weight: bold;
   padding: 15px;
-  background-color: #ffffff;
-  color: ${green};
-  border-radius: 5px;
-  margin-right: 15px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  background-color: ${blackBtn};
+  color: ${white};
+  border-radius: 0 0 5px 0;
 `;
 
 const NOBtn = styled.button`
@@ -123,13 +114,8 @@ const NOBtn = styled.button`
   font-size: 16px;
   font-weight: bold;
   padding: 15px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  background-color: ${grayBtn};
+  border-radius: 0 0 0 5px;
 `;
 
 export default ReportDoubleCheckModal;

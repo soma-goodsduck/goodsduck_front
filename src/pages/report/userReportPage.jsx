@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+
 import styled from "styled-components";
 import styles from "./report.module.css";
 
@@ -8,9 +10,12 @@ import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder, white } from "../../shared/colors";
 
 import { requestAuthData, postAction } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const UserReportPage = (props) => {
+  const dispatch = useDispatch();
+
   const href = window.location.href.split("/");
   const bcrypt = href[href.length - 1];
   const [nick, setNick] = useState("");
@@ -66,14 +71,16 @@ const UserReportPage = (props) => {
     }
 
     if (report.response.isExist) {
-      window.alert("이미 신고된 유저입니다.");
       history.goBack();
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("이미 신고된 유저입니다."));
       return;
     }
 
     if (report.success) {
-      window.alert(`${nick}님을 신고했습니다.`);
       history.goBack();
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody(`${nick}님을 신고했습니다.`));
     } else {
       window.alert("신고 등록에 실패했습니다.");
     }

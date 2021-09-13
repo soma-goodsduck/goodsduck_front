@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
+import styled from "styled-components";
 import { Text, Icon } from "../../elements";
 import ReportDoubleCheckModal from "./reportDoubleCheckModal";
 import HeaderInfo from "../../components/haeder/headerInfo";
@@ -11,9 +12,12 @@ import {
   requestAuthData,
   postAction,
 } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const ItemReportPage = (props) => {
+  const dispatch = useDispatch();
+
   const href = window.location.href.split("/");
   const bcrypt = href[href.length - 1];
   const itemId = Number(href[href.length - 2]);
@@ -65,14 +69,20 @@ const ItemReportPage = (props) => {
     }
 
     if (report.response.isExist) {
-      window.alert("이미 신고된 굿즈입니다.");
       history.goBack();
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("이미 신고된 굿즈입니다."));
       return;
     }
 
     if (report.success) {
-      window.alert(`${itemData.name} 굿즈를 신고했습니다.`);
       history.goBack();
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody(
+          `${itemData.name} 굿즈를 신고했습니다.`,
+        ),
+      );
     } else {
       window.alert("신고 등록에 실패했습니다.");
     }

@@ -14,6 +14,7 @@ import {
 } from "../../shared/axios";
 import { actionCreators as chatActions } from "../../redux/modules/chat";
 import { actionCreators as itemActions } from "../../redux/modules/item";
+import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { history } from "../../redux/configureStore";
 
@@ -83,6 +84,8 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
     } else {
       _onClick();
       dispatch(itemActions.deletePriceProposeAction(priceId));
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("가격제시를 취소했습니다."));
     }
   };
 

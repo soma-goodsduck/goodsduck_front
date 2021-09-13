@@ -8,6 +8,7 @@ import ItemRow from "../../components/itemRow/itemRow";
 import { Input, Flex, LoginPopUp } from "../../elements";
 
 import { actionCreators as itemActions } from "../../redux/modules/item";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { requestPublicData, postAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
@@ -69,6 +70,8 @@ const PriceProposeModal = ({ _onClick }) => {
     };
     _onClick();
     dispatch(itemActions.addPriceProposeAction(pricePropose));
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("가격제시를 했습니다."));
   };
 
   return (

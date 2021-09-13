@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
 import ItemImg from "./itemImg";
-import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
+import {
+  Flex,
+  Text,
+  Image,
+  Icon,
+  PopUp2,
+  PopUp3,
+  Notification,
+} from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as homeActions } from "../../redux/modules/home";
+import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { timeForToday } from "../../shared/functions";
 import { requestPublicData, deleteAction } from "../../shared/axios";
@@ -18,6 +27,24 @@ import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
 
 const ItemDetailPage = ({ history }) => {
   const dispatch = useDispatch();
+
+  // alert
+  const [showNotiPopup, setShowNotiPopup] = useState(false);
+  const { showNotification, notificationBody } = useSelector((state) => ({
+    showNotification: state.user.showNotification,
+    notificationBody: state.user.notificationBody,
+  }));
+
+  useEffect(() => {
+    if (showNotification) {
+      setShowNotiPopup(true);
+      setTimeout(() => {
+        setShowNotiPopup(false);
+        dispatch(userActions.setShowNotification(false));
+        dispatch(userActions.setNotificationBody(""));
+      }, 2000);
+    }
+  }, [showNotification]);
 
   // 아이템 아이디
   const href = window.location.href.split("/");
@@ -176,6 +203,7 @@ const ItemDetailPage = ({ history }) => {
 
   return (
     <>
+      {showNotiPopup && <Notification data={notificationBody} />}
       {showDeleteCheckModal && (
         <DeleteDoubleCheckModal
           text1="굿즈 삭제 후에는 관련 채팅방, 가격제시 정보 등이 모두 삭제됩니다."

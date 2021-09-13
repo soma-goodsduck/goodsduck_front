@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
+import styled from "styled-components";
 import { Text, Icon } from "../../elements";
 import ReportDoubleCheckModal from "./reportDoubleCheckModal";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder } from "../../shared/colors";
 
 import { requestAuthData, postAction } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const ChattingReportPage = (props) => {
+  const dispatch = useDispatch();
+
   const href = window.location.href.split("/");
   const bcrypt = href[href.length - 1];
   const chatroomId = href[href.length - 2];
@@ -56,14 +60,18 @@ const ChattingReportPage = (props) => {
     }
 
     if (report.response.isExist) {
-      window.alert("이미 신고된 채팅방입니다.");
       history.goBack();
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("이미 신고된 채팅입니다."));
       return;
     }
 
     if (report.success) {
-      window.alert(`${nick}님과의 채팅을 신고했습니다.`);
       history.goBack();
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody(`${nick}님과의 채팅을 신고했습니다.`),
+      );
     } else {
       window.alert("신고 등록에 실패했습니다.");
     }
