@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable indent */
@@ -14,6 +15,7 @@ import Image from "./modules/image";
 import Filtering from "./modules/filtering";
 import NewItem from "./modules/newItem";
 import Chat from "./modules/chat";
+import Item from "./modules/item";
 
 export const history = createBrowserHistory();
 
@@ -24,6 +26,7 @@ const rootReducer = combineReducers({
   newItem: NewItem,
   filtering: Filtering,
   chat: Chat,
+  item: Item,
   router: connectRouter(history),
 });
 

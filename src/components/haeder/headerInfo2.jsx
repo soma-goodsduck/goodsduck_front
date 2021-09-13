@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
 import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
+import { actionCreators as itemActions } from "../../redux/modules/item";
 import { history } from "../../redux/configureStore";
 
 const HeaderInfo2 = (props) => {
+  const dispatch = useDispatch();
+
   const href = window.location.href;
   const isChatRoom = href.indexOf("chat-room");
   const [chatRoomId, setChatRoomId] = useState("");
@@ -24,6 +28,7 @@ const HeaderInfo2 = (props) => {
     _onClick,
     _nickClick,
     isClick,
+    isChat,
     type,
     margin,
     bg,
@@ -57,6 +62,10 @@ const HeaderInfo2 = (props) => {
     if (isClear) {
       history.replace("/");
       return;
+    }
+
+    if (isChat) {
+      dispatch(itemActions.clearPriceProposeInfo());
     }
 
     if (chatRoomId !== "") {

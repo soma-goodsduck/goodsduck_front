@@ -13,6 +13,7 @@ import {
   deleteAction,
 } from "../../shared/axios";
 import { actionCreators as chatActions } from "../../redux/modules/chat";
+import { actionCreators as itemActions } from "../../redux/modules/item";
 
 import { history } from "../../redux/configureStore";
 
@@ -80,7 +81,8 @@ const PriceProposeDeleteModal = ({ priceId, proposePrice, _onClick, type }) => {
 
       dispatch(chatActions.addChatRoomAciton(getItemDetail, user));
     } else {
-      window.location.reload();
+      _onClick();
+      dispatch(itemActions.deletePriceProposeAction(priceId));
     }
   };
 

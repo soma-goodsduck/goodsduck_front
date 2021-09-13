@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
@@ -8,11 +8,11 @@ import styles from "./itemDetail.module.css";
 import { Flex } from "../../elements/index";
 import { postAction, deleteAction } from "../../shared/axios";
 
+import { actionCreators as itemActions } from "../../redux/modules/item";
+import { history } from "../../redux/configureStore";
+
 const ItemImg = ({ id, item, onClick }) => {
-  const history = useHistory();
-  const goBack = () => {
-    history.push("/");
-  };
+  const dispatch = useDispatch();
 
   const [isLike, setIsLike] = useState(item.isLike);
   const reqClickHeart = async () => {
@@ -84,7 +84,8 @@ const ItemImg = ({ id, item, onClick }) => {
         aria-label="back"
         className={styles.backBtn}
         onClick={() => {
-          goBack();
+          history.goBack();
+          dispatch(itemActions.clearPriceProposeInfo());
         }}
       />
       <button

@@ -144,6 +144,7 @@ export class ChatRoom extends Component {
           }}
           type="chat"
           isClick
+          isChat
           popup2
           userIdForReport={withChatBcrypt}
         />

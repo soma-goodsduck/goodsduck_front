@@ -39,7 +39,6 @@ const ItemDetailPage = ({ history }) => {
   };
   const fnEffect = async () => {
     const getItemDetail = await requestItemData();
-    console.log(getItemDetail);
 
     if (getItemDetail < 0) {
       history.push("/error");
@@ -146,15 +145,19 @@ const ItemDetailPage = ({ history }) => {
     setShowWriterPopup(false);
   };
 
+  const reqDeleteItem = async () => {
+    const result = await deleteAction(`v2/items/${itemId}`);
+    return result;
+  };
   const deleteItem = async () => {
-    const reqDeleteItem = await deleteAction(`v1/items/${itemId}`);
+    const _deleteItem = await reqDeleteItem();
 
-    if (reqDeleteItem === "error") {
+    if (_deleteItem < 0) {
       history.push("/error");
       return;
     }
 
-    if (reqDeleteItem.success) {
+    if (_deleteItem.response) {
       dispatch(homeActions.deleteItem(itemId));
       history.replace("/");
     } else {
@@ -284,7 +287,7 @@ const ItemDetailPage = ({ history }) => {
             <Text bold size="18px" margin="0 0 20px 0">
               가격 제시 목록
             </Text>
-            <PriceList id={itemId} />
+            <PriceList data={itemData.proposedList} />
             <div className={styles.line} />
             {/* 글쓴이 정보 */}
             <button

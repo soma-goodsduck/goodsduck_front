@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./pricePropose.module.css";
@@ -6,10 +7,13 @@ import styles from "./pricePropose.module.css";
 import ItemRow from "../../components/itemRow/itemRow";
 import { Input, Flex, LoginPopUp } from "../../elements";
 
+import { actionCreators as itemActions } from "../../redux/modules/item";
 import { requestPublicData, postAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const PriceProposeModal = ({ _onClick }) => {
+  const dispatch = useDispatch();
+
   // 아이템 아이디
   const href = window.location.href.split("/");
   const itemId = Number(href[href.length - 1]);
@@ -57,7 +61,14 @@ const PriceProposeModal = ({ _onClick }) => {
       return;
     }
 
-    window.location.reload();
+    const pricePropose = {
+      createdAt: postPrice.response.createdAt,
+      proposedPrice: postPrice.response.proposedPrice,
+      priceProposeId: postPrice.response.priceProposeId,
+      type: "REDUX",
+    };
+    _onClick();
+    dispatch(itemActions.addPriceProposeAction(pricePropose));
   };
 
   return (
