@@ -7,6 +7,7 @@
   border-radius: 10px;
   background: var(--lightGray2);
   margin-top: 10px;
+  position: relative;
 }
 
 /* itemList */
@@ -132,4 +133,88 @@ input:checked + .slider:before {
   .cameraBtnBox {
     margin-left: 430px;
   }
+}
+
+/* */
+/* */
+/* Term */
+/* */
+/* */
+
+/* 표 (table) */
+table,
+td,
+th {
+  border: 1px solid black;
+  text-align: center;
+}
+table {
+  margin-top: 30px;
+}
+th {
+  padding: 10px;
+}
+td {
+  padding: 15px 5px;
+}
+
+thead,
+tfoot {
+  color: black;
+}
+
+.shortTd {
+  width: 100px;
+}
+.longTd {
+  width: 200px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.term {
+  line-height: 1.5;
+  margin: 5px 0;
+}
+
+/* 개인정보 처리방침 */
+.termTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.termBody {
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+.termLists {
+  padding: 0 20px;
+}
+.indentation {
+  margin-left: 20px;
+}
+
+/* 이용약관 */
+.subTitle {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 415px) {
+  .title {
+    font-size: 20px;
+    margin-bottom: 50px;
+  }
+}
+
+/* 배송지 정보 및 계좌 설정 */
+.inputText::placeholder {
+  font-size: 16px;
+  color: var(--grayText);
 }

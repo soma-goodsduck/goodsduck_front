@@ -45,9 +45,8 @@ const UserProfile = ({ user }) => {
           </Text>
         </Flex>
         <div className={styles.gaugeBox}>
-          <Gauge style={{ width: `${user.exp}%` }}>
-            <GaugePercent>{user.exp}%</GaugePercent>{" "}
-          </Gauge>
+          <Gauge style={{ width: `${user.exp}%` }} />
+          <GaugePercent>{user.exp}%</GaugePercent>
         </div>
       </Flex>
     </UserProfileBox>
@@ -69,9 +68,11 @@ const Gauge = styled.div`
 const GaugePercent = styled.div`
   color: ${blackBtn};
   font-size: 0.7rem;
-  text-align: right;
   padding-top: 2px;
   padding-right: 10px;
+  position: absolute;
+  top: 0;
+  left: 45%;
 `;
 
 export default UserProfile;
