@@ -96,54 +96,64 @@ const Setting = () => {
                   <span className={styles.slider} />
                 </label>
               </BtnBox>
-              {/* <BtnBox>
-            <Text color={blackBtn} size="18px" medium>
-              배송지 및 계좌 설정
-            </Text>
-            <Icon
-              width="12px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-            />
-          </BtnBox> */}
+              <BtnBox
+                onClick={() => {
+                  history.push("/edit-personal-information");
+                }}
+              >
+                <Text color={blackBtn} size="18px" medium>
+                  배송지 및 계좌 설정
+                </Text>
+                <Icon
+                  width="12px"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                />
+              </BtnBox>
             </SettingBtn>
             {/* 서비스 정보 */}
             <SettingBtn>
               <Text color={grayText} size="16px" margin="0px 0 15px 0">
                 서비스 정보
               </Text>
-              <a href="/service-policy">
-                <BtnBox>
-                  <Text color={blackBtn} size="18px" medium>
-                    이용 약관
-                  </Text>
-                  <Icon
-                    width="12px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-                  />
-                </BtnBox>
-              </a>
-              <a href="/privacy">
-                <BtnBox>
-                  <Text color={blackBtn} size="18px" medium>
-                    개인정보 처리방침
-                  </Text>
-                  <Icon
-                    width="12px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-                  />
-                </BtnBox>
-              </a>
-              <a href="/marketing-policy">
-                <BtnBox>
-                  <Text color={blackBtn} size="18px" medium>
-                    마케팅 정보 활용 동의
-                  </Text>
-                  <Icon
-                    width="12px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-                  />
-                </BtnBox>
-              </a>
+              <BtnBox
+                onClick={() => {
+                  history.push("/service-policy");
+                }}
+              >
+                <Text color={blackBtn} size="18px" medium>
+                  이용 약관
+                </Text>
+                <Icon
+                  width="12px"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                />
+              </BtnBox>
+              <BtnBox
+                onClick={() => {
+                  history.push("/privacy");
+                }}
+              >
+                <Text color={blackBtn} size="18px" medium>
+                  개인정보 처리방침
+                </Text>
+                <Icon
+                  width="12px"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                />
+              </BtnBox>
+              <BtnBox
+                onClick={() => {
+                  history.push("/marketing-policy");
+                }}
+              >
+                <Text color={blackBtn} size="18px" medium>
+                  마케팅 정보 활용 동의
+                </Text>
+                <Icon
+                  width="12px"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                />
+              </BtnBox>
             </SettingBtn>
             {/* 로그아웃 & 탈퇴 */}
             <SettingBtn>

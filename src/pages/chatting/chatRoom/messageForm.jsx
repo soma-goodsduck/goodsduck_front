@@ -1,24 +1,18 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable dot-notation */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import firebase from "firebase/app";
-
 import styled from "styled-components";
 
 import { Flex, Icon, Button, Notification } from "../../../elements";
-
 import { grayBorder, white } from "../../../shared/colors";
 import { firebaseDatabase } from "../../../shared/firebase";
-import {
-  requestAuthData,
-  postImgAction,
-  postAction,
-} from "../../../shared/axios";
+import { requestAuthData, postAction } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
 
-const MessageForm = (props) => {
+const MessageForm = ({ onOpenAttachment }) => {
   const href = window.location.href.split("/");
   const chatRoomId = href[href.length - 1];
   const chatRoomRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
@@ -29,7 +23,6 @@ const MessageForm = (props) => {
   const messagesRef = firebaseDatabase.ref("messages");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const inputOpenImageRef = useRef();
   const [showPopup, setShowPopup] = useState(false);
   const isItemExist = useSelector((state) => state.chat.isItemExist);
 
@@ -54,10 +47,6 @@ const MessageForm = (props) => {
       setShowPopup(false);
     }, 5000);
   }, [showPopup]);
-
-  const handleOpenImageRef = () => {
-    inputOpenImageRef.current.click();
-  };
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -143,18 +132,6 @@ const MessageForm = (props) => {
     }
   };
 
-  const handleUploadImage = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("multipartFile", file);
-    const postImg = postImgAction("v1/users/chat-image", formData);
-    postImg.then((result) => {
-      messagesRef.child(chatRoomId).push().set(createMessage(result));
-    });
-  };
-
   return (
     <>
       {showPopup && (
@@ -169,18 +146,11 @@ const MessageForm = (props) => {
           ))}
         </div>
         <Flex is_flex justify="space-between" padding="20px">
-          <input
-            type="file"
-            accept="image/jpeg, image/png, image/jpg"
-            ref={inputOpenImageRef}
-            style={{ display: "none" }}
-            onChange={handleUploadImage}
-          />
           <Icon
             width="28px"
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
             _onClick={() => {
-              handleOpenImageRef();
+              onOpenAttachment();
             }}
           />
           <InputBox

@@ -11,10 +11,12 @@ import ItemInfo from "./itemInfo";
 import Message from "./message";
 import MessageForm from "./messageForm";
 import Skeleton from "./skeleton";
+import AttachmentForm from "./attachmentForm";
 import { firebaseDatabase } from "../../../shared/firebase";
 
 import { postAction, requestPublicData } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
+import AttachmentUserInfo from "./attachmentUserInfo";
 
 export class ChatRoom extends Component {
   messagesEnd = createRef();
@@ -27,6 +29,9 @@ export class ChatRoom extends Component {
     messages: [],
     messageLoading: true,
     messagesRef: firebaseDatabase.ref("messages"),
+    showAttachmentPopup: false,
+    showAttachmentAddressPopup: false,
+    showAttachmentAccountPopup: false,
   };
 
   componentDidMount() {
@@ -84,6 +89,18 @@ export class ChatRoom extends Component {
     this.state.messagesRef.off();
   }
 
+  handleOpenAttachment = () => {
+    this.setState({ showAttachmentPopup: true });
+  };
+
+  handleOpenAttachmentAddress = () => {
+    this.setState({ showAttachmentAddressPopup: true });
+  };
+
+  handleOpenAttachmentAccount = () => {
+    this.setState({ showAttachmentAccountPopup: true });
+  };
+
   addMessagesListeners = (chatRoomId) => {
     const messagesArray = [];
     this.setState({ messages: [] });
@@ -128,10 +145,51 @@ export class ChatRoom extends Component {
     );
 
   render() {
-    const { messages, messageLoading, chatRoomId, withChatBcrypt } = this.state;
+    const {
+      messages,
+      messageLoading,
+      chatRoomId,
+      withChatBcrypt,
+      showAttachmentPopup,
+      showAttachmentAddressPopup,
+      showAttachmentAccountPopup,
+    } = this.state;
 
     return (
       <>
+        {showAttachmentPopup && (
+          <AttachmentForm
+            _onClick1={() => {
+              this.setState({ showAttachmentAddressPopup: true });
+              this.setState({ showAttachmentPopup: false });
+            }}
+            _onClick2={() => {
+              this.setState({ showAttachmentAccountPopup: true });
+              this.setState({ showAttachmentPopup: false });
+            }}
+            _onClickExit={() => {
+              this.setState({ showAttachmentPopup: false });
+            }}
+          />
+        )}
+        {showAttachmentAddressPopup && (
+          <AttachmentUserInfo
+            type="address"
+            text="배송지 정보"
+            _onClickExit={() => {
+              this.setState({ showAttachmentAddressPopup: false });
+            }}
+          />
+        )}
+        {showAttachmentAccountPopup && (
+          <AttachmentUserInfo
+            type="account"
+            text="계좌번호"
+            _onClickExit={() => {
+              this.setState({ showAttachmentAccountPopup: false });
+            }}
+          />
+        )}
         <HeaderInfo2
           text1="채팅방 나가기"
           text2={this.state.withChatNick}
@@ -156,7 +214,12 @@ export class ChatRoom extends Component {
           )}
           <div ref={(node) => (this.messagesEnd = node)} />
         </div>
-        <MessageForm />
+        <MessageForm
+          onOpenAttachment={() => {
+            this.handleOpenAttachment();
+          }}
+          // onSendImg={}
+        />
       </>
     );
   }
@@ -166,15 +229,4 @@ const MessageBox = styled.div`
   margin-bottom: 80px;
 `;
 
-// const mapStateToProps = (state) => {
-//   return {
-//     chatRoomId: state.chat.chatRoomId,
-//     createdById: state.chat.createdById,
-//     createdByNickName: state.chat.createdByNickName,
-//     createdWithNickName: state.chat.createdWithNickName,
-//     createdWithBcryptId: state.chat.createdWithBcryptId,
-//   };
-// };
-
-// export default connect(mapStateToProps)(ChatRoom);
 export default ChatRoom;

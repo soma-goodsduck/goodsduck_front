@@ -32,6 +32,7 @@ import IdolMember from "./pages/itemUpload/idolMeberSelect";
 import PriceProposeListPage from "./pages/price/priceProposeListPage";
 import PriceProposePage from "./pages/myProfilePage/priceProposePage";
 import ReviewPage from "./pages/myProfilePage/reviewPage";
+import UserPersonalInfo from "./pages/myProfilePage/userPersonalInfo";
 import WritingReviewPage from "./pages/review/writingReviewPage";
 import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
@@ -42,15 +43,15 @@ import ChattingReportPage from "./pages/report/chattingReportPage";
 import ErrorPage from "./pages/error/errorPage";
 import NotFoundPage from "./pages/error/notFoundPage";
 import NoticePage from "./pages/notice/noticePage";
+import TermServicePage from "./pages/myProfilePage/termServicePage";
+import TermPrivacyPage from "./pages/myProfilePage/termPrivacyPage";
+import TermMarketingPage from "./pages/myProfilePage/termMarketingPage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
 import { sendTokenAction } from "./shared/axios";
 
 import { history } from "./redux/configureStore";
-import TermServicePage from "./pages/myProfilePage/termServicePage";
-import TermPrivacyPage from "./pages/myProfilePage/termPrivacyPage";
-import TermMarketingPage from "./pages/myProfilePage/termMarketingPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -160,6 +161,11 @@ function App() {
             />
             <Route path="/setting" exact component={Setting} />
             <Route path="/edit-profile" exact component={EditProfile} />
+            <Route
+              path="/edit-personal-information"
+              exact
+              component={UserPersonalInfo}
+            />
             <Route path="/price-proposes" exact component={PriceProposePage} />
             <Route path="/reviews" exact component={ReviewPage} />
             <Route path="/favorites" exact component={LikeItemList} />

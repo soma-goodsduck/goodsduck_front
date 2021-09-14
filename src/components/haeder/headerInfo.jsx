@@ -22,6 +22,7 @@ const HeaderInfo = (props) => {
     isReviewClear,
     isFiltering,
     isUploading,
+    isSetting,
   } = props;
 
   const styleProps = {
@@ -44,6 +45,9 @@ const HeaderInfo = (props) => {
       history.goBack();
     } else if (isFiltering) {
       history.push("/filtering");
+    } else if (isSetting) {
+      dispatch(userActions.clearSettingInfo());
+      history.goBack();
     } else {
       history.goBack();
     }
