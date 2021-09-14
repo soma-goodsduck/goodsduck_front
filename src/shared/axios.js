@@ -23,7 +23,6 @@ const updateJwt = (newJwt) => {
 const verifyError = (error) => {
   if (error !== null) {
     const statusCode = error.status;
-    console.log(error);
 
     switch (statusCode) {
       // NotFoundDataException
@@ -38,9 +37,6 @@ const verifyError = (error) => {
       // InvalidStateException
       case -104:
         return -104;
-      // DeletedDataException
-      case -105:
-        return -105;
       // InvalidJwtException
       case -201:
         return -201;
@@ -50,6 +46,18 @@ const verifyError = (error) => {
       // UnauthorizedException
       case -203:
         return -203;
+      // Oauth2Exception
+      case -204:
+        return -204;
+      // SmsAuthorizationException
+      case -205:
+        return -205;
+      // ImageProcessException
+      case -401:
+        return -401;
+      // InvalidMetadataException
+      case -402:
+        return -402;
       // UnknownException
       default:
         return -999;
@@ -66,7 +74,6 @@ export const getItems = async (path, itemId) => {
 
   try {
     const result = await axios.get(url, options);
-    console.log(result);
 
     if (result.data?.error) {
       return verifyError(result.data.error);
@@ -168,8 +175,8 @@ export const requestPublicData = async (path) => {
 // JWT를 리턴하는 데이터 (회원 전용)
 export const requestAuthData = async (path) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -193,8 +200,8 @@ export const requestAuthData = async (path) => {
 // delete 요청
 export const deleteAction = async (path) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -218,8 +225,8 @@ export const deleteAction = async (path) => {
 // post 요청
 export const postAction = async (path, json) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -251,8 +258,8 @@ export const postActionForNonUser = async (path, json) => {
 // post(image) 요청
 export const postImgAction = async (path, file) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -276,8 +283,8 @@ export const postImgAction = async (path, file) => {
 // put 요청
 export const putAction = async (path, data) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -298,11 +305,36 @@ export const putAction = async (path, data) => {
   }
 };
 
+// put JSON 요청
+export const putJsonAction = async (path, json) => {
+  const jwt = verifyJwt();
+  if (jwt === -201) {
+    return -201;
+  }
+
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { jwt, "Content-Type": "application/json" } };
+
+  try {
+    const result = await axios.put(url, JSON.stringify(json), options);
+
+    if (result.data?.error) {
+      return verifyError(result.data.error);
+    }
+    updateJwt(result.headers.jwt);
+
+    return result.data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return -999;
+  }
+};
+
 // patch 요청
 export const patchAction = async (path) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -326,8 +358,8 @@ export const patchAction = async (path) => {
 // patch JSON 요청
 export const patchJsonAction = async (path, json) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
@@ -351,8 +383,8 @@ export const patchJsonAction = async (path, json) => {
 // FCM TOKEN 전송
 export const sendTokenAction = async (token) => {
   const jwt = verifyJwt();
-  if (jwt === "login") {
-    return "login";
+  if (jwt === -201) {
+    return -201;
   }
 
   const json = {
