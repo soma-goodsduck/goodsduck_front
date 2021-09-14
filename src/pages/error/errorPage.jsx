@@ -17,14 +17,14 @@ const ErrorPage = (props) => {
         오류
       </Text>
       <Text size="16px" medium>
-        일시적인 네트워크 장애가 발생했습니다.
+        죄송합니다. 알 수 없는 오류가 발생했습니다 :(
       </Text>
       <RefreshBtn
         onClick={() => {
-          history.goBack();
+          history.replace("/");
         }}
       >
-        페이지 새로고침
+        홈으로 돌아가기
       </RefreshBtn>
     </ErrorBox>
   );

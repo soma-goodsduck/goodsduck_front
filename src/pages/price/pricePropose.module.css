@@ -6,7 +6,7 @@ input::placeholder {
 }
 
 .wonSign {
-  font-size: 32px;
+  font-size: 26px;
   display: flex;
   align-items: center;
   margin-right: 10px;
@@ -26,4 +26,9 @@ input::placeholder {
 
 .rejectBtn {
   background-color: var(--lightGray2);
+}
+
+.priceInput input::placeholder {
+  font-size: 15px;
+  font-weight: 400;
 }

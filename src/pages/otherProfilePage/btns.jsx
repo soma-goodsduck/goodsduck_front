@@ -26,14 +26,6 @@ const Btns = ({ data }) => {
                 후기
               </Text>
             </Flex>
-            {/* <Flex is_col>
-              <Text bold size="22px">
-                {data.stampCount}/10
-              </Text>
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                보증스탬프
-              </Text>
-            </Flex> */}
           </BtnGrid>
         </Flex>
       )}

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import styled from "styled-components";
 

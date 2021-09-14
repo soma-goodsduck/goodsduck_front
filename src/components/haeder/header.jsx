@@ -47,7 +47,7 @@ const Header = () => {
           <Icon
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart2.svg"
             alt="heart"
-            margin="0 10px"
+            margin="0 15px"
             _onClick={() => {
               history.push("/favorites");
             }}

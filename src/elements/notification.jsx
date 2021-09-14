@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable import/no-cycle */
 import React from "react";
 import styled from "styled-components";
@@ -17,9 +18,9 @@ const Notification = ({ data, clickUrl }) => {
         <UserBox>
           <Image
             shape="circle"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png"
             margin="0 10px 0 0"
-            size="50px"
+            size="35px"
           />
           <InfoBox>
             <Flex>
@@ -36,7 +37,7 @@ const NotiBox = styled.div`
   width: 350px;
   background-color: ${blackBtn};
   color: ${white};
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -51,15 +52,16 @@ const NotiBox = styled.div`
 `;
 
 const UserBox = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
 `;
 
 const InfoBox = styled.div`
-  width: 80%;
+  width: 85%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const TextBox = styled.span`

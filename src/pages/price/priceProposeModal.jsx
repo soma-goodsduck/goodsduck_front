@@ -83,17 +83,22 @@ const PriceProposeModal = ({ _onClick }) => {
             <Info>
               <ExitBtn onClick={_onClick} />
               {itemData && <ItemRow item={itemData} />}
-              <Flex is_felxm margin="25px 0 0 0">
+              <Flex is_felxm margin="25px">
                 <div className={styles.wonSign}>₩</div>
-                <Input
-                  type="number"
-                  borderRadius="5px"
-                  value={price}
-                  placeholder="금액을 적어주세요"
-                  _onChange={(e) => {
-                    setPrice(e.target.value);
-                  }}
-                />
+                <div className={styles.priceInput}>
+                  <Input
+                    type="number"
+                    borderRadius="5px"
+                    value={price}
+                    placeholder="금액을 적어주세요"
+                    _onChange={(e) => {
+                      setPrice(e.target.value);
+                    }}
+                    size="18px"
+                    bold
+                    center
+                  />
+                </div>
               </Flex>
             </Info>
             <ProposeBtn
@@ -137,7 +142,7 @@ const PriceProposeBox = styled.div`
 
 const Info = styled.div`
   position: relative;
-  height: 260px;
+  height: 250px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -152,11 +157,6 @@ const ProposeBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 `;
 
 const ExitBtn = styled.button`

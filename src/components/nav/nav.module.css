@@ -55,18 +55,6 @@
   margin: 0 0 10px 0;
 }
 
-.isCommunityIcon,
-.isNotCommunityIcon {
-  width: 32px;
-  height: 28px;
-}
-
-.isProfileIcon,
-.isNotProfileIcon {
-  width: 28px;
-  height: 28px;
-}
-
 .isHomeIcon {
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_home_click.svg");
 }
@@ -83,10 +71,10 @@
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_upload.svg");
 }
 .isCommunityIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_community_click.svg");
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_newCommunity_click.svg");
 }
 .isNotCommunityIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_community.svg");
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_newCommunity.svg");
 }
 .isProfileIcon {
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_profile_click.svg");
@@ -146,17 +134,6 @@
   .isNotProfileIcon {
     width: 32px;
     height: 32px;
-  }
-
-  .isCommunityIcon,
-  .isNotCommunityIcon {
-    width: 44px;
-  }
-
-  .isProfileIcon,
-  .isNotProfileIcon {
-    width: 40px;
-    height: 38px;
   }
 
   .isHomeText,

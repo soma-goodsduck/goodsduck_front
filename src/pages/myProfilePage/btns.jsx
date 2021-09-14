@@ -10,31 +10,37 @@ const Btns = ({ myProfile }) => {
   return (
     <>
       {myProfile && (
-        <Flex>
+        <Flex margin="15px">
           <BtnGrid>
             <Flex
               is_col
+              justify="space-between"
               pointer
               _onClick={() => {
                 history.push("/favorites");
               }}
             >
-              <Text bold size="22px">
-                {myProfile.countOfLikes}
+              <Text bold size="22px" margin="10px 0 0 0">
+                {myProfile.countOfLikes > 9999
+                  ? "9999+"
+                  : myProfile.countOfLikes}
               </Text>
               <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                찜
+                찜한 굿즈
               </Text>
             </Flex>
             <Flex
               is_col
+              justify="space-between"
               pointer
               _onClick={() => {
                 history.push("/reviews");
               }}
             >
-              <Text bold size="22px">
-                {myProfile.countOfReceivedReviews}
+              <Text bold size="22px" margin="10px 0 0 0">
+                {myProfile.countOfReceivedReviews > 9999
+                  ? "9999+"
+                  : myProfile.countOfReceivedReviews}
               </Text>
               <Text size="15px" margin="10px 0 0 0" color={grayText}>
                 후기
@@ -42,76 +48,55 @@ const Btns = ({ myProfile }) => {
             </Flex>
             <Flex
               is_col
+              justify="space-between"
               pointer
               _onClick={() => {
                 history.push("/price-proposes");
               }}
             >
-              <Text bold size="22px">
-                {myProfile.countOfReceievedPriceProposes}
+              <Text bold size="22px" margin="10px 0 0 0">
+                {myProfile.countOfReceievedPriceProposes > 9999
+                  ? "9999+"
+                  : myProfile.countOfReceievedPriceProposes}
               </Text>
               <Text size="15px" margin="10px 0 0 0" color={grayText}>
                 가격제시
               </Text>
             </Flex>
-            {/* <Flex is_col>
-          <Text bold size="22px">
-            112
-          </Text>
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            투표권
-          </Text>
-        </Flex>
-        <Flex is_col>
-          <Text bold size="22px">
-            9/10
-          </Text>
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            보증스탬프
-          </Text>
-        </Flex>
-        <Flex is_col>
-          <Icon
-            width="40px"
-            margin="0 auto"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_ad.svg"
-          />
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            광고시청
-          </Text>
-        </Flex>
-        <Flex is_col>
-          <Icon
-            width="40px"
-            margin="0 auto"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_fame.svg"
-          />
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            명예전당
-          </Text>
-        </Flex>
-        <Flex is_col>
-          <Icon
-            width="40px"
-            margin="0 auto"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notice.svg"
-          />
-          <Text size="15px" margin="10px 0 0 0" color={grayText}>
-            공지사항
-          </Text>
-        </Flex> */}
-            <a href="http://pf.kakao.com/_njxaWs">
-              <Flex is_col>
-                <Icon
-                  width="40px"
-                  margin="0 auto"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
-                />
-                <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                  고객센터
-                </Text>
-              </Flex>
-            </a>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                history.push("/notice");
+              }}
+            >
+              <Icon
+                width="40px"
+                margin="0 auto"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notice.svg"
+              />
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                공지사항
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                document.location.href = "http://pf.kakao.com/_njxaWs";
+              }}
+            >
+              <Icon
+                width="40px"
+                margin="0 auto"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
+              />
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                고객센터
+              </Text>
+            </Flex>
           </BtnGrid>
         </Flex>
       )}
@@ -121,12 +106,12 @@ const Btns = ({ myProfile }) => {
 
 const BtnGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 85px);
-  grid-auto-rows: 80px;
+  grid-template-columns: repeat(5, 70px);
+  grid-auto-rows: 70px;
   margin-top: 20px;
 
   @media screen and (min-width: 415px) {
-    grid-template-columns: repeat(4, 100px);
+    grid-template-columns: repeat(5, 80px);
   }
 `;
 

@@ -66,7 +66,7 @@ const ItemRow = ({ item }) => {
     return result;
   };
   const handleUpdate = async (_updateStatus) => {
-    const updateTradeStatus = await reqUpdateTradeStatus();
+    const updateTradeStatus = await reqUpdateTradeStatus(_updateStatus);
 
     if (updateTradeStatus < 0) {
       history.push("/error");
@@ -85,6 +85,8 @@ const ItemRow = ({ item }) => {
     const _items = items.filter((i) => i.itemId !== item.itemId);
     _items.unshift(_item);
     dispatch(userActions.setUserItems(_items));
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("굿즈 상태를 변경했습니다."));
   };
 
   return (

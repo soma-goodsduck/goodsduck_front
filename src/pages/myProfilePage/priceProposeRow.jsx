@@ -30,7 +30,7 @@ const PriceProposeRow = ({ item }) => {
             <Flex>
               <TextBox>
                 {item.proposer.nickName}님이 &quot;{item.item.name}&quot; 굿즈에
-                가격 제안을 했어요.
+                가격 제시를 했어요.
                 <TextPointBox>
                   [{numberWithCommas(item.proposedPrice)}원]
                 </TextPointBox>

@@ -44,7 +44,6 @@ const IdolMemberSelect = ({ history }) => {
   const [memberId, setMemberId] = useState(0);
 
   const checkMemberHandler = (id, name) => {
-    console.log(id, name);
     setMemberId(id);
     dispatch(newItemActions.setIdolMember(id, name));
     history.push("/upload-item");

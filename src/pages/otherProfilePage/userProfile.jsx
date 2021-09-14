@@ -21,7 +21,7 @@ const UserProfile = ({ user }) => {
         <Flex is_flex>
           <Image
             shape="circle"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level.svg"
+            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${user.level}.png`}
             size="25px"
             margin="0 10px 0 0"
           />
@@ -32,9 +32,8 @@ const UserProfile = ({ user }) => {
           </Text>
         </Flex>
         <div className={styles.gaugeBox}>
-          <Gauge>
-            <GaugePercent>준비중 😉</GaugePercent>
-          </Gauge>
+          <Gauge style={{ width: `${user.exp}%` }} />
+          <GaugePercent>{user.exp}%</GaugePercent>
         </div>
       </Flex>
     </UserProfileBox>
@@ -58,9 +57,11 @@ const Gauge = styled.div`
 const GaugePercent = styled.div`
   color: ${blackBtn};
   font-size: 0.7rem;
-  text-align: right;
   padding-top: 2px;
   padding-right: 10px;
+  position: absolute;
+  top: 0;
+  left: 45%;
 `;
 
 export default UserProfile;

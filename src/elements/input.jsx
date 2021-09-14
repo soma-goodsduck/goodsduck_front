@@ -5,10 +5,20 @@ import { grayBorder } from "../shared/colors";
 import { Text, Grid } from "./index";
 
 const Input = (props) => {
-  const { type, label, placeholder, width, borderRadius, border, _onChange } =
-    props;
+  const {
+    type,
+    label,
+    placeholder,
+    width,
+    borderRadius,
+    border,
+    size,
+    center,
+    bold,
+    _onChange,
+  } = props;
 
-  const styles = { width, borderRadius, border };
+  const styles = { width, borderRadius, border, size, center, bold };
   return (
     <>
       <Grid>
@@ -40,7 +50,10 @@ const ElInput = styled.input`
   width: ${(props) => props.width};
   border-radius: ${(props) => props.borderRadius};
   border: ${(props) => props.border};
-  padding: 12px 8px;
+  padding: 10px 8px;
+  font-size: ${(props) => props.size};
+  ${(props) => (props.center ? "text-align: center;" : "")}
+  ${(props) => (props.bold ? "font-weight: 600;" : "")}
 `;
 
 export default Input;

@@ -138,10 +138,10 @@ const Title = styled.div`
 `;
 
 const UserName = styled.div`
-  width: 70px;
+  width: 80px;
 
   @media screen and (min-width: 415px) {
-    width: 85px;
+    width: 95px;
   }
 `;
 

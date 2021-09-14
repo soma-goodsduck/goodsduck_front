@@ -123,24 +123,27 @@
 }
 
 .backBtn {
-  position: absolute;
-  top: 3vw;
-  left: 14px;
   z-index: 2;
-  width: 18px;
+  width: 16px;
   height: 28px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_w.svg");
   background-size: cover;
   cursor: pointer;
 }
+.backBtnBlack {
+  z-index: 2;
+  width: 16px;
+  height: 28px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg");
+  background-size: cover;
+  cursor: pointer;
+}
 
 .infoBtn {
-  position: absolute;
-  top: 3vw;
-  right: 17px;
   z-index: 2;
   width: 15px;
   height: 30px;
+  margin-left: 10px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg");
   background-size: cover;
   cursor: pointer;
@@ -148,9 +151,6 @@
 
 /* 찜 버튼 */
 .likeBtn {
-  position: absolute;
-  top: 3vw;
-  right: 40px;
   z-index: 2;
   width: 32px;
   height: 32px;
@@ -160,9 +160,6 @@
 }
 
 .clickLikeBtn {
-  position: absolute;
-  top: 3vw;
-  right: 40px;
   z-index: 2;
   width: 32px;
   height: 32px;
@@ -180,6 +177,7 @@
   border: 1px solid var(--blackBtn);
   border-radius: 15px;
   margin-right: 5px;
+  margin-bottom: 10px;
 }
 
 /* 워터마크 */
