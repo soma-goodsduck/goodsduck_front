@@ -12,28 +12,27 @@ import { history } from "../../redux/configureStore";
 
 const ItemStatus = () => {
   const dispatch = useDispatch();
-
   const statusValue = useSelector((state) => state.filtering.filterStatus);
 
   // 상품상태 데이터 받아오기
   const [statuses, setStatuses] = useState([]);
 
-  useEffect(() => {
-    const getCategory = requestPublicData("v1/items/grade-status");
-    getCategory.then((result) => {
-      setStatuses(result);
-    });
-  }, []);
-
-  const [nextOK, setNextOK] = useState(false);
+  const reqCategory = async () => {
+    const result = await requestPublicData("v1/items/grade-status");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getCategory = await reqCategory();
+    if (getCategory < 0) {
+      history.push("/error");
+      return;
+    }
+    setStatuses(getCategory);
+  };
+  useEffect(fnEffect, []);
 
   const checkHandler = (grade) => {
-    console.log(statusValue, grade);
     dispatch(filteringActions.setFilterStatus(grade));
-    setNextOK(true);
-  };
-
-  const next = () => {
     history.push("/filtering");
   };
 
@@ -65,15 +64,6 @@ const ItemStatus = () => {
             </StatusBox>
           ))}
         </div>
-        <button
-          className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-          type="button"
-          onClick={() => {
-            next();
-          }}
-        >
-          완료
-        </button>
       </StatusContainer>
     </Outer>
   );

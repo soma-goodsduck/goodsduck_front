@@ -13,21 +13,27 @@ import { requestPublicData } from "../../shared/axios";
 
 const IdolMemberSelect = ({ history }) => {
   const dispatch = useDispatch();
-
   const idolValue = useSelector((state) => state.filtering.filterIdolMemberId);
 
   // 아이돌 멤버 데이터 가져오기
   const groupId = localStorage.getItem("filter_idolGroup");
   const [members, setMembers] = useState([]);
 
-  useEffect(() => {
-    const getIdolMember = requestPublicData(
+  const reqIdolMember = async () => {
+    const result = await requestPublicData(
       `v1/idol-members/idol-groups/${groupId}`,
     );
-    getIdolMember.then((result) => {
-      setMembers(result);
-    });
-  }, []);
+    return result;
+  };
+  const fnEffect = async () => {
+    const getIdolMember = await reqIdolMember();
+    if (getIdolMember < 0) {
+      history.push("/error");
+      return;
+    }
+    setMembers(getIdolMember);
+  };
+  useEffect(fnEffect, []);
 
   if (!members) {
     return null;
@@ -35,26 +41,11 @@ const IdolMemberSelect = ({ history }) => {
 
   // 아이돌 멤버 선택
   const [memberId, setMemberId] = useState(0);
-  const [nextOK, setNextOK] = useState(false);
-
-  useEffect(() => {
-    if (memberId) {
-      setNextOK(true);
-    } else {
-      setNextOK(false);
-    }
-  }, [memberId]);
 
   const checkMemberHandler = (id, name) => {
+    history.push("/filtering");
     setMemberId(id);
     dispatch(filteringActions.setFilterIdolMember(name, id));
-  };
-
-  const selectFin = () => {
-    if (!memberId) {
-      return;
-    }
-    history.push("/filtering");
   };
 
   return (
@@ -91,17 +82,6 @@ const IdolMemberSelect = ({ history }) => {
             ))}
           </Flex>
         </div>
-        <ButtonBox>
-          <button
-            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-            type="button"
-            onClick={() => {
-              selectFin();
-            }}
-          >
-            다음
-          </button>
-        </ButtonBox>
       </IdolContainer>
     </>
   );

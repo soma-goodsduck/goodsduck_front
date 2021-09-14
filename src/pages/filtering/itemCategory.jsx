@@ -15,18 +15,24 @@ import { history } from "../../redux/configureStore";
 
 const ItemCategory = () => {
   const dispatch = useDispatch();
-
   const categoryValue = useSelector((state) => state.filtering.filterCategory);
 
   // 카테고리 데이터 받아오기
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    const getCategory = requestPublicData("v1/items/category");
-    getCategory.then((result) => {
-      setCategories(result);
-    });
-  }, []);
+  const reqCategory = async () => {
+    const result = await requestPublicData("v1/items/category");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getCategory = await reqCategory();
+    if (getCategory < 0) {
+      history.push("/error");
+      return;
+    }
+    setCategories(getCategory);
+  };
+  useEffect(fnEffect, []);
 
   const checkHandler = (name, id) => {
     dispatch(filteringActions.setFilterCategory(name, id));
@@ -40,21 +46,19 @@ const ItemCategory = () => {
       {categories &&
         categories.map((category) => (
           <CategoryBox
-            key={category.categoryItemId}
+            key={category.categoryId}
             className={styles.categoryBtn}
             onClick={() =>
-              checkHandler(category.categoryItemName, category.categoryItemId)
+              checkHandler(category.categoryName, category.categoryId)
             }
           >
             <CategoryInput
-              id={category.categoryItemId}
+              id={category.categoryId}
               type="radio"
-              checked={categoryValue === `${category.categoryItemId}`}
-              onChange={() => checkHandler(`${category.categoryItemName}`)}
+              checked={categoryValue === `${category.categoryId}`}
+              onChange={() => checkHandler(`${category.categoryName}`)}
             />
-            <label htmlFor={category.categoryItemId}>
-              {category.categoryItemName}
-            </label>
+            <label htmlFor={category.categoryId}>{category.categoryName}</label>
             <Icon
               width="12px"
               src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
