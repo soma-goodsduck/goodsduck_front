@@ -1,22 +1,17 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable dot-notation */
 import React, { useEffect, useState } from "react";
-import firebase from "firebase/app";
 
 import styled from "styled-components";
 import { Notification } from "../../../elements";
 
-import { firebaseDatabase } from "../../../shared/firebase";
-import { requestAuthData, postAction } from "../../../shared/axios";
+import { requestAuthData } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
+import { grayBtnText } from "../../../shared/colors";
 
 const AttachmentUserInfo = (props) => {
-  const { type, text, _onClickExit } = props;
+  const { type, text, _onClickExit, _onClickSend } = props;
 
-  const href = window.location.href.split("/");
-  const chatRoomId = href[href.length - 1];
-
-  const messagesRef = firebaseDatabase.ref("messages");
   const [userId, setUserId] = useState("");
   const [userNick, setUserNick] = useState("");
   const [addressInfo, setAddressInfo] = useState("");
@@ -41,14 +36,7 @@ const AttachmentUserInfo = (props) => {
     const getUserId = await reqUserId();
 
     if (getAddress < 0 || getAccount < 0 || getUserId < 0) {
-      if (getAddress === -101) {
-        setAddressInfo("등록해주세요 :D");
-      }
-      if (getAccount === -101) {
-        setAccountInfo("등록해주세요 :D");
-      }
-
-      if (getAddress === -999 || getAccount === -999 || getUserId === -999) {
+      if (getAddress !== -101 && getAccount !== -101) {
         history.push("/error");
         return;
       }
@@ -56,12 +44,20 @@ const AttachmentUserInfo = (props) => {
 
     setUserId(getUserId.userId);
     setUserNick(getUserId.nickName);
-    setAddressInfo(
-      `${getAddress.detailAddress} ${getAddress.phoneNumber} ${getAddress.name}`,
-    );
-    setAccountInfo(
-      `(${getAccount.bank}) ${getAccount.accountNumber} ${getAccount.name}`,
-    );
+    if (getAddress === -101) {
+      setAddressInfo("등록해주세요 :D");
+    } else {
+      setAddressInfo(
+        `${getAddress.detailAddress} ${getAddress.phoneNumber} ${getAddress.name}`,
+      );
+    }
+    if (getAccount === -101) {
+      setAccountInfo("등록해주세요 :D");
+    } else {
+      setAccountInfo(
+        `(${getAccount.bank}) ${getAccount.accountNumber} ${getAccount.name}`,
+      );
+    }
   };
   useEffect(fnEffect, []);
 
@@ -71,53 +67,13 @@ const AttachmentUserInfo = (props) => {
     }, 5000);
   }, [showPopup]);
 
-  const reqSendNoti = async (notiJson) => {
-    const result = await postAction("v2/chat/notification", notiJson);
-    return result;
-  };
-
-  const createMessage = () => {
-    const message = {
-      timestamp: firebase.database.ServerValue.TIMESTAMP,
-      user: {
-        id: userId,
-        name: userNick,
-      },
-    };
+  const handleBeforeSend = () => {
+    _onClickExit();
 
     if (type === "address") {
-      message["content"] = addressInfo;
+      _onClickSend(addressInfo, userId, userNick);
     } else if (type === "account") {
-      message["content"] = accountInfo;
-    }
-
-    _onClickExit();
-    return message;
-  };
-
-  const handleSubmit = async () => {
-    const key = messagesRef.child(chatRoomId).push().key;
-    await messagesRef.child(chatRoomId).child(key).update(createMessage());
-
-    // LS에 채팅방에 방문한 시각 업데이트
-    localStorage.setItem(
-      `${chatRoomId}`,
-      `${Math.round(new Date().getTime())}`,
-    );
-
-    const notiJson = {
-      chatMessageId: key,
-      chatRoomId,
-      senderId: userId,
-      type: "CHAT",
-    };
-
-    const sendNoti = await reqSendNoti(notiJson);
-    if (sendNoti < 0) {
-      if (sendNoti === -101) {
-        setShowPopup(true);
-      }
-      history.push("/error");
+      _onClickSend(accountInfo, userId, userNick);
     }
   };
 
@@ -131,7 +87,7 @@ const AttachmentUserInfo = (props) => {
           <Btns>
             <Button1
               onClick={() => {
-                handleSubmit();
+                handleBeforeSend();
               }}
             >
               {type === "address" ? addressInfo : accountInfo}
@@ -186,6 +142,7 @@ const Btns = styled.div`
 const Button1 = styled.button`
   padding: 15px;
   border-bottom: 1px solid #dddddd;
+  color: ${grayBtnText};
 `;
 
 const Button2 = styled.button`

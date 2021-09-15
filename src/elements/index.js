@@ -14,6 +14,7 @@ import PopUp3 from "./popUp3";
 import LoginPopUp from "./loginPopUp";
 import Notification from "./notification";
 import ItemStatusBox from "./itemStatusBox";
+import DoubleCheckModal from "./doubleCheckModal";
 
 export {
   Grid,
@@ -30,4 +31,5 @@ export {
   LoginPopUp,
   Notification,
   ItemStatusBox,
+  DoubleCheckModal,
 };

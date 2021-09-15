@@ -1,8 +1,10 @@
+/* eslint-disable dot-notation */
 /* eslint-disable no-return-assign */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/state-in-constructor */
 import React, { Component, createRef } from "react";
+import firebase from "firebase/app";
 
 import styled from "styled-components";
 
@@ -12,11 +14,12 @@ import Message from "./message";
 import MessageForm from "./messageForm";
 import Skeleton from "./skeleton";
 import AttachmentForm from "./attachmentForm";
-import { firebaseDatabase } from "../../../shared/firebase";
+import AttachmentUserInfo from "./attachmentUserInfo";
+import { DoubleCheckModal } from "../../../elements";
 
+import { firebaseDatabase } from "../../../shared/firebase";
 import { postAction, requestPublicData } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
-import AttachmentUserInfo from "./attachmentUserInfo";
 
 export class ChatRoom extends Component {
   messagesEnd = createRef();
@@ -32,6 +35,12 @@ export class ChatRoom extends Component {
     showAttachmentPopup: false,
     showAttachmentAddressPopup: false,
     showAttachmentAccountPopup: false,
+    showDoubleCheckPopup: false,
+    messageType: "",
+    addressInfo: "",
+    accountInfo: "",
+    userId: "",
+    userNick: "",
   };
 
   componentDidMount() {
@@ -144,6 +153,54 @@ export class ChatRoom extends Component {
       </>
     );
 
+  // 배송지 정보 & 계좌번호 메세지 전송
+  createUserInfoMessage = () => {
+    const message = {
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      user: {
+        id: this.state.userId,
+        name: this.state.userNick,
+      },
+    };
+
+    if (this.state.messageType === "address") {
+      message["content"] = this.state.addressInfo;
+    } else if (this.state.messageType === "account") {
+      message["content"] = this.state.accountInfo;
+    }
+
+    return message;
+  };
+
+  handleUserInfoSubmit = async () => {
+    const key = this.state.messagesRef.child(this.state.chatRoomId).push().key;
+    await this.state.messagesRef
+      .child(this.state.chatRoomId)
+      .child(key)
+      .update(this.createUserInfoMessage());
+
+    // LS에 채팅방에 방문한 시각 업데이트
+    localStorage.setItem(
+      `${this.state.chatRoomId}`,
+      `${Math.round(new Date().getTime())}`,
+    );
+
+    const notiJson = {
+      chatMessageId: key,
+      chatRoomId: this.state.chatRoomId,
+      senderId: this.state.userId,
+      type: "CHAT",
+    };
+
+    const sendNoti = postAction("v2/chat/notification", notiJson);
+    sendNoti.then((result) => {
+      if (result < 0) {
+        history.push("/error");
+      }
+    });
+    this.setState({ showDoubleCheckPopup: false });
+  };
+
   render() {
     const {
       messages,
@@ -153,6 +210,10 @@ export class ChatRoom extends Component {
       showAttachmentPopup,
       showAttachmentAddressPopup,
       showAttachmentAccountPopup,
+      showDoubleCheckPopup,
+      addressInfo,
+      accountInfo,
+      messageType,
     } = this.state;
 
     return (
@@ -179,6 +240,13 @@ export class ChatRoom extends Component {
             _onClickExit={() => {
               this.setState({ showAttachmentAddressPopup: false });
             }}
+            _onClickSend={(_addressInfo, _userId, _userNick) => {
+              this.setState({ showDoubleCheckPopup: true });
+              this.setState({ addressInfo: _addressInfo });
+              this.setState({ userId: _userId });
+              this.setState({ userNick: _userNick });
+              this.setState({ messageType: "address" });
+            }}
           />
         )}
         {showAttachmentAccountPopup && (
@@ -187,6 +255,23 @@ export class ChatRoom extends Component {
             text="계좌번호"
             _onClickExit={() => {
               this.setState({ showAttachmentAccountPopup: false });
+            }}
+            _onClickSend={(_accountInfo, _userId, _userNick) => {
+              this.setState({ showDoubleCheckPopup: true });
+              this.setState({ accountInfo: _accountInfo });
+              this.setState({ userId: _userId });
+              this.setState({ userNick: _userNick });
+              this.setState({ messageType: "account" });
+            }}
+          />
+        )}
+        {showDoubleCheckPopup && (
+          <DoubleCheckModal
+            text1={messageType === "address" ? addressInfo : accountInfo}
+            text2="전송하시겠습니까?"
+            onOkClick={this.handleUserInfoSubmit}
+            onNoClick={() => {
+              this.setState({ showDoubleCheckPopup: false });
             }}
           />
         )}
@@ -199,6 +284,11 @@ export class ChatRoom extends Component {
           }}
           _nickClick={() => {
             history.push(`/profile/${withChatBcrypt}`);
+            // LS에 채팅방에 방문한 시각 업데이트
+            localStorage.setItem(
+              `${chatRoomId}`,
+              `${Math.round(new Date().getTime())}`,
+            );
           }}
           type="chat"
           isClick
@@ -218,7 +308,6 @@ export class ChatRoom extends Component {
           onOpenAttachment={() => {
             this.handleOpenAttachment();
           }}
-          // onSendImg={}
         />
       </>
     );
