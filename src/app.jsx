@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
@@ -51,6 +52,7 @@ import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
 import { sendTokenAction } from "./shared/axios";
 
+import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
 
 function App() {
@@ -124,11 +126,31 @@ function App() {
     RNListener();
   });
 
+  // alert
+  const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState(false);
+  const { showNotification, notificationBody } = useSelector((state) => ({
+    showNotification: state.user.showNotification,
+    notificationBody: state.user.notificationBody,
+  }));
+
+  useEffect(() => {
+    if (showNotification) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+        dispatch(userActions.setShowNotification(false));
+        dispatch(userActions.setNotificationBody(""));
+      }, 2000);
+    }
+  }, [showNotification]);
+
   return (
     <>
       <div className={styles.appImg} />
       <div className={styles.app}>
         {showNoti && <Notification data={notiInfo} clickUrl={notiUrl} />}
+        {showAlert && <Notification data={notificationBody} />}
         <ConnectedRouter history={history}>
           <Switch>
             <Route path="/" exact component={home} />

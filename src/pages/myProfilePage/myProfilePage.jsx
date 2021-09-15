@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ItemList from "./itemList";
 
-import { Text, Button, LoginPopUp, Notification } from "../../elements";
+import { Text, Button, LoginPopUp } from "../../elements";
 import Btns from "./btns";
 import UserProfile from "./userProfile";
 import Nav from "../../components/nav/nav";
@@ -15,24 +15,6 @@ import { history } from "../../redux/configureStore";
 
 const MyProfilePage = () => {
   const dispatch = useDispatch();
-
-  // alert
-  const [showNotiPopup, setShowNotiPopup] = useState(false);
-  const { showNotification, notificationBody } = useSelector((state) => ({
-    showNotification: state.user.showNotification,
-    notificationBody: state.user.notificationBody,
-  }));
-
-  useEffect(() => {
-    if (showNotification) {
-      setShowNotiPopup(true);
-      setTimeout(() => {
-        setShowNotiPopup(false);
-        dispatch(userActions.setShowNotification(false));
-        dispatch(userActions.setNotificationBody(""));
-      }, 2000);
-    }
-  }, [showNotification]);
 
   const isApp = localStorage.getItem("isApp");
   // 해당 유저 데이터 받아오기
@@ -74,7 +56,6 @@ const MyProfilePage = () => {
 
   return (
     <>
-      {showNotiPopup && <Notification data={notificationBody} />}
       {showPopup && <LoginPopUp />}
       {!showPopup && (
         <div>
