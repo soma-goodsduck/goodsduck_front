@@ -25,6 +25,7 @@ export class ChatRoom extends Component {
   messagesEnd = createRef();
 
   state = {
+    itemId: "",
     createdByMe: false,
     chatRoomId: "",
     withChatNick: "",
@@ -52,10 +53,14 @@ export class ChatRoom extends Component {
     });
 
     const href = window.location.href.split("/");
-    const _ChatRoomId = href[href.length - 1];
-    this.setState({ chatRoomId: _ChatRoomId });
+    const _chatRoomId = href[href.length - 1];
+    const _itemId = href[href.length - 2];
+    this.setState({ chatRoomId: _chatRoomId });
+    this.setState({ itemId: _itemId });
 
-    const chatRoomInfoRef = firebaseDatabase.ref(`chatRooms/${_ChatRoomId}`);
+    const chatRoomInfoRef = firebaseDatabase.ref(
+      `chatRooms/${_itemId}/${_chatRoomId}`,
+    );
     chatRoomInfoRef
       .get()
       .then((snapshot) => {
@@ -126,11 +131,11 @@ export class ChatRoom extends Component {
   leaveChatRoom = (chatRoomId) => {
     if (this.state.createdByMe) {
       firebaseDatabase
-        .ref(`chatRooms/${chatRoomId}/createdBy`)
+        .ref(`chatRooms/${this.state.itemId}/${chatRoomId}/createdBy`)
         .update({ isPresented: false });
     } else {
       firebaseDatabase
-        .ref(`chatRooms/${chatRoomId}/createdWith`)
+        .ref(`chatRooms/${this.state.itemId}/${chatRoomId}/createdWith`)
         .update({ isPresented: false });
     }
     postAction("v1/chat", { chatId: chatRoomId });

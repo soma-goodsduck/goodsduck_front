@@ -30,7 +30,9 @@ const ItemInfo = () => {
     const getItemData = await requestItemData();
     dispatch(chatActions.setItemIsExisted());
 
-    const chatRoomInfoRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
+    const chatRoomInfoRef = firebaseDatabase.ref(
+      `chatRooms/${itemId}/${chatRoomId}`,
+    );
     chatRoomInfoRef
       .get()
       .then((snapshot) => {
@@ -58,35 +60,53 @@ const ItemInfo = () => {
   return (
     <>
       {item && (
-        <ItemBox
-          onClick={() => {
-            history.push(`/item/${itemId}`);
-          }}
-        >
-          <Image
-            shape="rectangle"
-            src={item.imageUrl}
-            size="70px"
-            borderRadius="5px"
-          />
-          <ItemRowBox>
-            <div>
-              <Flex justify="flex-start">
-                {isNotExist && <ItemType color={color}>삭제</ItemType>}
-                <Text is_long margin="5px 0" color={color}>
-                  {item.name}
+        <ItemContainer>
+          <ItemBox
+            onClick={() => {
+              history.push(`/item/${itemId}`);
+              // LS에 채팅방에 방문한 시각 업데이트
+              localStorage.setItem(
+                `${chatRoomId}`,
+                `${Math.round(new Date().getTime())}`,
+              );
+            }}
+          >
+            <Image
+              shape="rectangle"
+              src={item.imageUrl}
+              size="70px"
+              borderRadius="5px"
+            />
+            <ItemRowBox>
+              <div>
+                <Flex justify="flex-start">
+                  {isNotExist && <ItemType color={color}>삭제</ItemType>}
+                  <Text is_long margin="5px 0" color={color}>
+                    {item.name}
+                  </Text>
+                </Flex>
+                <Text bold size="18px" color={color}>
+                  {numberWithCommas(Number(item.price))}원
                 </Text>
-              </Flex>
-              <Text bold size="18px" color={color}>
-                {numberWithCommas(Number(item.price))}원
-              </Text>
-            </div>
-          </ItemRowBox>
-        </ItemBox>
+              </div>
+            </ItemRowBox>
+          </ItemBox>
+        </ItemContainer>
       )}
     </>
   );
 };
+
+const ItemContainer = styled.div`
+  width: 100vw;
+  background-color: ${white};
+  position: fixed;
+  cursor: pointer;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
+`;
 
 const ItemBox = styled.div`
   margin: 0 20px;
@@ -94,11 +114,6 @@ const ItemBox = styled.div`
   display: flex;
   position: relative;
   border-bottom: 2px solid ${grayBorder};
-  cursor: pointer;
-
-  width: 90%;
-  position: fixed;
-  background-color: ${white};
 
   @media screen and (min-width: 415px) {
     width: 415px;

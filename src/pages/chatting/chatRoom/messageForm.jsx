@@ -15,7 +15,7 @@ import { history } from "../../../redux/configureStore";
 const MessageForm = ({ onOpenAttachment }) => {
   const href = window.location.href.split("/");
   const chatRoomId = href[href.length - 1];
-  const chatRoomRef = firebaseDatabase.ref(`chatRooms/${chatRoomId}`);
+  const itemId = href[href.length - 2];
 
   const [userId, setUserId] = useState("");
   const [userNick, setUserNick] = useState("");
@@ -39,6 +39,8 @@ const MessageForm = ({ onOpenAttachment }) => {
 
     setUserId(getUserId.userId);
     setUserNick(getUserId.nickName);
+
+    return firebaseDatabase.ref(`chatRooms/${itemId}/${chatRoomId}`).off();
   };
   useEffect(fnEffect, []);
 
@@ -70,10 +72,12 @@ const MessageForm = ({ onOpenAttachment }) => {
   };
 
   const handleSubmit = async () => {
+    const chatRoomRef = firebaseDatabase.ref(
+      `chatRooms/${itemId}/${chatRoomId}`,
+    );
+
     // 채팅방 최신순 정렬을 위한 timestamp 업데이트
-    firebaseDatabase
-      .ref(`chatRooms/${chatRoomId}`)
-      .update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
+    chatRoomRef.update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
 
     // 만약 상대방이 존재하지 않거나 아이템이 삭제된 채팅방이라면 메세지를 보낼 수 없도록 알림
     let isNotChatRoom;

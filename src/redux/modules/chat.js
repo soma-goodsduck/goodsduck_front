@@ -40,7 +40,7 @@ const initialState = {
 
 // middleware actions
 const addChatRoomAciton = (item, user) => {
-  const chatRoomsRef = firebaseDatabase.ref("chatRooms");
+  const chatRoomsRef = firebaseDatabase.ref(`chatRooms/${item.itemId}`);
   const key = chatRoomsRef.push().key;
   const newChatRoom = {
     id: key,
@@ -86,7 +86,7 @@ const addChatRoomAciton = (item, user) => {
 };
 
 const addChatRoomAtPropseAciton = (item, user) => {
-  const chatRoomsRef = firebaseDatabase.ref("chatRooms");
+  const chatRoomsRef = firebaseDatabase.ref(`chatRooms/${item.item.itemId}`);
   const key = chatRoomsRef.push().key;
 
   const newChatRoom = {
