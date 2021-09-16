@@ -54,7 +54,6 @@ const EditProfilePage = (props) => {
     }
     getUserData.likeIdolGroups.forEach((idolId) => {
       idolsFromUser.push(idolId.idolGroupId);
-      dispatch(userActions.setFavIdolGroups([...idols, idolId.idolGroupId]));
     });
     dispatch(userActions.setFavIdolGroups(idolsFromUser));
   };
@@ -90,7 +89,6 @@ const EditProfilePage = (props) => {
   };
   const nickCheckPost = _.debounce(async (_nick) => {
     const _nickCheckPost = await reqNickCheckPost(_nick);
-    console.log(_nickCheckPost.response);
 
     if (_nickCheckPost < 0) {
       history.push("/error");
@@ -109,12 +107,20 @@ const EditProfilePage = (props) => {
       (today.getTime() - updatedTime.getTime()) / 1000 / 60,
     );
     if (Math.floor(betweenTime / 60 / 24) < 30) {
-      setCanUpdateNick(false); // 한 달 안에 닉네임을 바꾼 적이 있음
+      if (_nickCheckPost.response.nickName !== _nick) {
+        setCanUpdateNick(false); // 한 달 안에 닉네임을 바꾼 적이 있음
+      } else {
+        setCanUpdateNick(true);
+      }
     } else {
       setCanUpdateNick(true);
     }
 
-    setIsNickUpdated(true);
+    if (_nickCheckPost.response.nickName === _nick) {
+      setIsNickUpdated(false);
+    } else {
+      setIsNickUpdated(true);
+    }
   }, 500);
   const nickCheck = useCallback(nickCheckPost, []);
 
