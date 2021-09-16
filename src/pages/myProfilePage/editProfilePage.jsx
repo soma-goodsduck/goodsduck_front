@@ -8,16 +8,12 @@ import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
 
 import EditIdolGroup from "./editIdolGroup";
-import { Image, Text } from "../../elements/index";
+import { Image, Text, DoubleCheckModal } from "../../elements/index";
 import HeaderInfo from "../../components/haeder/headerInfo";
-import { grayBorder, yellow, red } from "../../shared/colors";
+import { grayBorder, red } from "../../shared/colors";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
-import {
-  requestAuthData,
-  putAction,
-  postActionForNonUser,
-} from "../../shared/axios";
+import { requestAuthData, putAction, postAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const EditProfilePage = (props) => {
@@ -28,12 +24,15 @@ const EditProfilePage = (props) => {
   const nickRef = useRef();
   const [nick, setNick] = useState("");
   const [isUsedNick, setIsUsedNick] = useState(false);
+  const [canUpdateNick, setCanUpdateNick] = useState(true);
+  const [isNickUpdated, setIsNickUpdated] = useState(false);
   const [img, setImg] = useState(
     "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
   );
   const [imgFile, setImgFile] = useState();
   const idols = useSelector((state) => state.user.favIdolGroups);
   const [nextOK, setNextOK] = useState(false);
+  const [showDoubleCheck, setShowDoubleCheck] = useState(false);
 
   const reqUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
@@ -62,12 +61,12 @@ const EditProfilePage = (props) => {
   useEffect(fnEffect, []);
 
   useEffect(() => {
-    if (nick !== "" && !isUsedNick) {
+    if (nick !== "" && !isUsedNick && canUpdateNick) {
       setNextOK(true);
     } else {
       setNextOK(false);
     }
-  }, [nick, isUsedNick]);
+  }, [nick, isUsedNick, canUpdateNick]);
 
   const updateImg = (e) => {
     const reader = new FileReader();
@@ -84,24 +83,38 @@ const EditProfilePage = (props) => {
 
   // 닉네임 중복체크
   const reqNickCheckPost = async (_nick) => {
-    const result = await postActionForNonUser("v1/users/nickname-check", {
+    const result = await postAction("v1/users/nickname-check", {
       nickName: _nick,
     });
     return result;
   };
   const nickCheckPost = _.debounce(async (_nick) => {
     const _nickCheckPost = await reqNickCheckPost(_nick);
+    console.log(_nickCheckPost.response);
 
     if (_nickCheckPost < 0) {
       history.push("/error");
       return;
     }
 
-    if (_nickCheckPost.response) {
-      setIsUsedNick(false); // 닉네임 사용 가능
-    } else {
+    if (_nickCheckPost.response.isSame) {
       setIsUsedNick(true); // 이미 사용중인 닉네임
+    } else {
+      setIsUsedNick(false); // 닉네임 사용 가능
     }
+
+    const today = new Date();
+    const updatedTime = new Date(_nickCheckPost.response.updatedAt);
+    const betweenTime = Math.floor(
+      (today.getTime() - updatedTime.getTime()) / 1000 / 60,
+    );
+    if (Math.floor(betweenTime / 60 / 24) < 30) {
+      setCanUpdateNick(false); // 한 달 안에 닉네임을 바꾼 적이 있음
+    } else {
+      setCanUpdateNick(true);
+    }
+
+    setIsNickUpdated(true);
   }, 500);
   const nickCheck = useCallback(nickCheckPost, []);
 
@@ -157,13 +170,25 @@ const EditProfilePage = (props) => {
         }
         history.replace("/my-profile");
         dispatch(userActions.setShowNotification(true));
-        dispatch(userActions.setNotificationBody("내 정보를 수정했습니다."));
+        dispatch(userActions.setNotificationBody("프로필을 수정했습니다."));
       }
     }
   };
 
   return (
     <>
+      {showDoubleCheck && (
+        <DoubleCheckModal
+          text1="닉네임 수정은 한 달에 1번만 가능합니다."
+          text2="프로필을 수정하시겠습니까?"
+          onOkClick={() => {
+            updateProfile();
+          }}
+          onNoClick={() => {
+            setShowDoubleCheck(false);
+          }}
+        />
+      )}
       <HeaderInfo text="프로필 수정" />
       {user && (
         <MyProfileBox>
@@ -203,6 +228,11 @@ const EditProfilePage = (props) => {
                   이미 존재하는 닉네임입니다.
                 </Text>
               )}
+              {!canUpdateNick && (
+                <Text color={red} bold height="3">
+                  한 달 이내에 닉네임을 변경한 적이 있습니다.
+                </Text>
+              )}
             </NicknameBox>
             <IdolBox>
               <LabelText>좋아하는 아이돌</LabelText>
@@ -213,7 +243,11 @@ const EditProfilePage = (props) => {
             className={nextOK ? styles.nextOKBtn : styles.nextBtn}
             type="button"
             onClick={() => {
-              updateProfile();
+              if (isNickUpdated && nextOK) {
+                setShowDoubleCheck(true);
+              } else {
+                updateProfile();
+              }
             }}
           >
             저장
