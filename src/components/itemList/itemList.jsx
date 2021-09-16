@@ -74,7 +74,7 @@ const ItemList = ({ keyword }) => {
     } else {
       dispatch(homeActions.getItemsData());
     }
-  }, []);
+  }, [keyword]);
 
   const handleCallNext = (_type) => {
     if (_type === "home") {
