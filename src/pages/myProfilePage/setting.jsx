@@ -8,7 +8,7 @@ import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
-import { Icon, Text, LoginPopUp } from "../../elements";
+import { Icon, Text, LoginPopUp, DoubleCheckModal2 } from "../../elements";
 import { blackBtn, darkRed, grayText } from "../../shared/colors";
 import { notification } from "../../shared/notification";
 import { requestAuthData, deleteAction } from "../../shared/axios";
@@ -21,6 +21,7 @@ const Setting = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [isNotificationOn, setIsNotificationOn] = useState(true);
+  const [showDoubleCheckModal, setDoubleCheckModal] = useState(false);
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
@@ -66,11 +67,26 @@ const Setting = () => {
       history.push("/error");
       return;
     }
+
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("알림을 비활성화했습니다."));
     setIsNotificationOn(false);
+  };
+
+  const deleteAccount = () => {
+    setDoubleCheckModal(true);
   };
 
   return (
     <>
+      {showDoubleCheckModal && (
+        <DoubleCheckModal2
+          text="죄송합니다. 회원탈퇴를 원하시는 경우 고객센터로 문의해주세요."
+          onOkClick={() => {
+            setDoubleCheckModal(false);
+          }}
+        />
+      )}
       {showPopup && <LoginPopUp />}
       {!showPopup && (
         <div>
@@ -170,7 +186,11 @@ const Setting = () => {
                   src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
                 />
               </BtnBox>
-              <BtnBox>
+              <BtnBox
+                onClick={() => {
+                  deleteAccount();
+                }}
+              >
                 <Text color={blackBtn} size="18px" medium color={darkRed}>
                   회원탈퇴
                 </Text>
