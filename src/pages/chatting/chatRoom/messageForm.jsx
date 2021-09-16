@@ -20,11 +20,11 @@ const MessageForm = ({ onOpenAttachment }) => {
   const [userId, setUserId] = useState("");
   const [userNick, setUserNick] = useState("");
   const [content, setContent] = useState("");
-  const messagesRef = firebaseDatabase.ref("messages");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const isItemExist = useSelector((state) => state.chat.isItemExist);
+  const messagesRef = firebaseDatabase.ref("messages");
 
   const reqUserId = async () => {
     const result = await requestAuthData("v1/users/look-up-id");
@@ -39,10 +39,18 @@ const MessageForm = ({ onOpenAttachment }) => {
 
     setUserId(getUserId.userId);
     setUserNick(getUserId.nickName);
-
-    return firebaseDatabase.ref(`chatRooms/${itemId}/${chatRoomId}`).off();
   };
-  useEffect(fnEffect, []);
+  useEffect(() => {
+    fnEffect();
+
+    return () => {
+      const chatRoomRef = firebaseDatabase.ref(
+        `chatRooms/${itemId}/${chatRoomId}`,
+      );
+      chatRoomRef.off();
+      messagesRef.off();
+    };
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {

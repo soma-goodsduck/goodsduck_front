@@ -100,6 +100,10 @@ export class ChatRoom extends Component {
   }
 
   componentWillUnmount() {
+    const chatRoomInfoRef = firebaseDatabase.ref(
+      `chatRooms/${this.state.itemId}/${this.state.chatRoomId}`,
+    );
+    chatRoomInfoRef.off();
     this.state.messagesRef.off();
   }
 

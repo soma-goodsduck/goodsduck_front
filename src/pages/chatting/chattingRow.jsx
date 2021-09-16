@@ -23,6 +23,10 @@ const ChattingRow = ({ chatRoom, userId }) => {
   );
   const [chatCount, setChatCount] = useState(0);
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
+  const messagesRef = firebaseDatabase.ref("messages");
+  const lastMessageRef = firebaseDatabase
+    .ref(`messages/${chatRoom.id}`)
+    .limitToLast(1);
 
   const clickChatRow = () => {
     // LS에 채팅방에 방문한 시각 저장
@@ -36,10 +40,7 @@ const ChattingRow = ({ chatRoom, userId }) => {
   };
 
   const getLastMessage = () => {
-    const messageRef = firebaseDatabase
-      .ref(`messages/${chatRoom.id}`)
-      .limitToLast(1);
-    messageRef.on("value", (snapshot) => {
+    lastMessageRef.on("value", (snapshot) => {
       const data = snapshot.val();
       if (data !== null) {
         const messageObj = data[Object.keys(data)[0]];
@@ -52,11 +53,9 @@ const ChattingRow = ({ chatRoom, userId }) => {
         }
       }
     });
-    return () => messageRef.off();
   };
 
   const getChatNotification = (chatRoomId) => {
-    const messagesRef = firebaseDatabase.ref("messages");
     messagesRef.child(chatRoomId).on("value", (DataSnapshot) => {
       let count = 0;
       const lastVisitTime = Number(localStorage.getItem(chatRoomId));
@@ -89,6 +88,11 @@ const ChattingRow = ({ chatRoom, userId }) => {
     }
     getLastMessage();
     getChatNotification(chatRoom.id);
+
+    return () => {
+      messagesRef.off();
+      lastMessageRef.off();
+    };
   });
 
   return (
