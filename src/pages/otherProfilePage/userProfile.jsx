@@ -14,8 +14,8 @@ const UserProfile = ({ user }) => {
           user.imageUrl ||
           "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
         }
-        margin="0 7px 0 0"
-        size="80px"
+        margin="0 20px 0 0"
+        size="70px"
       />
       <Flex is_col align="flex-start">
         <Flex is_flex>

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemRow from "../../components/itemRow/itemRow";
 import PriceRow from "./priceRow";
-import { Text, PopUp } from "../../elements";
-import PriceFilteringModal from "./priceFilteringModal";
+import { Text, PopUp, FilteringModal } from "../../elements";
 
 import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { grayBorder, grayBtnText } from "../../shared/colors";
@@ -17,7 +15,6 @@ const PriceProposeListPage = ({ history }) => {
   const itemId = Number(href[href.length - 1]);
 
   // 아이템 데이터 및 가격 제안 리스트
-  const dispatch = useDispatch();
   const [itemData, setItemData] = useState(null);
   const [priceList, setPriceLists] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -105,7 +102,7 @@ const PriceProposeListPage = ({ history }) => {
         />
       )}
       {showFilteringPopup && (
-        <PriceFilteringModal
+        <FilteringModal
           clickExit={hideFileringPopup}
           sortingNew={sortingNew}
           sortingLowPrice={sortingLowPrice}

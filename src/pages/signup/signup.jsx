@@ -190,9 +190,12 @@ const Signup = () => {
   };
 
   const reqNickCheckPost = async (_nick) => {
-    const result = await postActionForNonUser("v1/users/nickname-check", {
-      nickName: _nick,
-    });
+    const result = await postActionForNonUser(
+      "v1/users/nickname-check-register",
+      {
+        nickName: _nick,
+      },
+    );
     return result;
   };
   const nickCheckPost = _.debounce(async (_nick) => {

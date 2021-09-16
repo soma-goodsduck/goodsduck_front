@@ -23,6 +23,19 @@
   font-size: 14px;
 }
 
+.searchKeyword {
+  width: 70vw;
+  background-color: #f2f3f6;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.searchKeyword::placeholder {
+  color: var(--blackBtn);
+  font-size: 18px;
+}
+
 .searchIcon {
   width: 18px;
   position: absolute;
@@ -39,6 +52,9 @@
   }
   .search {
     width: 270px;
+  }
+  .searchKeyword {
+    width: 300px;
   }
 }
 

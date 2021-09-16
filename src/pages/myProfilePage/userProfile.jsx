@@ -29,8 +29,8 @@ const UserProfile = ({ user }) => {
             ? user.imageUrl
             : userImg
         }
-        margin="0 7px 0 0"
-        size="80px"
+        margin="0 20px 0 0"
+        size="70px"
       />
       <Flex is_col align="flex-start">
         <Flex is_flex>

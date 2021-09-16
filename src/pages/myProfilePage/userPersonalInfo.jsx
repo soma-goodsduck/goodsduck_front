@@ -63,7 +63,6 @@ const UserPersonalInfo = (props) => {
   const fnEffect = async () => {
     const getAddress = await reqAddress();
     const getAccount = await reqAccount();
-    console.log(getAddress, getAccount);
 
     if (getAddress < 0 || getAccount < 0) {
       if (getAddress === -101) {
@@ -150,7 +149,6 @@ const UserPersonalInfo = (props) => {
       bank: _bankName,
       name: _bankUserName,
     };
-    console.log(json);
     const result = await putJsonAction("v1/users/account", json);
     return result;
   };
@@ -196,21 +194,21 @@ const UserPersonalInfo = (props) => {
             }}
           />
           <InputBox
-            className={_name ? "" : styles.inputText}
-            ref={nameRef}
-            value={_name || ""}
-            placeholder="이름"
-            onChange={() => {
-              dispatch(userActions.setName(nameRef.current.value));
-            }}
-          />
-          <InputBox
             className={_phNum ? "" : styles.inputText}
             ref={phRef}
             value={_phNum || ""}
             placeholder="휴대폰 번호"
             onChange={() => {
               dispatch(userActions.setPhNum(phRef.current.value));
+            }}
+          />
+          <InputBox
+            className={_name ? "" : styles.inputText}
+            ref={nameRef}
+            value={_name || ""}
+            placeholder="이름"
+            onChange={() => {
+              dispatch(userActions.setName(nameRef.current.value));
             }}
           />
           <EditBtn
