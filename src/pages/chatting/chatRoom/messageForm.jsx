@@ -1,18 +1,22 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable dot-notation */
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import firebase from "firebase/app";
 import styled from "styled-components";
 
-import { Flex, Icon, Button, Notification } from "../../../elements";
-import { grayBorder, white } from "../../../shared/colors";
+import { Flex, Icon, Button, DoubleCheckModal2 } from "../../../elements";
+import { grayBorder, white, grayBtnText } from "../../../shared/colors";
+
 import { firebaseDatabase } from "../../../shared/firebase";
 import { requestAuthData, postAction } from "../../../shared/axios";
+import { actionCreators as chatActions } from "../../../redux/modules/chat";
 import { history } from "../../../redux/configureStore";
 
 const MessageForm = ({ onOpenAttachment }) => {
+  const dispatch = useDispatch();
+
   const href = window.location.href.split("/");
   const chatRoomId = href[href.length - 1];
   const itemId = href[href.length - 2];
@@ -22,8 +26,11 @@ const MessageForm = ({ onOpenAttachment }) => {
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const isItemExist = useSelector((state) => state.chat.isItemExist);
+  const [showNotice, setShowNotice] = useState(false);
+  const { isItemExist, readyToSendMessage } = useSelector((state) => ({
+    isItemExist: state.chat.isItemExist,
+    readyToSendMessage: state.chat.readyToSendMessage,
+  }));
   const messagesRef = firebaseDatabase.ref("messages");
 
   const reqUserId = async () => {
@@ -40,23 +47,38 @@ const MessageForm = ({ onOpenAttachment }) => {
     setUserId(getUserId.userId);
     setUserNick(getUserId.nickName);
   };
+  useEffect(fnEffect, []);
+
   useEffect(() => {
-    fnEffect();
+    const chatRoomRef = firebaseDatabase.ref(
+      `chatRooms/${itemId}/${chatRoomId}`,
+    );
+
+    // 채팅방 최신순 정렬을 위한 timestamp 업데이트
+    chatRoomRef.update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
+
+    // 만약 상대방이 존재하지 않거나 아이템이 삭제된 채팅방이라면 메세지를 보낼 수 없도록 알림
+    chatRoomRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (
+        (data.createdBy.id !== userId &&
+          data.createdBy.isPresented === false) ||
+        (data.createdWith.id !== userId &&
+          data.createdWith.isPresented === false) ||
+        !isItemExist
+      ) {
+        dispatch(chatActions.setReadyToSendMessage(false));
+        setShowNotice(true);
+      } else {
+        dispatch(chatActions.setReadyToSendMessage(true));
+      }
+    });
 
     return () => {
-      const chatRoomRef = firebaseDatabase.ref(
-        `chatRooms/${itemId}/${chatRoomId}`,
-      );
       chatRoomRef.off();
       messagesRef.off();
     };
   }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 5000);
-  }, [showPopup]);
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -80,34 +102,10 @@ const MessageForm = ({ onOpenAttachment }) => {
   };
 
   const handleSubmit = async () => {
-    const chatRoomRef = firebaseDatabase.ref(
-      `chatRooms/${itemId}/${chatRoomId}`,
-    );
-
-    // 채팅방 최신순 정렬을 위한 timestamp 업데이트
-    chatRoomRef.update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
-
-    // 만약 상대방이 존재하지 않거나 아이템이 삭제된 채팅방이라면 메세지를 보낼 수 없도록 알림
-    let isNotChatRoom;
-    chatRoomRef.on("value", (snapshot) => {
-      const data = snapshot.val();
-      if (
-        (data.createdBy.id !== userId &&
-          data.createdBy.isPresented === false) ||
-        (data.createdWith.id !== userId &&
-          data.createdWith.isPresented === false) ||
-        !isItemExist
-      ) {
-        isNotChatRoom = true;
-        setShowPopup(true);
-      }
-    });
-    if (isNotChatRoom || !isItemExist) {
-      return;
-    }
     if (!content) {
       return;
     }
+
     setLoading(true);
 
     try {
@@ -146,47 +144,72 @@ const MessageForm = ({ onOpenAttachment }) => {
 
   return (
     <>
-      {showPopup && (
-        <Notification data="상대방이 존재하지 않거나 굿즈가 삭제되어 메세지를 보낼 수 없습니다." />
+      {showNotice && (
+        <DoubleCheckModal2
+          text="상대방이 존재하지 않거나 굿즈가 삭제되어 메세지를 보낼 수 없습니다."
+          onOkClick={() => {
+            setShowNotice(false);
+          }}
+        />
       )}
-      <MessageFormBox onSubmit={handleSubmit}>
-        <div>
-          {errors.map((errorMsg) => (
-            <p style={{ color: "red" }} key={errorMsg}>
-              {errorMsg}
-            </p>
-          ))}
-        </div>
-        <Flex is_flex justify="space-between" padding="20px">
-          <Icon
-            width="28px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-            _onClick={() => {
-              onOpenAttachment();
-            }}
-          />
-          <InputBox
-            placeholder="메세지를 입력하세요."
-            onKeyDown={handleKeyDown}
-            value={content}
-            onChange={handleChange}
-          />
-          <Button
-            type="submit"
-            width="32px"
-            height="28px"
-            src={
-              content
-                ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send_ready.svg"
-                : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
-            }
-            disabled={loading}
-            _onClick={() => {
-              handleSubmit();
-            }}
-          />
-        </Flex>
-      </MessageFormBox>
+      {readyToSendMessage ? (
+        <MessageFormBox onSubmit={handleSubmit}>
+          <div>
+            {errors.map((errorMsg) => (
+              <p style={{ color: "red" }} key={errorMsg}>
+                {errorMsg}
+              </p>
+            ))}
+          </div>
+          <Flex is_flex justify="space-between" padding="20px">
+            <Icon
+              width="28px"
+              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+              _onClick={() => {
+                onOpenAttachment();
+              }}
+            />
+            <InputBox
+              placeholder="메세지를 입력하세요."
+              onKeyDown={handleKeyDown}
+              value={content}
+              onChange={handleChange}
+            />
+            <Button
+              type="submit"
+              width="32px"
+              height="28px"
+              src={
+                content
+                  ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send_ready.svg"
+                  : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+              }
+              disabled={loading}
+              _onClick={() => {
+                if (!readyToSendMessage) {
+                  handleSubmit();
+                }
+              }}
+            />
+          </Flex>
+        </MessageFormBox>
+      ) : (
+        <MessageFormBox onSubmit={handleSubmit}>
+          <Flex is_flex justify="space-between" padding="20px">
+            <Icon
+              width="28px"
+              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+            />
+            <InputBoxNonUse value="채팅을 할 수 없습니다." readOnly />
+            <Button
+              type="submit"
+              width="32px"
+              height="28px"
+              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+            />
+          </Flex>
+        </MessageFormBox>
+      )}
     </>
   );
 };
@@ -222,6 +245,16 @@ const InputBox = styled.input`
   border-radius: 10px;
   margin: 0 12px;
   padding-left: 10px;
+`;
+
+const InputBoxNonUse = styled.input`
+  width: 100%;
+  height: 40px;
+  border: 2px solid ${grayBorder};
+  border-radius: 10px;
+  margin: 0 12px;
+  padding-left: 10px;
+  color: ${grayBtnText};
 `;
 
 export default MessageForm;

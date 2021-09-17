@@ -13,6 +13,7 @@ import { postAction } from "../../shared/axios";
 const SET_CHAT_ROOM = "SET_CHAT_ROOM";
 const SET_ITEM_IS_EXISTED = "SET_ITEM_IS_EXISTED";
 const SET_ITEM_IS_NOT_EXISTED = "SET_ITEM_IS_NOT_EXISTED";
+const SET_READY_TO_SEND_MESSAGE = "SET_READY_TO_SEND_MESSAGE";
 
 // action creators
 const setChatRoom = createAction(SET_CHAT_ROOM, (chatRoom) => ({
@@ -20,6 +21,10 @@ const setChatRoom = createAction(SET_CHAT_ROOM, (chatRoom) => ({
 }));
 const setItemIsExisted = createAction(SET_ITEM_IS_EXISTED, () => ({}));
 const setItemIsNotExisted = createAction(SET_ITEM_IS_NOT_EXISTED, () => ({}));
+const setReadyToSendMessage = createAction(
+  SET_READY_TO_SEND_MESSAGE,
+  (readyToSendMessage) => ({ readyToSendMessage }),
+);
 
 // initialState
 const initialState = {
@@ -36,6 +41,7 @@ const initialState = {
   itemName: "",
   itemPrice: 0,
   isItemExist: true,
+  readyToSendMessage: true,
 };
 
 // middleware actions
@@ -161,6 +167,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.isItemExist = false;
       }),
+    [SET_READY_TO_SEND_MESSAGE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.readyToSendMessage = action.payload.readyToSendMessage;
+      }),
   },
   initialState,
 );
@@ -172,6 +182,7 @@ const actionCreators = {
   addChatRoomAtPropseAciton,
   setItemIsExisted,
   setItemIsNotExisted,
+  setReadyToSendMessage,
 };
 
 export { actionCreators };
