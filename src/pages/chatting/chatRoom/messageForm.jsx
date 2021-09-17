@@ -65,7 +65,7 @@ const MessageForm = ({ onOpenAttachment }) => {
           data.createdBy.isPresented === false) ||
         (data.createdWith.id !== userId &&
           data.createdWith.isPresented === false) ||
-        !isItemExist
+        isItemExist
       ) {
         dispatch(chatActions.setReadyToSendMessage(false));
         setShowNotice(true);

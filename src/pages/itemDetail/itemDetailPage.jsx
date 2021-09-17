@@ -5,24 +5,16 @@ import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
 import ItemImg from "./itemImg";
-import {
-  Flex,
-  Text,
-  Image,
-  Icon,
-  PopUp2,
-  PopUp3,
-  Notification,
-} from "../../elements/index";
+import ItemNav from "./itemNav";
+import PriceList from "./priceList";
+import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
+import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as homeActions } from "../../redux/modules/home";
 
 import { timeForToday } from "../../shared/functions";
 import { requestPublicData, deleteAction } from "../../shared/axios";
-import ItemNav from "./itemNav";
-import PriceList from "./priceList";
-import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
 
 const ItemDetailPage = ({ history }) => {
   const dispatch = useDispatch();
