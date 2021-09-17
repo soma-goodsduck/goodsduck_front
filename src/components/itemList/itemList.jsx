@@ -12,10 +12,21 @@ import { actionCreators as homeActions } from "../../redux/modules/home";
 
 const ItemList = ({ keyword }) => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.home.items);
-  const isLoading = useSelector((state) => state.home.isLoading);
-  const hasNext = useSelector((state) => state.home.hasNext);
-  const itemNum = useSelector((state) => state.home.itemNum);
+  const {
+    items,
+    isLoading,
+    hasNext,
+    itemNum,
+    searchOrderType,
+    searchCompleteType,
+  } = useSelector((state) => ({
+    items: state.home.items,
+    isLoading: state.home.isLoading,
+    hasNext: state.home.hasNext,
+    itemNum: state.home.itemNum,
+    searchOrderType: state.home.searchOrderType,
+    searchCompleteType: state.home.searchCompleteType,
+  }));
   const [isIdolFilter, setIsIdolFilter] = useState(false);
   const [isDetailFilter, setIsDetailFilter] = useState(false);
   const [idolFilter, setIdolFilter] = useState(0);
@@ -58,7 +69,14 @@ const ItemList = ({ keyword }) => {
 
     dispatch(homeActions.clearItems());
     if (keyword) {
-      dispatch(homeActions.getItemsDataBySearch(0, keyword));
+      dispatch(
+        homeActions.getItemsDataBySearch(
+          0,
+          keyword,
+          searchOrderType,
+          searchCompleteType,
+        ),
+      );
     } else if (filteringInfo) {
       const query = getFilteringQuery(0, filteringInfo);
       dispatch(homeActions.getItemsDataByFilter(query));
@@ -74,7 +92,7 @@ const ItemList = ({ keyword }) => {
     } else {
       dispatch(homeActions.getItemsData());
     }
-  }, [keyword]);
+  }, [keyword, searchOrderType, searchCompleteType]);
 
   const handleCallNext = (_type) => {
     if (_type === "home") {
@@ -87,7 +105,14 @@ const ItemList = ({ keyword }) => {
         ),
       );
     } else if (_type === "keyword") {
-      dispatch(homeActions.getItemsDataBySearch(itemNum, keyword));
+      dispatch(
+        homeActions.getItemsDataBySearch(
+          itemNum,
+          keyword,
+          searchOrderType,
+          searchCompleteType,
+        ),
+      );
     } else if (_type === "filtering") {
       const query = getFilteringQuery(itemNum, filteringInfo);
       dispatch(homeActions.getItemsDataByFilter(query));

@@ -1,5 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
@@ -8,13 +9,17 @@ import Nav from "../../components/nav/nav";
 import Header from "../../components/haeder/headerKeyword";
 import ItemList from "../../components/itemList/itemList";
 import { grayBtnText } from "../../shared/colors";
+import { actionCreators as homeActions } from "../../redux/modules/home";
 
 const KeywordSearch = (props) => {
+  const dispatch = useDispatch();
+
   const keyword = props.match.params.name;
-  const [showCompletedItem, setShowCompletedItem] = useState(false);
+  const [showCompletedItem, setShowCompletedItem] = useState(true);
 
   const filteringShowCompletedItem = () => {
     setShowCompletedItem(!showCompletedItem);
+    dispatch(homeActions.setSearchCompleteType(!showCompletedItem));
   };
 
   const [showFilteringPopup, setShowFilteringPopup] = useState(false);
@@ -29,16 +34,19 @@ const KeywordSearch = (props) => {
   const [filtering, setFiltering] = useState("최신순");
   const sortingNew = () => {
     setFiltering("최신순");
+    dispatch(homeActions.setSearchOrderType("latest"));
     hideFileringPopup();
   };
 
   const sortingLowPrice = () => {
     setFiltering("낮은 가격순");
+    dispatch(homeActions.setSearchOrderType("low_price"));
     hideFileringPopup();
   };
 
   const sortingHighPrice = () => {
     setFiltering("높은 가격순");
+    dispatch(homeActions.setSearchOrderType("high_price"));
     hideFileringPopup();
   };
 
@@ -59,7 +67,11 @@ const KeywordSearch = (props) => {
             <Dropdown />
             <Text color={grayBtnText}>{filtering}</Text>
           </Filtering>
-          <Flex>
+          <Flex
+            _onClick={() => {
+              filteringShowCompletedItem();
+            }}
+          >
             {showCompletedItem && (
               <Icon
                 width="16px"
@@ -74,13 +86,7 @@ const KeywordSearch = (props) => {
                 src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_checkbox.svg"
               />
             )}
-            <CompletedItemBtn
-              onClick={() => {
-                filteringShowCompletedItem();
-              }}
-            >
-              거래완료 안보기
-            </CompletedItemBtn>
+            <CompletedItemBtn>거래완료 안보기</CompletedItemBtn>
           </Flex>
         </FilteringBox>
         <ItemListBox>

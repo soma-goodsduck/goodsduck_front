@@ -18,6 +18,8 @@ const DELETE_ITEM = "DELETE_ITEM";
 const LOADING = "LOADING";
 const CLEAR_ITEMS = "CLEAR_ITEMS";
 const SET_NEW_NOTI = "SET_NEW_NOTI";
+const SET_SEARCH_ORDER_TYPE = "SET_SEARCH_ORDER_TYPE";
+const SET_SEARCH_COMPLETE_TYPE = "SET_SEARCH_COMPLETE_TYPE";
 
 // action creators
 const setHomeItems = createAction(
@@ -39,6 +41,18 @@ const clearItems = createAction(CLEAR_ITEMS, () => ({}));
 const setNewNoti = createAction(SET_NEW_NOTI, (hasNewNoti) => ({
   hasNewNoti,
 }));
+const setSearchOrderType = createAction(
+  SET_SEARCH_ORDER_TYPE,
+  (searchOrderType) => ({
+    searchOrderType,
+  }),
+);
+const setSearchCompleteType = createAction(
+  SET_SEARCH_COMPLETE_TYPE,
+  (searchCompleteType) => ({
+    searchCompleteType,
+  }),
+);
 
 // initialState
 const initialState = {
@@ -47,6 +61,8 @@ const initialState = {
   isLoading: false,
   itemNum: 0,
   hasNewNoti: false,
+  searchOrderType: "latest",
+  searchCompleteType: true,
 };
 
 // middleware actions
@@ -157,7 +173,7 @@ const getItemsDataByFilter = (query) => {
 };
 
 // 검색 필터링
-const getItemsDataBySearch = (num, _keyword) => {
+const getItemsDataBySearch = (num, _keyword, orderType, completeType) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
@@ -167,7 +183,12 @@ const getItemsDataBySearch = (num, _keyword) => {
 
     dispatch(loading(true));
 
-    const getItemList = await getItemsBySearch(num, _keyword);
+    const getItemList = await getItemsBySearch(
+      num,
+      _keyword,
+      orderType,
+      completeType,
+    );
     if (getItemList < 0) {
       history.push("/error");
       return;
@@ -186,8 +207,6 @@ const getItemsDataBySearch = (num, _keyword) => {
     } else {
       dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
     }
-
-    dispatch(setNewNoti(response.noty.hasNewNotification));
   };
 };
 
@@ -227,6 +246,14 @@ export default handleActions(
       produce(state, (draft) => {
         draft.hasNewNoti = action.payload.hasNewNoti;
       }),
+    [SET_SEARCH_ORDER_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.searchOrderType = action.payload.searchOrderType;
+      }),
+    [SET_SEARCH_COMPLETE_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.searchCompleteType = action.payload.searchCompleteType;
+      }),
   },
   initialState,
 );
@@ -241,6 +268,8 @@ const actionCreators = {
   getItemsDataByIdol,
   getItemsDataByFilter,
   getItemsDataBySearch,
+  setSearchOrderType,
+  setSearchCompleteType,
 };
 
 export { actionCreators };
