@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 
 import styled from "styled-components";
+import { Flex } from "../../elements";
+import { blackNav } from "../../shared/colors";
 
-import { Flex, Button } from "../../elements";
 import {
   NAVER_AUTH_URL_PROD,
   NAVER_AUTH_URL_DEV,
@@ -26,7 +27,7 @@ const Login = () => {
     <LoginBox>
       <Logo />
       <div>
-        <Flex is_flex>
+        <Flex is_flex is_col>
           <a
             href={
               process.env.REACT_APP_TYPE === "DEV"
@@ -34,36 +35,33 @@ const Login = () => {
                 : NAVER_AUTH_URL_PROD
             }
           >
-            <Button
-              width="60px"
-              height="60px"
-              borderRadius="50%"
-              margin="0 20px 0 0"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_naver.svg"
-            />
+            <LoginBtn color="#3FC800">
+              <LoginInfo>
+                <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_naver.svg" />
+                <LoginText color="white">네이버로 로그인</LoginText>
+              </LoginInfo>
+            </LoginBtn>
           </a>
           <a href={KAKAO_AUTH_URL}>
-            <Button
-              width="60px"
-              height="60px"
-              borderRadius="50%"
-              margin="0 20px 0 0"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_kakao.svg"
-            />
+            <LoginBtn color="#FFDF00">
+              <LoginInfo>
+                <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_kakao.svg" />
+                <LoginText color="black">카카오로 로그인</LoginText>
+              </LoginInfo>
+            </LoginBtn>
           </a>
           {isIOSApp !== -1 && (
             <a href={APPLE_AUTH_URL}>
-              <Button
-                width="60px"
-                height="60px"
-                borderRadius="50%"
-                margin="0 20px 0 0"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_apple.png"
-              />
+              <LoginBtn color="#040404">
+                <LoginInfo>
+                  <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_apple.png" />
+                  <LoginText color="white">APPLE로 로그인</LoginText>
+                </LoginInfo>
+              </LoginBtn>
             </a>
           )}
         </Flex>
-        <Flex is_flex margin="20px">
+        <Flex is_flex margin="10px 0 0 0">
           <TextBtn
             onClick={() => {
               history.replace("/");
@@ -79,12 +77,12 @@ const Login = () => {
 
 const LoginBox = styled.div`
   width: 100vw;
-  height: 70vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20vh;
+  margin-top: 15vh;
 
   @media screen and (min-width: 415px) {
     width: 415px;
@@ -92,19 +90,65 @@ const LoginBox = styled.div`
 `;
 
 const Logo = styled.div`
-  width: 80%;
-  height: 70px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/logo.svg");
+  width: 350px;
+  height: 250px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck_with_slogan.png");
   background-size: contain;
   background-repeat: no-repeat;
+
+  @media screen and (min-width: 415px) {
+    width: 350px;
+    height: 350px;
+  }
 `;
 
 const TextBtn = styled.div`
   display: flex;
   justify-contents: center;
-  margin: 20px 0;
-  padding-right: 20px;
   cursor: pointer;
+  color: ${blackNav};
+`;
+
+const LoginBtn = styled.button`
+  width: 75vw;
+  height: 40px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: ${(props) => props.color};
+
+  @media screen and (min-width: 415px) {
+    width: 300px;
+    height: 50px;
+  }
+`;
+
+const LoginInfo = styled.div`
+  width: 190px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LoginText = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${(props) => props.color};
+
+  @media screen and (min-width: 415px) {
+    font-size: 16px;
+  }
+`;
+
+const LoginIcon = styled.div`
+  width: 35px;
+  height: 35px;
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
 `;
 
 export default Login;
