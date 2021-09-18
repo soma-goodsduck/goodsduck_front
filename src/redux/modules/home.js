@@ -18,6 +18,7 @@ const ADD_ITEM = "ADD_ITEM";
 const DELETE_ITEM = "DELETE_ITEM";
 const LOADING = "LOADING";
 const CLEAR_ITEMS = "CLEAR_ITEMS";
+const CLEAR_SEARCH_FILTER = "CLEAR_SEARCH_FILTER";
 const SET_NEW_NOTI = "SET_NEW_NOTI";
 const SET_SEARCH_ORDER_TYPE = "SET_SEARCH_ORDER_TYPE";
 const SET_SEARCH_COMPLETE_TYPE = "SET_SEARCH_COMPLETE_TYPE";
@@ -48,6 +49,7 @@ const deleteItem = createAction(DELETE_ITEM, (itemId) => ({
 }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 const clearItems = createAction(CLEAR_ITEMS, () => ({}));
+const clearSearchFilter = createAction(CLEAR_SEARCH_FILTER, () => ({}));
 const setNewNoti = createAction(SET_NEW_NOTI, (hasNewNoti) => ({
   hasNewNoti,
 }));
@@ -78,17 +80,17 @@ const initialState = {
 
 // middleware actions
 // 전체 홈 데이터
-const getItemsData = (_itemNum = 0) => {
+const getItemsData = (num) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
-    if (!_hasNext) {
+    if (num !== 0 && !_hasNext) {
       return;
     }
 
     dispatch(loading(true));
 
-    const getItemList = await getItems("items", _itemNum);
+    const getItemList = await getItems("items", num);
     if (getItemList < 0) {
       history.push("/error");
       return;
@@ -118,7 +120,7 @@ const getItemsDataByIdol = (num, idolId) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
-    if (!_hasNext) {
+    if (num !== 0 && !_hasNext) {
       return;
     }
 
@@ -149,11 +151,11 @@ const getItemsDataByIdol = (num, idolId) => {
 };
 
 // 상세 필터링
-const getItemsDataByFilter = (query) => {
+const getItemsDataByFilter = (num, query) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
-    if (!_hasNext) {
+    if (num !== 0 && !_hasNext) {
       return;
     }
 
@@ -194,7 +196,7 @@ const getItemsDataBySearch = (
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
-    if (!_hasNext) {
+    if (num !== 0 && !_hasNext) {
       return;
     }
 
@@ -274,6 +276,12 @@ export default handleActions(
         draft.hasNext = true;
         draft.isLoading = false;
         draft.itemNum = 0;
+        draft.price = -1;
+      }),
+    [CLEAR_SEARCH_FILTER]: (state, action) =>
+      produce(state, (draft) => {
+        draft.searchOrderType = "latest";
+        draft.searchCompleteType = true;
       }),
     [LOADING]: (state, action) =>
       produce(state, (draft) => {
@@ -301,6 +309,7 @@ const actionCreators = {
   addItem,
   deleteItem,
   clearItems,
+  clearSearchFilter,
   getItemsData,
   getItemsDataByIdol,
   getItemsDataByFilter,

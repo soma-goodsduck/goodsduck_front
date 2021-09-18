@@ -1,13 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
 
 import { Flex, Icon } from "../../elements";
 
+import { actionCreators as homeActions } from "../../redux/modules/home";
 import { history } from "../../redux/configureStore";
 
 const HeaderKeyword = ({ keyword }) => {
+  const dispatch = useDispatch();
+
   const inputRef = useRef();
   const [searchWord, setSearchWord] = useState("");
 
@@ -21,6 +25,7 @@ const HeaderKeyword = ({ keyword }) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+
     const name = inputRef.current.value;
     if (name) {
       onSearch(name);
@@ -35,6 +40,7 @@ const HeaderKeyword = ({ keyword }) => {
             width="12px"
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
             _onClick={() => {
+              dispatch(homeActions.clearSearchFilter());
               history.push("/");
             }}
           />

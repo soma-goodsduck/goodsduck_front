@@ -19,6 +19,14 @@ const IdolGroupFiltering = ({ onClick }) => {
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
   const [groupId, setGroupId] = useState(0);
 
+  const checkAllItems = () => {
+    localStorage.removeItem("filter_idolGroup");
+    localStorage.removeItem("filter_idolGroupName");
+    dispatch(filteringActions.clearFiltering());
+    setGroupId(0);
+    onClick(0);
+  };
+
   const checkGroupHandler = (id, name) => {
     setGroupId(id);
     onClick(id);
@@ -106,9 +114,7 @@ const IdolGroupFiltering = ({ onClick }) => {
           <Flex justify="flex-start">
             <BtnBox
               onClick={() => {
-                localStorage.removeItem("filter_idolGroup");
-                dispatch(filteringActions.clearFiltering());
-                window.location.reload();
+                checkAllItems();
               }}
             >
               <Btn>

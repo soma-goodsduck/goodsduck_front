@@ -82,7 +82,7 @@ const ItemList = ({ keyword }) => {
       );
     } else if (filteringInfo) {
       const query = getFilteringQuery(0, filteringInfo);
-      dispatch(homeActions.getItemsDataByFilter(query));
+      dispatch(homeActions.getItemsDataByFilter(0, query));
     } else if (localStorage.getItem("filter_idolGroup")) {
       setIsIdolFilter(true);
       setIsDetailFilter(true);
@@ -93,7 +93,7 @@ const ItemList = ({ keyword }) => {
         ),
       );
     } else {
-      dispatch(homeActions.getItemsData());
+      dispatch(homeActions.getItemsData(0));
     }
   }, [keyword, searchOrderType, searchCompleteType]);
 
@@ -119,16 +119,23 @@ const ItemList = ({ keyword }) => {
       );
     } else if (_type === "filtering") {
       const query = getFilteringQuery(itemNum, filteringInfo);
-      dispatch(homeActions.getItemsDataByFilter(query));
+      dispatch(homeActions.getItemsDataByFilter(itemNum, query));
     }
   };
 
   const handleFiltering = async (id) => {
-    setIdolFilter(id);
-    setIsIdolFilter(true);
-    setIsDetailFilter(true);
-    dispatch(homeActions.clearItems());
-    dispatch(homeActions.getItemsDataByIdol(0, id));
+    if (id === 0) {
+      setIsIdolFilter(false);
+      setIsDetailFilter(false);
+      dispatch(homeActions.clearItems());
+      dispatch(homeActions.getItemsData(0));
+    } else {
+      setIdolFilter(id);
+      setIsIdolFilter(true);
+      setIsDetailFilter(true);
+      dispatch(homeActions.clearItems());
+      dispatch(homeActions.getItemsDataByIdol(0, id));
+    }
   };
 
   return (
