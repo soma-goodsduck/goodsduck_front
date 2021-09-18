@@ -129,10 +129,16 @@ export const getItemsByFilter = async (path) => {
 };
 
 // 무한 스크롤 - 검색 필터링(홈 데이터)
-export const getItemsBySearch = async (itemId, keyword) => {
+export const getItemsBySearch = async (
+  itemId,
+  keyword,
+  order,
+  complete,
+  price,
+) => {
   const jwt = verifyJwt();
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}`;
+  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}&complete=${complete}&order=${order}&price=${price}`;
   const options = { headers: { jwt } };
 
   try {

@@ -17,6 +17,7 @@ const ItemList = ({ keyword }) => {
     isLoading,
     hasNext,
     itemNum,
+    price,
     searchOrderType,
     searchCompleteType,
   } = useSelector((state) => ({
@@ -24,6 +25,7 @@ const ItemList = ({ keyword }) => {
     isLoading: state.home.isLoading,
     hasNext: state.home.hasNext,
     itemNum: state.home.itemNum,
+    price: state.home.price,
     searchOrderType: state.home.searchOrderType,
     searchCompleteType: state.home.searchCompleteType,
   }));
@@ -75,6 +77,7 @@ const ItemList = ({ keyword }) => {
           keyword,
           searchOrderType,
           searchCompleteType,
+          -1,
         ),
       );
     } else if (filteringInfo) {
@@ -111,6 +114,7 @@ const ItemList = ({ keyword }) => {
           keyword,
           searchOrderType,
           searchCompleteType,
+          price,
         ),
       );
     } else if (_type === "filtering") {

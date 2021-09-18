@@ -13,6 +13,7 @@ import {
 
 // actions
 const SET_HOME_ITEMS = "SET_HOME_ITEMS";
+const SET_HOME_ITEMS_WITH_PRICE = "SET_HOME_ITEMS_WITH_PRICE";
 const ADD_ITEM = "ADD_ITEM";
 const DELETE_ITEM = "DELETE_ITEM";
 const LOADING = "LOADING";
@@ -28,6 +29,15 @@ const setHomeItems = createAction(
     items,
     hasNext,
     itemNum,
+  }),
+);
+const setHomeItemsWithPrice = createAction(
+  SET_HOME_ITEMS_WITH_PRICE,
+  (items, hasNext, itemNum, price) => ({
+    items,
+    hasNext,
+    itemNum,
+    price,
   }),
 );
 const addItem = createAction(ADD_ITEM, (item) => ({
@@ -60,6 +70,7 @@ const initialState = {
   hasNext: true,
   isLoading: false,
   itemNum: 0,
+  price: -1,
   hasNewNoti: false,
   searchOrderType: "latest",
   searchCompleteType: true,
@@ -173,7 +184,13 @@ const getItemsDataByFilter = (query) => {
 };
 
 // 검색 필터링
-const getItemsDataBySearch = (num, _keyword, orderType, completeType) => {
+const getItemsDataBySearch = (
+  num,
+  _keyword,
+  orderType,
+  completeType,
+  _price,
+) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().home.hasNext;
 
@@ -188,6 +205,7 @@ const getItemsDataBySearch = (num, _keyword, orderType, completeType) => {
       _keyword,
       orderType,
       completeType,
+      _price,
     );
     if (getItemList < 0) {
       history.push("/error");
@@ -201,11 +219,22 @@ const getItemsDataBySearch = (num, _keyword, orderType, completeType) => {
     if (newItemData.length !== 0) {
       itemNum = newItemData[newItemData.length - 1].itemId;
     }
+    let price;
+    if (newItemData.length !== 0) {
+      price = newItemData[newItemData.length - 1].price;
+    }
 
     if (response.hasNext) {
-      dispatch(setHomeItems(newItemData, hasNext, itemNum));
+      dispatch(setHomeItemsWithPrice(newItemData, hasNext, itemNum, price));
     } else {
-      dispatch(setHomeItems(newItemData, hasNext, getState().home.itemNum));
+      dispatch(
+        setHomeItemsWithPrice(
+          newItemData,
+          hasNext,
+          getState().home.itemNum,
+          getState().home.price,
+        ),
+      );
     }
   };
 };
@@ -218,6 +247,14 @@ export default handleActions(
         draft.items.push(...action.payload.items);
         draft.hasNext = action.payload.hasNext;
         draft.itemNum = action.payload.itemNum;
+        draft.isLoading = false;
+      }),
+    [SET_HOME_ITEMS_WITH_PRICE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.items.push(...action.payload.items);
+        draft.hasNext = action.payload.hasNext;
+        draft.itemNum = action.payload.itemNum;
+        draft.price = action.payload.price;
         draft.isLoading = false;
       }),
     [ADD_ITEM]: (state, action) =>
