@@ -126,15 +126,28 @@ const ItemImg = ({ id, item, onClick }) => {
             : { backgroundColor: "" }
         }
       >
-        <button
-          type="button"
-          aria-label="back"
-          className={isOverImg ? styles.backBtnBlack : styles.backBtn}
-          onClick={() => {
-            history.push("/");
-            dispatch(itemActions.clearPriceProposeInfo());
-          }}
-        />
+        {!item.images[imgNumber].isBright && (
+          <button
+            type="button"
+            aria-label="back"
+            className={isOverImg ? styles.backBtnBlack : styles.backBtn}
+            onClick={() => {
+              history.push("/");
+              dispatch(itemActions.clearPriceProposeInfo());
+            }}
+          />
+        )}
+        {item.images[imgNumber].isBright && (
+          <button
+            type="button"
+            aria-label="back"
+            className={styles.backBtnBlack}
+            onClick={() => {
+              history.push("/");
+              dispatch(itemActions.clearPriceProposeInfo());
+            }}
+          />
+        )}
         <div>
           <button
             type="button"
