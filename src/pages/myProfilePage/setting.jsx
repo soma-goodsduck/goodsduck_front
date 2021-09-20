@@ -114,6 +114,19 @@ const Setting = () => {
               </BtnBox>
               <BtnBox
                 onClick={() => {
+                  history.push("/edit-user-account");
+                }}
+              >
+                <Text color={blackBtn} size="18px" medium>
+                  계정 관리
+                </Text>
+                <Icon
+                  width="12px"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                />
+              </BtnBox>
+              <BtnBox
+                onClick={() => {
                   history.push("/edit-personal-information");
                 }}
               >

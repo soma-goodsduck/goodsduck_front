@@ -1,19 +1,19 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 
 import styled from "styled-components";
 import styles from "./signup.module.css";
-import { Grid, Input, Flex, Text } from "../../elements";
+import { Grid, Flex, Text } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import IdolGroups from "./idolGroups";
 import Timer from "./timer";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { postActionForNonUser } from "../../shared/axios";
-import { red, green } from "../../shared/colors";
+import { red, green, grayBorder } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
@@ -25,10 +25,17 @@ const Signup = () => {
   const [isEmailOk, setIsEmailOk] = useState(true);
   const [isUsedEmail, setIsUsedEmail] = useState(false); // email 가입 여부 체크
 
+  const [pw, setPw] = useState("");
+  const pwRef = useRef();
+  const [isPwOk, setIsPwOk] = useState(true); // pw 체크
+  const pw2Ref = useRef();
+  const [pw2, setPw2] = useState("");
+  const [isPw2Ok, setIsPw2Ok] = useState(true); // pw 더블 체크
+
   const [phone, setPhone] = useState("");
   const [isPhoneOk, setIsPhoneOk] = useState(false); // ph 유효성 체크
   const [isUsedPhone, setIsUsedPhone] = useState(false); // ph 가입 여부 체크
-  const [snsType, setSnsType] = useState(""); // 이전에 가입한 적 있다면 어떤 sns로 가입했는지
+  // const [snsType, setSnsType] = useState(""); // 이전에 가입한 적 있다면 어떤 sns로 가입했는지
   const [showSmsValidateBtn, setShowSmsValidateBtn] = useState(false); // 인증 요청 버튼을 눌러서 인증번호를 확인받을 수 있는 창을 보여줌
   const [showTimer, setShowTimer] = useState(false); // 인증 요청과 동시에 타이머 시작
   const [smsCode, setSmsCode] = useState(""); // 인증번호를 입력 받음
@@ -40,13 +47,15 @@ const Signup = () => {
   const idol = useSelector((state) => state.user.idolsForSignup);
   const [isIdolSelected, setIsIdolSelected] = useState(false);
 
-  const type = useSelector((state) => state.user.type);
-  const id = useSelector((state) => state.user.id);
+  // const type = useSelector((state) => state.user.type);
+  // const id = useSelector((state) => state.user.id);
   const [nextOK, setNextOK] = useState(false);
 
   useEffect(() => {
     if (
       !isUsedEmail &&
+      pw !== "" &&
+      pw2 !== "" &&
       nick !== "" &&
       !isUsedNick &&
       isIdolSelected &&
@@ -56,7 +65,7 @@ const Signup = () => {
     } else {
       setNextOK(false);
     }
-  }, [isUsedEmail, nick, isUsedNick, isIdolSelected, isValidated]);
+  }, [isUsedEmail, pw, pw2, nick, isUsedNick, isIdolSelected, isValidated]);
 
   // 이메일 중복 체크
   const reqUsedEmailCheckPost = async (_email) => {
@@ -91,6 +100,36 @@ const Signup = () => {
       setIsEmailOk(false);
     }
   };
+
+  // 비밀번호 유효성 확인
+  const _pwCheck = _.debounce(async (_pw) => {
+    const regex1 = /[0-9]/;
+    const regex2 = /[a-zA-Z]/;
+    const regex3 = /[~!@\#$%<>^&*_-]/;
+
+    if (
+      !regex1.test(_pw) ||
+      !regex2.test(_pw) ||
+      !regex3.test(_pw) ||
+      _pw.length < 8 ||
+      _pw.length > 20
+    ) {
+      setIsPwOk(false);
+    } else {
+      setIsPwOk(true);
+    }
+  }, 500);
+  const pwCheck = useCallback(_pwCheck, []);
+
+  // 비밀번호 더블체크
+  const _pwDoubleCheck = _.debounce(async (_pw) => {
+    if (pwRef.current.value !== pw2Ref.current.value) {
+      setIsPw2Ok(false);
+    } else {
+      setIsPw2Ok(true);
+    }
+  }, 500);
+  const pwDoubleCheck = useCallback(_pwDoubleCheck, []);
 
   const handleTimeOut = () => {
     setShowTimer(false);
@@ -149,15 +188,15 @@ const Signup = () => {
     }
   };
 
-  // 이전에 다른 SNS을 통해 가입한 적이 있는 휴대폰 번호인지 확인
+  // 이전에 (다른 SNS을 통해) 가입한 적이 있는 휴대폰 번호인지 확인
   const reqUsedPhCheckPost = async (_ph) => {
-    const result = await postActionForNonUser("v1/users/phone-number-check", {
+    const result = await postActionForNonUser("v2/users/phone-number-check", {
       phoneNumber: _ph,
     });
     return result;
   };
   const usedPhCheckPost = _.debounce(async (_ph) => {
-    const _usedPhCheckPost = await reqUsedPhCheckPost();
+    const _usedPhCheckPost = await reqUsedPhCheckPost(_ph);
 
     if (_usedPhCheckPost < 0) {
       history.push("/error");
@@ -165,12 +204,14 @@ const Signup = () => {
     }
 
     if (
-      _usedPhCheckPost.response === "NAVER" ||
-      _usedPhCheckPost.response === "KAKAO"
+      // _usedPhCheckPost.response === "NAVER" ||
+      // _usedPhCheckPost.response === "KAKAO" ||
+      // _usedPhCheckPost.response === "APPLE" ||
+      _usedPhCheckPost.response === "GOODSDUCK"
     ) {
       setIsUsedPhone(true); // 이미 가입한 적 있는 번호
       setIsPhoneOk(false);
-      setSnsType(_usedPhCheckPost.response);
+      // setSnsType(_usedPhCheckPost.response);
     } else {
       setIsUsedPhone(false); // 휴대폰 번호 가입한 적 없음
       setIsPhoneOk(true); // 가입한 적 없으므로 인증 요청 가능
@@ -224,8 +265,12 @@ const Signup = () => {
     }
 
     const idols = [Number(idol)];
-    const user = { email, nick, phone, id, type, idols };
+    const user = { email, pw, nick, phone, idols };
     dispatch(userActions.signupAction(user));
+
+    // 소셜 로그인했을 때 회원가입
+    // const user = { email, nick, phone, id, type, idols };
+    // dispatch(userActions.socialSignupAction(user));
   };
 
   return (
@@ -239,9 +284,8 @@ const Signup = () => {
               <Input
                 type="email"
                 placeholder="이메일을 입력해주세요."
-                borderRadius="5px"
                 value={email}
-                _onChange={(e) => {
+                onChange={(e) => {
                   setEmail(e.target.value);
                   emailCheck(e.target.value);
                 }}
@@ -259,15 +303,54 @@ const Signup = () => {
             </Flex>
           </Grid>
           <Grid padding="16px 0px">
+            <LabelText>비밀번호</LabelText>
+            <Flex is_col>
+              <Input
+                type="password"
+                placeholder="비밀번호를 입력해주세요."
+                ref={pwRef}
+                value={pw}
+                onChange={(e) => {
+                  setPw(e.target.value);
+                  pwCheck(e.target.value);
+                }}
+              />
+              {!isPwOk && (
+                <Text color={red} bold height="2">
+                  숫자, 영문, 특수문자 조합으로 8~16자리인지 확인해주세요.
+                </Text>
+              )}
+            </Flex>
+          </Grid>
+          <Grid padding="16px 0px">
+            <LabelText>비밀번호 확인</LabelText>
+            <Flex is_col>
+              <Input
+                type="password"
+                placeholder="비밀번호를 한번 더 입력해주세요."
+                ref={pw2Ref}
+                value={pw2}
+                onChange={(e) => {
+                  setPw2(e.target.value);
+                  pwDoubleCheck(e.target.value);
+                }}
+              />
+              {!isPw2Ok && (
+                <Text color={red} bold height="2">
+                  비밀번호가 일치하지 않습니다.
+                </Text>
+              )}
+            </Flex>
+          </Grid>
+          <Grid padding="16px 0px">
             <LabelText>핸드폰 번호</LabelText>
             {/* 이전에 가입한 적 있는 핸드폰 번호인지 확인 */}
             <Flex>
               <Input
                 type="number"
                 placeholder="ex.01012345678"
-                borderRadius="5px"
                 value={phone}
-                _onChange={(e) => {
+                onChange={(e) => {
                   setPhone(e.target.value);
                   phCheck(e.target.value);
                   setShowSmsValidateBtn(false);
@@ -294,7 +377,8 @@ const Signup = () => {
             )}
             {isUsedPhone && (
               <Text color={red} bold height="1.5" margin="10px 0 0 0">
-                {snsType}를 통해 이미 가입한 적 있는 번호입니다.
+                {/* {snsType}를 통해 이미 가입한 적 있는 번호입니다. */}
+                이미 가입된 번호입니다.
               </Text>
             )}
             {/* 이전에 가입한 적이 없다면 SMS 인증 진행 */}
@@ -303,9 +387,8 @@ const Signup = () => {
                 <Input
                   type="number"
                   placeholder="인증 번호를 입력해주세요"
-                  borderRadius="5px"
                   value={smsCode}
-                  _onChange={(e) => {
+                  onChange={(e) => {
                     setSmsCode(e.target.value);
                   }}
                 />
@@ -340,9 +423,8 @@ const Signup = () => {
             <Flex is_col>
               <Input
                 placeholder="닉네임을 입력해주세요"
-                borderRadius="5px"
                 value={nick}
-                _onChange={(e) => {
+                onChange={(e) => {
                   setNick(e.target.value);
                   nickCheck(e.target.value);
                 }}
@@ -374,11 +456,15 @@ const Signup = () => {
 };
 
 const SignUpBox = styled.div`
-  height: 100%;
+  height: 128%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 0 20px;
+
+  @media screen and (min-width: 415px) {
+    height: 100%;
+  }
 `;
 
 const Box = styled.div`
@@ -389,6 +475,13 @@ const LabelText = styled.div`
   margin-bottom: 10px;
   font-weight: bold;
   color: #222222;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid ${grayBorder};
+  padding: 10px 8px;
 `;
 
 export default Signup;

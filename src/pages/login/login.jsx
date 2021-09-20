@@ -1,21 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import { Flex } from "../../elements";
-import { blackNav } from "../../shared/colors";
+import { Flex, Text } from "../../elements";
+import { blackNav, grayBorder, grayBtnBorder } from "../../shared/colors";
 
-import {
-  NAVER_AUTH_URL_PROD,
-  NAVER_AUTH_URL_DEV,
-  KAKAO_AUTH_URL,
-  APPLE_AUTH_URL,
-} from "../../shared/OAuth";
+import { actionCreators as userActions } from "../../redux/modules/user";
+import { requestLogin } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const Login = () => {
-  const userAgent = window.navigator.userAgent;
-  const isIOSApp = userAgent.indexOf("IOS APP");
-
   useEffect(() => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("likeIdolGroups");
@@ -23,46 +17,85 @@ const Login = () => {
     localStorage.removeItem("filter_idolGroup");
   }, []);
 
+  const dispatch = useDispatch();
+  const emailRef = useRef();
+  const pwRef = useRef();
+
+  const reqLogin = async () => {
+    const json = {
+      email: emailRef.current.value,
+      password: pwRef.current.value,
+    };
+    const result = await requestLogin("v1/users/login", json);
+    return result;
+  };
+  const handleLogin = async () => {
+    const _handleLogin = await reqLogin();
+
+    if (_handleLogin < 0) {
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("로그인에 실패했습니다."));
+      history.replace("/login");
+      return;
+    }
+
+    if (!_handleLogin.emailSuccess || !_handleLogin.passwordSuccess) {
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody("이메일 또는 비밀번호가 틀렸습니다."),
+      );
+      history.replace("/login");
+      return;
+    }
+
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("로그인에 성공했습니다."));
+    history.replace("/");
+  };
+
   return (
-    <LoginBox>
+    <LoginContainer>
       <Logo />
       <div>
         <Flex is_flex is_col>
-          <a
-            href={
-              process.env.REACT_APP_TYPE === "DEV"
-                ? NAVER_AUTH_URL_DEV
-                : NAVER_AUTH_URL_PROD
-            }
-          >
-            <LoginBtn color="#3FC800">
-              <LoginInfo>
-                <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_naver.svg" />
-                <LoginText color="white">네이버로 로그인</LoginText>
-              </LoginInfo>
-            </LoginBtn>
-          </a>
-          <a href={KAKAO_AUTH_URL}>
-            <LoginBtn color="#FFDF00">
-              <LoginInfo>
-                <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_kakao.svg" />
-                <LoginText color="black">카카오로 로그인</LoginText>
-              </LoginInfo>
-            </LoginBtn>
-          </a>
-          {isIOSApp !== -1 && (
-            <a href={APPLE_AUTH_URL}>
-              <LoginBtn color="#040404">
-                <LoginInfo>
-                  <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_apple.png" />
-                  <LoginText color="white">APPLE로 로그인</LoginText>
-                </LoginInfo>
-              </LoginBtn>
-            </a>
-          )}
-        </Flex>
-        <Flex is_flex margin="10px 0 0 0">
+          <LoginInput type="text" placeholder="이메일" ref={emailRef} />
+          <LoginInput type="password" placeholder="비밀번호" ref={pwRef} />
           <TextBtn
+            justify="flex-end"
+            margin="0 0 20px 0"
+            size="14px"
+            onClick={() => {
+              history.replace("/find-email-pw");
+            }}
+          >
+            이메일/비밀번호 찾기
+          </TextBtn>
+          <LoginBtn
+            onClick={() => {
+              handleLogin();
+            }}
+          >
+            로그인
+          </LoginBtn>
+
+          <Flex is_flex justify="space-between" margin="10px 0">
+            <Line />
+            <Text margin="0 10px" color={grayBorder}>
+              OR
+            </Text>
+            <Line />
+          </Flex>
+          <SignupBtn
+            onClick={() => {
+              history.replace("/signup");
+            }}
+          >
+            회원가입
+          </SignupBtn>
+        </Flex>
+        <Flex is_flex margin="30px 0 0 0">
+          <TextBtn
+            justify="center"
             onClick={() => {
               history.replace("/");
             }}
@@ -71,84 +104,118 @@ const Login = () => {
           </TextBtn>
         </Flex>
       </div>
-    </LoginBox>
+    </LoginContainer>
   );
 };
 
-const LoginBox = styled.div`
+const LoginContainer = styled.div`
   width: 100vw;
-  height: 80vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 15vh;
+  margin-top: 10vh;
 
+  @media screen and (max-width: 360px) {
+    height: 95vh;
+    margin-top: 0vh;
+  }
   @media screen and (min-width: 415px) {
     width: 415px;
   }
 `;
 
 const Logo = styled.div`
-  width: 350px;
+  width: 90vw;
   height: 250px;
   background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck_with_slogan.png");
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
 
+  @media screen and (max-width: 280px) {
+    width: 100vw;
+    height: 180px;
+  }
   @media screen and (min-width: 415px) {
     width: 350px;
-    height: 350px;
+    height: 250px;
+  }
+`;
+
+const LoginInput = styled.input`
+  width: 80vw;
+  height: 50px;
+  background-color: #f2f3f6;
+  border-radius: 5px;
+  padding: 10px 8px;
+  margin-bottom: 10px;
+
+  &::placeholder {
+    color: ${grayBtnBorder};
+  }
+
+  @media screen and (min-width: 415px) {
+    width: 300px;
+  }
+`;
+
+const LoginBtn = styled.button`
+  width: 80vw;
+  height: 50px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 226, 0, 1) 0%,
+    rgba(255, 141, 41, 0.7) 100%
+  );
+  color: white;
+  font-weight: 600;
+  border-radius: 5px;
+  padding: 10px 8px;
+  margin-bottom: 10px;
+
+  @media screen and (min-width: 415px) {
+    width: 300px;
+  }
+`;
+
+const SignupBtn = styled.button`
+  width: 80vw;
+  height: 50px;
+  border: 2px solid rgb(255, 226, 0);
+  color: #fda61d;
+  font-weight: 600;
+  border-radius: 5px;
+  padding: 10px 8px;
+  margin: 10px 0;
+
+  @media screen and (min-width: 415px) {
+    width: 300px;
   }
 `;
 
 const TextBtn = styled.div`
+  width: 80vw;
   display: flex;
-  justify-contents: center;
+  justify-content: ${(props) => props.justify};
+  margin: ${(props) => props.margin};
   cursor: pointer;
   color: ${blackNav};
-`;
-
-const LoginBtn = styled.button`
-  width: 75vw;
-  height: 40px;
-  border-radius: 50px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  background-color: ${(props) => props.color};
+  font-size: ${(props) => props.size};
 
   @media screen and (min-width: 415px) {
     width: 300px;
-    height: 50px;
   }
 `;
 
-const LoginInfo = styled.div`
-  width: 190px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LoginText = styled.div`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${(props) => props.color};
+const Line = styled.div`
+  width: 34vw;
+  height: 1px;
+  background-color: ${grayBorder};
 
   @media screen and (min-width: 415px) {
-    font-size: 16px;
+    width: 130px;
   }
-`;
-
-const LoginIcon = styled.div`
-  width: 35px;
-  height: 35px;
-  background-image: url("${(props) => props.src}");
-  background-size: cover;
 `;
 
 export default Login;

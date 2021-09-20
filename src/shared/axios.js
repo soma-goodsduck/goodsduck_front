@@ -155,6 +155,25 @@ export const getItemsBySearch = async (
   }
 };
 
+// 자체 로그인
+export const requestLogin = async (path, json) => {
+  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const options = { headers: { "Content-Type": "application/json" } };
+
+  try {
+    const result = await axios.post(url, JSON.stringify(json), options);
+    if (result.data?.error) {
+      return verifyError(result.data.error);
+    }
+    updateJwt(result.data.response.jwt);
+
+    return result.data.response;
+  } catch (error) {
+    Sentry.captureException(error);
+    return -999;
+  }
+};
+
 // JWT를 리턴하지 않는 데이터 (비회원 가능)
 export const requestPublicData = async (path) => {
   const jwt = verifyJwt();
@@ -256,9 +275,18 @@ export const postAction = async (path, json) => {
 export const postActionForNonUser = async (path, json) => {
   const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { "Content-Type": "application/json" } };
-  const result = await axios.post(url, JSON.stringify(json), options);
 
-  return result.data;
+  try {
+    const result = await axios.post(url, JSON.stringify(json), options);
+    if (result.data.error) {
+      return verifyError(result.data.error);
+    }
+
+    return result.data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return -999;
+  }
 };
 
 // post(image) 요청

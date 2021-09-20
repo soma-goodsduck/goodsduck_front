@@ -5,13 +5,13 @@
 
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import axios from "axios";
 
 import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
+import { postActionForNonUser } from "../../shared/axios";
 
 // actions
-const SIGN_UP = "SIGN_UP";
+const SOCIAL_SIGN_UP = "SOCIAL_SIGN_UP";
 const SET_IDOLS_FOR_SIGNUP = "SET_IDOLS_FOR_SIGNUP";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
@@ -37,9 +37,10 @@ const CLEAR_SETTING_INFO = "CLEAR_SETTING_INFO";
 const SET_SHOW_NOTIFICATION = "SET_SHOW_NOTIFICATION";
 const SET_NOTIFICATION_BODY = "SET_NOTIFICATION_BODY";
 const SET_NOTIFICATION_LIST = "SET_NOTIFICATION_LIST";
+const SET_EMAIL = "SET_EMAIL";
 
 // action creators
-const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
+const socialSignUp = createAction(SOCIAL_SIGN_UP, (id, type) => ({ id, type }));
 const setIdolsForSignup = createAction(
   SET_IDOLS_FOR_SIGNUP,
   (idolsForSignup) => ({
@@ -106,14 +107,15 @@ const setNotificationList = createAction(
   SET_NOTIFICATION_LIST,
   (notifications) => ({ notifications }),
 );
+const setEmail = createAction(SET_EMAIL, (email) => ({ email }));
 
 // initialState
 const initialState = {
   user: "",
   type: null,
   id: null,
+  email: "",
   idolsForSignup: 0,
-  isLogin: false,
   showPopup: false,
   favIdolGroups: [],
   filteringType: "SELLING",
@@ -147,20 +149,57 @@ const loginAction = (user) => {
 const logoutAction = (user) => {
   return function (dispatch, getState, { history }) {
     dispatch(logOut(user));
+    dispatch(setShowNotification(true));
+    dispatch(setNotificationBody("로그아웃 했습니다."));
     history.replace("/");
   };
 };
 
-// 비회원인 경우, 회원가입 페이지로 이동
+// [소셜 로그인] 비회원인 경우, 회원가입 페이지로 이동
 const nonUserAction = (id, type) => {
   return function (dispatch, getState, { history }) {
-    dispatch(signUp(id, type));
+    dispatch(socialSignUp(id, type));
     history.push("/signup");
   };
 };
 
-// 최종 회원가입
+// 자체 회원가입
 const signupAction = (user) => {
+  const json = {
+    email: user.email,
+    password: user.pw,
+    nickName: user.nick,
+    phoneNumber: user.phone,
+    likeIdolGroupsId: user.idols,
+  };
+  return async function (dispatch, getState, { history }) {
+    const signup = await postActionForNonUser("v2/users/sign-up", json);
+
+    console.log(signup);
+    if (signup < 0) {
+      history.replace("/login");
+      window.alert("회원가입에 실패했습니다.");
+      return;
+    }
+
+    dispatch(logIn(signup.response.jwt));
+
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+      );
+    } else {
+      notification();
+    }
+
+    dispatch(setShowNotification(true));
+    dispatch(setNotificationBody("회원가입에 성공했습니다."));
+    history.push("/");
+  };
+};
+
+// 소셜 로그인했을때 회원가입
+const socialSignupAction = (user) => {
   const json = {
     email: user.email,
     nickName: user.nick,
@@ -170,16 +209,7 @@ const signupAction = (user) => {
     likeIdolGroupsId: user.idols,
   };
   return async function (dispatch, getState, { history }) {
-    const signup = await axios.post(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/users/sign-up`,
-      JSON.stringify(json),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      { withCredentials: true },
-    );
+    const signup = await postActionForNonUser("v1/users/sign-up", json);
 
     if (signup < 0) {
       history.replace("/login");
@@ -198,17 +228,20 @@ const signupAction = (user) => {
     }
 
     history.push("/");
+
+    dispatch(setShowNotification(true));
+    dispatch(setNotificationBody("회원가입에 성공했습니다."));
+    history.push("/");
   };
 };
 
 // reducer
 export default handleActions(
   {
-    [SIGN_UP]: (state, action) =>
+    [SOCIAL_SIGN_UP]: (state, action) =>
       produce(state, (draft) => {
         draft.id = action.payload.id;
         draft.type = action.payload.type;
-        draft.isLogin = true;
         draft.show_popup = false;
       }),
     [SET_IDOLS_FOR_SIGNUP]: (state, action) =>
@@ -219,7 +252,6 @@ export default handleActions(
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-        draft.isLogin = true;
         draft.show_popup = false;
         setLS("jwt", draft.user);
       }),
@@ -230,12 +262,10 @@ export default handleActions(
         deleteLS("filtering");
         deleteLS("filter_idolGroup");
         draft.user = null;
-        draft.isLogin = false;
       }),
     [GET_USER]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-        draft.isLogin = true;
       }),
     [SHOW_POPUP]: (state, action) =>
       produce(state, (draft) => {
@@ -329,6 +359,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.notifications = action.payload.notifications;
       }),
+    [SET_EMAIL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.email = action.payload.email;
+      }),
   },
   initialState,
 );
@@ -336,6 +370,7 @@ export default handleActions(
 // action creator export
 const actionCreators = {
   signupAction,
+  socialSignupAction,
   setIdolsForSignup,
   loginAction,
   logoutAction,
@@ -362,6 +397,7 @@ const actionCreators = {
   setShowNotification,
   setNotificationBody,
   setNotificationList,
+  setEmail,
 };
 
 export { actionCreators };

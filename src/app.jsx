@@ -33,7 +33,8 @@ import IdolMember from "./pages/itemUpload/idolMeberSelect";
 import PriceProposeListPage from "./pages/price/priceProposeListPage";
 import PriceProposePage from "./pages/myProfilePage/priceProposePage";
 import ReviewPage from "./pages/myProfilePage/reviewPage";
-import UserPersonalInfo from "./pages/myProfilePage/userPersonalInfo";
+import EditUserAccountPage from "./pages/myProfilePage/editUserAccountPage";
+import EditPersonalInfoPage from "./pages/myProfilePage/editPersonalInfoPage";
 import WritingReviewPage from "./pages/review/writingReviewPage";
 import WritingReviewBackPage from "./pages/review/writingReviewBackPage";
 import OtherProfilePage from "./pages/otherProfilePage/otherProfilePage";
@@ -54,6 +55,7 @@ import { sendTokenAction } from "./shared/axios";
 
 import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
+import FindEmailOrPwPage from "./pages/login/findEmailOrPwPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -155,6 +157,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={home} />
             <Route path="/login" exact component={Login} />
+            <Route path="/find-email-pw" exact component={FindEmailOrPwPage} />
             <Route path="/signup" exact component={Signup} />
             <Route
               path="/auth/kakao/callback"
@@ -184,9 +187,14 @@ function App() {
             <Route path="/setting" exact component={Setting} />
             <Route path="/edit-profile" exact component={EditProfile} />
             <Route
+              path="/edit-user-account"
+              exact
+              component={EditUserAccountPage}
+            />
+            <Route
               path="/edit-personal-information"
               exact
-              component={UserPersonalInfo}
+              component={EditPersonalInfoPage}
             />
             <Route path="/price-proposes" exact component={PriceProposePage} />
             <Route path="/reviews" exact component={ReviewPage} />

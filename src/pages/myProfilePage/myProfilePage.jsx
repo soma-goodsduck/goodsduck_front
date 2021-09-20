@@ -51,6 +51,7 @@ const MyProfilePage = () => {
     setMyProfile(myProfileData);
     setItems(myProfileData.items);
     dispatch(userActions.setUserItems(myProfileData.items));
+    dispatch(userActions.setEmail(userData.email));
   };
   useEffect(fnEffect, [tradeStatus]);
 

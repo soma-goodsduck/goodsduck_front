@@ -5,33 +5,15 @@ import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
-import { Text, Notification } from "../../elements";
+import { Text } from "../../elements";
 
 import { requestAuthData, postAction, putJsonAction } from "../../shared/axios";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 import { grayBtnBorder } from "../../shared/colors";
 
-const UserPersonalInfo = (props) => {
+const EditPersonalInfoPage = (props) => {
   const dispatch = useDispatch();
-
-  // alert
-  const [showNotiPopup, setShowNotiPopup] = useState(false);
-  const { showNotification, notificationBody } = useSelector((state) => ({
-    showNotification: state.user.showNotification,
-    notificationBody: state.user.notificationBody,
-  }));
-
-  useEffect(() => {
-    if (showNotification) {
-      setShowNotiPopup(true);
-      setTimeout(() => {
-        setShowNotiPopup(false);
-        dispatch(userActions.setShowNotification(false));
-        dispatch(userActions.setNotificationBody(""));
-      }, 2000);
-    }
-  }, [showNotification]);
 
   const addressRef = useRef();
   const nameRef = useRef();
@@ -177,7 +159,6 @@ const UserPersonalInfo = (props) => {
 
   return (
     <>
-      {showNotiPopup && <Notification data={notificationBody} />}
       <HeaderInfo text="배송지 정보 및 계좌 설정" isSetting />
       <InfoContainer>
         <div style={{ margin: "0 0 10px 0" }}>
@@ -284,4 +265,4 @@ const EditBtn = styled.button`
   color: #666666;
 `;
 
-export default UserPersonalInfo;
+export default EditPersonalInfoPage;
