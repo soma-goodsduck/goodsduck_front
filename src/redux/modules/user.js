@@ -36,6 +36,7 @@ const SET_BANK_USER_NAME = "SET_BANK_USER_NAME";
 const CLEAR_SETTING_INFO = "CLEAR_SETTING_INFO";
 const SET_SHOW_NOTIFICATION = "SET_SHOW_NOTIFICATION";
 const SET_NOTIFICATION_BODY = "SET_NOTIFICATION_BODY";
+const SET_NOTIFICATION_LIST = "SET_NOTIFICATION_LIST";
 
 // action creators
 const signUp = createAction(SIGN_UP, (id, type) => ({ id, type }));
@@ -101,12 +102,16 @@ const setNotificationBody = createAction(
   SET_NOTIFICATION_BODY,
   (notificationBody) => ({ notificationBody }),
 );
+const setNotificationList = createAction(
+  SET_NOTIFICATION_LIST,
+  (notifications) => ({ notifications }),
+);
 
 // initialState
 const initialState = {
   user: "",
-  id: null,
   type: null,
+  id: null,
   idolsForSignup: 0,
   isLogin: false,
   showPopup: false,
@@ -127,6 +132,7 @@ const initialState = {
   bankUserName: "",
   showNotification: false,
   notificationBody: "",
+  notifications: [],
 };
 
 // middleware actions
@@ -319,6 +325,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.notificationBody = action.payload.notificationBody;
       }),
+    [SET_NOTIFICATION_LIST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.notifications = action.payload.notifications;
+      }),
   },
   initialState,
 );
@@ -351,6 +361,7 @@ const actionCreators = {
   clearSettingInfo,
   setShowNotification,
   setNotificationBody,
+  setNotificationList,
 };
 
 export { actionCreators };

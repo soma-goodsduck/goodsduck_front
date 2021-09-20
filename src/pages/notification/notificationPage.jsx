@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import styled from "styled-components";
-
+import { Icon, Text, Flex, LoginPopUp } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
-import LoginPopUp from "../../elements/loginPopUp";
 import NotificationRow from "./notificationRow";
-import { requestAuthData } from "../../shared/axios";
+import { grayBtnText } from "../../shared/colors";
 
+import { requestAuthData, deleteAction } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const NotificationPage = () => {
+  const dispatch = useDispatch();
+
+  const notifications = useSelector((state) => state.user.notifications);
   const [showPopup, setShowPopup] = useState(false);
-  const [notifications, setNotifications] = useState(null);
 
   const requestNotifications = async () => {
     const result = await requestAuthData("v2/users/notifications");
@@ -28,9 +33,23 @@ const NotificationPage = () => {
       return;
     }
 
-    setNotifications(getNotifications);
+    dispatch(userActions.setNotificationList(getNotifications));
   };
   useEffect(fnEffect, []);
+
+  const reqDeleteNotifications = async () => {
+    const result = await deleteAction("v1/users/notifications");
+    return result;
+  };
+  const handleDeleteNotifications = async () => {
+    const _handleDeleteNotifications = await reqDeleteNotifications();
+
+    if (_handleDeleteNotifications.response) {
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("알림을 전체 삭제했습니다."));
+      dispatch(userActions.setNotificationList([]));
+    }
+  };
 
   return (
     <>
@@ -38,6 +57,20 @@ const NotificationPage = () => {
       {!showPopup && (
         <div>
           <HeaderInfo text="알림" padding="0 16px" />
+          <Flex is_flex justify="flex-end" margin="55px 20px 0 0">
+            <DeleteBtn
+              onClick={() => {
+                handleDeleteNotifications();
+              }}
+            >
+              <Icon
+                width="16px"
+                margin="0 7px 0 0"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_uncheckbox.svg"
+              />
+              <Text color={grayBtnText}>전체 알림 삭제</Text>
+            </DeleteBtn>
+          </Flex>
           {notifications !== null && (
             <NotificationRowBox>
               {notifications.map((notification, idx) => (
@@ -54,7 +87,12 @@ const NotificationPage = () => {
 const NotificationRowBox = styled.div`
   overflow-y: auto;
   height: 95vh;
-  margin-top: 40px;
+  margin-top: 10px;
+`;
+
+const DeleteBtn = styled.button`
+  display: flex;
+  align-items: center;
 `;
 
 export default NotificationPage;
