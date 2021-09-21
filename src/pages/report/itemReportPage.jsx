@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import { Text, Icon } from "../../elements";
+import { Text, Icon, LoginPopUp } from "../../elements";
 import ReportDoubleCheckModal from "./reportDoubleCheckModal";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder } from "../../shared/colors";
@@ -26,6 +26,7 @@ const ItemReportPage = (props) => {
   const [reports, setReports] = useState([]);
   const [reportId, setReportId] = useState("");
   const [showDoubleCheckModal, setShowDoubleCheckModal] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const requestItemData = async () => {
     const result = await requestPublicData(`v1/items/${itemId}/summary`);
@@ -40,6 +41,10 @@ const ItemReportPage = (props) => {
     const getItemData = await requestItemData();
 
     if (getCategoryOfReport < 0 || getItemData < 0) {
+      if (getCategoryOfReport === -201 || getItemData === -201) {
+        setShowPopup(true);
+        return;
+      }
       history.push("/error");
       return;
     }
@@ -90,6 +95,7 @@ const ItemReportPage = (props) => {
 
   return (
     <>
+      {showPopup && <LoginPopUp />}
       {showDoubleCheckModal && (
         <ReportDoubleCheckModal
           text="정말로 신고하시겠습니까?"

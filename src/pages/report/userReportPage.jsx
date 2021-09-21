@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import styles from "./report.module.css";
 
-import { Text, Icon } from "../../elements";
+import { Text, Icon, LoginPopUp } from "../../elements";
 import ReportDoubleCheckModal from "./reportDoubleCheckModal";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import { grayBorder, white } from "../../shared/colors";
@@ -26,6 +26,7 @@ const UserReportPage = (props) => {
   const [reportContent, setReportContent] = useState("");
   const reportRef = useRef();
   const [nextOK, setNextOK] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const requestCategoryOfReport = async () => {
     const result = await requestAuthData(`v1/users/report-category/${bcrypt}`);
@@ -35,6 +36,10 @@ const UserReportPage = (props) => {
     const getCategoryOfReport = await requestCategoryOfReport();
 
     if (getCategoryOfReport < 0) {
+      if (getCategoryOfReport === -201) {
+        setShowPopup(true);
+        return;
+      }
       history.push("/error");
       return;
     }
@@ -88,6 +93,7 @@ const UserReportPage = (props) => {
 
   return (
     <>
+      {showPopup && <LoginPopUp />}
       {showDoubleCheckModal && (
         <ReportDoubleCheckModal
           text="정말로 신고하시겠습니까?"
@@ -95,59 +101,61 @@ const UserReportPage = (props) => {
         />
       )}
 
-      <ReportContainer>
-        <div>
-          <HeaderInfo text="신고하기" padding="0 16px" />
-          <TextBox>
-            <Text margin="10px 15px" medium>
-              {nick}님을 신고하는 이유를 선택해주세요.
-            </Text>
-          </TextBox>
-          {reports &&
-            reports.map((report) => (
-              <ReportBox
-                key={report.categoryId}
-                onClick={() => {
-                  setReportId(report.categoryId);
-                }}
-              >
-                <ReportInput
-                  className={styles.reportInput}
-                  id={report.categoryId}
-                  type="radio"
-                  checked={reportId === report.categoryId}
-                  onChange={() => setReportId(report.categoryId)}
-                />
-                <label
-                  className={styles.reportLabel}
-                  htmlFor={report.categoryId}
+      {!showPopup && (
+        <ReportContainer>
+          <div>
+            <HeaderInfo text="신고하기" padding="0 16px" />
+            <TextBox>
+              <Text margin="10px 15px" medium>
+                {nick}님을 신고하는 이유를 선택해주세요.
+              </Text>
+            </TextBox>
+            {reports &&
+              reports.map((report) => (
+                <ReportBox
+                  key={report.categoryId}
+                  onClick={() => {
+                    setReportId(report.categoryId);
+                  }}
                 >
-                  {report.categoryName}
-                </label>
-                <Icon
-                  width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-                />
-              </ReportBox>
-            ))}
-          <ReportTextBox
-            placeholder="신고 이유를 작성해주세요"
-            ref={reportRef}
-            onChange={() => {
-              setReportContent(reportRef.current.value);
+                  <ReportInput
+                    className={styles.reportInput}
+                    id={report.categoryId}
+                    type="radio"
+                    checked={reportId === report.categoryId}
+                    onChange={() => setReportId(report.categoryId)}
+                  />
+                  <label
+                    className={styles.reportLabel}
+                    htmlFor={report.categoryId}
+                  >
+                    {report.categoryName}
+                  </label>
+                  <Icon
+                    width="12px"
+                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  />
+                </ReportBox>
+              ))}
+            <ReportTextBox
+              placeholder="신고 이유를 작성해주세요"
+              ref={reportRef}
+              onChange={() => {
+                setReportContent(reportRef.current.value);
+              }}
+            />
+          </div>
+          <button
+            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
+            type="button"
+            onClick={() => {
+              setShowDoubleCheckModal(true);
             }}
-          />
-        </div>
-        <button
-          className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-          type="button"
-          onClick={() => {
-            setShowDoubleCheckModal(true);
-          }}
-        >
-          다음
-        </button>
-      </ReportContainer>
+          >
+            다음
+          </button>
+        </ReportContainer>
+      )}
     </>
   );
 };

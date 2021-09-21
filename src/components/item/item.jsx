@@ -50,12 +50,18 @@ const Item = ({ item, id }) => {
     if (!isLike) {
       const clickAction = await reqClickHeart();
       if (clickAction < 0) {
+        if (clickAction === -201) {
+          return;
+        }
         history.push("/error");
         return;
       }
     } else {
       const clickAction = await reqUnclickHeart();
       if (clickAction < 0) {
+        if (clickAction === -201) {
+          return;
+        }
         history.push("/error");
         return;
       }
@@ -65,58 +71,60 @@ const Item = ({ item, id }) => {
   };
 
   return (
-    <ItemBox onClick={(e) => clickItem(e)}>
-      <Flex className={styles.imgBox}>
-        <div style={{ position: "relative" }}>
-          {tradeType === "예약" && <ItemStatusBox text="예약 완료" />}
-          {tradeType === "완료" && <ItemStatusBox text="거래 완료" />}
-          <ItemImg src={item.imageUrl} className={styles.itemImg} />
-        </div>
-        {(tradeType === "구매" || tradeType === "판매") && (
-          <div className={styles.likeBox}>
-            <button
-              type="button"
-              aria-label="like"
-              className={isLike ? styles.clickLikeBtn : styles.likeBtn}
-              onClick={() => clickHeart()}
-            />
+    <>
+      <ItemBox onClick={(e) => clickItem(e)}>
+        <Flex className={styles.imgBox}>
+          <div style={{ position: "relative" }}>
+            {tradeType === "예약" && <ItemStatusBox text="예약 완료" />}
+            {tradeType === "완료" && <ItemStatusBox text="거래 완료" />}
+            <ItemImg src={item.imageUrl} className={styles.itemImg} />
           </div>
-        )}
-      </Flex>
-      <InfoBox>
-        <Flex justify="flex-start" padding="5px 0">
-          <Text bold margin="0 5px 0 0" color={color}>
-            {tradeType}
-          </Text>
-          <Title>
-            <Text isLong>{item.name}</Text>
-          </Title>
+          {(tradeType === "구매" || tradeType === "판매") && (
+            <div className={styles.likeBox}>
+              <button
+                type="button"
+                aria-label="like"
+                className={isLike ? styles.clickLikeBtn : styles.likeBtn}
+                onClick={() => clickHeart()}
+              />
+            </div>
+          )}
         </Flex>
-        <Flex justify="flex-start" padding="5px 0">
-          <Text priceSize bold isLong>
-            {numberWithCommas(item.price)}원
-          </Text>
-        </Flex>
-        <Flex justify="space-between" padding="5px 0 20px 0">
-          <Flex>
-            <UserImg
-              src={
-                item.itemOwner.imageUrl ||
-                "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
-              }
-            />
-            <UserName>
-              <Text isLong nickSize>
-                {item.itemOwner.nickName}
-              </Text>
-            </UserName>
+        <InfoBox>
+          <Flex justify="flex-start" padding="5px 0">
+            <Text bold margin="0 5px 0 0" color={color}>
+              {tradeType}
+            </Text>
+            <Title>
+              <Text isLong>{item.name}</Text>
+            </Title>
           </Flex>
-          <Text color="#bbbbbb" timeSize>
-            {timeForToday(item.itemCreatedAt)}
-          </Text>
-        </Flex>
-      </InfoBox>
-    </ItemBox>
+          <Flex justify="flex-start" padding="5px 0">
+            <Text priceSize bold isLong>
+              {numberWithCommas(item.price)}원
+            </Text>
+          </Flex>
+          <Flex justify="space-between" padding="5px 0 20px 0">
+            <Flex>
+              <UserImg
+                src={
+                  item.itemOwner.imageUrl ||
+                  "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                }
+              />
+              <UserName>
+                <Text isLong nickSize>
+                  {item.itemOwner.nickName}
+                </Text>
+              </UserName>
+            </Flex>
+            <Text color="#bbbbbb" timeSize>
+              {timeForToday(item.itemCreatedAt)}
+            </Text>
+          </Flex>
+        </InfoBox>
+      </ItemBox>
+    </>
   );
 };
 

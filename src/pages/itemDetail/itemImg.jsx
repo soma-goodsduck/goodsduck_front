@@ -7,7 +7,7 @@ import _ from "lodash";
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
-import { Flex } from "../../elements/index";
+import { Flex, LoginPopUp } from "../../elements/index";
 import { postAction, deleteAction } from "../../shared/axios";
 
 import { actionCreators as itemActions } from "../../redux/modules/item";
@@ -50,6 +50,7 @@ const ItemImg = ({ id, item, onClick }) => {
   }, [scrollHeight]);
 
   // 찜 버튼
+  const [showPopup, setShowPopup] = useState(false);
   const [isLike, setIsLike] = useState(item.isLike);
   const reqClickHeart = async () => {
     const result = await postAction(`v1/items/${id}/like`);
@@ -64,12 +65,20 @@ const ItemImg = ({ id, item, onClick }) => {
     if (!isLike) {
       const clickAction = await reqClickHeart();
       if (clickAction < 0) {
+        if (clickAction === -201) {
+          setShowPopup(true);
+          return;
+        }
         history.push("/error");
         return;
       }
     } else {
       const clickAction = await reqUnclickHeart();
       if (clickAction < 0) {
+        if (clickAction === -201) {
+          setShowPopup(true);
+          return;
+        }
         history.push("/error");
         return;
       }
@@ -109,77 +118,80 @@ const ItemImg = ({ id, item, onClick }) => {
   }, [imgNumber]);
 
   return (
-    <Flex className={styles.imgBox}>
-      <div className={styles.imgDataBox} id="itemImg">
-        <Img src={item.images[imgNumber].url} className={styles.itemImg} />
-        <span className={styles.watermark}>
-          ⓒ GOODSDUCK ({item.itemOwner.nickName})
-        </span>
-      </div>
-      <Btns
-        style={
-          isOverImg
-            ? {
-                backgroundColor: "#ffffff",
-                borderBottom: `1px solid ${grayBorder}`,
-              }
-            : { backgroundColor: "" }
-        }
-      >
-        {!item.images[imgNumber].isBright && (
-          <button
-            type="button"
-            aria-label="back"
-            className={isOverImg ? styles.backBtnBlack : styles.backBtn}
-            onClick={() => {
-              history.push("/");
-              dispatch(itemActions.clearPriceProposeInfo());
-            }}
-          />
-        )}
-        {item.images[imgNumber].isBright && (
-          <button
-            type="button"
-            aria-label="back"
-            className={styles.backBtnBlack}
-            onClick={() => {
-              history.push("/");
-              dispatch(itemActions.clearPriceProposeInfo());
-            }}
-          />
-        )}
-        <div>
-          <button
-            type="button"
-            aria-label="like"
-            className={isLike ? styles.clickLikeBtn : styles.likeBtn}
-            onClick={() => clickHeart()}
-          />
-          <button
-            type="button"
-            aria-label="info"
-            className={styles.infoBtn}
-            onClick={() => clickDots()}
-          />
+    <>
+      {showPopup && <LoginPopUp />}
+      <Flex className={styles.imgBox}>
+        <div className={styles.imgDataBox} id="itemImg">
+          <Img src={item.images[imgNumber].url} className={styles.itemImg} />
+          <span className={styles.watermark}>
+            ⓒ GOODSDUCK ({item.itemOwner.nickName})
+          </span>
         </div>
-      </Btns>
-      {!isSwipeBtnOverImg && (
-        <>
-          <button
-            type="button"
-            aria-label="previous img"
-            className={showPreviousImgBtn ? styles.previousImgBtn : ""}
-            onClick={() => imgClickHandler("previous")}
-          />
-          <button
-            type="button"
-            aria-label="next img"
-            className={showNextImgBtn ? styles.nextImgBtn : ""}
-            onClick={() => imgClickHandler("next")}
-          />
-        </>
-      )}
-    </Flex>
+        <Btns
+          style={
+            isOverImg
+              ? {
+                  backgroundColor: "#ffffff",
+                  borderBottom: `1px solid ${grayBorder}`,
+                }
+              : { backgroundColor: "" }
+          }
+        >
+          {!item.images[imgNumber].isBright && (
+            <button
+              type="button"
+              aria-label="back"
+              className={isOverImg ? styles.backBtnBlack : styles.backBtn}
+              onClick={() => {
+                history.push("/");
+                dispatch(itemActions.clearPriceProposeInfo());
+              }}
+            />
+          )}
+          {item.images[imgNumber].isBright && (
+            <button
+              type="button"
+              aria-label="back"
+              className={styles.backBtnBlack}
+              onClick={() => {
+                history.push("/");
+                dispatch(itemActions.clearPriceProposeInfo());
+              }}
+            />
+          )}
+          <div>
+            <button
+              type="button"
+              aria-label="like"
+              className={isLike ? styles.clickLikeBtn : styles.likeBtn}
+              onClick={() => clickHeart()}
+            />
+            <button
+              type="button"
+              aria-label="info"
+              className={styles.infoBtn}
+              onClick={() => clickDots()}
+            />
+          </div>
+        </Btns>
+        {!isSwipeBtnOverImg && (
+          <>
+            <button
+              type="button"
+              aria-label="previous img"
+              className={showPreviousImgBtn ? styles.previousImgBtn : ""}
+              onClick={() => imgClickHandler("previous")}
+            />
+            <button
+              type="button"
+              aria-label="next img"
+              className={showNextImgBtn ? styles.nextImgBtn : ""}
+              onClick={() => imgClickHandler("next")}
+            />
+          </>
+        )}
+      </Flex>
+    </>
   );
 };
 
