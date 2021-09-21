@@ -39,6 +39,13 @@ const Login = () => {
       return;
     }
 
+    if (_handleLogin.role === "RESIGNED") {
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("탈퇴한 계정입니다."));
+      history.replace("/login");
+      return;
+    }
+
     if (!_handleLogin.emailSuccess || !_handleLogin.passwordSuccess) {
       dispatch(userActions.setShowNotification(true));
       dispatch(

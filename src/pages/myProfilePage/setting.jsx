@@ -8,13 +8,18 @@ import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
 
 import HeaderInfo from "../../components/haeder/headerInfo";
-import { Icon, Text, LoginPopUp, DoubleCheckModal2 } from "../../elements";
+import { Icon, Text, LoginPopUp } from "../../elements";
 import { blackBtn, darkRed, grayText } from "../../shared/colors";
 import { notification } from "../../shared/notification";
-import { requestAuthData, deleteAction } from "../../shared/axios";
+import {
+  requestAuthData,
+  deleteAction,
+  putJsonAction,
+} from "../../shared/axios";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
+import DeleteAccountModal from "./deleteAccountModal";
 
 const Setting = () => {
   const dispatch = useDispatch();
@@ -73,16 +78,43 @@ const Setting = () => {
     setIsNotificationOn(false);
   };
 
-  const deleteAccount = () => {
+  const handleDleteAccount = () => {
     setDoubleCheckModal(true);
+  };
+
+  const reqDeleteAccount = async (pw) => {
+    const result = await putJsonAction("v2/users", { password: pw });
+    return result;
+  };
+  const deleteAccount = async (pw) => {
+    const _deleteAccount = await reqDeleteAccount(pw);
+    if (_deleteAccount < 0) {
+      history.push("/error");
+      return;
+    }
+
+    if (_deleteAccount.response) {
+      setDoubleCheckModal(false);
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("GOODSDUCK을 탈퇴했습니다."));
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("likeIdolGroups");
+      localStorage.removeItem("filtering");
+      localStorage.removeItem("filter_idolGroup");
+      history.replace("/");
+    } else {
+      window.alert("회원탈퇴에 실패했습니다.");
+    }
   };
 
   return (
     <>
       {showDoubleCheckModal && (
-        <DoubleCheckModal2
-          text="죄송합니다. 회원탈퇴를 원하시는 경우 고객센터로 문의해주세요."
-          onOkClick={() => {
+        <DeleteAccountModal
+          onOkClick={(pw) => {
+            deleteAccount(pw);
+          }}
+          onNoClick={() => {
             setDoubleCheckModal(false);
           }}
         />
@@ -201,7 +233,7 @@ const Setting = () => {
               </BtnBox>
               <BtnBox
                 onClick={() => {
-                  deleteAccount();
+                  handleDleteAccount();
                 }}
               >
                 <Text color={blackBtn} size="18px" medium color={darkRed}>
