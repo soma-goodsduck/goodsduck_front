@@ -1,0 +1,75 @@
+body,
+.app {
+  font-family: "Noto Sans KR", sans-serif;
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.app {
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.app::-webkit-scrollbar,
+.appImg {
+  display: none;
+}
+
+@media screen and (min-width: 415px) {
+  .app {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 415px;
+    margin-top: 0;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .app {
+    left: 10%;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .app {
+    left: 50%;
+  }
+  .appImg {
+    position: absolute;
+    top: 0;
+    left: 10%;
+
+    display: block;
+    width: 350px;
+    height: 700px;
+
+    background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/appPromotion.png");
+    background-size: cover;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .appImg {
+    left: 20%;
+  }
+}
+
+@media screen and (min-width: 1900px) {
+  .appImg {
+    left: 30%;
+  }
+}

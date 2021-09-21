@@ -1,0 +1,23 @@
+.previewContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.previewImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+.deleteBtn {
+  transform: translate(-110%, -380%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg");
+  background-size: cover;
+  z-index: 3;
+}

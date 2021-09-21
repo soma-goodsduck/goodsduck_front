@@ -1,0 +1,34 @@
+@import "../../shared/colors.css";
+
+input,
+input::placeholder {
+  font-size: 16px;
+}
+
+.wonSign {
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.acceptBtn,
+.rejectBtn {
+  width: 100%;
+  padding: 8px 15px;
+  border-radius: 10px;
+}
+
+.acceptBtn {
+  background-color: var(--yellow);
+  margin-right: 10px;
+}
+
+.rejectBtn {
+  background-color: var(--lightGray2);
+}
+
+.priceInput input::placeholder {
+  font-size: 15px;
+  font-weight: 400;
+}

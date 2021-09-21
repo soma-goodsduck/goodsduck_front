@@ -1,0 +1,162 @@
+@import "../../shared/colors.css";
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 10px;
+  background-color: var(--white);
+  z-index: 3;
+}
+
+.iconBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatBadge {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--green);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 23px;
+  padding-bottom: 4px;
+  position: relative;
+  bottom: -13px;
+  right: -1px;
+}
+
+.chatBadgeZero {
+  visibility: hidden;
+}
+
+.isHomeIcon,
+.isNotHomeIcon,
+.isChatIcon,
+.isNotChatIcon,
+.isNotNewIcon,
+.isCommunityIcon,
+.isNotCommunityIcon,
+.isProfileIcon,
+.isNotProfileIcon {
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  cursor: pointer;
+  margin: 0 0 10px 0;
+}
+
+.isHomeIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_home_click.svg");
+}
+.isNotHomeIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_home.svg");
+}
+.isChatIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_chatting_click.svg");
+}
+.isNotChatIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_chatting.svg");
+}
+.isNotNewIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_upload.svg");
+}
+.isCommunityIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_newCommunity_click.svg");
+}
+.isNotCommunityIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_newCommunity.svg");
+}
+.isProfileIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_profile_click.svg");
+}
+.isNotProfileIcon {
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_profile.svg");
+}
+
+.isHomeText,
+.isNotHomeText,
+.isChatText,
+.isNotChatText,
+.isNotNewText,
+.isCommunityText,
+.isNotCommunityText,
+.isProfileText,
+.isNotProfileText {
+  font-size: 13px;
+}
+
+.isHomeText,
+.isChatText,
+.isNewText,
+.isCommunityText,
+.isProfileText {
+  color: #000000;
+}
+.isNotHomeText,
+.isNotChatText,
+.isNotNewText,
+.isNotCommunityText,
+.isNotProfileText {
+  color: #bbbbbb;
+}
+
+@media screen and (min-width: 415px) {
+  .nav {
+    width: 415px;
+  }
+
+  .chatBadge {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    bottom: -15px;
+    right: -3px;
+  }
+
+  .isHomeIcon,
+  .isNotHomeIcon,
+  .isChatIcon,
+  .isNotChatIcon,
+  .isNotNewIcon,
+  .isCommunityIcon,
+  .isNotCommunityIcon,
+  .isProfileIcon,
+  .isNotProfileIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .isHomeText,
+  .isNotHomeText,
+  .isChatText,
+  .isNotChatText,
+  .isNotNewText,
+  .isCommunityText,
+  .isNotCommunityText,
+  .isProfileText,
+  .isNotProfileText {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .nav {
+    left: 10%;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .nav {
+    left: 50%;
+  }
+}

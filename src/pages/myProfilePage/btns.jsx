@@ -1,0 +1,118 @@
+import React from "react";
+
+import styled from "styled-components";
+import { Icon, Flex, Text } from "../../elements";
+import { grayText } from "../../shared/colors";
+
+import { history } from "../../redux/configureStore";
+
+const Btns = ({ myProfile }) => {
+  return (
+    <>
+      {myProfile && (
+        <Flex margin="15px">
+          <BtnGrid>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                history.push("/favorites");
+              }}
+            >
+              <Text bold size="22px" margin="10px 0 0 0">
+                {myProfile.countOfLikes > 9999
+                  ? "9999+"
+                  : myProfile.countOfLikes}
+              </Text>
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                찜한 굿즈
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                history.push("/reviews");
+              }}
+            >
+              <Text bold size="22px" margin="10px 0 0 0">
+                {myProfile.countOfReceivedReviews > 9999
+                  ? "9999+"
+                  : myProfile.countOfReceivedReviews}
+              </Text>
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                후기
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                history.push("/price-proposes");
+              }}
+            >
+              <Text bold size="22px" margin="10px 0 0 0">
+                {myProfile.countOfReceievedPriceProposes > 9999
+                  ? "9999+"
+                  : myProfile.countOfReceievedPriceProposes}
+              </Text>
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                가격제시
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                history.push("/notice");
+              }}
+            >
+              <Icon
+                width="40px"
+                margin="0 auto"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notice.svg"
+              />
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                공지사항
+              </Text>
+            </Flex>
+            <Flex
+              is_col
+              justify="space-between"
+              pointer
+              _onClick={() => {
+                document.location.href = "http://pf.kakao.com/_njxaWs";
+              }}
+            >
+              <Icon
+                width="40px"
+                margin="0 auto"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
+              />
+              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+                고객센터
+              </Text>
+            </Flex>
+          </BtnGrid>
+        </Flex>
+      )}
+    </>
+  );
+};
+
+const BtnGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 70px);
+  grid-auto-rows: 70px;
+  margin-top: 20px;
+
+  @media screen and (min-width: 415px) {
+    grid-template-columns: repeat(5, 80px);
+  }
+`;
+
+export default Btns;

@@ -1,0 +1,34 @@
+/* .filtering,
+.nonFiltering {
+  cursor: pointer;
+  margin-top: 160px;
+  margin-bottom: 50px;
+}
+
+.filtering {
+  margin-top: 210px;
+} */
+
+/* 
+@media screen and (max-height: 668px) {
+  .filtering {
+    margin-top: 560px;
+  }
+
+  .nonFiltering {
+    margin-top: 250px;
+  }
+} */
+
+/* @media screen and (min-width: 415px) {
+  .filtering,
+  .nonFiltering {
+    margin-bottom: 80px;
+  }
+  .filtering {
+    margin-top: 220px;
+  }
+  .nonFiltering {
+    margin-top: 160px;
+  }
+} */

@@ -1,0 +1,231 @@
+@import "../../shared/colors.css";
+
+.line {
+  width: 100%;
+  height: 1px;
+  margin: 30px auto;
+  background-color: var(--grayBorder);
+}
+
+.btnUserShop {
+  width: 100%;
+}
+
+/* itemNav */
+
+.itemNavCol,
+.itemNavRow {
+  display: flex;
+  align-items: center;
+}
+
+.itemNavRow {
+  justify-content: space-between;
+}
+
+.itemNavCol {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.btnChat,
+.btnChatCol,
+.btnReChat,
+.btnReChatCol {
+  height: 50px;
+  background: var(--yellow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  margin-right: 10px;
+}
+
+.btnChatCol,
+.btnPriceCol,
+.btnReChatCol,
+.btnReChatCol {
+  width: 44vw;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.btnPrice,
+.btnPriceCol,
+.btnRePrice,
+.btnRePriceCol,
+.btnSoldout,
+.btnSoldoutCol {
+  height: 50px;
+  background: var(--blackBtn);
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnPrice {
+  font-size: 13px;
+}
+
+.btnRePrice {
+  width: 65%;
+  font-size: 15px;
+}
+.btnRePriceCol {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btnReChat,
+.btnSoldout {
+  width: 220px;
+  font-size: 15px;
+}
+.btnReChatCol,
+.btnSoldoutCol {
+  width: 90vw;
+  margin-top: 10px;
+}
+
+/*  */
+
+.imgBox {
+  position: relative;
+  width: 100%;
+}
+
+.itemImg {
+  width: 100%;
+  height: auto;
+}
+
+.previousImgBtn {
+  position: absolute;
+  top: 190px;
+  left: 10px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_previous.png");
+  background-size: cover;
+  cursor: pointer;
+}
+.nextImgBtn {
+  position: absolute;
+  top: 190px;
+  right: 10px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_next.png");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.backBtn {
+  z-index: 2;
+  width: 16px;
+  height: 28px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_w.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+.backBtnBlack {
+  z-index: 2;
+  width: 16px;
+  height: 28px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.infoBtn {
+  z-index: 2;
+  width: 15px;
+  height: 30px;
+  margin-left: 10px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+/* 찜 버튼 */
+.likeBtn {
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.clickLikeBtn {
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.filteringBtn {
+  font-size: 14px;
+  height: 100%;
+  padding: 5px 10px;
+  color: var(--grayBtnText);
+  background-color: var(--lightGray);
+  border: 1px solid var(--blackBtn);
+  border-radius: 15px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+/* 워터마크 */
+.imgDataBox {
+  position: relative;
+}
+.watermark {
+  position: absolute;
+  top: 93vw;
+  left: 10px;
+  z-index: 2;
+  color: gray;
+  opacity: 0.5;
+}
+
+@media screen and (min-width: 415px) {
+  .btnChat {
+    font-size: 14px;
+  }
+
+  .btnPrice {
+    font-size: 14px;
+  }
+
+  .btnChatCol,
+  .btnPriceCol {
+    width: 185px;
+  }
+
+  .btnReChat,
+  .btnSoldout {
+    width: 240px;
+  }
+  .btnReChatCol,
+  .btnSoldoutCol {
+    width: 380px;
+  }
+
+  .backBtn,
+  .infoBtn,
+  .likeBtn,
+  .clickLikeBtn {
+    top: 20px;
+  }
+
+  /* 워터마크 */
+  .watermark {
+    top: 390px;
+  }
+}

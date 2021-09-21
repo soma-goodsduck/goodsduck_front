@@ -1,0 +1,24 @@
+@import "../../shared/colors.css";
+
+.nextBtn,
+.nextOKBtn {
+  width: 95%;
+  padding: 18px;
+  margin: 10px;
+  border-radius: 5px;
+}
+.nextBtn {
+  color: var(--white);
+  background-color: var(--gray);
+  cursor: auto;
+}
+
+.nextOKBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
+}
+
+.reportInput:checked + .reportLabel {
+  color: var(--red);
+  font-weight: 600;
+}

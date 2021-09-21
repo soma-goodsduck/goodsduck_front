@@ -1,0 +1,73 @@
+@import "../../shared/colors.css";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--white);
+  z-index: 15;
+}
+
+.search {
+  font-size: 18px;
+  width: 62vw;
+  color: black;
+  background-color: var(--white);
+  border-radius: 3px;
+  padding: 0 8px;
+}
+
+.search::placeholder {
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.searchKeyword {
+  width: 70vw;
+  background-color: #f2f3f6;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.searchKeyword::placeholder {
+  color: var(--blackBtn);
+  font-size: 18px;
+}
+
+.searchIcon {
+  width: 18px;
+  position: absolute;
+  margin-left: 10px;
+}
+
+@media screen and (min-width: 415px) {
+  .header {
+    width: 415px;
+  }
+  .filteringHeader {
+    width: 415px;
+    left: 30%;
+  }
+  .search {
+    width: 270px;
+  }
+  .searchKeyword {
+    width: 300px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .header,
+  .headerInfoBox {
+    left: 10%;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .header,
+  .headerInfoBox {
+    left: 50%;
+  }
+}
