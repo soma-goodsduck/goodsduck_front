@@ -54,9 +54,6 @@ const MessageForm = ({ onOpenAttachment }) => {
       `chatRooms/${itemId}/${chatRoomId}`,
     );
 
-    // 채팅방 최신순 정렬을 위한 timestamp 업데이트
-    chatRoomRef.update({ timestamp: firebase.database.ServerValue.TIMESTAMP });
-
     // 만약 상대방이 존재하지 않거나 아이템이 삭제된 채팅방이라면 메세지를 보낼 수 없도록 알림
     chatRoomRef.on("value", (snapshot) => {
       const data = snapshot.val();
@@ -65,7 +62,7 @@ const MessageForm = ({ onOpenAttachment }) => {
           data.createdBy.isPresented === false) ||
         (data.createdWith.id !== userId &&
           data.createdWith.isPresented === false) ||
-        isItemExist
+        isItemExist === false
       ) {
         dispatch(chatActions.setReadyToSendMessage(false));
         setShowNotice(true);
@@ -129,6 +126,14 @@ const MessageForm = ({ onOpenAttachment }) => {
         type: "CHAT",
       };
       postAction("v2/chat/notification", notiJson);
+
+      // 채팅방 최신순 정렬을 위한 timestamp 업데이트
+      const chatRoomRef = firebaseDatabase.ref(
+        `chatRooms/${itemId}/${chatRoomId}`,
+      );
+      chatRoomRef.update({
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+      });
     } catch (error) {
       console.error(error.message);
       setErrors((prev) => prev.concat(error.message));
@@ -186,15 +191,13 @@ const MessageForm = ({ onOpenAttachment }) => {
               }
               disabled={loading}
               _onClick={() => {
-                if (!readyToSendMessage) {
-                  handleSubmit();
-                }
+                handleSubmit();
               }}
             />
           </Flex>
         </MessageFormBox>
       ) : (
-        <MessageFormBox onSubmit={handleSubmit}>
+        <MessageFormBox>
           <Flex is_flex justify="space-between" padding="20px">
             <Icon
               width="28px"

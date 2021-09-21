@@ -4,7 +4,7 @@ import styled from "styled-components";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemRow from "../../components/itemRow/itemRow";
 import PriceRow from "./priceRow";
-import { Text, PopUp, FilteringModal } from "../../elements";
+import { Text, PopUp, FilteringModal, DoubleCheckModal2 } from "../../elements";
 
 import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { grayBorder, grayBtnText } from "../../shared/colors";
@@ -18,6 +18,7 @@ const PriceProposeListPage = ({ history }) => {
   const [itemData, setItemData] = useState(null);
   const [priceList, setPriceLists] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [showNoItem, setShowNoItem] = useState(false);
 
   const requestItemData = async () => {
     const result = await requestPublicData(`v1/items/${itemId}/summary`);
@@ -32,6 +33,10 @@ const PriceProposeListPage = ({ history }) => {
     const getPriceList = await requestPriceList();
 
     if (getItemSummary < 0 || getPriceList < 0) {
+      if (getItemSummary === -101) {
+        setShowNoItem(true);
+        return;
+      }
       if (getPriceList === -201) {
         setShowPopup(true);
         return;
@@ -89,6 +94,14 @@ const PriceProposeListPage = ({ history }) => {
 
   return (
     <>
+      {showNoItem && (
+        <DoubleCheckModal2
+          text="삭제된 아이템입니다"
+          onOkClick={() => {
+            history.goBack();
+          }}
+        />
+      )}
       {showPopup && (
         <PopUp
           is_bold

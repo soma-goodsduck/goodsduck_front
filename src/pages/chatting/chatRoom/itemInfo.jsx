@@ -49,6 +49,7 @@ const ItemInfo = () => {
       if (getItemData === -101) {
         dispatch(chatActions.setItemIsNotExisted());
         setIsNotExist(true);
+        dispatch(chatActions.setReadyToSendMessage(false));
         setColor(gray);
         return;
       }

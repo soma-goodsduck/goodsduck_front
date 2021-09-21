@@ -1,7 +1,7 @@
 import React from "react";
 
 import styled from "styled-components";
-import { grayBtn, blackBtn, white } from "../shared/colors";
+import { blackBtn, white } from "../shared/colors";
 
 const DoubleCheckModal2 = (props) => {
   const { text, onOkClick, height } = props;
