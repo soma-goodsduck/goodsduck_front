@@ -20,6 +20,7 @@ const SET_FILES = "SET_FILES";
 const SET_IMAGES = "SET_IMAGES";
 const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
+const CLEAR_SELECT_IDOL = "CLEAR_SELECT_IDOL";
 
 // action creators
 const setItem = createAction(SET_ITEM, (item) => ({ item }));
@@ -51,6 +52,7 @@ const setFiles = createAction(SET_FILES, (files) => ({ files }));
 const setImages = createAction(SET_IMAGES, (images) => ({ images }));
 const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
+const clearSelectIdol = createAction(CLEAR_SELECT_IDOL, () => ({}));
 
 // initialState
 const initialState = {
@@ -253,6 +255,13 @@ export default handleActions(
         draft.images = [];
         draft.item_id = 0;
       }),
+    [CLEAR_SELECT_IDOL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.idol_group_id = null;
+        draft.idol_member_id = null;
+        draft.idol_group_name = "";
+        draft.idol_member_name = "";
+      }),
   },
   initialState,
 );
@@ -273,6 +282,7 @@ const actionCreators = {
   setImages,
   deleteImage,
   clearAction,
+  clearSelectIdol,
   updateItemAction,
 };
 

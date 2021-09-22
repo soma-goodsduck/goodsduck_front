@@ -201,6 +201,7 @@ const ItemUpload = (props) => {
                 <div
                   className={styles.selectBtn}
                   onClick={() => {
+                    dispatch(newItemActions.clearSelectIdol());
                     history.replace("/select-idol");
                   }}
                 >
