@@ -171,11 +171,11 @@ const signupAction = (user) => {
     nickName: user.nick,
     phoneNumber: user.phone,
     likeIdolGroupsId: user.idols,
+    marketingAgree: user.isMarketingAgree,
   };
   return async function (dispatch, getState, { history }) {
     const signup = await postActionForNonUser("v2/users/sign-up", json);
 
-    console.log(signup);
     if (signup < 0) {
       history.replace("/login");
       window.alert("회원가입에 실패했습니다.");

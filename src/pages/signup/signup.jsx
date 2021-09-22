@@ -6,10 +6,11 @@ import _ from "lodash";
 
 import styled from "styled-components";
 import styles from "./signup.module.css";
-import { Grid, Flex, Text } from "../../elements";
+import { Grid, Flex, Text, Icon } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import IdolGroups from "./idolGroups";
 import Timer from "./timer";
+import AgreementOfTerms from "./agreementOfTerms";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { postActionForNonUser } from "../../shared/axios";
@@ -40,12 +41,18 @@ const Signup = () => {
   const [showTimer, setShowTimer] = useState(false); // 인증 요청과 동시에 타이머 시작
   const [smsCode, setSmsCode] = useState(""); // 인증번호를 입력 받음
   const [isValidated, setisValidated] = useState(false); // 인증번호가 맞는지 확인
+  const [isResignedUser, setIsResignedUser] = useState(false); // 탈퇴한 유저인지 확인
 
   const [nick, setNick] = useState("");
   const [isUsedNick, setIsUsedNick] = useState(false);
 
   const idol = useSelector((state) => state.user.idolsForSignup);
   const [isIdolSelected, setIsIdolSelected] = useState(false);
+
+  // 이용약관, 개인정보, 마케팅 정보 동의
+  const [isServiceAgree, setIsServiceAgree] = useState(false);
+  const [isPrivacyAgree, setIsPrivacyAgree] = useState(false);
+  const [isMarketingAgree, setIsMarketingAgree] = useState(false);
 
   // const type = useSelector((state) => state.user.type);
   // const id = useSelector((state) => state.user.id);
@@ -59,13 +66,25 @@ const Signup = () => {
       nick !== "" &&
       !isUsedNick &&
       isIdolSelected &&
-      isValidated
+      isValidated &&
+      isServiceAgree &&
+      isPrivacyAgree
     ) {
       setNextOK(true);
     } else {
       setNextOK(false);
     }
-  }, [isUsedEmail, pw, pw2, nick, isUsedNick, isIdolSelected, isValidated]);
+  }, [
+    isUsedEmail,
+    pw,
+    pw2,
+    nick,
+    isUsedNick,
+    isIdolSelected,
+    isValidated,
+    isServiceAgree,
+    isPrivacyAgree,
+  ]);
 
   // 이메일 중복 체크
   const reqUsedEmailCheckPost = async (_email) => {
@@ -211,10 +230,15 @@ const Signup = () => {
     ) {
       setIsUsedPhone(true); // 이미 가입한 적 있는 번호
       setIsPhoneOk(false);
+      setIsResignedUser(false);
       // setSnsType(_usedPhCheckPost.response);
+    } else if (_usedPhCheckPost.response === "RESIGNED") {
+      setIsUsedPhone(true);
+      setIsResignedUser(true); // 탈퇴한 유저
     } else {
       setIsUsedPhone(false); // 휴대폰 번호 가입한 적 없음
       setIsPhoneOk(true); // 가입한 적 없으므로 인증 요청 가능
+      setIsResignedUser(false);
     }
   }, 500);
   const usedPhCheck = useCallback(usedPhCheckPost, []);
@@ -259,13 +283,28 @@ const Signup = () => {
     setIsIdolSelected(true);
   };
 
+  const handleAgreeAllClick = () => {
+    setIsServiceAgree(true);
+    setIsPrivacyAgree(true);
+    setIsMarketingAgree(true);
+  };
+  const handleAgreeServiceClick = () => {
+    setIsServiceAgree(!isServiceAgree);
+  };
+  const handleAgreePrivacyClick = () => {
+    setIsPrivacyAgree(!isPrivacyAgree);
+  };
+  const handleAgreeMarketingClick = () => {
+    setIsMarketingAgree(!isMarketingAgree);
+  };
+
   const signup = () => {
     if (!nextOK) {
       return;
     }
 
     const idols = [Number(idol)];
-    const user = { email, pw, nick, phone, idols };
+    const user = { email, pw, nick, phone, idols, isMarketingAgree };
     dispatch(userActions.signupAction(user));
 
     // 소셜 로그인했을 때 회원가입
@@ -375,10 +414,16 @@ const Signup = () => {
                 휴대폰 번호(- 없이)를 다시 한 번 확인해주세요.
               </Text>
             )}
-            {isUsedPhone && (
+            {isUsedPhone && !isResignedUser && (
               <Text color={red} bold height="1.5" margin="10px 0 0 0">
                 {/* {snsType}를 통해 이미 가입한 적 있는 번호입니다. */}
                 이미 가입된 번호입니다.
+              </Text>
+            )}
+            {isUsedPhone && isResignedUser && (
+              <Text color={red} bold height="1.5" margin="10px 0 0 0">
+                탈퇴한 유저의 번호입니다. 탈퇴한지 30일 후에 재가입 할 수
+                있습니다.
               </Text>
             )}
             {/* 이전에 가입한 적이 없다면 SMS 인증 진행 */}
@@ -441,6 +486,15 @@ const Signup = () => {
             <IdolGroups onUpdate={updateIdols} />
           </Grid>
         </Box>
+        <Grid padding="16px 0px">
+          <LabelText>GOODSDUCK 이용을 위한 약관 동의</LabelText>
+          <AgreementOfTerms
+            onAllClick={handleAgreeAllClick}
+            onServiceClick={handleAgreeServiceClick}
+            onPrivacyClick={handleAgreePrivacyClick}
+            onMarketingClick={handleAgreeMarketingClick}
+          />
+        </Grid>
       </div>
       <button
         className={nextOK ? styles.nextOKBtn : styles.nextBtn}
@@ -456,15 +510,9 @@ const Signup = () => {
 };
 
 const SignUpBox = styled.div`
-  height: 128%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 0 20px;
-
-  @media screen and (min-width: 415px) {
-    height: 100%;
-  }
 `;
 
 const Box = styled.div`
