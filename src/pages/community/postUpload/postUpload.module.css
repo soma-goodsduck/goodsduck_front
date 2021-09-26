@@ -1,0 +1,61 @@
+@import "../../../shared/colors.css";
+
+/* 전체적인 선택 버튼 */
+.selectBtn {
+  width: 340px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 16px;
+  margin: 10px 0;
+  border-bottom: 1px solid var(--grayBorder);
+  cursor: pointer;
+}
+
+.inputText::placeholder {
+  font-size: 16px;
+  color: var(--grayText);
+}
+
+/* 일반글, 나눔글 버튼 */
+.typeBtn {
+  border: 2px solid var(--grayBorder);
+  border-radius: 5px;
+}
+
+.clickTypeBtn {
+  border: 2px solid var(--yellow);
+  background-color: var(--yellow);
+  color: var(--blackBtn);
+  border-radius: 5px;
+}
+
+.typeBtn:first-child,
+.clickTypeBtn:first-child {
+  margin-right: 8px;
+}
+
+/* 등록완료 버튼 */
+.nextBtn,
+.nextOKBtn {
+  width: 100%;
+  padding: 18px;
+  border-radius: 5px;
+}
+.nextBtn {
+  color: var(--white);
+  background-color: var(--gray);
+  cursor: auto;
+}
+
+.nextOKBtn {
+  color: var(--blackBtn);
+  background-color: var(--yellow);
+}
+
+@media screen and (min-width: 415px) {
+  .selectBtn {
+    width: 380px;
+  }
+}
