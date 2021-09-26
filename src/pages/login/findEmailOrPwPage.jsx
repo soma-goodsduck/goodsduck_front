@@ -18,12 +18,12 @@ const FindEmailOrPwPage = (props) => {
   const dispatch = useDispatch();
 
   const [phone, setPhone] = useState("");
-  const [isPhoneOk, setIsPhoneOk] = useState(false); // ph 유효성 체크
-  const [isUsedPhone, setIsUsedPhone] = useState(false); // ph 가입 여부 체크
+  const [isPhoneOk, setIsPhoneOk] = useState(false); // ph 유효성 체크 + 가입여부
   const [showSmsValidateBtn, setShowSmsValidateBtn] = useState(false); // 인증 요청 버튼을 눌러서 인증번호를 확인받을 수 있는 창을 보여줌
   const [showTimer, setShowTimer] = useState(false); // 인증 요청과 동시에 타이머 시작
   const [smsCode, setSmsCode] = useState(""); // 인증번호를 입력 받음
   const [isValidated, setisValidated] = useState(false); // 인증번호가 맞는지 확인
+  const [isResignedUser, setIsResignedUser] = useState(false); // 탈퇴한 유저인지 확인
 
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
@@ -53,12 +53,15 @@ const FindEmailOrPwPage = (props) => {
       return;
     }
 
+    console.log(_usedPhCheckPost);
     if (_usedPhCheckPost.response === "GOODSDUCK") {
-      setIsUsedPhone(true); // 이미 가입한 적 있는 번호
       setIsPhoneOk(true); // 가입한 적 있으므로 인증 요청 가능
+      setIsResignedUser(false);
+    } else if (_usedPhCheckPost.response === "RESIGNED") {
+      setIsResignedUser(true); // 탈퇴한 유저
     } else {
-      setIsUsedPhone(false); // 휴대폰 번호 가입한 적 없음
-      setIsPhoneOk(false);
+      setIsPhoneOk(false); // 휴대폰 번호 가입한 적 없음
+      setIsResignedUser(false);
     }
   }, 500);
   const usedPhCheck = useCallback(usedPhCheckPost, []);
@@ -187,18 +190,19 @@ const FindEmailOrPwPage = (props) => {
 
   return (
     <Box>
-      <BackBtn
-        onClick={() => {
-          history.push("/login");
-        }}
-      >
-        <Icon
-          width="24px"
-          margin="0 5px 0 0"
-          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg"
-        />
-      </BackBtn>
-
+      {!isValidated && (
+        <BackBtn
+          onClick={() => {
+            history.push("/login");
+          }}
+        >
+          <Icon
+            width="24px"
+            margin="0 5px 0 0"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg"
+          />
+        </BackBtn>
+      )}
       <Logo />
       {!isValidated && (
         <>
@@ -238,9 +242,15 @@ const FindEmailOrPwPage = (props) => {
             인증 요청
           </button>
         </Flex>
-        {phone !== "" && !isPhoneOk && !showTimer && (
+        {phone !== "" && !isPhoneOk && !isResignedUser && !showTimer && (
           <Text color={red} bold height="1.5" margin="10px 0 0 0">
             가입된 휴대폰 번호(- 없이)인지 다시 한 번 확인해주세요.
+          </Text>
+        )}
+        {phone !== "" && isResignedUser && !showTimer && (
+          <Text color={red} bold height="1.5" margin="10px 0 0 0">
+            탈퇴한 유저의 번호입니다. 탈퇴 후 30일이 지났다면, 다시
+            회원가입해주세요.
           </Text>
         )}
         {!isValidated && showSmsValidateBtn && (
