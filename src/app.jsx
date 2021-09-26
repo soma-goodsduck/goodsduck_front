@@ -11,6 +11,7 @@ import "./normalize.css";
 import OAuth2RedirectHandler from "./shared/OAuth2RedirectHandler";
 import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
+import FindEmailOrPwPage from "./pages/login/findEmailOrPwPage";
 import home from "./pages/home/home";
 import KeywordSearch from "./pages/home/keywordSearch";
 import Filtering from "./pages/filtering/filteringPage";
@@ -42,12 +43,18 @@ import OtherItemsPage from "./pages/otherProfilePage/otherItemsPage";
 import UserReportPage from "./pages/report/userReportPage";
 import ItemReportPage from "./pages/report/itemReportPage";
 import ChattingReportPage from "./pages/report/chattingReportPage";
+import CommentReportPage from "./pages/report/commentReportPage";
 import ErrorPage from "./pages/error/errorPage";
 import NotFoundPage from "./pages/error/notFoundPage";
 import NoticePage from "./pages/notice/noticePage";
 import TermServicePage from "./pages/myProfilePage/termServicePage";
 import TermPrivacyPage from "./pages/myProfilePage/termPrivacyPage";
 import TermMarketingPage from "./pages/myProfilePage/termMarketingPage";
+import CommunityHomePage from "./pages/community/communityHomePage";
+import CommunityMenu from "./pages/community/communityMenu";
+import postDetailPage from "./pages/community/postDetail/postDetailPage";
+import postUploadPage from "./pages/community/postUpload/postUploadPage";
+import PostReportPage from "./pages/report/postReportPage";
 
 import { Notification } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
@@ -55,7 +62,6 @@ import { sendTokenAction } from "./shared/axios";
 
 import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
-import FindEmailOrPwPage from "./pages/login/findEmailOrPwPage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -65,7 +71,7 @@ function App() {
   const isKakaoTalk = userAgent.indexOf("KAKAOTALK");
   const isApp = userAgent.indexOf("APP");
 
-  const [showNoti, setShotNoti] = useState(false);
+  const [showNoti, setShowNoti] = useState(false);
   const [notiInfo, setNotiInfo] = useState(null);
   const [notiUrl, setNotiUrl] = useState("");
 
@@ -91,32 +97,48 @@ function App() {
             }
           }
 
-          setShotNoti(true);
           setNotiInfo(payload.notification.body);
           setNotiUrl(payload.notification.click_action);
 
-          setTimeout(() => {
-            setShotNoti(false);
-          }, 5000);
+          if (payload.data.type === "LEVEL_UP") {
+            setTimeout(() => {
+              setShowNoti(true);
+            }, 3000);
+
+            setTimeout(() => {
+              setShowNoti(false);
+            }, 8000);
+          } else {
+            setShowNoti(true);
+            setTimeout(() => {
+              setShowNoti(false);
+            }, 3000);
+          }
         });
       }
     }
   }
 
-  const RNListener = () => {
-    const listener = (event) => {
-      const { data, type } = JSON.parse(event.data);
-      if (type === "TOKEN") {
-        const sendFcmToken = sendTokenAction(data);
-        sendFcmToken.then((result) => {
-          console.log(result);
-          if (result === "login") {
-            history.push("/login");
-          }
-        });
-      }
-    };
+  const reqSendFcmToken = async (data) => {
+    const result = await sendTokenAction(data);
+    return result;
+  };
+  const listener = async (event) => {
+    const { data, type } = JSON.parse(event.data);
 
+    if (type === "TOKEN") {
+      const sendFcmToken = await reqSendFcmToken(data);
+
+      if (sendFcmToken < 0) {
+        if (sendFcmToken === -201) {
+          history.push("/login");
+          return;
+        }
+        history.push("/error");
+      }
+    }
+  };
+  const RNListener = () => {
     if (isApp !== -1) {
       /** android */
       document.addEventListener("message", listener);
@@ -126,7 +148,12 @@ function App() {
   };
   useEffect(() => {
     RNListener();
-  });
+
+    return () => {
+      document.removeEventListener("message", listener, true);
+      window.removeEventListener("message", listener, true);
+    };
+  }, []);
 
   // alert
   const dispatch = useDispatch();
@@ -243,6 +270,18 @@ function App() {
               exact
               component={FilterIdolMember}
             />
+            {/* 커뮤니티 */}
+            <Route path="/community" exact component={CommunityHomePage} />
+            <Route path="/community-menu" exact component={CommunityMenu} />
+            <Route path="/post/:id" exact component={postDetailPage} />
+            <Route path="/upload-post" exact component={postUploadPage} />
+            <Route path="/report/posts/:id" exact component={PostReportPage} />
+            <Route
+              path="/report/comments/:id"
+              exact
+              component={CommentReportPage}
+            />
+
             {/* 에러 페이지 */}
             <Route path="/error" exact component={ErrorPage} />
             <Route path="/*" component={NotFoundPage} />
