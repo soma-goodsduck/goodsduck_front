@@ -265,7 +265,6 @@ const EditProfilePage = (props) => {
 };
 
 const MyProfileBox = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -315,7 +314,7 @@ const InputBox = styled.input`
 `;
 
 const IdolBox = styled.div`
-  margin-top: 40px;
+  margin: 40px 0;
 `;
 
 export default EditProfilePage;

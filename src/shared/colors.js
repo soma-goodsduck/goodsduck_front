@@ -8,6 +8,7 @@ export const red = "#e15b5b";
 export const darkRed = "#e33e3e";
 export const blue = "#299bff";
 export const green = "#00920a";
+export const darkGreen = "#006e5e";
 export const orange = "#ff8d29";
 
 export const blackNav = "#444444";

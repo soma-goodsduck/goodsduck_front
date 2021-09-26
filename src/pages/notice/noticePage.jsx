@@ -4,15 +4,13 @@ import styled from "styled-components";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import Notice from "./notice";
 
+import { formatDate } from "../../shared/functions";
 import { requestPublicData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const NoticePage = (props) => {
   const [noticeList, setNoticeList] = useState([]);
 
-  const sliceDateString = (createdAt) => {
-    return createdAt.substr(0, 10);
-  };
   const requestNotices = async () => {
     const result = await requestPublicData("v1/notices");
     return result;
@@ -35,7 +33,7 @@ const NoticePage = (props) => {
         <Notice
           notice={notice}
           key={notice.id}
-          date={sliceDateString(notice.createdAt)}
+          date={formatDate(notice.createdAt)}
         />
       ))}
     </NoticeContainer>

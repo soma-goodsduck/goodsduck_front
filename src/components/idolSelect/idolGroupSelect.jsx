@@ -47,6 +47,13 @@ const IdolList = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 85px);
   grid-auto-rows: 115px;
+
+  @media screen and (max-width: 320px) {
+    grid-template-columns: repeat(2, 110px);
+  }
+  @media screen and (max-width: 360px) {
+    grid-template-columns: repeat(3, 100px);
+  }
 `;
 
 export default IdolGroups;

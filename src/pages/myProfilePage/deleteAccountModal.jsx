@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import styled from "styled-components";
 import { Flex } from "../../elements";
-import { grayBtn, blackBtn, white, grayBorder } from "../../shared/colors";
+import { grayBtn, blackBtn, white, grayBorder, red } from "../../shared/colors";
 
 const DeleteAccountModal = ({ onOkClick, onNoClick }) => {
   const [pw, setPw] = useState("");
@@ -21,6 +21,7 @@ const DeleteAccountModal = ({ onOkClick, onNoClick }) => {
         <Info>
           <Text>회원탈퇴를 원하시는 경우,</Text>
           <Text>현재 비밀번호를 입력해주세요.</Text>
+          <TextNotice>( ⚠️ 30일동안은 다시 가입할 수 없습니다.)</TextNotice>
           <Flex is_col>
             <Input
               type="password"
@@ -80,7 +81,7 @@ const ModalBox = styled.div`
 
 const Info = styled.div`
   position: relative;
-  height: 150px;
+  height: 170px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -93,6 +94,14 @@ const Text = styled.div`
   font-size: 16px;
   text-align: center;
   line-height: 1.3;
+`;
+
+const TextNotice = styled.div`
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 2;
+  color: ${red};
 `;
 
 const Input = styled.input`

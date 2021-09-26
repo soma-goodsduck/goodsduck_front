@@ -57,20 +57,7 @@ const WritingReviewPage = () => {
     }
 
     setItem(usersByChat.item);
-    // 거래 상대방 설정 (중복 제거)
-    if (usersByChat.chatRooms !== []) {
-      if (usersByChat.chatRooms.length !== 0) {
-        const newChatRooms = [usersByChat.chatRooms[0]];
-        usersByChat.chatRooms.forEach((element) => {
-          newChatRooms.forEach((chatRoom) => {
-            if (chatRoom.otherUser.userId !== element.otherUser.userId) {
-              newChatRooms.push(element);
-            }
-          });
-        });
-        setUsers(newChatRooms);
-      }
-    }
+    setUsers(usersByChat.chatRooms);
   };
   useEffect(fnEffect, []);
 

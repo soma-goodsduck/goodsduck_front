@@ -182,8 +182,6 @@ const ItemDetailPage = ({ history }) => {
     <>
       {showDeleteCheckModal && (
         <DeleteDoubleCheckModal
-          text1="굿즈 삭제 후에는 관련 채팅방, 가격제시 정보 등이 모두 삭제됩니다."
-          text2="진짜로 삭제하시겠습니까?"
           onOkClick={deleteItem}
           onNoClick={hideDeleteCheckModal}
         />

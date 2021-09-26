@@ -52,6 +52,8 @@ const WritingReviewBackPage = () => {
 
     if (firstReviewData.isExist) {
       history.push("/");
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("이미 리뷰를 작성했습니다."));
       return;
     }
 

@@ -7,6 +7,7 @@ import { blackNav, grayBorder, grayBtnBorder } from "../../shared/colors";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { requestLogin } from "../../shared/axios";
+import { notification } from "../../shared/notification";
 import { history } from "../../redux/configureStore";
 
 const Login = () => {
@@ -55,6 +56,13 @@ const Login = () => {
       return;
     }
 
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+      );
+    } else {
+      notification();
+    }
     dispatch(userActions.setShowNotification(true));
     dispatch(userActions.setNotificationBody("로그인에 성공했습니다."));
     history.replace("/");

@@ -6,7 +6,7 @@ import _ from "lodash";
 
 import styled from "styled-components";
 import styles from "./signup.module.css";
-import { Grid, Flex, Text, Icon } from "../../elements";
+import { Grid, Flex, Text } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import IdolGroups from "./idolGroups";
 import Timer from "./timer";

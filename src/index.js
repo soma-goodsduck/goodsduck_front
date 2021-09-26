@@ -11,7 +11,10 @@ import "@fortawesome/fontawesome-free/js/all.js";
 
 if (process.env.REACT_APP_SENTRY) {
   Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY,
+    dsn:
+      process.env.REACT_APP_TYPE === "PROD"
+        ? process.env.REACT_APP_SENTRY
+        : false,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
   });

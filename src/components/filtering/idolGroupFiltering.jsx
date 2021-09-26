@@ -17,18 +17,16 @@ const IdolGroupFiltering = ({ onClick }) => {
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
-  const [groupId, setGroupId] = useState(0);
+  const idolIdLS = Number(localStorage.getItem("filter_idolGroup"));
 
   const checkAllItems = () => {
     localStorage.removeItem("filter_idolGroup");
     localStorage.removeItem("filter_idolGroupName");
     dispatch(filteringActions.clearFiltering());
-    setGroupId(0);
     onClick(0);
   };
 
   const checkGroupHandler = (id, name) => {
-    setGroupId(id);
     onClick(id);
     localStorage.setItem("filter_idolGroup", `${id}`);
     localStorage.setItem("filter_idolGroupName", `${name}`);
@@ -61,7 +59,6 @@ const IdolGroupFiltering = ({ onClick }) => {
     }
 
     setIdols(idolGroups);
-    setGroupId(localStorage.getItem("filter_idolGroup"));
   };
   useEffect(fnEffect, []);
 
@@ -137,20 +134,20 @@ const IdolGroupFiltering = ({ onClick }) => {
                 <IdolInput
                   id={idol.id}
                   type="radio"
-                  checked={groupId === idol.id}
+                  checked={idolIdLS === idol.id}
                   onChange={() => checkGroupHandler(idol.id, idol.name)}
                 />
                 <label
                   htmlFor={idol.id}
                   className={
-                    groupId === idol.id
+                    idolIdLS === idol.id
                       ? styles.clickIdolGroupBtn
                       : styles.idolGroupBtn
                   }
                 >
                   <img
                     className={
-                      groupId === idol.id
+                      idolIdLS === idol.id
                         ? styles.clickIdolGroupImg
                         : styles.idolGroupImg
                     }
@@ -158,7 +155,11 @@ const IdolGroupFiltering = ({ onClick }) => {
                     alt="Idol Group"
                   />
                   <div
-                    className={idol.id === 10 ? styles.idolGroupLongName : ""}
+                    className={
+                      idol.id === 10 || idol.id === 14 || idol.id === 20
+                        ? styles.idolGroupLongName
+                        : ""
+                    }
                   >
                     {idol.name}
                   </div>

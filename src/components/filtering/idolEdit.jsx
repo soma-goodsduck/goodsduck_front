@@ -84,17 +84,24 @@ const Screen = styled.div`
 `;
 
 const IdolEditBox = styled.div`
-  width: 350px;
+  width: 360px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: fixed;
-  bottom: 30%;
+  bottom: 25%;
+
+  @media screen and (max-width: 320px) {
+    width: 240px;
+  }
+  @media screen and (max-width: 360px) {
+    width: 320px;
+  }
 `;
 
 const Info = styled.div`
   position: relative;
-  height: 400px;
+  height: 320px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -102,6 +109,9 @@ const Info = styled.div`
   padding: 5px;
   padding-top: 35px;
   border-radius: 10px;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const EditBtn = styled.button`
@@ -110,11 +120,6 @@ const EditBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 `;
 
 const ExitBtn = styled.button`

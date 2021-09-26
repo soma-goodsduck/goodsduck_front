@@ -2,14 +2,13 @@ import React, { useEffect } from "react";
 
 import Header from "../../components/haeder/header";
 import ItemList from "../../components/itemList/itemList";
-import { Grid, Notification } from "../../elements";
+import { Grid } from "../../elements";
 import Nav from "../../components/nav/nav";
 
 import { requestPublicData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const Home = (props) => {
-  const isApp = localStorage.getItem("isApp");
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
 
   const reqUserData = async () => {
@@ -45,7 +44,7 @@ const Home = (props) => {
       <Grid>
         <Header />
         <ItemList />
-        {!isApp && <Nav />}
+        <Nav />
       </Grid>
     </>
   );

@@ -43,7 +43,7 @@ const Btns = ({ myProfile }) => {
                   : myProfile.countOfReceivedReviews}
               </Text>
               <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                후기
+                리뷰
               </Text>
             </Flex>
             <Flex
