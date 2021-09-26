@@ -16,6 +16,9 @@ import Filtering from "./modules/filtering";
 import NewItem from "./modules/newItem";
 import Chat from "./modules/chat";
 import Item from "./modules/item";
+import Community from "./modules/community";
+import NewPost from "./modules/newPost";
+import Post from "./modules/post";
 
 export const history = createBrowserHistory();
 
@@ -27,6 +30,9 @@ const rootReducer = combineReducers({
   filtering: Filtering,
   chat: Chat,
   item: Item,
+  community: Community,
+  newPost: NewPost,
+  post: Post,
   router: connectRouter(history),
 });
 
