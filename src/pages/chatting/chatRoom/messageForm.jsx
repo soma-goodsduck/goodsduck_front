@@ -23,6 +23,7 @@ const MessageForm = ({ onOpenAttachment }) => {
 
   const [userId, setUserId] = useState("");
   const [userNick, setUserNick] = useState("");
+  const [patnerId, setPatnerId] = useState("");
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,20 +33,31 @@ const MessageForm = ({ onOpenAttachment }) => {
     readyToSendMessage: state.chat.readyToSendMessage,
   }));
   const messagesRef = firebaseDatabase.ref("messages");
+  const usersRef = firebaseDatabase.ref("users");
 
+  const reqUsersFromChat = async () => {
+    const result = await requestAuthData(`v1/chat/${chatRoomId}`);
+    return result;
+  };
   const reqUserId = async () => {
     const result = await requestAuthData("v1/users/look-up-id");
     return result;
   };
   const fnEffect = async () => {
     const getUserId = await reqUserId();
-    if (getUserId < 0) {
+    const getUsersFromChat = await reqUsersFromChat();
+    if (getUserId < 0 || getUsersFromChat < 0) {
       history.push("/error");
       return;
     }
 
     setUserId(getUserId.userId);
     setUserNick(getUserId.nickName);
+    if (getUsersFromChat.users[0].userId === getUserId.userId) {
+      setPatnerId(getUsersFromChat.users[1].userId);
+    } else {
+      setPatnerId(getUsersFromChat.users[0].userId);
+    }
   };
   useEffect(fnEffect, []);
 
@@ -108,6 +120,7 @@ const MessageForm = ({ onOpenAttachment }) => {
     try {
       const key = messagesRef.child(chatRoomId).push().key;
       await messagesRef.child(chatRoomId).child(key).update(createMessage());
+      await usersRef.child(patnerId).update({ hasNewChat: true });
 
       setErrors([]);
       setContent("");

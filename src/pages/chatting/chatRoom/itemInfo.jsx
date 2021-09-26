@@ -20,6 +20,7 @@ const ItemInfo = () => {
 
   const [item, setItem] = useState({});
   const [isNotExist, setIsNotExist] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [color, setColor] = useState(black);
 
   const requestItemData = async () => {
@@ -29,6 +30,11 @@ const ItemInfo = () => {
   const fnEffect = async () => {
     const getItemData = await requestItemData();
     dispatch(chatActions.setItemIsExisted());
+
+    if (getItemData.tradeStatus === "COMPLETE") {
+      setIsCompleted(true);
+      setColor(gray);
+    }
 
     const chatRoomInfoRef = firebaseDatabase.ref(
       `chatRooms/${itemId}/${chatRoomId}`,
@@ -82,6 +88,7 @@ const ItemInfo = () => {
               <div>
                 <Flex justify="flex-start">
                   {isNotExist && <ItemType color={color}>삭제</ItemType>}
+                  {isCompleted && <ItemType color={color}>완료</ItemType>}
                   <Text is_long margin="5px 0" color={color}>
                     {item.name}
                   </Text>

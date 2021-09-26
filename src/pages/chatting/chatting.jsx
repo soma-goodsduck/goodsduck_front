@@ -38,6 +38,9 @@ export class Chatting extends Component {
       }
 
       this.setState({ userId: result.userId });
+
+      const usersRef = firebaseDatabase.ref("users");
+      usersRef.child(result.userId).update({ hasNewChat: false });
     });
 
     const getChatroomList = requestAuthData("v2/users/chat-rooms");
