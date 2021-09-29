@@ -111,6 +111,22 @@ const IdolGroupFiltering = ({ onClick }) => {
           <Flex justify="flex-start">
             <BtnBox
               onClick={() => {
+                dispatch(filteringActions.clearFiltering());
+                setShowEditModal(true);
+              }}
+            >
+              <Btn>
+                <Image
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+                  size="30px"
+                />
+              </Btn>
+              <Text size="13px" margin="10px 0 0 0" color={grayText}>
+                그룹 편집
+              </Text>
+            </BtnBox>
+            <BtnBox
+              onClick={() => {
                 checkAllItems();
               }}
             >
@@ -166,22 +182,6 @@ const IdolGroupFiltering = ({ onClick }) => {
                 </label>
               </IdolBox>
             ))}
-            <BtnBox
-              onClick={() => {
-                dispatch(filteringActions.clearFiltering());
-                setShowEditModal(true);
-              }}
-            >
-              <Btn>
-                <Image
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-                  size="30px"
-                />
-              </Btn>
-              <Text size="13px" margin="10px 0 0 0" color={grayText}>
-                그룹 편집
-              </Text>
-            </BtnBox>
           </Flex>
         )}
       </div>

@@ -143,6 +143,13 @@ const ItemList = ({ keyword }) => {
       {!keyword && <FilteringIdol onClick={handleFiltering} />}
       {!keyword && isDetailFilter && <DetailFiltering idolId={idolFilter} />}
 
+      {!isLoading && items.length === 0 && (
+        <Notice>
+          <Text>아직 등록된 굿즈가 없습니다😢</Text>
+          <Text>제일 먼저 굿즈를 등록해보세요!</Text>
+        </Notice>
+      )}
+
       <InfinityScroll
         callNext={(_type) => {
           handleCallNext(_type);
@@ -178,6 +185,17 @@ const ItemListBox = styled.div`
     grid-auto-rows: 300px;
     grid-column-gap: 0;
   }
+`;
+
+const Notice = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+`;
+const Text = styled.div`
+  padding: 7px 0;
+  font-weight: 500;
 `;
 
 export default ItemList;

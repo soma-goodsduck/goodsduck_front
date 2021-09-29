@@ -12,11 +12,14 @@ import { history } from "../../../redux/configureStore";
 const Comments = ({ postId }) => {
   const dispatch = useDispatch();
 
-  const { comments, commentId, isSecretComment } = useSelector((state) => ({
-    comments: state.post.comments,
-    commentId: state.post.commentId,
-    isSecretComment: state.post.isSecretComment,
-  }));
+  const { comments, commentId, isSecretComment, commentCount } = useSelector(
+    (state) => ({
+      comments: state.post.comments,
+      commentId: state.post.commentId,
+      isSecretComment: state.post.isSecretComment,
+      commentCount: state.post.commentCount,
+    }),
+  );
   const [commentState, setCommentState] = useState("일반 댓글");
 
   useEffect(() => {
@@ -28,12 +31,11 @@ const Comments = ({ postId }) => {
   }, [isSecretComment]);
 
   const requestCommentData = async () => {
-    const result = await requestAuthData(`v2/comments/${postId}`);
+    const result = await requestAuthData(`v4/comments/${postId}`);
     return result;
   };
   const fnEffect = async () => {
     const getComments = await requestCommentData();
-    console.log(getComments);
 
     if (getComments < 0) {
       history.push("/error");
@@ -87,7 +89,7 @@ const Comments = ({ postId }) => {
   };
 
   const reqDeleteComment = async () => {
-    const result = await deleteAction(`v1/comments/${commentId}`);
+    const result = await deleteAction(`v2/comments/${commentId}`);
     return result;
   };
   const handleDelete = async () => {
@@ -98,6 +100,7 @@ const Comments = ({ postId }) => {
     }
 
     dispatch(postActions.deleteCommentAction(commentId));
+    dispatch(postActions.setCommentCnt(commentCount - 1));
     dispatch(userActions.setShowNotification(true));
     dispatch(userActions.setNotificationBody("댓글을 삭제했습니다."));
   };

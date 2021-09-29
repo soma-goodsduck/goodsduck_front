@@ -53,7 +53,6 @@ const FindEmailOrPwPage = (props) => {
       return;
     }
 
-    console.log(_usedPhCheckPost);
     if (_usedPhCheckPost.response === "GOODSDUCK") {
       setIsPhoneOk(true); // 가입한 적 있으므로 인증 요청 가능
       setIsResignedUser(false);

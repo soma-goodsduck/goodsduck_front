@@ -4,7 +4,6 @@ import styled from "styled-components";
 import styles from "./postDetail.module.css";
 
 const PostImg = ({ images }) => {
-  console.log(images);
   const screen = window.screen.width;
   // 이미지 스와이프
   const [showPreviousImgBtn, setShowPreviousImgBtn] = useState(true);

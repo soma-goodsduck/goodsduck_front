@@ -82,7 +82,9 @@ export class ChatRoom extends Component {
         }
       })
       .catch((error) => {
-        console.error(error);
+        if (process.env.REACT_APP_TYPE === "DEV") {
+          console.log(error);
+        }
       });
 
     setTimeout(() => {

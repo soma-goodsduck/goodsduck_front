@@ -15,9 +15,10 @@ const CommentForm = ({ postId, isOwner }) => {
   const [loading, setLoading] = useState(false);
   const [isSecretComment, setIsSecretComment] = useState(false);
 
-  const { recommentId, recommentNick } = useSelector((state) => ({
+  const { recommentId, recommentNick, commentCount } = useSelector((state) => ({
     recommentId: state.post.commentId,
     recommentNick: state.post.commentNick,
+    commentCount: state.post.commentCount,
   }));
 
   const handleChange = (e) => {
@@ -32,10 +33,10 @@ const CommentForm = ({ postId, isOwner }) => {
     const json = {
       content,
       isSecret: isSecretComment,
-      parentCommentId: recommentId,
+      receiveCommentId: recommentId,
       postId,
     };
-    const result = await postAction("v2/comments", json);
+    const result = await postAction("v3/comments", json);
     return result;
   };
   const handleSubmit = async () => {
@@ -79,9 +80,11 @@ const CommentForm = ({ postId, isOwner }) => {
       isLoginUserComment: true,
       isPostOwnerComment: isOwner,
       receiver,
+      childComments: [],
     };
 
     dispatch(postActions.addCommentAction(comment, recommentId));
+    dispatch(postActions.setCommentCnt(commentCount + 1));
   };
 
   const handleKeyDown = (event) => {

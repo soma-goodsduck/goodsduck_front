@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 /* eslint-disable camelcase */
@@ -5,6 +6,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
+import { actionCreators as userActions } from "./user";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -106,8 +108,9 @@ const addItemAction = (item, fileList) => {
     }
 
     if (uploadItem.data.response !== -1) {
-      console.log("굿즈 등록 완료");
       history.replace(`/item/${uploadItem.data.response}`);
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
     } else {
       window.alert("굿즈 등록 실패");
       history.push("/");
@@ -164,10 +167,12 @@ const updateItemAction = (item, id, fileList) => {
     }
 
     if (updateItem.data.success) {
-      console.log("굿즈 수정 완료");
       history.replace(`/item/${id}`);
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
     } else {
-      console.log("굿즈 수정 실패");
+      window.alert("굿즈 수정 실패");
+      history.push("/");
     }
   };
 };
@@ -177,7 +182,6 @@ export default handleActions(
   {
     [SET_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.item);
         draft.item_id = action.payload.item.id;
         draft.images = action.payload.item.images;
         draft.idol_group_id = action.payload.item.groupId;

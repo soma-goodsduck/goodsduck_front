@@ -12,6 +12,7 @@ import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as homeActions } from "../../redux/modules/home";
+import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { timeForToday } from "../../shared/functions";
 import { requestPublicData, deleteAction } from "../../shared/axios";
@@ -162,8 +163,10 @@ const ItemDetailPage = ({ history }) => {
     }
 
     if (_deleteItem.response) {
-      dispatch(homeActions.deleteItem(itemId));
       history.replace("/");
+      dispatch(homeActions.deleteItem(itemId));
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("굿즈를 삭제했습니다."));
     } else {
       window.alert("굿즈 삭제에 실패했습니다.");
     }

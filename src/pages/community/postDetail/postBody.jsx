@@ -20,7 +20,6 @@ import { actionCreators as postActions } from "../../../redux/modules/post";
 import { history } from "../../../redux/configureStore";
 
 const PostBody = ({ postData }) => {
-  console.log(postData);
   const dispatch = useDispatch();
 
   const [isLike, setIsLike] = useState(postData.isLike);

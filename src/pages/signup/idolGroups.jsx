@@ -35,7 +35,6 @@ const IdolGroups = ({ onUpdate }) => {
   }
 
   const checkHandler = (id) => {
-    console.log(id);
     onUpdate();
     dispatch(userActions.setIdolsForSignup(id));
   };

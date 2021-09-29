@@ -189,7 +189,7 @@ const StatusBtn = styled.button`
   font-weight: bold;
   font-size: 14px;
   box-sizing: border-box;
-  color: ${blackBtn}
+  color: ${blackBtn};
 
   &:hover {
     padding: 13px;

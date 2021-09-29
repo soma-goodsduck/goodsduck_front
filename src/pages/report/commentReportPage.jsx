@@ -16,7 +16,6 @@ const CommentReportPage = (props) => {
 
   const bcryptForReport = useSelector((state) => state.post.bcryptForReport);
   const commentIdForReport = useSelector((state) => state.post.commentId);
-  console.log(bcryptForReport);
 
   const [userNick, setUserNick] = useState("");
   const [reports, setReports] = useState([]);

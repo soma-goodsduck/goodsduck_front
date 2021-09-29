@@ -38,7 +38,6 @@ export const notification = () => {
             });
           })
           .catch((error) => {
-            console.log("error", error);
             window.alert(
               "URL 옆 자물쇠 버튼을 눌러 알림 차단을 요청으로 바꾼 후 다시 시도해주세요.",
             );

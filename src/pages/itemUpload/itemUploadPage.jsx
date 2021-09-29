@@ -11,7 +11,6 @@ import ItemImgUpload from "../../components/itemImgUpload/itemImgUpload";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as imgActions } from "../../redux/modules/image";
-import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
@@ -135,12 +134,8 @@ const ItemUpload = (props) => {
     // 굿즈 등록 또는 업데이트
     if (itemId !== 0) {
       dispatch(newItemActions.updateItemAction(item, itemId, fileList));
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
     } else {
       dispatch(newItemActions.addItemAction(item, fileList));
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
     }
 
     // 저장된 상태값 모두 삭제

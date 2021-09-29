@@ -32,7 +32,6 @@ const Comment = ({ comment, onClick }) => {
     dispatch(postActions.setCommentNick(comment.writer.nickName));
   };
   const clickDots = () => {
-    console.log(comment);
     onClick(comment.isLoginUserComment);
     dispatch(postActions.setBcryptForReport(comment.writer.bcryptId));
     dispatch(postActions.setCommentId(comment.commentId));
@@ -75,7 +74,7 @@ const Comment = ({ comment, onClick }) => {
               <ContentBox {...styles}>
                 {comment.isSecret && <LockBtn />}
                 <Body {...styles}>
-                  {comment.receiver !== null && !comment.isSecret && (
+                  {comment.receiver !== null && (
                     <Text medium margin="0 5px 3px 0">
                       @{comment.receiver.nickName}
                     </Text>

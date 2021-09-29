@@ -148,7 +148,9 @@ const MessageForm = ({ onOpenAttachment }) => {
         timestamp: firebase.database.ServerValue.TIMESTAMP,
       });
     } catch (error) {
-      console.error(error.message);
+      if (process.env.REACT_APP_TYPE === "DEV") {
+        console.log(error.message);
+      }
       setErrors((prev) => prev.concat(error.message));
       setLoading(false);
     }
