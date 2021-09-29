@@ -9,6 +9,7 @@ import { produce } from "immer";
 import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
 import { postActionForNonUser } from "../../shared/axios";
+import { firebaseDatabase } from "../../shared/firebase";
 
 // actions
 const SOCIAL_SIGN_UP = "SOCIAL_SIGN_UP";
@@ -183,6 +184,15 @@ const signupAction = (user) => {
     }
 
     dispatch(logIn(signup.response.jwt));
+    await setLS(
+      "likeIdolGroups",
+      signup.response.likeIdolGroups[0].idolGroupId,
+    );
+    // chat badge 정보 저장
+    firebaseDatabase
+      .ref("users")
+      .child(signup.response.userId)
+      .update({ hasNewChat: false });
 
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(
@@ -227,11 +237,11 @@ const socialSignupAction = (user) => {
       notification();
     }
 
-    history.push("/");
-
     dispatch(setShowNotification(true));
     dispatch(setNotificationBody("회원가입에 성공했습니다."));
+
     history.push("/");
+    window.location.reload();
   };
 };
 
