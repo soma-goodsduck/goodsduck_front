@@ -56,12 +56,13 @@ import postDetailPage from "./pages/community/postDetail/postDetailPage";
 import postUploadPage from "./pages/community/postUpload/postUploadPage";
 import PostReportPage from "./pages/report/postReportPage";
 
-import { Notification } from "./elements/index";
+import { Notification, Flex } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
 import { sendTokenAction } from "./shared/axios";
 
 import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
+import VotePage from "./pages/votePage/votePage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -82,7 +83,9 @@ function App() {
         const firebaseMessaging = firebaseApp.messaging();
 
         firebaseMessaging.onMessage((payload) => {
-          console.log(payload);
+          if (process.env.REACT_APP_TYPE === "DEV") {
+            console.log(payload);
+          }
 
           const href = window.location.href.split("/");
           const chatRoomId = String(href[href.length - 1]);
@@ -176,7 +179,31 @@ function App() {
 
   return (
     <>
-      <div className={styles.appImg} />
+      <Flex is_col align="center" style={{ width: "400px", height: "700px" }}>
+        <div className={styles.appImg} />
+        <div className={styles.appDownloadBtns}>
+          <a
+            href="https://apps.apple.com/kr/app/goodsduck/id1586463391"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div
+              className={styles.appDownloadForIos}
+              alt="Get Goodsduck on App Store"
+            />
+          </a>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.goodsduck_app&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div
+              className={styles.appDownloadForAndroid}
+              alt="Get Goodsduck on Google Play"
+            />
+          </a>
+        </div>
+      </Flex>
       <div className={styles.app}>
         {showNoti && <Notification data={notiInfo} clickUrl={notiUrl} />}
         {showAlert && <Notification data={notificationBody} />}
@@ -281,6 +308,7 @@ function App() {
               exact
               component={CommentReportPage}
             />
+            <Route path="/vote" exact component={VotePage} />
 
             {/* 에러 페이지 */}
             <Route path="/error" exact component={ErrorPage} />
