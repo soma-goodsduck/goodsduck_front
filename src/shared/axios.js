@@ -24,6 +24,10 @@ const verifyError = (error) => {
   if (error !== null) {
     const statusCode = error.status;
 
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
+
     switch (statusCode) {
       // NotFoundDataException
       case -101:
@@ -81,6 +85,9 @@ export const getItems = async (path, itemId) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -102,6 +109,9 @@ export const getItemsByIdol = async (itemId, idolGroupId) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -123,6 +133,9 @@ export const getItemsByFilter = async (path) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -150,6 +163,9 @@ export const getItemsBySearch = async (
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -169,6 +185,9 @@ export const requestLogin = async (path, json) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -190,6 +209,9 @@ export const requestPublicData = async (path) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
     // 삭제된 아이템 에러 수정될때까지
@@ -217,6 +239,9 @@ export const requestAuthData = async (path) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -242,6 +267,9 @@ export const deleteAction = async (path) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -266,6 +294,9 @@ export const postAction = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -284,6 +315,9 @@ export const postActionForNonUser = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -309,6 +343,9 @@ export const postImgAction = async (path, file) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -334,6 +371,9 @@ export const putAction = async (path, data) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -359,6 +399,9 @@ export const putJsonAction = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -384,6 +427,9 @@ export const patchAction = async (path) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -409,6 +455,9 @@ export const patchJsonAction = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -443,6 +492,9 @@ export const sendTokenAction = async (token) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }

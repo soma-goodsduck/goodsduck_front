@@ -38,11 +38,9 @@ const rootReducer = combineReducers({
 
 const middlewares = [thunk.withExtraArgument({ history })];
 
-// 지금이 어느 환경인 지 알려줘요. (개발환경, 프로덕션(배포)환경 ...)
-const env = process.env.NODE_ENV;
+const env = process.env.REACT_APP_TYPE;
 
-// 개발환경에서는 로거라는 걸 하나만 더 써볼게요.
-if (env === "development") {
+if (env === "DEV") {
   const { logger } = require("redux-logger");
   middlewares.push(logger);
 }
