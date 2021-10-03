@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import styles from "./nav.module.css";
 import { Flex } from "../../elements";
 
+import { actionCreators as homeActions } from "../../redux/modules/home";
 import { actionCreators as communityActions } from "../../redux/modules/community";
 import { firebaseDatabase } from "../../shared/firebase";
 import { requestAuthData } from "../../shared/axios";
@@ -24,7 +25,7 @@ const Nav = (props) => {
   useEffect(() => {
     if (href.includes("/chatting")) {
       setIsChat(true);
-    } else if (href.includes("/community")) {
+    } else if (href.includes("/community") || href.includes("/vote")) {
       setIsCommunity(true);
     } else if (href.includes("/my-profile")) {
       setIsProfile(true);
@@ -68,6 +69,43 @@ const Nav = (props) => {
     dispatch(communityActions.setCommunityMenu("home"));
   };
 
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up");
+    return result;
+  };
+  const clickIcon = async (type) => {
+    const getUserData = await reqUserData();
+    if (getUserData < 0) {
+      if (getUserData === -201) {
+        dispatch(homeActions.setLoginPopup(true));
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
+    removeFreeMarketState();
+    switch (type) {
+      case "home":
+        history.push("/");
+        break;
+      case "chatting":
+        history.push("/chatting");
+        break;
+      case "upload-item":
+        history.push("/upload-item");
+        break;
+      case "community":
+        history.push("/community");
+        break;
+      case "my-profile":
+        history.push("/my-profile");
+        break;
+      default:
+        history.push("/");
+    }
+  };
+
   return (
     <div className={styles.nav}>
       <Flex is_flex justify="space-around" align="flex-end" margin="0 0 15px 0">
@@ -75,8 +113,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/");
-            removeFreeMarketState();
+            clickIcon("home");
           }}
         >
           <div className={isHome ? styles.isHomeIcon : styles.isNotHomeIcon} />
@@ -88,8 +125,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/chatting");
-            removeFreeMarketState();
+            clickIcon("chatting");
           }}
         >
           <div className={hasNewChat ? styles.chatBadge : styles.chatBadgeZero}>
@@ -104,40 +140,39 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/upload-item");
-            removeFreeMarketState();
+            clickIcon("upload-item");
           }}
         >
           <div className={styles.isNotNewIcon} />
           <span className={styles.isNotNewText}>등록</span>
         </button>
-        <button
-          type="button"
-          className={styles.iconBtn}
-          onClick={() => {
-            history.push("/community");
-            removeFreeMarketState();
-          }}
-        >
-          <div
-            className={
-              isCommunity ? styles.isCommunityIcon : styles.isNotCommunityIcon
-            }
-          />
-          <span
-            className={
-              isCommunity ? styles.isCommunityText : styles.isNotCommunityText
-            }
+        {process.env.REACT_APP_TYPE === "DEV" && (
+          <button
+            type="button"
+            className={styles.iconBtn}
+            onClick={() => {
+              clickIcon("community");
+            }}
           >
-            커뮤니티
-          </span>
-        </button>
+            <div
+              className={
+                isCommunity ? styles.isCommunityIcon : styles.isNotCommunityIcon
+              }
+            />
+            <span
+              className={
+                isCommunity ? styles.isCommunityText : styles.isNotCommunityText
+              }
+            >
+              커뮤니티
+            </span>
+          </button>
+        )}
         <button
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/my-profile");
-            removeFreeMarketState();
+            clickIcon("my-profile");
           }}
         >
           <div

@@ -1,15 +1,19 @@
+/* eslint-disable indent */
 import React, { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
 
 import { Flex, Icon } from "../../elements";
-
-import { history } from "../../redux/configureStore";
 import { green } from "../../shared/colors";
 
+import { actionCreators as homeActions } from "../../redux/modules/home";
+import { requestAuthData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
+
 const Header = () => {
+  const dispatch = useDispatch();
   const inputRef = useRef();
   const hasNewNoti = useSelector((state) => state.home.hasNewNoti);
 
@@ -24,6 +28,33 @@ const Header = () => {
       onSearch(name);
     }
     inputRef.current.value = "";
+  };
+
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up");
+    return result;
+  };
+  const clickIcon = async (type) => {
+    const getUserData = await reqUserData();
+    if (getUserData < 0) {
+      if (getUserData === -201) {
+        dispatch(homeActions.setLoginPopup(true));
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
+    switch (type) {
+      case "favorites":
+        history.push("/favorites");
+        break;
+      case "notification":
+        history.push("/notification");
+        break;
+      default:
+        history.push("/");
+    }
   };
 
   return (
@@ -49,7 +80,7 @@ const Header = () => {
             alt="heart"
             margin="0 15px"
             _onClick={() => {
-              history.push("/favorites");
+              clickIcon("favorites");
             }}
           />
           <NotiBox>
@@ -58,7 +89,7 @@ const Header = () => {
               alt="notice"
               width="20px"
               _onClick={() => {
-                history.push("/notification");
+                clickIcon("notification");
               }}
             />
             {hasNewNoti && <NewBadge />}
