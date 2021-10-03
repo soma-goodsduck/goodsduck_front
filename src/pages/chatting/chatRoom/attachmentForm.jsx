@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 
 import styled from "styled-components";
 import { Notification } from "../../../elements";
+import { blackBtn } from "../../../shared/colors";
 
 import { firebaseDatabase } from "../../../shared/firebase";
 import {
@@ -185,16 +186,19 @@ const Btns = styled.div`
 const Button1 = styled.button`
   padding: 15px;
   border-bottom: 1px solid #dddddd;
+  color: ${blackBtn};
 `;
 
 const Button2 = styled.button`
   padding: 15px;
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
+  color: ${blackBtn};
 `;
 
 export default AttachmentForm;

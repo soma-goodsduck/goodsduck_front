@@ -65,10 +65,6 @@ const Nav = (props) => {
     return () => usersRef.off();
   }, []);
 
-  const removeFreeMarketState = () => {
-    dispatch(communityActions.setCommunityMenu("home"));
-  };
-
   const reqUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
     return result;
@@ -84,7 +80,9 @@ const Nav = (props) => {
       return;
     }
 
-    removeFreeMarketState();
+    // 커뮤니티 메뉴 기본값 설정
+    dispatch(communityActions.setCommunityMenu("home"));
+
     switch (type) {
       case "home":
         history.push("/");

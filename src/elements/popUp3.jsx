@@ -2,7 +2,7 @@
 import React from "react";
 
 import styled from "styled-components";
-import { blackBtn, white } from "../shared/colors";
+import { blackBtn } from "../shared/colors";
 
 const PopUp3 = (props) => {
   const { text, _onClick1, _onClick2, comment } = props;
@@ -61,9 +61,6 @@ const Button = styled.button`
   border-radius: 10px;
   margin-bottom: 10px;
   color: #e33e3e;
-  &:hover {
-    font-weight: bold;
-  }
 
   ${(props) =>
     props.comment
@@ -75,9 +72,7 @@ const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
 
   ${(props) =>
     props.comment

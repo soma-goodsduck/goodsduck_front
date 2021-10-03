@@ -29,6 +29,12 @@ body {
   display: none;
 }
 
+a,
+img,
+div {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @media screen and (min-width: 415px) {
   .app {
     position: absolute;

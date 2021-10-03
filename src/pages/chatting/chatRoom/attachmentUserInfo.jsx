@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import { Notification } from "../../../elements";
+import { blackBtn, grayBtnText } from "../../../shared/colors";
 
 import { requestAuthData } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
-import { grayBtnText } from "../../../shared/colors";
 
 const AttachmentUserInfo = (props) => {
   const { type, text, _onClickExit, _onClickSend } = props;
@@ -147,11 +147,13 @@ const Button1 = styled.button`
 
 const Button2 = styled.button`
   padding: 15px;
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
+  color: ${blackBtn};
 `;
 export default AttachmentUserInfo;

@@ -1,10 +1,10 @@
 import React from "react";
 
 import styled from "styled-components";
-import { grayBtn, blackBtn, white } from "../shared/colors";
+import { grayBtn, blackBtn, white, grayBtnText } from "../shared/colors";
 
 const DoubleCheckModal = (props) => {
-  const { text1, text2, onOkClick, onNoClick, height } = props;
+  const { text1, text2, text3, onOkClick, onNoClick, height, warning } = props;
 
   const styles = {
     height,
@@ -24,6 +24,7 @@ const DoubleCheckModal = (props) => {
         <Info {...styles}>
           <Text1>{text1}</Text1>
           <Text2 style={{ margin: "10px 0" }}>{text2}</Text2>
+          {warning && <Warning style={{ margin: "10px 0" }}>{text3}</Warning>}
         </Info>
         <Btns>
           <NOBtn
@@ -94,6 +95,12 @@ const Text2 = styled.div`
   font-size: 18px;
   font-weight: bold;
   text-align: center;
+`;
+
+const Warning = styled.div`
+  font-size: 14px;
+  text-align: center;
+  color: ${grayBtnText};
 `;
 
 const Btns = styled.div`

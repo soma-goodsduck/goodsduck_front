@@ -17,8 +17,6 @@ const SET_IDOLS_FOR_SIGNUP = "SET_IDOLS_FOR_SIGNUP";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
-const SHOW_POPUP = "SHOW_POPUP";
-const NO_SHOW_POPUP = "NO_SHOW_POPUP";
 const UPDATE_JWT = "UPDATE_JWT";
 const SET_FAV_IDOL_GROUPS = "SET_FAV_IDOL_GROUPS";
 const SET_FILTERING_TYPE = "SET_FILTERING_TYPE";
@@ -51,8 +49,6 @@ const setIdolsForSignup = createAction(
 const logIn = createAction(LOG_IN, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
-const showPopup = createAction(SHOW_POPUP, () => ({}));
-const noShowPopup = createAction(NO_SHOW_POPUP, () => ({}));
 const updateJwt = createAction(UPDATE_JWT, () => ({}));
 const setFavIdolGroups = createAction(SET_FAV_IDOL_GROUPS, (favIdolGroups) => ({
   favIdolGroups,
@@ -117,7 +113,6 @@ const initialState = {
   id: null,
   email: "",
   idolsForSignup: 0,
-  showPopup: false,
   favIdolGroups: [],
   filteringType: "SELLING",
   userForReview: "",
@@ -252,7 +247,6 @@ export default handleActions(
       produce(state, (draft) => {
         draft.id = action.payload.id;
         draft.type = action.payload.type;
-        draft.show_popup = false;
       }),
     [SET_IDOLS_FOR_SIGNUP]: (state, action) =>
       produce(state, (draft) => {
@@ -262,7 +256,6 @@ export default handleActions(
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-        draft.show_popup = false;
         setLS("jwt", draft.user);
       }),
     [LOG_OUT]: (state, action) =>
@@ -276,14 +269,6 @@ export default handleActions(
     [GET_USER]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-      }),
-    [SHOW_POPUP]: (state, action) =>
-      produce(state, (draft) => {
-        draft.showPopup = true;
-      }),
-    [NO_SHOW_POPUP]: (state, action) =>
-      produce(state, (draft) => {
-        draft.showPopup = false;
       }),
     [UPDATE_JWT]: (state, action) =>
       produce(state, (draft) => {
@@ -386,8 +371,6 @@ const actionCreators = {
   logoutAction,
   getUser,
   nonUserAction,
-  showPopup,
-  noShowPopup,
   updateJwt,
   setFavIdolGroups,
   setFilteringType,

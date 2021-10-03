@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import React from "react";
-
 import styled from "styled-components";
+import { blackBtn } from "../shared/colors";
 
 const PopUp2 = (props) => {
   const { text1, text2, _onClick1, _onClick2, _onClick3, isRed, comment } =
@@ -76,6 +76,7 @@ const Button1 = styled.button`
     font-weight: bold;
   }
   border-radius: 10px 10px 0 0;
+  color: ${blackBtn};
 
   ${(props) =>
     props.comment ? "background-color: #222222; color: #ffffff; " : ""}
@@ -83,13 +84,8 @@ const Button1 = styled.button`
 
 const Button2 = styled.button`
   padding: 15px;
-  ${(props) => (props.isRed ? "color: #e33e3e;" : "")};
-
-  &:hover {
-    color: #e33e3e;
-    font-weight: bold;
-  }
   border-radius: 0 0 10px 10px;
+  ${(props) => (props.isRed ? "color: #e33e3e;" : "color: #222222;")};
 
   ${(props) =>
     props.comment ? "background-color: #222222; color: #ffffff; " : ""}
@@ -99,9 +95,7 @@ const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
 
   ${(props) =>
     props.comment

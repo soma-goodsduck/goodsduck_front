@@ -17,6 +17,7 @@ input::placeholder {
   width: 100%;
   padding: 8px 15px;
   border-radius: 10px;
+  color: var(--blackBtn);
 }
 
 .acceptBtn {

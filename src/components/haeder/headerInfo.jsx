@@ -23,6 +23,7 @@ const HeaderInfo = (props) => {
     isFiltering,
     isUploading,
     isSetting,
+    isVote,
   } = props;
 
   const styleProps = {
@@ -48,6 +49,8 @@ const HeaderInfo = (props) => {
     } else if (isSetting) {
       dispatch(userActions.clearSettingInfo());
       history.goBack();
+    } else if (isVote) {
+      history.push("/community");
     } else {
       history.goBack();
     }

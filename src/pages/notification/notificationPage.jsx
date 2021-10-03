@@ -54,32 +54,30 @@ const NotificationPage = () => {
   return (
     <>
       {showPopup && <LoginPopUp />}
-      {!showPopup && (
-        <div>
-          <HeaderInfo text="알림" padding="0 16px" />
-          <Flex is_flex justify="flex-end" margin="55px 20px 0 0">
-            <DeleteBtn
-              onClick={() => {
-                handleDeleteNotifications();
-              }}
-            >
-              <Icon
-                width="16px"
-                margin="0 7px 0 0"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_uncheckbox.svg"
-              />
-              <Text color={grayBtnText}>전체 알림 삭제</Text>
-            </DeleteBtn>
-          </Flex>
-          {notifications !== null && (
-            <NotificationRowBox>
-              {notifications.map((notification, idx) => (
-                <NotificationRow key={idx} notification={notification} />
-              ))}
-            </NotificationRowBox>
-          )}
-        </div>
-      )}
+      <div>
+        <HeaderInfo text="알림" padding="0 16px" />
+        <Flex is_flex justify="flex-end" margin="55px 20px 0 0">
+          <DeleteBtn
+            onClick={() => {
+              handleDeleteNotifications();
+            }}
+          >
+            <Icon
+              width="16px"
+              margin="0 7px 0 0"
+              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_uncheckbox.svg"
+            />
+            <Text color={grayBtnText}>전체 알림 삭제</Text>
+          </DeleteBtn>
+        </Flex>
+        {notifications !== null && (
+          <NotificationRowBox>
+            {notifications.map((notification, idx) => (
+              <NotificationRow key={idx} notification={notification} />
+            ))}
+          </NotificationRowBox>
+        )}
+      </div>
     </>
   );
 };

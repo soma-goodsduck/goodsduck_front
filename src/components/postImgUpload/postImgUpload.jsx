@@ -140,7 +140,7 @@ const PostImgUpload = ({ community }) => {
             type="file"
             id="chooseFile"
             name="chooseFile"
-            accept=".jpg, .png, .jpeg"
+            accept=".jpg, .png, .jpeg, .gif"
             multiple
             onChange={showPreview}
           />

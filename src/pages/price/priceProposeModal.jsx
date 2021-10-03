@@ -6,6 +6,7 @@ import styles from "./pricePropose.module.css";
 
 import ItemRow from "../../components/itemRow/itemRow";
 import { Input, Flex, LoginPopUp } from "../../elements";
+import { blackBtn } from "../../shared/colors";
 
 import { actionCreators as itemActions } from "../../redux/modules/item";
 import { actionCreators as userActions } from "../../redux/modules/user";
@@ -157,6 +158,7 @@ const ProposeBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
