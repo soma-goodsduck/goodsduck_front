@@ -37,6 +37,7 @@ const SET_SHOW_NOTIFICATION = "SET_SHOW_NOTIFICATION";
 const SET_NOTIFICATION_BODY = "SET_NOTIFICATION_BODY";
 const SET_NOTIFICATION_LIST = "SET_NOTIFICATION_LIST";
 const SET_EMAIL = "SET_EMAIL";
+const SET_TODAY_VOTED_IDOL = "SET_TODAY_VOTED_IDOL";
 
 // action creators
 const socialSignUp = createAction(SOCIAL_SIGN_UP, (id, type) => ({ id, type }));
@@ -105,6 +106,9 @@ const setNotificationList = createAction(
   (notifications) => ({ notifications }),
 );
 const setEmail = createAction(SET_EMAIL, (email) => ({ email }));
+const setTodayVotedIdol = createAction(SET_TODAY_VOTED_IDOL, (votedIdolId) => ({
+  votedIdolId,
+}));
 
 // initialState
 const initialState = {
@@ -131,6 +135,7 @@ const initialState = {
   showNotification: false,
   notificationBody: "",
   notifications: [],
+  votedIdolId: 0,
 };
 
 // middleware actions
@@ -358,6 +363,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.email = action.payload.email;
       }),
+    [SET_TODAY_VOTED_IDOL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.votedIdolId = action.payload.votedIdolId;
+      }),
   },
   initialState,
 );
@@ -391,6 +400,7 @@ const actionCreators = {
   setNotificationBody,
   setNotificationList,
   setEmail,
+  setTodayVotedIdol,
 };
 
 export { actionCreators };
