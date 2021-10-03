@@ -101,61 +101,59 @@ const UserReportPage = (props) => {
         />
       )}
 
-      {!showPopup && (
-        <ReportContainer>
-          <div>
-            <HeaderInfo text="신고하기" padding="0 16px" />
-            <TextBox>
-              <Text margin="10px 15px" medium>
-                {nick}님을 신고하는 이유를 선택해주세요.
-              </Text>
-            </TextBox>
-            {reports &&
-              reports.map((report) => (
-                <ReportBox
-                  key={report.categoryId}
-                  onClick={() => {
-                    setReportId(report.categoryId);
-                  }}
+      <ReportContainer>
+        <div>
+          <HeaderInfo text="신고하기" padding="0 16px" />
+          <TextBox>
+            <Text margin="10px 15px" medium>
+              {nick}님을 신고하는 이유를 선택해주세요.
+            </Text>
+          </TextBox>
+          {reports &&
+            reports.map((report) => (
+              <ReportBox
+                key={report.categoryId}
+                onClick={() => {
+                  setReportId(report.categoryId);
+                }}
+              >
+                <ReportInput
+                  className={styles.reportInput}
+                  id={report.categoryId}
+                  type="radio"
+                  checked={reportId === report.categoryId}
+                  onChange={() => setReportId(report.categoryId)}
+                />
+                <label
+                  className={styles.reportLabel}
+                  htmlFor={report.categoryId}
                 >
-                  <ReportInput
-                    className={styles.reportInput}
-                    id={report.categoryId}
-                    type="radio"
-                    checked={reportId === report.categoryId}
-                    onChange={() => setReportId(report.categoryId)}
-                  />
-                  <label
-                    className={styles.reportLabel}
-                    htmlFor={report.categoryId}
-                  >
-                    {report.categoryName}
-                  </label>
-                  <Icon
-                    width="12px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-                  />
-                </ReportBox>
-              ))}
-            <ReportTextBox
-              placeholder="신고 이유를 작성해주세요"
-              ref={reportRef}
-              onChange={() => {
-                setReportContent(reportRef.current.value);
-              }}
-            />
-          </div>
-          <button
-            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-            type="button"
-            onClick={() => {
-              setShowDoubleCheckModal(true);
+                  {report.categoryName}
+                </label>
+                <Icon
+                  width="12px"
+                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                />
+              </ReportBox>
+            ))}
+          <ReportTextBox
+            placeholder="신고 이유를 작성해주세요"
+            ref={reportRef}
+            onChange={() => {
+              setReportContent(reportRef.current.value);
             }}
-          >
-            다음
-          </button>
-        </ReportContainer>
-      )}
+          />
+        </div>
+        <button
+          className={nextOK ? styles.nextOKBtn : styles.nextBtn}
+          type="button"
+          onClick={() => {
+            setShowDoubleCheckModal(true);
+          }}
+        >
+          다음
+        </button>
+      </ReportContainer>
     </>
   );
 };

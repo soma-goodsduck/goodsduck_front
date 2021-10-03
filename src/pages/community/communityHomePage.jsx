@@ -40,6 +40,12 @@ const CommunityHomePage = (props) => {
       setMenuText("커뮤니티");
     } else if (communityMenu === "freeMarket") {
       setMenuText("무료나눔장터");
+    } else if (communityMenu === "myPosts") {
+      setMenuText("내가 작성한 게시글");
+    } else if (communityMenu === "myComments") {
+      setMenuText("내가 작성한 댓글");
+    } else if (communityMenu === "myFavoritePosts") {
+      setMenuText("내가 좋아요한 게시글");
     }
   };
   useEffect(fnEffect, []);
@@ -47,23 +53,21 @@ const CommunityHomePage = (props) => {
   return (
     <>
       {showPopup && <LoginPopUp />}
-      {!showPopup && (
-        <>
-          <CommunityHome>
-            <HeaderCommunity text={menuText} />
-            <Line />
-            <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
-            {isIdolFilter !== 0 && (
-              <AddPostBtn
-                onClick={() => {
-                  history.push("/upload-post");
-                }}
-              />
-            )}
-          </CommunityHome>
-          <Nav />
-        </>
-      )}
+      <>
+        <CommunityHome>
+          <HeaderCommunity text={menuText} />
+          <Line />
+          <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
+          {isIdolFilter !== 0 && (
+            <AddPostBtn
+              onClick={() => {
+                history.push("/upload-post");
+              }}
+            />
+          )}
+        </CommunityHome>
+        <Nav />
+      </>
     </>
   );
 };

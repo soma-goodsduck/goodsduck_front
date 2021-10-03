@@ -58,31 +58,31 @@ const MyProfilePage = () => {
   return (
     <>
       {showPopup && <LoginPopUp />}
-      {!showPopup && (
-        <div>
-          {user && (
-            <MyPageBox>
-              <Header>
-                <Text size="20px" bold>
-                  내 프로필
-                </Text>
-                <Button
-                  width="30px"
-                  height="30px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_setting.svg"
-                  _onClick={() => {
-                    history.push("/setting");
-                  }}
-                />
-              </Header>
+      <div>
+        <MyPageBox>
+          <Header>
+            <Text size="20px" bold>
+              내 프로필
+            </Text>
+            <Button
+              width="30px"
+              height="30px"
+              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_setting.svg"
+              _onClick={() => {
+                history.push("/setting");
+              }}
+            />
+          </Header>
+          {user && myProfile && items && (
+            <>
               <UserProfile user={user} />
               <Btns myProfile={myProfile} />
               <ItemList items={items} />
-              {!isApp && <Nav />}
-            </MyPageBox>
+            </>
           )}
-        </div>
-      )}
+          <Nav />
+        </MyPageBox>
+      </div>
     </>
   );
 };

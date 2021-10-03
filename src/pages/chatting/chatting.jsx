@@ -146,21 +146,17 @@ export class Chatting extends Component {
     return (
       <>
         {showPopup && <LoginPopUp />}
-        {!showPopup && (
-          <ChattingBox>
-            <Header>
-              <Text bold size="18px">
-                채팅
-              </Text>
-            </Header>
-            {chatRooms !== [] && (
-              <div style={{ marginBottom: "80px" }}>
-                {this.renderChatRooms()}
-              </div>
-            )}
-            <Nav />
-          </ChattingBox>
-        )}
+        <ChattingBox>
+          <Header>
+            <Text bold size="18px">
+              채팅
+            </Text>
+          </Header>
+          {chatRooms !== [] && (
+            <div style={{ marginBottom: "80px" }}>{this.renderChatRooms()}</div>
+          )}
+          <Nav />
+        </ChattingBox>
       </>
     );
   }

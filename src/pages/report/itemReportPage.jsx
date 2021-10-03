@@ -103,33 +103,33 @@ const ItemReportPage = (props) => {
         />
       )}
 
-      {itemData && (
-        <ReportContainer>
-          <HeaderInfo text="신고하기" padding="0 16px" />
-          <TextBox>
+      <ReportContainer>
+        <HeaderInfo text="신고하기" padding="0 16px" />
+        <TextBox>
+          {itemData && (
             <Text margin="10px 15px" medium>
               &quot;{itemData.name}&quot; 굿즈를 신고하는 이유를 선택해주세요.
             </Text>
-          </TextBox>
-          {reports &&
-            reports.map((report) => (
-              <ReportBox
-                key={report.categoryId}
-                onClick={() => {
-                  setReportId(report.categoryId);
-                  setShowDoubleCheckModal(true);
-                }}
-              >
-                <ReportInput id={report.categoryId} type="radio" />
-                <label htmlFor={report.categoryId}>{report.categoryName}</label>
-                <Icon
-                  width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-                />
-              </ReportBox>
-            ))}
-        </ReportContainer>
-      )}
+          )}
+        </TextBox>
+        {reports &&
+          reports.map((report) => (
+            <ReportBox
+              key={report.categoryId}
+              onClick={() => {
+                setReportId(report.categoryId);
+                setShowDoubleCheckModal(true);
+              }}
+            >
+              <ReportInput id={report.categoryId} type="radio" />
+              <label htmlFor={report.categoryId}>{report.categoryName}</label>
+              <Icon
+                width="12px"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+              />
+            </ReportBox>
+          ))}
+      </ReportContainer>
     </>
   );
 };

@@ -36,18 +36,16 @@ const LikeItemList = () => {
   return (
     <>
       {showPopup && <LoginPopUp />}
-      {!showPopup && (
-        <div>
-          <HeaderInfo text="찜" padding="0 16px" />
-          {favoriteItems !== [] && (
-            <Box>
-              {favoriteItems.map((favoriteItem) => (
-                <ItemRow key={favoriteItem.itemId} item={favoriteItem} isBtn />
-              ))}
-            </Box>
-          )}
-        </div>
-      )}
+      <div>
+        <HeaderInfo text="찜" padding="0 16px" />
+        {favoriteItems !== [] && (
+          <Box>
+            {favoriteItems.map((favoriteItem) => (
+              <ItemRow key={favoriteItem.itemId} item={favoriteItem} isBtn />
+            ))}
+          </Box>
+        )}
+      </div>
     </>
   );
 };
