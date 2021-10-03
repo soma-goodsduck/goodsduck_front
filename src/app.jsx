@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable indent */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -129,16 +131,29 @@ function App() {
   const listener = async (event) => {
     const { data, type } = JSON.parse(event.data);
 
-    if (type === "TOKEN") {
-      const sendFcmToken = await reqSendFcmToken(data);
+    switch (type) {
+      case "TOKEN":
+        const sendFcmToken = await reqSendFcmToken(data);
 
-      if (sendFcmToken < 0) {
-        if (sendFcmToken === -201) {
-          history.push("/login");
-          return;
+        if (sendFcmToken < 0) {
+          if (sendFcmToken === -201) {
+            history.push("/login");
+            return;
+          }
+          history.push("/error");
         }
+        break;
+      case "BACK_ANDROID":
+        if (!history.location.key) {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQ_EXIT_ANDROID" }),
+          );
+        } else {
+          history.goBack();
+        }
+        break;
+      default:
         history.push("/error");
-      }
     }
   };
   const RNListener = () => {
