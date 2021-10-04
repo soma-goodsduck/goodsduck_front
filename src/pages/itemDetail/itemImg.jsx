@@ -14,6 +14,7 @@ import { postAction, deleteAction } from "../../shared/axios";
 import { actionCreators as itemActions } from "../../redux/modules/item";
 import { history } from "../../redux/configureStore";
 import { grayBorder } from "../../shared/colors";
+import ItemImgBig from "./itemImgBig";
 
 const ItemImg = ({ id, item, onClick }) => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const ItemImg = ({ id, item, onClick }) => {
   const [isOverImg, setIsOverImg] = useState(false);
   const [isSwipeBtnOverImg, setIsSwipeBtnOverImg] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
+  const [showBigImg, setShowBigImg] = useState(false);
 
   const _handleScroll = _.throttle(() => {
     const _img = document.querySelector("#itemImg");
@@ -133,6 +135,10 @@ const ItemImg = ({ id, item, onClick }) => {
     setShowSharePopup(false);
   };
 
+  const handleClickImg = () => {
+    setShowBigImg(true);
+  };
+
   // 이미지 스와이프
   const [showPreviousImgBtn, setShowPreviousImgBtn] = useState(true);
   const [showNextImgBtn, setShowNextImgBtn] = useState(true);
@@ -171,9 +177,19 @@ const ItemImg = ({ id, item, onClick }) => {
           _onClick3={() => setShowSharePopup(false)}
         />
       )}
+      {showBigImg && (
+        <ItemImgBig
+          imgUrl={item.images[imgNumber].url}
+          _onClick={() => setShowBigImg(false)}
+        />
+      )}
       <Flex className={styles.imgBox}>
         <div className={styles.imgDataBox} id="itemImg">
-          <Img src={item.images[imgNumber].url} className={styles.itemImg} />
+          <Img
+            src={item.images[imgNumber].url}
+            className={styles.itemImg}
+            onClick={() => handleClickImg()}
+          />
           <span className={styles.watermark}>
             ⓒ GOODSDUCK ({item.itemOwner.nickName})
           </span>
@@ -258,6 +274,7 @@ const Img = styled.div`
 
   background-image: url("${(props) => props.src}");
   background-size: cover;
+  cursor: pointer;
 
   @media screen and (min-width: 415px) {
     width: 415px;
