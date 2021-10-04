@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable indent */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState, useCallback } from "react";
@@ -7,7 +8,7 @@ import _ from "lodash";
 import styled from "styled-components";
 import styles from "./itemDetail.module.css";
 
-import { Flex, LoginPopUp } from "../../elements/index";
+import { Flex, LoginPopUp, PopUp2 } from "../../elements/index";
 import { postAction, deleteAction } from "../../shared/axios";
 
 import { actionCreators as itemActions } from "../../redux/modules/item";
@@ -22,6 +23,7 @@ const ItemImg = ({ id, item, onClick }) => {
   const [scrollHeight, setScrollHeight] = useState("");
   const [isOverImg, setIsOverImg] = useState(false);
   const [isSwipeBtnOverImg, setIsSwipeBtnOverImg] = useState(false);
+  const [showSharePopup, setShowSharePopup] = useState(false);
 
   const _handleScroll = _.throttle(() => {
     const _img = document.querySelector("#itemImg");
@@ -91,6 +93,46 @@ const ItemImg = ({ id, item, onClick }) => {
     onClick();
   };
 
+  const clickShare = () => {
+    if (typeof navigator.share !== "undefined") {
+      window.navigator.share({
+        title: "GOODSDUCK",
+        text: `${item.name} | GOODSDUCK`,
+        url: window.location.href,
+      });
+      return;
+    }
+
+    setShowSharePopup(true);
+  };
+
+  const handleShareByKakao = () => {
+    Kakao.Link.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "GOODSDUCK",
+        description: item.name,
+        imageUrl: item.images[0].url,
+        link: {
+          mobileWebUrl: window.location.href,
+          webUrl: window.location.href,
+        },
+      },
+    });
+
+    setShowSharePopup(false);
+  };
+
+  const handleShareByTwitter = () => {
+    const sendText = "GOODSDUCK";
+    const sendUrl = window.location.href;
+    window.open(
+      `https://twitter.com/intent/tweet?text=${sendText}&url=${sendUrl}`,
+    );
+
+    setShowSharePopup(false);
+  };
+
   // 이미지 스와이프
   const [showPreviousImgBtn, setShowPreviousImgBtn] = useState(true);
   const [showNextImgBtn, setShowNextImgBtn] = useState(true);
@@ -120,6 +162,15 @@ const ItemImg = ({ id, item, onClick }) => {
   return (
     <>
       {showPopup && <LoginPopUp />}
+      {showSharePopup && (
+        <PopUp2
+          text1="카카오톡으로 공유하기"
+          text2="트위터로 공유하기"
+          _onClick1={() => handleShareByKakao()}
+          _onClick2={() => handleShareByTwitter()}
+          _onClick3={() => setShowSharePopup(false)}
+        />
+      )}
       <Flex className={styles.imgBox}>
         <div className={styles.imgDataBox} id="itemImg">
           <Img src={item.images[imgNumber].url} className={styles.itemImg} />
@@ -159,12 +210,18 @@ const ItemImg = ({ id, item, onClick }) => {
               }}
             />
           )}
-          <div>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <button
               type="button"
               aria-label="like"
               className={isLike ? styles.clickLikeBtn : styles.likeBtn}
               onClick={() => clickHeart()}
+            />
+            <button
+              type="button"
+              aria-label="share"
+              className={styles.shareBtnBlack}
+              onClick={() => clickShare()}
             />
             <button
               type="button"

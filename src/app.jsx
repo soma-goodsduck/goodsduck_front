@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-case-declarations */
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
@@ -191,6 +192,12 @@ function App() {
       }, 2000);
     }
   }, [showNotification]);
+
+  useEffect(() => {
+    if (typeof navigator.share === "undefined") {
+      Kakao.init(process.env.REACT_APP_KAKAO_JS_API_KEY);
+    }
+  }, []);
 
   return (
     <>
