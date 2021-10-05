@@ -1,6 +1,8 @@
+/* eslint-disable indent */
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import styled from "styled-components";
 import Post from "./post";
 import InfinityScroll from "./infinityScroll";
 import IdolGroupFiltering from "../filtering/idolGroupFiltering";
@@ -16,103 +18,157 @@ const PostList = ({ onIdolFilter, type }) => {
     hasNext: state.community.hasNext,
     postNum: state.community.postNum,
   }));
-  const [isIdolFilter, setIsIdolFilter] = useState(false);
+  const [isIdolFilter, setIsIdolFilter] = useState(
+    localStorage.getItem("filter_idolGroup"),
+  );
 
   useEffect(() => {
-    if (localStorage.getItem("filter_idolGroup")) {
-      setIsIdolFilter(true);
-    }
     dispatch(communityActions.clearPosts());
 
-    // 커뮤니티
-    if (type === "home") {
-      if (isIdolFilter) {
-        dispatch(
-          communityActions.getPostsDataByIdol(
-            0,
-            localStorage.getItem("filter_idolGroup"),
-          ),
-        );
-      } else {
-        dispatch(communityActions.getPostsData("posts", 0));
-      }
-    } else if (type === "freeMarket") {
+    switch (type) {
+      // 커뮤니티
+      case "home":
+        if (isIdolFilter) {
+          dispatch(
+            communityActions.getPostsDataByIdol(
+              "posts",
+              0,
+              localStorage.getItem("filter_idolGroup"),
+            ),
+          );
+        } else {
+          dispatch(communityActions.getPostsData("posts", 0));
+        }
+        break;
       // 무료나눔장터
-      if (isIdolFilter) {
-        dispatch(
-          communityActions.getFreeMarketDataByIdol(
-            0,
-            localStorage.getItem("filter_idolGroup"),
-          ),
-        );
-      } else {
-        dispatch(communityActions.getPostsData("community/free-market", 0));
-      }
+      case "freeMarket":
+        if (isIdolFilter) {
+          dispatch(
+            communityActions.getPostsDataByIdol(
+              "community/free-market",
+              0,
+              localStorage.getItem("filter_idolGroup"),
+            ),
+          );
+        } else {
+          dispatch(communityActions.getPostsData("community/free-market", 0));
+        }
+        break;
+      // 내가 작성한 게시글
+      case "myPosts":
+        dispatch(communityActions.getMyPostsData(0));
+        break;
+      // 내가 작성한 댓글
+      case "myComments":
+        dispatch(communityActions.getMyCommentsData(0));
+        break;
+      // 내가 좋아요한 게시글
+      case "myFavoritePosts":
+        dispatch(communityActions.getMyFavoritePostsData(0));
+        break;
+      default:
+        break;
     }
   }, []);
 
   const handleCallNext = (_type) => {
-    // 커뮤니티
-    if (type === "home") {
-      if (_type === "home") {
-        console.log(postNum);
-        dispatch(communityActions.getPostsData("posts", postNum));
-      } else if (_type === "idol") {
-        dispatch(
-          communityActions.getPostsDataByIdol(
-            postNum,
-            localStorage.getItem("filter_idolGroup"),
-          ),
-        );
-      }
-    } else if (type === "freeMarket") {
+    switch (type) {
+      // 커뮤니티
+      case "home":
+        if (_type === "home") {
+          dispatch(communityActions.getPostsData("posts", postNum));
+        } else if (_type === "idol") {
+          dispatch(
+            communityActions.getPostsDataByIdol(
+              "posts",
+              postNum,
+              localStorage.getItem("filter_idolGroup"),
+            ),
+          );
+        }
+        break;
       // 무료나눔장터
-      if (_type === "home") {
-        dispatch(
-          communityActions.getPostsData("community/free-market", postNum),
-        );
-      } else if (_type === "idol") {
-        dispatch(
-          communityActions.getFreeMarketDataByIdol(
-            postNum,
-            localStorage.getItem("filter_idolGroup"),
-          ),
-        );
-      }
+      case "freeMarket":
+        if (_type === "home") {
+          dispatch(
+            communityActions.getPostsData("community/free-market", postNum),
+          );
+        } else if (_type === "idol") {
+          dispatch(
+            communityActions.getPostsDataByIdol(
+              "community/free-market",
+              postNum,
+              localStorage.getItem("filter_idolGroup"),
+            ),
+          );
+        }
+        break;
+      // 내가 작성한 게시글
+      case "myPosts":
+        dispatch(communityActions.getMyPostsData(postNum));
+        break;
+      // 내가 작성한 댓글
+      case "myComments":
+        dispatch(communityActions.getMyCommentsData(postNum));
+        break;
+      // 내가 좋아요한 게시글
+      case "myFavoritePosts":
+        dispatch(communityActions.getMyFavoritePostsData(postNum));
+        break;
+      default:
+        break;
     }
   };
 
   const handleFiltering = async (id) => {
-    // 커뮤니티
     dispatch(communityActions.clearPosts());
     dispatch(newPostActions.setIdol(id));
-    if (type === "home") {
-      if (id === 0) {
-        onIdolFilter(0);
-        setIsIdolFilter(false);
-        dispatch(communityActions.getPostsData("posts", 0));
-      } else {
-        onIdolFilter(id);
-        setIsIdolFilter(true);
-        dispatch(communityActions.getPostsDataByIdol(0, id));
-      }
-    } else if (type === "freeMarket") {
+
+    switch (type) {
+      // 커뮤니티
+      case "home":
+        if (id === 0) {
+          onIdolFilter(0);
+          setIsIdolFilter(false);
+          dispatch(communityActions.getPostsData("posts", 0));
+        } else {
+          onIdolFilter(id);
+          setIsIdolFilter(true);
+          dispatch(communityActions.getPostsDataByIdol("posts", 0, id));
+        }
+        break;
       // 무료나눔장터
-      if (id === 0) {
-        onIdolFilter(0);
-        setIsIdolFilter(false);
-        dispatch(communityActions.getPostsData("community/free-market", 0));
-      } else {
-        onIdolFilter(id);
-        setIsIdolFilter(true);
-        dispatch(communityActions.getFreeMarketDataByIdol(0, id));
-      }
+      case "freeMarket":
+        if (id === 0) {
+          onIdolFilter(0);
+          setIsIdolFilter(false);
+          dispatch(communityActions.getPostsData("community/free-market", 0));
+        } else {
+          onIdolFilter(id);
+          setIsIdolFilter(true);
+          dispatch(
+            communityActions.getPostsDataByIdol("community/free-market", 0, id),
+          );
+        }
+        break;
+      default:
+        break;
     }
   };
 
   return (
     <>
-      <IdolGroupFiltering onClick={handleFiltering} />
+      {(type === "home" || type === "freeMarket") && (
+        <IdolGroupFiltering onClick={handleFiltering} />
+      )}
+
+      {!isLoading && posts.length === 0 && (
+        <Notice>
+          <Text>아직 등록된 글이 없습니다😢</Text>
+        </Notice>
+      )}
+
+      {type !== "home" && type !== "freeMarket" && <Box />}
       <InfinityScroll
         callNext={(_type) => {
           handleCallNext(_type);
@@ -124,7 +180,7 @@ const PostList = ({ onIdolFilter, type }) => {
         {posts && (
           <>
             {posts.map((post) => (
-              <Post key={post.postId} postData={post} />
+              <Post key={post.postId} postData={post} type={type} />
             ))}
           </>
         )}
@@ -132,5 +188,20 @@ const PostList = ({ onIdolFilter, type }) => {
     </>
   );
 };
+
+const Notice = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+`;
+const Text = styled.div`
+  padding: 7px 0;
+  font-weight: 500;
+`;
+
+const Box = styled.div`
+  margin-top: 30px;
+`;
 
 export default PostList;

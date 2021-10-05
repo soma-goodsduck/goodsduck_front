@@ -44,7 +44,6 @@ const initialState = {
 const getPostsData = (path, num) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().community.hasNext;
-    console.log(_hasNext);
 
     if (num !== 0 && !_hasNext) {
       return;
@@ -54,10 +53,12 @@ const getPostsData = (path, num) => {
 
     const getPostList = await requestAuthData(`v1/${path}?postId=${num}`);
     if (getPostList < 0) {
+      if (getPostList === -201) {
+        return;
+      }
       history.push("/error");
       return;
     }
-    console.log(getPostList);
 
     const newPostData = getPostList.list;
     const hasNext = getPostList.hasNext;
@@ -75,8 +76,8 @@ const getPostsData = (path, num) => {
   };
 };
 
-// 아이돌 그룹별 필터링
-const getPostsDataByIdol = (num, idolId) => {
+// 아이돌 그룹별 필터링 OR 무료나눔장터 + 아이돌 필터
+const getPostsDataByIdol = (path, num, idolId) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().community.hasNext;
 
@@ -87,13 +88,15 @@ const getPostsDataByIdol = (num, idolId) => {
     dispatch(loading(true));
 
     const getPostList = await requestAuthData(
-      `v1/posts/filter?postId=${num}&idolGroup=${idolId}`,
+      `v1/${path}/filter?postId=${num}&idolGroup=${idolId}`,
     );
     if (getPostList < 0) {
+      if (getPostList === -201) {
+        return;
+      }
       history.push("/error");
       return;
     }
-    console.log(getPostList);
 
     const newPostData = getPostList.list;
     const hasNext = getPostList.hasNext;
@@ -111,8 +114,44 @@ const getPostsDataByIdol = (num, idolId) => {
   };
 };
 
-// 무료나눔장터 + 아이돌 필터
-const getFreeMarketDataByIdol = (num, idolId) => {
+// 내가 작성한 포스트
+const getMyPostsData = (num) => {
+  return async function (dispatch, getState, { history }) {
+    const _hasNext = getState().community.hasNext;
+
+    if (num !== 0 && !_hasNext) {
+      return;
+    }
+
+    dispatch(loading(true));
+
+    const getPostList = await requestAuthData(`v1/users/posts?postId=${num}`);
+    if (getPostList < 0) {
+      if (getPostList === -201) {
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
+    const newPostData = getPostList.list;
+    const hasNext = getPostList.hasNext;
+
+    let postNum;
+    if (newPostData.length !== 0) {
+      postNum = newPostData[newPostData.length - 1].postId;
+    }
+
+    if (getPostList.hasNext) {
+      dispatch(setPosts(newPostData, hasNext, postNum));
+    } else {
+      dispatch(setPosts(newPostData, hasNext, getState().community.postNum));
+    }
+  };
+};
+
+// 내가 작성한 댓글
+const getMyCommentsData = (num) => {
   return async function (dispatch, getState, { history }) {
     const _hasNext = getState().community.hasNext;
 
@@ -123,13 +162,53 @@ const getFreeMarketDataByIdol = (num, idolId) => {
     dispatch(loading(true));
 
     const getPostList = await requestAuthData(
-      `v1/community/free-market/filter?postId=${num}&idolGroupId=${idolId}`,
+      `v2/users/comments?postId=${num}`,
     );
     if (getPostList < 0) {
+      if (getPostList === -201) {
+        return;
+      }
       history.push("/error");
       return;
     }
-    console.log(getPostList);
+
+    const newPostData = getPostList.list;
+    const hasNext = getPostList.hasNext;
+
+    let postNum;
+    if (newPostData.length !== 0) {
+      postNum = newPostData[newPostData.length - 1].postId;
+    }
+
+    if (getPostList.hasNext) {
+      dispatch(setPosts(newPostData, hasNext, postNum));
+    } else {
+      dispatch(setPosts(newPostData, hasNext, getState().community.postNum));
+    }
+  };
+};
+
+// 내가 좋아요한 포스트
+const getMyFavoritePostsData = (num) => {
+  return async function (dispatch, getState, { history }) {
+    const _hasNext = getState().community.hasNext;
+
+    if (num !== 0 && !_hasNext) {
+      return;
+    }
+
+    dispatch(loading(true));
+
+    const getPostList = await requestAuthData(
+      `v1/users/like-posts?postId=${num}`,
+    );
+    if (getPostList < 0) {
+      if (getPostList === -201) {
+        return;
+      }
+      history.push("/error");
+      return;
+    }
 
     const newPostData = getPostList.list;
     const hasNext = getPostList.hasNext;
@@ -191,7 +270,9 @@ export default handleActions(
 const actionCreators = {
   getPostsData,
   getPostsDataByIdol,
-  getFreeMarketDataByIdol,
+  getMyPostsData,
+  getMyCommentsData,
+  getMyFavoritePostsData,
   addpost,
   deletePost,
   clearPosts,

@@ -28,10 +28,30 @@ const CommunityMenu = (props) => {
         />
       </Header>
       <MenuBtns>
-        <MenuBtn>내가 작성한 게시글</MenuBtn>
-        <MenuBtn>내가 작성한 댓글</MenuBtn>
-        <MenuBtn>내가 좋아요한 게시글</MenuBtn>
-        <MenuBtn>투표하기</MenuBtn>
+        <MenuBtn
+          onClick={() => {
+            history.push("/community");
+            dispatch(communityActions.setCommunityMenu("myPosts"));
+          }}
+        >
+          내가 작성한 게시글
+        </MenuBtn>
+        <MenuBtn
+          onClick={() => {
+            history.push("/community");
+            dispatch(communityActions.setCommunityMenu("myComments"));
+          }}
+        >
+          내가 작성한 댓글
+        </MenuBtn>
+        <MenuBtn
+          onClick={() => {
+            history.push("/community");
+            dispatch(communityActions.setCommunityMenu("myFavoritePosts"));
+          }}
+        >
+          내가 좋아요한 게시글
+        </MenuBtn>
         <MenuBtn
           onClick={() => {
             history.push("/community");
@@ -39,6 +59,14 @@ const CommunityMenu = (props) => {
           }}
         >
           무료나눔장터
+        </MenuBtn>
+        <MenuBtn
+          onClick={() => {
+            history.push("/vote");
+            dispatch(communityActions.setCommunityMenu("home"));
+          }}
+        >
+          투표하기
         </MenuBtn>
       </MenuBtns>
     </>
