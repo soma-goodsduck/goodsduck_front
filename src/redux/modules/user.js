@@ -184,10 +184,8 @@ const signupAction = (user) => {
     }
 
     dispatch(logIn(signup.response.jwt));
-    await setLS(
-      "likeIdolGroups",
-      signup.response.likeIdolGroups[0].idolGroupId,
-    );
+    setLS("likeIdolGroups", user.idols);
+
     // chat badge 정보 저장
     firebaseDatabase
       .ref("users")
@@ -228,6 +226,7 @@ const socialSignupAction = (user) => {
     }
 
     dispatch(logIn(signup.data.response.jwt));
+    setLS("likeIdolGroups", user.idols);
 
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(

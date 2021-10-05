@@ -14,7 +14,13 @@ import AgreementOfTerms from "./agreementOfTerms";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { postActionForNonUser } from "../../shared/axios";
-import { red, green, grayBorder } from "../../shared/colors";
+import {
+  red,
+  green,
+  grayBorder,
+  gray,
+  grayBtnBorder,
+} from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
@@ -46,8 +52,8 @@ const Signup = () => {
   const [nick, setNick] = useState("");
   const [isUsedNick, setIsUsedNick] = useState(false);
 
-  const idol = useSelector((state) => state.user.idolsForSignup);
-  const [isIdolSelected, setIsIdolSelected] = useState(false);
+  // const idol = useSelector((state) => state.user.idolsForSignup);
+  // const [isIdolSelected, setIsIdolSelected] = useState(false);
 
   // 이용약관, 개인정보, 마케팅 정보 동의
   const [isServiceAgree, setIsServiceAgree] = useState(false);
@@ -65,7 +71,7 @@ const Signup = () => {
       pw2 !== "" &&
       nick !== "" &&
       !isUsedNick &&
-      isIdolSelected &&
+      // isIdolSelected &&
       isValidated &&
       isServiceAgree &&
       isPrivacyAgree
@@ -80,7 +86,7 @@ const Signup = () => {
     pw2,
     nick,
     isUsedNick,
-    isIdolSelected,
+    // isIdolSelected,
     isValidated,
     isServiceAgree,
     isPrivacyAgree,
@@ -279,9 +285,9 @@ const Signup = () => {
   }, 500);
   const nickCheck = useCallback(nickCheckPost, []);
 
-  const updateIdols = () => {
-    setIsIdolSelected(true);
-  };
+  // const updateIdols = () => {
+  //   setIsIdolSelected(true);
+  // };
 
   const handleAgreeAllClick = () => {
     setIsServiceAgree(true);
@@ -303,7 +309,10 @@ const Signup = () => {
       return;
     }
 
-    const idols = [Number(idol)];
+    // const idols = [Number(idol)];
+    const idols = [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ];
     const user = { email, pw, nick, phone, idols, isMarketingAgree };
     dispatch(userActions.signupAction(user));
 
@@ -483,7 +492,11 @@ const Signup = () => {
           </Grid>
           <Grid padding="16px 0px">
             <LabelText>좋아하는 아이돌</LabelText>
-            <IdolGroups onUpdate={updateIdols} />
+            <Text color={grayBtnBorder} size="15px" margin="0 0 5px 0">
+              회원가입 후 홈, 마이페이지에서 수정할 수 있습니다.
+            </Text>
+            {/* <IdolGroups onUpdate={updateIdols} /> */}
+            <IdolGroups onlyRead />
           </Grid>
         </Box>
         <Grid padding="16px 0px">
