@@ -102,7 +102,7 @@ const Login = () => {
           </Flex>
           <SignupBtn
             onClick={() => {
-              history.replace("/signup");
+              history.push("/signup");
             }}
           >
             회원가입

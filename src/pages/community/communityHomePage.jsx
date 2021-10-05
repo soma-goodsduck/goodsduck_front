@@ -16,7 +16,9 @@ const CommunityHomePage = (props) => {
   const communityMenu = useSelector((state) => state.community.menu);
   const [menuText, setMenuText] = useState("커뮤니티");
   const [showPopup, setShowPopup] = useState(false);
-  const [isIdolFilter, setIsIdolFilter] = useState(0);
+
+  const idolIdLS = Number(localStorage.getItem("filter_idolGroup"));
+  const [isIdolFilter, setIsIdolFilter] = useState(idolIdLS);
   const handleIdolFilter = (id) => {
     setIsIdolFilter(id);
   };
@@ -33,9 +35,11 @@ const CommunityHomePage = (props) => {
         return;
       }
       history.push("/error");
-      return;
     }
+  };
+  useEffect(fnEffect, []);
 
+  useEffect(() => {
     if (communityMenu === "home") {
       setMenuText("커뮤니티");
     } else if (communityMenu === "freeMarket") {
@@ -47,8 +51,7 @@ const CommunityHomePage = (props) => {
     } else if (communityMenu === "myFavoritePosts") {
       setMenuText("내가 좋아요한 게시글");
     }
-  };
-  useEffect(fnEffect, []);
+  }, [communityMenu]);
 
   return (
     <>

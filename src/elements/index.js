@@ -17,6 +17,7 @@ import ItemStatusBox from "./itemStatusBox";
 import DoubleCheckModal from "./doubleCheckModal";
 import DoubleCheckModal2 from "./doubleCheckModal2";
 import FilteringModal from "./filteringModal";
+import Spinner from "./spinner";
 
 export {
   Grid,
@@ -27,6 +28,7 @@ export {
   Button,
   Flex,
   RowScroll,
+  Spinner,
   PopUp,
   PopUp2,
   PopUp3,

@@ -73,7 +73,6 @@ const PostBody = ({ postData }) => {
     <PostContainer>
       <PostBox>
         {/* 글쓴이 정보 */}
-
         <UserInfo
           onClick={() => {
             history.push(`${userPushUrl}`);

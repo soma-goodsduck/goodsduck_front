@@ -37,7 +37,7 @@ const ItemImg = ({ id, item, onClick }) => {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, true);
     return () => window.removeEventListener("scroll", handleScroll, true);
-  }, []);
+  });
 
   useEffect(() => {
     if (scrollHeight > screenWidth - 40) {
@@ -180,6 +180,7 @@ const ItemImg = ({ id, item, onClick }) => {
       {showBigImg && (
         <ItemImgBig
           imgUrl={item.images[imgNumber].url}
+          nickName={item.itemOwner.nickName}
           _onClick={() => setShowBigImg(false)}
         />
       )}

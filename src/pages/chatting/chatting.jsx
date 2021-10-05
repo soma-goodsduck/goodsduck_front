@@ -141,7 +141,7 @@ export class Chatting extends Component {
   };
 
   render() {
-    const { userId, chatRooms, showPopup } = this.state;
+    const { chatRooms, showPopup } = this.state;
 
     return (
       <>

@@ -74,7 +74,7 @@ const postUploadPage = (props) => {
 
   return (
     <>
-      <HeaderInfo text="작성하기" />
+      <HeaderInfo text="작성하기" isCommunity />
       <PostUploadBox>
         <div>
           <Flex is_flex justify="flex-start">

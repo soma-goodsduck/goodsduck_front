@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { grayBorder, lightGray2, white, yellow } from "../../../shared/colors";
+import {
+  blackBtn,
+  grayBorder,
+  lightGray2,
+  white,
+  yellow,
+} from "../../../shared/colors";
 
 import { postAction, requestAuthData } from "../../../shared/axios";
 import { actionCreators as postActions } from "../../../redux/modules/post";
@@ -189,6 +195,7 @@ const SendBtn = styled.button`
   width: 50px;
   height: 30px;
   background-color: ${yellow};
+  color: ${blackBtn};
   border-radius: 5px;
   margin: 0 12px;
   padding: 0 5px;

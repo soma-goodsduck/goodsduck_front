@@ -72,9 +72,6 @@ const Btns = styled.div`
 const Button1 = styled.button`
   padding: 15px;
   border-bottom: 1px solid #dddddd;
-  &:hover {
-    font-weight: bold;
-  }
   border-radius: 10px 10px 0 0;
   color: ${blackBtn};
 

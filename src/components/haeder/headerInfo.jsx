@@ -9,6 +9,7 @@ import { Flex, Text, Icon } from "../../elements/index";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { actionCreators as imgActions } from "../../redux/modules/image";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
+import { actionCreators as newPostActions } from "../../redux/modules/newPost";
 
 const HeaderInfo = (props) => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const HeaderInfo = (props) => {
     isUploading,
     isSetting,
     isVote,
+    isCommunity,
   } = props;
 
   const styleProps = {
@@ -50,6 +52,9 @@ const HeaderInfo = (props) => {
       dispatch(userActions.clearSettingInfo());
       history.goBack();
     } else if (isVote) {
+      history.push("/community");
+    } else if (isCommunity) {
+      dispatch(newPostActions.clear());
       history.push("/community");
     } else {
       history.goBack();

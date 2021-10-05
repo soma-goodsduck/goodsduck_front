@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const ItemImgBig = ({ imgUrl, _onClick }) => {
+const ItemImgBig = ({ imgUrl, nickName, _onClick }) => {
   return (
     <>
       <Screen>
         <ExitBtn onClick={_onClick} />
         <Img src={imgUrl} />
+        <Watermark>ⓒ GOODSDUCK ({nickName})</Watermark>
       </Screen>
     </>
   );
@@ -40,6 +41,14 @@ const Img = styled.div`
   @media screen and (min-width: 415px) {
     width: 415px;
   }
+`;
+
+const Watermark = styled.span`
+  position: absolute;
+  top: 80vw;
+  color: gray;
+  opacity: 0.4;
+  font-size: 5vw;
 `;
 
 const ExitBtn = styled.button`

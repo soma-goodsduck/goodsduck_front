@@ -26,9 +26,6 @@ const IconBox = styled.img`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   margin: ${(props) => props.margin};
-
-  background-image: url("${(props) => props.src}");
-  background-size: cover;
   cursor: pointer;
 `;
 

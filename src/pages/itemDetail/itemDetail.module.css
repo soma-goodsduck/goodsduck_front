@@ -181,7 +181,7 @@
 }
 
 .filteringBtn {
-  font-size: 14px;
+  font-size: 12px;
   height: 100%;
   padding: 5px 10px;
   color: var(--grayBtnText);
@@ -189,7 +189,6 @@
   border: 1px solid var(--blackBtn);
   border-radius: 15px;
   margin-right: 5px;
-  margin-bottom: 10px;
 }
 
 /* 워터마크 */

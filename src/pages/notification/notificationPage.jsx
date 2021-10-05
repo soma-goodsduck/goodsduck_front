@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { Icon, Text, Flex, LoginPopUp } from "../../elements";
+import { Icon, Text, Flex, LoginPopUp, Spinner } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import NotificationRow from "./notificationRow";
 import { grayBtnText } from "../../shared/colors";
@@ -16,12 +16,15 @@ const NotificationPage = () => {
 
   const notifications = useSelector((state) => state.user.notifications);
   const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestNotifications = async () => {
     const result = await requestAuthData("v2/users/notifications");
     return result;
   };
   const fnEffect = async () => {
+    setIsLoading(true);
+
     const getNotifications = await requestNotifications();
 
     if (getNotifications < 0) {
@@ -33,6 +36,7 @@ const NotificationPage = () => {
       return;
     }
 
+    setIsLoading(false);
     dispatch(userActions.setNotificationList(getNotifications));
   };
   useEffect(fnEffect, []);
@@ -70,6 +74,12 @@ const NotificationPage = () => {
             <Text color={grayBtnText}>전체 알림 삭제</Text>
           </DeleteBtn>
         </Flex>
+        {isLoading && <Spinner />}
+        {notifications.length === 0 && (
+          <Notice>
+            <NoticeText>받은 알림이 없습니다!</NoticeText>
+          </Notice>
+        )}
         {notifications !== null && (
           <NotificationRowBox>
             {notifications.map((notification, idx) => (
@@ -91,6 +101,17 @@ const NotificationRowBox = styled.div`
 const DeleteBtn = styled.button`
   display: flex;
   align-items: center;
+`;
+
+const Notice = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+`;
+const NoticeText = styled.div`
+  padding: 7px 0;
+  font-weight: 500;
 `;
 
 export default NotificationPage;

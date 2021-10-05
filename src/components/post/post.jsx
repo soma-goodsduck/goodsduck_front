@@ -9,12 +9,13 @@ import {
   darkGreen,
   red,
   white,
+  blackNav,
 } from "../../shared/colors";
 import { formatDate } from "../../shared/functions";
 
 import { history } from "../../redux/configureStore";
 
-const Post = ({ postData }) => {
+const Post = ({ postData, type }) => {
   return (
     <PostContainer>
       <PostBox
@@ -52,9 +53,14 @@ const Post = ({ postData }) => {
                 </Text>
               </Flex>
             </Flex>
-            {postData.postCategory.postCategoryId === 26 && (
-              <TypeBadge>나눔글</TypeBadge>
-            )}
+            <Flex is_col align="flex-end">
+              {type !== "home" && type !== "freeMarket" && (
+                <IdolBadge>{postData.idolGroupName}</IdolBadge>
+              )}
+              {postData.postCategory.postCategoryId === 26 && (
+                <TypeBadge>나눔글</TypeBadge>
+              )}
+            </Flex>
           </Flex>
         </UserInfo>
         {/* 게시글 내용 */}
@@ -127,12 +133,27 @@ const UserName = styled.div`
 
 const TypeBadge = styled.div`
   color: ${darkGreen};
-  width: 58px;
-  height: 28px;
+  width: 100%;
   border: 2px solid ${darkGreen};
   border-radius: 20px;
   font-weight: 500;
   font-size: 14px;
+  padding: 3px 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const IdolBadge = styled.div`
+  color: ${blackNav};
+  width: 100%;
+  border: 2px solid ${blackNav};
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 5px;
+  padding: 3px 8px;
 
   display: flex;
   justify-content: center;

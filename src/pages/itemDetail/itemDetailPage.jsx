@@ -8,7 +8,15 @@ import ItemImg from "./itemImg";
 import ItemNav from "./itemNav";
 import PriceList from "./priceList";
 import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
-import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
+import {
+  Flex,
+  Text,
+  Image,
+  Icon,
+  PopUp2,
+  PopUp3,
+  Spinner,
+} from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as homeActions } from "../../redux/modules/home";
@@ -33,12 +41,14 @@ const ItemDetailPage = ({ history }) => {
   const [korTradeType, setKorTradeType] = useState("");
   const [descData, setDescData] = useState("");
   const [descHeight, setDescHegiht] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestItemData = async () => {
     const result = await requestPublicData(`v1/items/${itemId}`);
     return result;
   };
   const fnEffect = async () => {
+    setIsLoading(true);
     const getItemDetail = await requestItemData();
 
     if (getItemDetail < 0) {
@@ -50,6 +60,7 @@ const ItemDetailPage = ({ history }) => {
       return;
     }
 
+    setIsLoading(false);
     setItemData(getItemDetail);
     setItemOwnerId(getItemDetail.itemOwner.bcryptId);
     setDescData(getItemDetail.description);
@@ -215,40 +226,41 @@ const ItemDetailPage = ({ history }) => {
           }}
         />
       )}
+      {isLoading && <Spinner />}
       {itemData && (
         <>
           <ItemImg id={itemId} item={itemData} onClick={() => clickDots()} />
           <InfoBox>
             {/* 타입, 제목 */}
-            <Flex justify="flex-start" margin="0 0 10px 0">
-              <Text size="22px" bold color={color}>
-                {tradeType}
+            <Text size="19px" bold color={color}>
+              {tradeType}
+            </Text>
+            <Title>
+              <Text size="19px" medium>
+                {itemData.name}
               </Text>
-              <Title>
-                <Text size="22px">{itemData.name}</Text>
-              </Title>
-            </Flex>
+            </Title>
             {/* 시간, 조회수, 좋아요 */}
             <Flex justify="flex-start">
               <Flex>
                 <Icon
-                  width="18px"
+                  width="16px"
                   src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_clock.svg"
                   alt="upload time"
                   margin="0 5px 0 0"
                 />
-                <Text size="18px" color="#bbbbbb">
+                <Text size="16px" color="#bbbbbb">
                   {timeForToday(itemData.itemCreatedAt)}
                 </Text>
               </Flex>
               <Flex margin="0 20px">
                 <Icon
-                  width="18px"
+                  width="16px"
                   src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_eye.svg"
                   alt="views item count"
                   margin="0 5px 0 0"
                 />
-                <Text size="18px" color="#bbbbbb">
+                <Text size="16px" color="#bbbbbb">
                   {itemData.views}
                 </Text>
               </Flex>
@@ -289,7 +301,7 @@ const ItemDetailPage = ({ history }) => {
             </Flex>
             <div className={styles.line} />
             {/* 가격 제시 목록 */}
-            <Text bold size="18px" margin="0 0 20px 0">
+            <Text bold size="17px" margin="0 0 20px 0">
               가격 제시 목록
             </Text>
             <PriceList data={itemData.proposedList} />
@@ -319,7 +331,7 @@ const ItemDetailPage = ({ history }) => {
                       src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${itemData.itemOwner.level}.png`}
                     />
                     <UserName>
-                      <Text size="18px">{itemData.itemOwner.nickName}</Text>
+                      <Text size="16px">{itemData.itemOwner.nickName}</Text>
                     </UserName>
                   </Flex>
                 </Flex>
@@ -342,8 +354,9 @@ const ItemDetailPage = ({ history }) => {
 };
 
 const Title = styled.div`
-  width: 70%;
-  margin-left: 10px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
 `;
 
 const UserName = styled.div`

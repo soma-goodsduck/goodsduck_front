@@ -214,8 +214,6 @@ export const requestPublicData = async (path) => {
     }
     Sentry.captureException(error);
     return -999;
-    // 삭제된 아이템 에러 수정될때까지
-    // return verifyError(error.response.data.error);
   }
 };
 

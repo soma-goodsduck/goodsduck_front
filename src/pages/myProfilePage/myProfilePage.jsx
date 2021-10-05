@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ItemList from "./itemList";
 
-import { Text, Button, LoginPopUp } from "../../elements";
+import { Text, Button, LoginPopUp, Spinner } from "../../elements";
 import Btns from "./btns";
 import UserProfile from "./userProfile";
 import Nav from "../../components/nav/nav";
@@ -16,13 +16,13 @@ import { history } from "../../redux/configureStore";
 const MyProfilePage = () => {
   const dispatch = useDispatch();
 
-  const isApp = localStorage.getItem("isApp");
   // 해당 유저 데이터 받아오기
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [myProfile, setMyProfile] = useState(null);
   const [items, setItems] = useState(null);
   const tradeStatus = useSelector((state) => state.user.filteringType);
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
@@ -35,6 +35,8 @@ const MyProfilePage = () => {
     return result;
   };
   const fnEffect = async () => {
+    setIsLoading(true);
+
     const userData = await requestUserData();
     const myProfileData = await requestMyProfileData();
 
@@ -47,6 +49,7 @@ const MyProfilePage = () => {
       return;
     }
 
+    setIsLoading(false);
     setUser(userData);
     setMyProfile(myProfileData);
     setItems(myProfileData.items);
@@ -61,18 +64,19 @@ const MyProfilePage = () => {
       <div>
         <MyPageBox>
           <Header>
-            <Text size="20px" bold>
+            <Text size="18px" bold>
               내 프로필
             </Text>
             <Button
-              width="30px"
-              height="30px"
+              width="25px"
+              height="25px"
               src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_setting.svg"
               _onClick={() => {
                 history.push("/setting");
               }}
             />
           </Header>
+          {isLoading && <Spinner />}
           {user && myProfile && items && (
             <>
               <UserProfile user={user} />

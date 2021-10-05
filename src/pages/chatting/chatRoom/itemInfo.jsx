@@ -18,7 +18,7 @@ const ItemInfo = () => {
   const chatRoomId = href[href.length - 1];
   const itemId = href[href.length - 2];
 
-  const [item, setItem] = useState({});
+  const [item, setItem] = useState();
   const [isNotExist, setIsNotExist] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [color, setColor] = useState(black);

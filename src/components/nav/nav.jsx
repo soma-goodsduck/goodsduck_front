@@ -144,28 +144,26 @@ const Nav = (props) => {
           <div className={styles.isNotNewIcon} />
           <span className={styles.isNotNewText}>등록</span>
         </button>
-        {process.env.REACT_APP_TYPE === "DEV" && (
-          <button
-            type="button"
-            className={styles.iconBtn}
-            onClick={() => {
-              clickIcon("community");
-            }}
+        <button
+          type="button"
+          className={styles.iconBtn}
+          onClick={() => {
+            clickIcon("community");
+          }}
+        >
+          <div
+            className={
+              isCommunity ? styles.isCommunityIcon : styles.isNotCommunityIcon
+            }
+          />
+          <span
+            className={
+              isCommunity ? styles.isCommunityText : styles.isNotCommunityText
+            }
           >
-            <div
-              className={
-                isCommunity ? styles.isCommunityIcon : styles.isNotCommunityIcon
-              }
-            />
-            <span
-              className={
-                isCommunity ? styles.isCommunityText : styles.isNotCommunityText
-              }
-            >
-              커뮤니티
-            </span>
-          </button>
-        )}
+            커뮤니티
+          </span>
+        </button>
         <button
           type="button"
           className={styles.iconBtn}

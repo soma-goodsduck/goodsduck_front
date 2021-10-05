@@ -9,7 +9,7 @@ import { requestPublicData } from "../../shared/axios";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
-const IdolGroups = ({ onUpdate }) => {
+const IdolGroups = ({ onUpdate, onlyRead }) => {
   const dispatch = useDispatch();
   const idolValue = useSelector((state) => state.user.idolsForSignup);
 
@@ -40,33 +40,67 @@ const IdolGroups = ({ onUpdate }) => {
   };
 
   return (
-    <IdolList>
-      {idols.map((idol) => (
-        <IdolBox key={idol.id} onClick={() => checkHandler(`${idol.id}`)}>
-          <IdolInput
-            id={idol.id}
-            type="radio"
-            checked={idolValue === `${idol.id}`}
-            onChange={() => checkHandler(`${idol.id}`)}
-          />
-          <label
-            htmlFor={idol.id}
-            className={
-              idolValue === `${idol.id}` ? styles.selectedLabel : styles.label
-            }
-          >
-            <img
-              className={styles.idolGroupImg}
-              src={idol.imageUrl}
-              alt="Idol Group"
-            />
-            {idol.name}
-          </label>
-        </IdolBox>
-      ))}
-    </IdolList>
+    <>
+      {onlyRead && (
+        <IdolListForRead>
+          {idols.map((idol) => (
+            <IdolBoxForRead key={idol.id}>
+              <img
+                className={styles.idolGroupImg}
+                src={idol.imageUrl}
+                alt="Idol Group"
+              />
+              <span className={styles.label}>{idol.name}</span>
+            </IdolBoxForRead>
+          ))}
+        </IdolListForRead>
+      )}
+      {!onlyRead && (
+        <IdolList>
+          {idols.map((idol) => (
+            <IdolBox key={idol.id} onClick={() => checkHandler(`${idol.id}`)}>
+              <IdolInput
+                id={idol.id}
+                type="radio"
+                checked={idolValue === `${idol.id}`}
+                onChange={() => checkHandler(`${idol.id}`)}
+              />
+              <label
+                htmlFor={idol.id}
+                className={
+                  idolValue === `${idol.id}`
+                    ? styles.selectedLabel
+                    : styles.label
+                }
+              >
+                <img
+                  className={styles.idolGroupImg}
+                  src={idol.imageUrl}
+                  alt="Idol Group"
+                />
+                {idol.name}
+              </label>
+            </IdolBox>
+          ))}
+        </IdolList>
+      )}
+    </>
   );
 };
+
+const IdolListForRead = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+const IdolBoxForRead = styled.div`
+  width: 80px;
+  margin: 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const IdolList = styled.div`
   display: grid;
