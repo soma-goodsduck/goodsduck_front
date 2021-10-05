@@ -7,6 +7,7 @@ import Item from "../item/item";
 import FilteringIdol from "../filtering/idolGroupFiltering";
 import DetailFiltering from "../filtering/filtering";
 import InfinityScroll from "./infinityScroll";
+import { pullToRefresh } from "../../shared/pullToRefresh";
 
 import { actionCreators as homeActions } from "../../redux/modules/home";
 
@@ -60,15 +61,7 @@ const ItemList = ({ keyword }) => {
     return query;
   };
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("filter_idolGroup") &&
-      localStorage.getItem("filtering")
-    ) {
-      setIsIdolFilter(true);
-      setIsDetailFilter(true);
-    }
-
+  const getNewItems = () => {
     dispatch(homeActions.clearItems());
     if (keyword) {
       dispatch(
@@ -95,7 +88,25 @@ const ItemList = ({ keyword }) => {
     } else {
       dispatch(homeActions.getItemsData(0));
     }
+  };
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("filter_idolGroup") &&
+      localStorage.getItem("filtering")
+    ) {
+      setIsIdolFilter(true);
+      setIsDetailFilter(true);
+    }
+
+    getNewItems();
   }, [keyword, searchOrderType, searchCompleteType]);
+
+  // 모바일에서 위로 당기면 새로고침
+  useEffect(() => {
+    // pullToRefresh(getNewItems);
+    pullToRefresh();
+  }, []);
 
   const handleCallNext = (_type) => {
     if (_type === "home") {
