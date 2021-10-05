@@ -58,6 +58,8 @@ import CommunityMenu from "./pages/community/communityMenu";
 import postDetailPage from "./pages/community/postDetail/postDetailPage";
 import postUploadPage from "./pages/community/postUpload/postUploadPage";
 import PostReportPage from "./pages/report/postReportPage";
+import VotePage from "./pages/votePage/votePage";
+import AppDownloadPopup from "./elements/appDownloadPopup";
 
 import { Notification, Flex } from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
@@ -65,7 +67,6 @@ import { sendTokenAction } from "./shared/axios";
 
 import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
-import VotePage from "./pages/votePage/votePage";
 
 function App() {
   const userAgent = window.navigator.userAgent;
@@ -73,13 +74,47 @@ function App() {
   const isChrome = userAgent.indexOf("Chrome");
   const isChromeMobile = userAgent.indexOf("CriOS");
   const isKakaoTalk = userAgent.indexOf("KAKAOTALK");
+  const isAndroidWeb = userAgent.indexOf("Android");
+  const isIosWeb = userAgent.indexOf("iPhone");
   const isApp = userAgent.indexOf("APP");
 
   const [showNoti, setShowNoti] = useState(false);
   const [notiInfo, setNotiInfo] = useState(null);
   const [notiUrl, setNotiUrl] = useState("");
 
-  // WEB
+  const [showAppDownloadPopup, setShowAppDownloadPopup] = useState(false);
+  const [downloadLink, setDownloadLink] = useState("");
+  const showAppPopupTimeLS = localStorage.getItem("showAppPopupTime");
+
+  // MOBILE WEB => App Download
+  useEffect(() => {
+    if (isApp === -1) {
+      if (isIosWeb !== -1 || isAndroidWeb !== -1) {
+        if (showAppPopupTimeLS) {
+          const betweenTime = Math.floor(
+            (new Date().getTime() - new Date(showAppPopupTimeLS).getTime()) /
+              1000 /
+              60,
+          );
+          if (betweenTime > 86400) {
+            setShowAppDownloadPopup(true);
+          }
+        } else {
+          setShowAppDownloadPopup(true);
+        }
+      }
+
+      if (isIosWeb !== -1) {
+        setDownloadLink("https://apps.apple.com/kr/app/goodsduck/id1586463391");
+      } else if (isAndroidWeb !== -1) {
+        setDownloadLink(
+          "https://play.google.com/store/apps/details?id=com.goodsduck_app&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1",
+        );
+      }
+    }
+  }, []);
+
+  // WEB Notification
   if (isApp === -1) {
     if (isKakaoTalk === -1) {
       if (isChrome !== -1 || isChromeMobile !== -1) {
@@ -145,7 +180,10 @@ function App() {
         }
         break;
       case "BACK_ANDROID":
-        if (!history.location.key) {
+        const href = window.location.href.split("/");
+        const menu = href[href.length - 1];
+
+        if (!history.location.key || menu === "") {
           window.ReactNativeWebView.postMessage(
             JSON.stringify({ type: "REQ_EXIT_ANDROID" }),
           );
@@ -201,6 +239,15 @@ function App() {
 
   return (
     <>
+      {showAppDownloadPopup && (
+        <AppDownloadPopup
+          downloadLink={downloadLink}
+          handleExitClcik={() => {
+            setShowAppDownloadPopup(false);
+            localStorage.setItem("showAppPopupTime", new Date());
+          }}
+        />
+      )}
       <Flex is_col align="center" style={{ width: "400px", height: "700px" }}>
         <div className={styles.appImg} />
         <div className={styles.appDownloadBtns}>
