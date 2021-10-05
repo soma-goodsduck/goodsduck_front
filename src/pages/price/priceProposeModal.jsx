@@ -48,8 +48,45 @@ const PriceProposeModal = ({ _onClick }) => {
   };
   const handleClcik = async () => {
     if (price <= 0) {
-      window.alert("최소한 0원 이상의 금액을 입력하세요!");
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody(
+          "최소한 0원 이상의 금액을 입력해야 합니다.",
+        ),
+      );
       return;
+    }
+
+    if (price % 500 !== 0) {
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody(
+          "가격제시 금액은 500원 단위로만 가능합니다.",
+        ),
+      );
+      return;
+    }
+
+    if (itemData.tradeType === "구매") {
+      if (price < itemData.price) {
+        dispatch(userActions.setShowNotification(true));
+        dispatch(
+          userActions.setNotificationBody(
+            "굿즈의 가격보다 더 높은 가격만 제시할 수 있습니다.",
+          ),
+        );
+        return;
+      }
+    } else if (itemData.tradeType === "판매") {
+      if (price > itemData.price) {
+        dispatch(userActions.setShowNotification(true));
+        dispatch(
+          userActions.setNotificationBody(
+            "굿즈의 가격보다 더 낮은 가격만 제시할 수 있습니다.",
+          ),
+        );
+        return;
+      }
     }
 
     const postPrice = await reqPricePropose();
