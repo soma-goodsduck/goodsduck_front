@@ -63,7 +63,7 @@ const Screen = styled.div`
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  color: #222222;
+  color: ${blackBtn};
 
   @media screen and (min-width: 415px) {
     width: 415px;
@@ -134,6 +134,7 @@ const NOBtn = styled.button`
   font-weight: bold;
   padding: 15px;
   background-color: ${grayBtn};
+  color: ${blackBtn};
   border-radius: 0 0 0 5px;
 `;
 

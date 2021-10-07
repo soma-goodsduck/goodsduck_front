@@ -122,7 +122,7 @@ const CommentForm = ({ postId, isOwner }) => {
         <LockBtn
           src={
             isSecretComment
-              ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_lock1.png"
+              ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_lock1_yellow.png"
               : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_lock2.png"
           }
           onClick={() => {
@@ -182,6 +182,7 @@ const InputBox = styled.input`
   border-radius: 5px;
   margin: 0 12px;
   padding-left: 10px;
+  padding-right: 55px;
 
   @media screen and (min-width: 415px) {
     width: 360px;

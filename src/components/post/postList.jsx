@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Post from "./post";
 import InfinityScroll from "./infinityScroll";
 import IdolGroupFiltering from "../filtering/idolGroupFiltering";
+import { pullToRefresh } from "../../shared/pullToRefresh";
 
 import { actionCreators as communityActions } from "../../redux/modules/community";
 import { actionCreators as newPostActions } from "../../redux/modules/newPost";
@@ -21,6 +22,11 @@ const PostList = ({ onIdolFilter, type }) => {
   const [isIdolFilter, setIsIdolFilter] = useState(
     localStorage.getItem("filter_idolGroup"),
   );
+
+  // 모바일에서 위로 당기면 새로고침
+  useEffect(() => {
+    pullToRefresh();
+  }, []);
 
   useEffect(() => {
     dispatch(communityActions.clearPosts());

@@ -8,6 +8,11 @@ const AppDownloadPopup = ({ downloadLink, handleExitClcik }) => {
     <Screen>
       <ModalBox>
         <Info>
+          <ExitBtn
+            onClick={() => {
+              handleExitClcik();
+            }}
+          />
           <Icon
             src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png"
             width="40px"
@@ -22,6 +27,7 @@ const AppDownloadPopup = ({ downloadLink, handleExitClcik }) => {
             <NOBtn
               onClick={() => {
                 handleExitClcik();
+                localStorage.setItem("showAppPopupTime", new Date());
               }}
             >
               오늘은 그냥 볼래요
@@ -104,6 +110,17 @@ const NOBtn = styled.button`
   font-size: 16px;
   padding: 15px;
   color: ${grayBtn};
+`;
+
+const ExitBtn = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg");
+  background-size: cover;
+  cursor: pointer;
 `;
 
 export default AppDownloadPopup;

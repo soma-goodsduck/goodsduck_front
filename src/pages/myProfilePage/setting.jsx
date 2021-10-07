@@ -78,7 +78,7 @@ const Setting = () => {
     setIsNotificationOn(false);
   };
 
-  const handleDleteAccount = () => {
+  const handleDeleteAccount = () => {
     setDoubleCheckModal(true);
   };
 
@@ -233,7 +233,7 @@ const Setting = () => {
               </BtnBox>
               <BtnBox
                 onClick={() => {
-                  handleDleteAccount();
+                  handleDeleteAccount();
                 }}
               >
                 <Text color={blackBtn} size="18px" medium color={darkRed}>

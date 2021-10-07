@@ -64,7 +64,7 @@ const Notice = ({ notice, date }) => {
           <NoticeBody
             value={notice.content}
             readOnly
-            style={{ height: `${30 + descHeight * 25}px` }}
+            style={{ height: `${30 + descHeight * 15}px` }}
           />
         )}
       </NoticeBox>

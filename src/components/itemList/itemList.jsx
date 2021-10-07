@@ -35,6 +35,11 @@ const ItemList = ({ keyword }) => {
   const [idolFilter, setIdolFilter] = useState(0);
   const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
 
+  // 모바일에서 위로 당기면 새로고침
+  useEffect(() => {
+    pullToRefresh();
+  }, []);
+
   const getFilteringQuery = (num, _filteringInfo) => {
     const idolGroupId = localStorage.getItem("filter_idolGroup");
     let query = `itemId=${num}&idolGroup=${idolGroupId}`;
@@ -101,12 +106,6 @@ const ItemList = ({ keyword }) => {
 
     getNewItems();
   }, [keyword, searchOrderType, searchCompleteType]);
-
-  // 모바일에서 위로 당기면 새로고침
-  useEffect(() => {
-    // pullToRefresh(getNewItems);
-    pullToRefresh();
-  }, []);
 
   const handleCallNext = (_type) => {
     if (_type === "home") {

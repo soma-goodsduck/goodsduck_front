@@ -91,12 +91,8 @@ function App() {
     if (isApp === -1) {
       if (isIosWeb !== -1 || isAndroidWeb !== -1) {
         if (showAppPopupTimeLS) {
-          const betweenTime = Math.floor(
-            (new Date().getTime() - new Date(showAppPopupTimeLS).getTime()) /
-              1000 /
-              60,
-          );
-          if (betweenTime > 86400) {
+          // 하루에 한 번
+          if (new Date(showAppPopupTimeLS).getDate() !== new Date().getDate()) {
             setShowAppDownloadPopup(true);
           }
         } else {
@@ -244,7 +240,6 @@ function App() {
           downloadLink={downloadLink}
           handleExitClcik={() => {
             setShowAppDownloadPopup(false);
-            localStorage.setItem("showAppPopupTime", new Date());
           }}
         />
       )}

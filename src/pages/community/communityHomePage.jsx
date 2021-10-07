@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import { grayBtn } from "../../shared/colors";
@@ -10,9 +10,12 @@ import HeaderCommunity from "../../components/haeder/headerCommunity";
 import PostList from "../../components/post/postList";
 
 import { requestAuthData } from "../../shared/axios";
+import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
 const CommunityHomePage = (props) => {
+  const dispatch = useDispatch();
+
   const communityMenu = useSelector((state) => state.community.menu);
   const [menuText, setMenuText] = useState("커뮤니티");
   const [showPopup, setShowPopup] = useState(false);
@@ -61,13 +64,20 @@ const CommunityHomePage = (props) => {
           <HeaderCommunity text={menuText} />
           <Line />
           <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
-          {isIdolFilter !== 0 && (
-            <AddPostBtn
-              onClick={() => {
+          <AddPostBtn
+            onClick={() => {
+              if (isIdolFilter !== 0) {
                 history.push("/upload-post");
-              }}
-            />
-          )}
+              } else {
+                dispatch(userActions.setShowNotification(true));
+                dispatch(
+                  userActions.setNotificationBody(
+                    "아이돌을 먼저 선택해주세요.",
+                  ),
+                );
+              }
+            }}
+          />
         </CommunityHome>
         <Nav />
       </>

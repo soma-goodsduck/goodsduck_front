@@ -5,6 +5,7 @@ import styled from "styled-components";
 import LoginPopUp from "../../elements/loginPopUp";
 import IdolGroups from "../idolSelect/idolGroupSelect";
 import { putAction } from "../../shared/axios";
+import { blackBtn } from "../../shared/colors";
 
 const IdolEdit = ({ _onClick }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -76,7 +77,7 @@ const Screen = styled.div`
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  color: #222222;
+  color: ${blackBtn};
 
   @media screen and (min-width: 415px) {
     width: 415px;
@@ -120,6 +121,7 @@ const EditBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`

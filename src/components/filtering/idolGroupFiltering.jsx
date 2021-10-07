@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import styles from "./filtering.module.css";
 import { Flex, Text, Image } from "../../elements";
-import { grayText } from "../../shared/colors";
+import { blackBtn, grayText } from "../../shared/colors";
 import IdolEdit from "./idolEdit";
 
 import { actionCreators as filteringActions } from "../../redux/modules/filtering";
@@ -136,7 +136,16 @@ const IdolGroupFiltering = ({ onClick }) => {
                   size="55px"
                 />
               </Btn>
-              <Text size="13px" margin="10px 0 0 0" color={grayText}>
+              <Text
+                size="13px"
+                margin="10px 0 0 0"
+                color={idolIdLS === 0 ? blackBtn : grayText}
+                _className={
+                  idolIdLS === 0
+                    ? styles.clickIdolGroupBtn
+                    : styles.idolGroupBtn
+                }
+              >
                 전체
               </Text>
             </BtnBox>
