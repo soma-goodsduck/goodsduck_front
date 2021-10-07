@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
 import HeaderInfo from "../../components/haeder/headerInfo";
-import { Flex } from "../../elements";
+import { Flex, Spinner } from "../../elements";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { requestPublicData } from "../../shared/axios";
@@ -14,6 +14,7 @@ import { requestPublicData } from "../../shared/axios";
 const IdolSelect = ({ history }) => {
   const dispatch = useDispatch();
   const idolValue = useSelector((state) => state.newItem.idol_group_id);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
@@ -24,6 +25,8 @@ const IdolSelect = ({ history }) => {
   };
   const fnEffect = async () => {
     const getIdol = await reqIdol();
+    setIsLoading(false);
+
     if (getIdol < 0) {
       history.push("/error");
       return;
@@ -47,38 +50,41 @@ const IdolSelect = ({ history }) => {
 
   return (
     <>
-      <HeaderInfo text="아이돌 그룹" padding="0 16px" isUploading />
-      <IdolContainer>
-        <div>
-          <Flex is_flex is_wrap>
-            {idols.map((idol) => (
-              <IdolBox key={idol.id}>
-                <IdolInput
-                  id={idol.id}
-                  type="radio"
-                  checked={idolValue === idol.id}
-                  onChange={() => checkGroupHandler(idol.id, idol.engName)}
-                />
-                <label
-                  htmlFor={idol.id}
-                  className={
-                    groupId === idol.id
-                      ? styles.clickIdolGroupBtn
-                      : styles.idolGroupBtn
-                  }
-                >
-                  <img
-                    className={styles.idolGroupImg}
-                    src={idol.imageUrl}
-                    alt="Idol Group"
+      {isLoading && <Spinner />}
+      {!isLoading && (
+        <>
+          <HeaderInfo text="아이돌 그룹" padding="0 16px" isUploading />
+          <IdolContainer>
+            <Flex is_flex is_wrap>
+              {idols.map((idol) => (
+                <IdolBox key={idol.id}>
+                  <IdolInput
+                    id={idol.id}
+                    type="radio"
+                    checked={idolValue === idol.id}
+                    onChange={() => checkGroupHandler(idol.id, idol.engName)}
                   />
-                  {idol.name}
-                </label>
-              </IdolBox>
-            ))}
-          </Flex>
-        </div>
-      </IdolContainer>
+                  <label
+                    htmlFor={idol.id}
+                    className={
+                      groupId === idol.id
+                        ? styles.clickIdolGroupBtn
+                        : styles.idolGroupBtn
+                    }
+                  >
+                    <img
+                      className={styles.idolGroupImg}
+                      src={idol.imageUrl}
+                      alt="Idol Group"
+                    />
+                    {idol.name}
+                  </label>
+                </IdolBox>
+              ))}
+            </Flex>
+          </IdolContainer>
+        </>
+      )}
     </>
   );
 };

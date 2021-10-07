@@ -5,12 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex, LoginPopUp } from "../../elements";
+import { Flex, LoginPopUp, Spinner } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemImgUpload from "../../components/itemImgUpload/itemImgUpload";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
-import { actionCreators as imgActions } from "../../redux/modules/image";
 
 import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
@@ -58,6 +57,7 @@ const ItemUpload = (props) => {
     images,
     fileList,
     itemId,
+    isLoading,
   } = useSelector((state) => ({
     dataName: state.newItem.name,
     dataPrice: state.newItem.price,
@@ -71,6 +71,7 @@ const ItemUpload = (props) => {
     images: state.newItem.images,
     fileList: state.image.fileList,
     itemId: state.newItem.item_id,
+    isLoading: state.newItem.loading,
   }));
 
   const item = {
@@ -137,173 +138,180 @@ const ItemUpload = (props) => {
     } else {
       dispatch(newItemActions.addItemAction(item, fileList));
     }
-
-    // 저장된 상태값 모두 삭제
-    dispatch(newItemActions.clearAction());
-    dispatch(imgActions.clearImgAction());
   };
 
   return (
     <>
+      {isLoading && <Spinner />}
       {showPopup && <LoginPopUp />}
-      <div>
-        <HeaderInfo text="굿즈 등록" isClear />
-        <ItemUploadBox>
-          <div>
-            <Flex is_flex justify="flex-start">
-              <ItemImgUpload />
-            </Flex>
-            <Flex is_flex justify="space-between">
-              <TypeBtn
-                className={
-                  dataTradeType === "SELL"
-                    ? styles.clickTypeBtn
-                    : styles.typeBtn
-                }
-                onClick={(e) => clickTradeType(e)}
-              >
-                판매하기
-              </TypeBtn>
-              <TypeBtn
-                className={
-                  dataTradeType === "BUY" ? styles.clickTypeBtn : styles.typeBtn
-                }
-                onClick={(e) => clickTradeType(e)}
-              >
-                구매하기
-              </TypeBtn>
-            </Flex>
-            <Flex is_col>
-              <div className={styles.selectBtn}>
-                <InputBox
-                  className={dataName ? "" : styles.inputText}
-                  ref={nameRef}
-                  value={dataName || ""}
-                  placeholder="굿즈명"
-                  onChange={() => {
-                    dispatch(newItemActions.setName(nameRef.current.value));
+      {!isLoading && (
+        <div>
+          <HeaderInfo text="굿즈 등록" isClear />
+          <ItemUploadBox>
+            <div>
+              <Flex is_flex justify="flex-start">
+                <ItemImgUpload />
+              </Flex>
+              <Flex is_flex justify="space-between">
+                <TypeBtn
+                  className={
+                    dataTradeType === "SELL"
+                      ? styles.clickTypeBtn
+                      : styles.typeBtn
+                  }
+                  onClick={(e) => clickTradeType(e)}
+                >
+                  판매하기
+                </TypeBtn>
+                <TypeBtn
+                  className={
+                    dataTradeType === "BUY"
+                      ? styles.clickTypeBtn
+                      : styles.typeBtn
+                  }
+                  onClick={(e) => clickTradeType(e)}
+                >
+                  구매하기
+                </TypeBtn>
+              </Flex>
+              <Flex is_col>
+                <div className={styles.selectBtn}>
+                  <InputBox
+                    className={dataName ? "" : styles.inputText}
+                    ref={nameRef}
+                    value={dataName || ""}
+                    placeholder="굿즈명"
+                    onChange={() => {
+                      dispatch(newItemActions.setName(nameRef.current.value));
+                    }}
+                  />
+                  <div
+                    className={
+                      dataName ? styles.moreIconClick : styles.moreIcon
+                    }
+                  />
+                </div>
+                <div
+                  className={styles.selectBtn}
+                  onClick={() => {
+                    dispatch(newItemActions.clearSelectIdol());
+                    history.replace("/select-idol");
                   }}
-                />
-                <div
-                  className={dataName ? styles.moreIconClick : styles.moreIcon}
-                />
-              </div>
-              <div
-                className={styles.selectBtn}
-                onClick={() => {
-                  dispatch(newItemActions.clearSelectIdol());
-                  history.replace("/select-idol");
-                }}
-              >
-                <div
-                  className={
-                    idolMember !== null
-                      ? styles.selectDoneText
-                      : styles.selectText
-                  }
                 >
-                  {idolMember !== null
-                    ? `${idolGroupName} ${idolMemberName}`
-                    : "아이돌 그룹 & 멤버"}
+                  <div
+                    className={
+                      idolMember !== null
+                        ? styles.selectDoneText
+                        : styles.selectText
+                    }
+                  >
+                    {idolMember !== null
+                      ? `${idolGroupName} ${idolMemberName}`
+                      : "아이돌 그룹 & 멤버"}
+                  </div>
+                  <div
+                    className={
+                      idolMember ? styles.moreIconClick : styles.moreIcon
+                    }
+                  />
                 </div>
                 <div
-                  className={
-                    idolMember ? styles.moreIconClick : styles.moreIcon
-                  }
-                />
-              </div>
-              <div
-                className={styles.selectBtn}
-                onClick={() => {
-                  history.replace("/category");
-                }}
-              >
-                <div
-                  className={
-                    dataCategory !== ""
-                      ? styles.selectDoneText
-                      : styles.selectText
-                  }
-                >
-                  {dataCategory !== "" ? dataCategory : "카테고리"}
-                </div>
-                <div
-                  className={
-                    dataCategory ? styles.moreIconClick : styles.moreIcon
-                  }
-                />
-              </div>
-              <div
-                className={styles.selectBtn}
-                onClick={() => {
-                  history.replace("/status");
-                }}
-              >
-                <div
-                  className={
-                    dataStatus !== ""
-                      ? styles.selectDoneText
-                      : styles.selectText
-                  }
-                >
-                  {dataStatus !== "" ? `${dataStatus}급` : "굿즈 상태"}
-                </div>
-                <div
-                  className={
-                    dataStatus ? styles.moreIconClick : styles.moreIcon
-                  }
-                />
-              </div>
-              <div className={styles.selectBtn}>
-                <InputDescBox
-                  className={dataDesc ? "" : styles.inputText}
-                  ref={descriptionRef}
-                  value={dataDesc || ""}
-                  placeholder="굿즈 설명"
-                  onChange={() => {
-                    dispatch(
-                      newItemActions.setDesc(descriptionRef.current.value),
-                    );
+                  className={styles.selectBtn}
+                  onClick={() => {
+                    history.replace("/category");
                   }}
-                />
-                <div
-                  className={dataDesc ? styles.moreIconClick : styles.moreIcon}
-                />
-              </div>
-              <div className={styles.selectBtn}>
-                <div
-                  className={
-                    dataPrice ? styles.selectDoneText : styles.selectText
-                  }
                 >
-                  ₩
+                  <div
+                    className={
+                      dataCategory !== ""
+                        ? styles.selectDoneText
+                        : styles.selectText
+                    }
+                  >
+                    {dataCategory !== "" ? dataCategory : "카테고리"}
+                  </div>
+                  <div
+                    className={
+                      dataCategory ? styles.moreIconClick : styles.moreIcon
+                    }
+                  />
                 </div>
-                <InputBox
-                  className={dataPrice ? "" : styles.inputText}
-                  ref={priceRef}
-                  value={dataPrice || ""}
-                  type="number"
-                  placeholder="가격 입력"
-                  onChange={() => {
-                    dispatch(newItemActions.setPrice(priceRef.current.value));
-                  }}
-                />
                 <div
-                  className={dataPrice ? styles.moreIconClick : styles.moreIcon}
-                />
-              </div>
-            </Flex>
-          </div>
-          <AddBtn
-            className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-            onClick={() => {
-              uploadItem();
-            }}
-          >
-            {itemId !== 0 ? "수정 완료" : "등록 완료"}
-          </AddBtn>
-        </ItemUploadBox>
-      </div>
+                  className={styles.selectBtn}
+                  onClick={() => {
+                    history.replace("/status");
+                  }}
+                >
+                  <div
+                    className={
+                      dataStatus !== ""
+                        ? styles.selectDoneText
+                        : styles.selectText
+                    }
+                  >
+                    {dataStatus !== "" ? `${dataStatus}급` : "굿즈 상태"}
+                  </div>
+                  <div
+                    className={
+                      dataStatus ? styles.moreIconClick : styles.moreIcon
+                    }
+                  />
+                </div>
+                <div className={styles.selectBtn}>
+                  <InputDescBox
+                    className={dataDesc ? "" : styles.inputText}
+                    ref={descriptionRef}
+                    value={dataDesc || ""}
+                    placeholder="굿즈 설명"
+                    onChange={() => {
+                      dispatch(
+                        newItemActions.setDesc(descriptionRef.current.value),
+                      );
+                    }}
+                  />
+                  <div
+                    className={
+                      dataDesc ? styles.moreIconClick : styles.moreIcon
+                    }
+                  />
+                </div>
+                <div className={styles.selectBtn}>
+                  <div
+                    className={
+                      dataPrice ? styles.selectDoneText : styles.selectText
+                    }
+                  >
+                    ₩
+                  </div>
+                  <InputBox
+                    className={dataPrice ? "" : styles.inputText}
+                    ref={priceRef}
+                    value={dataPrice || ""}
+                    type="number"
+                    placeholder="가격 입력"
+                    onChange={() => {
+                      dispatch(newItemActions.setPrice(priceRef.current.value));
+                    }}
+                  />
+                  <div
+                    className={
+                      dataPrice ? styles.moreIconClick : styles.moreIcon
+                    }
+                  />
+                </div>
+              </Flex>
+            </div>
+            <AddBtn
+              className={nextOK ? styles.nextOKBtn : styles.nextBtn}
+              onClick={() => {
+                uploadItem();
+              }}
+            >
+              {itemId !== 0 ? "수정 완료" : "등록 완료"}
+            </AddBtn>
+          </ItemUploadBox>
+        </div>
+      )}
     </>
   );
 };

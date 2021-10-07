@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Icon } from "../../elements";
+import { Icon, Spinner } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { requestPublicData } from "../../shared/axios";
@@ -14,6 +14,7 @@ import { history } from "../../redux/configureStore";
 const ItemCategory = () => {
   const dispatch = useDispatch();
   const categoryValue = useSelector((state) => state.newItem.category);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 카테고리 데이터 받아오기
   const [categories, setCategories] = useState([]);
@@ -24,6 +25,8 @@ const ItemCategory = () => {
   };
   const fnEffect = async () => {
     const getItemCategory = await reqItemCategory();
+    setIsLoading(false);
+
     if (getItemCategory < 0) {
       history.push("/error");
       return;
@@ -38,28 +41,35 @@ const ItemCategory = () => {
   };
 
   return (
-    <CategoryContainer>
-      <HeaderInfo text="카테고리" padding="0 16px" isUploading />
-      {categories.map((category) => (
-        <CategoryBox
-          key={category.categoryId}
-          className={styles.categoryBtn}
-          onClick={() => checkHandler(`${category.categoryName}`)}
-        >
-          <CategoryInput
-            id={category.categoryId}
-            type="radio"
-            checked={categoryValue === `${category.categoryId}`}
-            onChange={() => checkHandler(`${category.categoryName}`)}
-          />
-          <label htmlFor={category.categoryId}>{category.categoryName}</label>
-          <Icon
-            width="12px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
-          />
-        </CategoryBox>
-      ))}
-    </CategoryContainer>
+    <>
+      {isLoading && <Spinner />}
+      {!isLoading && (
+        <CategoryContainer>
+          <HeaderInfo text="카테고리" padding="0 16px" isUploading />
+          {categories.map((category) => (
+            <CategoryBox
+              key={category.categoryId}
+              className={styles.categoryBtn}
+              onClick={() => checkHandler(`${category.categoryName}`)}
+            >
+              <CategoryInput
+                id={category.categoryId}
+                type="radio"
+                checked={categoryValue === `${category.categoryId}`}
+                onChange={() => checkHandler(`${category.categoryName}`)}
+              />
+              <label htmlFor={category.categoryId}>
+                {category.categoryName}
+              </label>
+              <Icon
+                width="12px"
+                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+              />
+            </CategoryBox>
+          ))}
+        </CategoryContainer>
+      )}
+    </>
   );
 };
 

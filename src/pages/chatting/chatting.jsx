@@ -7,7 +7,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 import ChattingRow from "./chattingRow";
-import { Text, LoginPopUp } from "../../elements";
+import { Text, LoginPopUp, Spinner } from "../../elements";
 import Nav from "../../components/nav/nav";
 
 import { requestPublicData, requestAuthData } from "../../shared/axios";
@@ -21,6 +21,7 @@ export class Chatting extends Component {
     itemList: [], // from DB
     userId: "",
     showPopup: false,
+    isLoading: true,
   };
 
   componentDidMount() {
@@ -60,6 +61,8 @@ export class Chatting extends Component {
 
     const getMyItemList = requestAuthData("v1/users/items/not-complete");
     getMyItemList.then((result) => {
+      this.setState({ isLoading: false });
+
       if (result < 0) {
         if (result === -201) {
           this.setState({ showPopup: true });
@@ -141,7 +144,7 @@ export class Chatting extends Component {
   };
 
   render() {
-    const { chatRooms, showPopup } = this.state;
+    const { chatRooms, showPopup, isLoading } = this.state;
 
     return (
       <>
@@ -152,6 +155,7 @@ export class Chatting extends Component {
               채팅
             </Text>
           </Header>
+          {isLoading && <Spinner />}
           {chatRooms !== [] && (
             <div style={{ marginBottom: "80px" }}>{this.renderChatRooms()}</div>
           )}

@@ -7,6 +7,7 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
 import { actionCreators as userActions } from "./user";
+import { actionCreators as imgActions } from "./image";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -23,6 +24,7 @@ const SET_IMAGES = "SET_IMAGES";
 const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
 const CLEAR_SELECT_IDOL = "CLEAR_SELECT_IDOL";
+const SET_LOADING = "SET_LOADING";
 
 // action creators
 const setItem = createAction(SET_ITEM, (item) => ({ item }));
@@ -55,6 +57,7 @@ const setImages = createAction(SET_IMAGES, (images) => ({ images }));
 const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
 const clearSelectIdol = createAction(CLEAR_SELECT_IDOL, () => ({}));
+const setLoading = createAction(SET_LOADING, (loading) => ({ loading }));
 
 // initialState
 const initialState = {
@@ -72,6 +75,7 @@ const initialState = {
   idol_group_name: "",
   idol_member_name: "",
   category: "",
+  loading: false,
 };
 
 // middleware actions
@@ -79,6 +83,8 @@ const initialState = {
 // 아이템 정보를 백으로 전송
 const addItemAction = (item, fileList) => {
   return async function (dispatch, getState, { history }) {
+    dispatch(setLoading(true));
+
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("multipartFiles", file);
@@ -101,6 +107,10 @@ const addItemAction = (item, fileList) => {
         headers: { jwt: `${item.userJwt}` },
       },
     );
+
+    dispatch(setLoading(false));
+    dispatch(clear());
+    dispatch(imgActions.clearImgAction());
 
     if (uploadItem < 0) {
       history.push("/error");
@@ -136,6 +146,8 @@ const clearAction = () => {
 // 업데이트
 const updateItemAction = (item, id, fileList) => {
   return async function (dispatch, getState, { history }) {
+    dispatch(setLoading(true));
+
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("multipartFiles", file);
@@ -160,6 +172,10 @@ const updateItemAction = (item, id, fileList) => {
         headers: { jwt: `${item.userJwt}` },
       },
     );
+
+    dispatch(setLoading(false));
+    dispatch(clear());
+    dispatch(imgActions.clearImgAction());
 
     if (updateItem < 0) {
       history.push("/error");
@@ -265,6 +281,10 @@ export default handleActions(
         draft.idol_member_id = null;
         draft.idol_group_name = "";
         draft.idol_member_name = "";
+      }),
+    [SET_LOADING]: (state, action) =>
+      produce(state, (draft) => {
+        draft.loading = action.payload.loading;
       }),
   },
   initialState,
