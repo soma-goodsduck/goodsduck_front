@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable dot-notation */
 /* eslint-disable no-undef */
 /* eslint-disable indent */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -140,30 +142,56 @@ const ItemImg = ({ id, item, onClick }) => {
   };
 
   // 이미지 스와이프
-  const [showPreviousImgBtn, setShowPreviousImgBtn] = useState(true);
-  const [showNextImgBtn, setShowNextImgBtn] = useState(true);
   const [imgNumber, setImgNumber] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const [stopX, setStopX] = useState(0);
 
-  const imgClickHandler = (type) => {
-    if (type === "previous" && imgNumber > 0) {
-      setImgNumber(imgNumber - 1);
-      setShowNextImgBtn(true);
-    } else if (type === "next" && imgNumber < item.images.length - 1) {
-      setImgNumber(imgNumber + 1);
-      setShowPreviousImgBtn(true);
+  const swipeStart = (e) => {
+    if (e.target.parentNode.id === "itemImg") {
+      const touch = e.targetTouches[0];
+      setStartX(touch.screenX);
     }
   };
+
+  const swipeEnd = (e) => {
+    if (e.target.parentNode.id === "itemImg") {
+      const touch = e.changedTouches[0];
+      setStopX(touch.screenX);
+    }
+  };
+
+  document.addEventListener(
+    "touchstart",
+    (e) => {
+      swipeStart(e);
+    },
+    false,
+  );
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      swipeEnd(e);
+    },
+    false,
+  );
+
   useEffect(() => {
-    if (item.images.length === 1) {
-      setShowPreviousImgBtn(false);
-      setShowNextImgBtn(false);
+    const changeX = startX - stopX;
+    if (changeX > 0) {
+      if (imgNumber !== item.images.length - 1) {
+        setImgNumber(imgNumber + 1);
+      }
+    } else if (changeX < 0) {
+      if (imgNumber !== 0) {
+        setImgNumber(imgNumber - 1);
+      }
     }
-    if (imgNumber === 0) {
-      setShowPreviousImgBtn(false);
-    } else if (imgNumber === item.images.length - 1) {
-      setShowNextImgBtn(false);
-    }
-  }, [imgNumber]);
+
+    return () => {
+      window.removeEventListener("touchstart", swipeStart, true);
+      window.removeEventListener("touchend", swipeEnd, true);
+    };
+  }, [startX]);
 
   return (
     <>
@@ -191,9 +219,21 @@ const ItemImg = ({ id, item, onClick }) => {
             className={styles.itemImg}
             onClick={() => handleClickImg()}
           />
-          <span className={styles.watermark}>
-            ⓒ GOODSDUCK ({item.itemOwner.nickName})
-          </span>
+          <span className={styles.watermark}>ⓒ GOODSDUCK</span>
+          {item.images.length !== 1 && (
+            <div className={styles.imgNumbers}>
+              {item.images.map((img, idx) => (
+                <div
+                  className={
+                    imgNumber === idx
+                      ? styles.selectedImgNumber
+                      : styles.imgNumber
+                  }
+                  key={img.url}
+                />
+              ))}
+            </div>
+          )}
         </div>
         <Btns
           style={
@@ -248,22 +288,6 @@ const ItemImg = ({ id, item, onClick }) => {
             />
           </div>
         </Btns>
-        {!isSwipeBtnOverImg && (
-          <>
-            <button
-              type="button"
-              aria-label="previous img"
-              className={showPreviousImgBtn ? styles.previousImgBtn : ""}
-              onClick={() => imgClickHandler("previous")}
-            />
-            <button
-              type="button"
-              aria-label="next img"
-              className={showNextImgBtn ? styles.nextImgBtn : ""}
-              onClick={() => imgClickHandler("next")}
-            />
-          </>
-        )}
       </Flex>
     </>
   );

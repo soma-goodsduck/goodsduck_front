@@ -100,29 +100,6 @@
   height: auto;
 }
 
-.previousImgBtn {
-  position: absolute;
-  top: 190px;
-  left: 10px;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_previous.png");
-  background-size: cover;
-  cursor: pointer;
-}
-.nextImgBtn {
-  position: absolute;
-  top: 190px;
-  right: 10px;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_next.png");
-  background-size: cover;
-  cursor: pointer;
-}
-
 .backBtn {
   z-index: 2;
   width: 16px;
@@ -198,10 +175,36 @@
 .watermark {
   position: absolute;
   top: 93vw;
-  left: 10px;
+  left: 5px;
   z-index: 2;
   color: gray;
   opacity: 0.5;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+/* 현재 이미지 표시 */
+.imgNumbers {
+  display: flex;
+  position: absolute;
+  top: 95vw;
+  left: 45%;
+}
+
+.imgNumber,
+.selectedImgNumber {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 0.75;
+  margin-right: 10px;
+}
+.imgNumber {
+  background-color: var(--grayBorder);
+}
+
+.selectedImgNumber {
+  background-color: var(--yellow);
 }
 
 @media screen and (min-width: 415px) {
@@ -237,5 +240,10 @@
   /* 워터마크 */
   .watermark {
     top: 390px;
+  }
+
+  /* 현재 이미지 표시 */
+  .imgNumbers {
+    top: 395px;
   }
 }
