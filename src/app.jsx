@@ -59,9 +59,13 @@ import postDetailPage from "./pages/community/postDetail/postDetailPage";
 import postUploadPage from "./pages/community/postUpload/postUploadPage";
 import PostReportPage from "./pages/report/postReportPage";
 import VotePage from "./pages/votePage/votePage";
-import AppDownloadPopup from "./elements/appDownloadPopup";
 
-import { Notification, Flex } from "./elements/index";
+import {
+  Notification,
+  Flex,
+  AppDownloadPopup,
+  EventPopup,
+} from "./elements/index";
 import { firebaseApp } from "./shared/firebase";
 import { sendTokenAction } from "./shared/axios";
 
@@ -86,8 +90,11 @@ function App() {
   const [downloadLink, setDownloadLink] = useState("");
   const showAppPopupTimeLS = localStorage.getItem("showAppPopupTime");
 
-  // MOBILE WEB => App Download
+  const [showEventPopup, setShowEventPopup] = useState(false);
+  const showEventPopupTimeLS = localStorage.getItem("showEventPopupTime");
+
   useEffect(() => {
+    // MOBILE WEB => App Download
     if (isApp === -1) {
       if (isIosWeb !== -1 || isAndroidWeb !== -1) {
         if (showAppPopupTimeLS) {
@@ -106,6 +113,16 @@ function App() {
         setDownloadLink(
           "https://play.google.com/store/apps/details?id=com.goodsduck_app&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1",
         );
+      }
+    } else if (isApp !== -1) {
+      // APP
+      if (showEventPopupTimeLS) {
+        // 하루에 한 번
+        if (new Date(showEventPopupTimeLS).getDate() !== new Date().getDate()) {
+          setShowEventPopup(true);
+        }
+      } else {
+        setShowEventPopup(true);
       }
     }
   }, []);
@@ -238,8 +255,15 @@ function App() {
       {showAppDownloadPopup && (
         <AppDownloadPopup
           downloadLink={downloadLink}
-          handleExitClcik={() => {
+          handleExitClick={() => {
             setShowAppDownloadPopup(false);
+          }}
+        />
+      )}
+      {showEventPopup && (
+        <EventPopup
+          handleExitClick={() => {
+            setShowEventPopup(false);
           }}
         />
       )}

@@ -1,41 +1,53 @@
 import React from "react";
 import styled from "styled-components";
-import { Icon } from ".";
+import { Image } from ".";
 import { blackBtn, grayBtn, white, yellow } from "../shared/colors";
+import { history } from "../redux/configureStore";
 
-const AppDownloadPopup = ({ downloadLink, handleExitClick }) => {
+const EventPopup = ({ handleExitClick }) => {
   return (
-    <Screen>
-      <ModalBox>
-        <Info>
+    <>
+      <Screen>
+        <ModalBox>
           <ExitBtn
             onClick={() => {
               handleExitClick();
             }}
           />
-          <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png"
-            width="40px"
+          <Image
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/event.png"
+            shape="rectangle"
+            size="90vw"
           />
-          <Text style={{ margin: "10px 0" }}>
-            GOODSDUCK을 앱으로도 만나볼 수 있어요!
-          </Text>
           <Btns>
-            <a href={downloadLink}>
-              <OKBtn>앱으로 보기</OKBtn>
-            </a>
+            <VoteBtn
+              onClick={() => {
+                handleExitClick();
+                history.push("/vote");
+              }}
+            >
+              바로 투표하러가기
+            </VoteBtn>
+            <OKBtn
+              onClick={() => {
+                handleExitClick();
+                history.push("/notice");
+              }}
+            >
+              더 많은 이벤트 보러가기
+            </OKBtn>
             <NOBtn
               onClick={() => {
                 handleExitClick();
-                localStorage.setItem("showAppPopupTime", new Date());
+                localStorage.setItem("showEventPopupTime", new Date());
               }}
             >
-              오늘은 그냥 볼래요
+              오늘 하루 더 이상 안보기
             </NOBtn>
           </Btns>
-        </Info>
-      </ModalBox>
-    </Screen>
+        </ModalBox>
+      </Screen>
+    </>
   );
 };
 
@@ -47,38 +59,19 @@ const Screen = styled.div`
   z-index: 9999;
   width: 100%;
   height: 100vh;
-
-  @media screen and (min-width: 415px) {
-    width: 415px;
-  }
 `;
 
 const ModalBox = styled.div`
-  width: 340px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: fixed;
-  bottom: 40%;
-`;
+  width: 90vw;
+  background-color: #4d4d4d;
+  padding: 25px 0;
 
-const Info = styled.div`
-  position: relative;
-  height: 230px;
-  background-color: ${blackBtn};
-  color: ${white};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  border-radius: 5px;
-`;
-
-const Text = styled.div`
-  font-size: 16px;
-  text-align: center;
-  font-weight: bold;
+  position: fixed;
+  bottom: 20%;
 `;
 
 const Btns = styled.div`
@@ -90,7 +83,7 @@ const Btns = styled.div`
   margin-top: 20px;
 `;
 
-const OKBtn = styled.button`
+const VoteBtn = styled.button`
   width: 80vw;
   max-width: 300px;
   font-size: 16px;
@@ -100,15 +93,24 @@ const OKBtn = styled.button`
   color: ${blackBtn};
   border-radius: 20px;
   font-weight: bold;
+  margin-bottom: 10px;
+`;
 
-  @media screen and (min-width: 415px) {
-    width: 300px;
-  }
+const OKBtn = styled.button`
+  width: 80vw;
+  max-width: 300px;
+  font-size: 16px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: ${white};
+  color: ${blackBtn};
+  border-radius: 20px;
+  font-weight: bold;
 `;
 
 const NOBtn = styled.button`
   font-size: 16px;
-  padding: 15px;
+  padding-top: 25px;
   color: ${grayBtn};
 `;
 
@@ -123,4 +125,4 @@ const ExitBtn = styled.button`
   cursor: pointer;
 `;
 
-export default AppDownloadPopup;
+export default EventPopup;

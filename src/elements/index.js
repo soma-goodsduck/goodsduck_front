@@ -18,6 +18,8 @@ import DoubleCheckModal from "./doubleCheckModal";
 import DoubleCheckModal2 from "./doubleCheckModal2";
 import FilteringModal from "./filteringModal";
 import Spinner from "./spinner";
+import AppDownloadPopup from "./appDownloadPopup";
+import EventPopup from "./eventPopup";
 
 export {
   Grid,
@@ -38,4 +40,6 @@ export {
   DoubleCheckModal,
   DoubleCheckModal2,
   FilteringModal,
+  AppDownloadPopup,
+  EventPopup,
 };
