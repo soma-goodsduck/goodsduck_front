@@ -6,10 +6,11 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 
+import { firebaseDatabase } from "../../shared/firebase";
+
 import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
 import { postActionForNonUser } from "../../shared/axios";
-import { firebaseDatabase } from "../../shared/firebase";
 
 // actions
 const SOCIAL_SIGN_UP = "SOCIAL_SIGN_UP";
@@ -38,6 +39,7 @@ const SET_NOTIFICATION_BODY = "SET_NOTIFICATION_BODY";
 const SET_NOTIFICATION_LIST = "SET_NOTIFICATION_LIST";
 const SET_EMAIL = "SET_EMAIL";
 const SET_TODAY_VOTED_IDOL = "SET_TODAY_VOTED_IDOL";
+const SET_AUTH_STATE = "SET_AUTH_STATE";
 
 // action creators
 const socialSignUp = createAction(SOCIAL_SIGN_UP, (id, type) => ({ id, type }));
@@ -109,6 +111,9 @@ const setEmail = createAction(SET_EMAIL, (email) => ({ email }));
 const setTodayVotedIdol = createAction(SET_TODAY_VOTED_IDOL, (votedIdolId) => ({
   votedIdolId,
 }));
+const setAuthState = createAction(SET_AUTH_STATE, (authState) => ({
+  authState,
+}));
 
 // initialState
 const initialState = {
@@ -136,6 +141,7 @@ const initialState = {
   notificationBody: "",
   notifications: [],
   votedIdolId: 0,
+  authState: "",
 };
 
 // middleware actions
@@ -174,11 +180,12 @@ const signupAction = (user) => {
     likeIdolGroupsId: user.idols,
     marketingAgree: user.isMarketingAgree,
   };
+
   return async function (dispatch, getState, { history }) {
     const signup = await postActionForNonUser("v2/users/sign-up", json);
 
     if (signup < 0) {
-      history.replace("/login");
+      history.replace("/sign-up");
       window.alert("회원가입에 실패했습니다.");
       return;
     }
@@ -240,7 +247,7 @@ const socialSignupAction = (user) => {
     dispatch(setNotificationBody("회원가입에 성공했습니다."));
 
     history.push("/");
-    window.location.reload();
+    // window.location.reload();
   };
 };
 
@@ -366,6 +373,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.votedIdolId = action.payload.votedIdolId;
       }),
+    [SET_AUTH_STATE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.authState = action.payload.authState;
+      }),
   },
   initialState,
 );
@@ -400,6 +411,7 @@ const actionCreators = {
   setNotificationList,
   setEmail,
   setTodayVotedIdol,
+  setAuthState,
 };
 
 export { actionCreators };

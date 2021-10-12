@@ -71,10 +71,12 @@ import { sendTokenAction } from "./shared/axios";
 
 import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
+import WelcomeChatRoom from "./pages/chatting/chatRoom/welcomeChatRoom";
 
 function App() {
-  const userAgent = window.navigator.userAgent;
+  const dispatch = useDispatch();
 
+  const userAgent = window.navigator.userAgent;
   const isChrome = userAgent.indexOf("Chrome");
   const isChromeMobile = userAgent.indexOf("CriOS");
   const isKakaoTalk = userAgent.indexOf("KAKAOTALK");
@@ -181,6 +183,9 @@ function App() {
     const { data, type } = JSON.parse(event.data);
 
     switch (type) {
+      case "AUTH_STATUS":
+        await dispatch(userActions.setAuthState(data));
+        break;
       case "TOKEN":
         const sendFcmToken = await reqSendFcmToken(data);
 
@@ -226,7 +231,6 @@ function App() {
   }, []);
 
   // alert
-  const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
   const { showNotification, notificationBody } = useSelector((state) => ({
     showNotification: state.user.showNotification,
@@ -267,6 +271,7 @@ function App() {
           }}
         />
       )}
+
       <Flex is_col align="center" style={{ width: "400px", height: "700px" }}>
         <div className={styles.appImg} />
         <div className={styles.appDownloadBtns}>
@@ -318,6 +323,11 @@ function App() {
             />
             <Route path="/search/item/:name" exact component={KeywordSearch} />
             <Route path="/chatting" exact component={Chatting} />
+            <Route
+              path="/chat-room/welcome"
+              exact
+              component={WelcomeChatRoom}
+            />
             <Route path="/chat-room/:id/:id" exact component={ChatRoom} />
             <Route path="/my-profile" exact component={MyProfile} />
             <Route path="/review/:id" exact component={WritingReviewPage} />

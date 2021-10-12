@@ -55,6 +55,13 @@ const MyProfilePage = () => {
     setItems(myProfileData.items);
     dispatch(userActions.setUserItems(myProfileData.items));
     dispatch(userActions.setEmail(userData.email));
+
+    if (window.ReactNativeWebView) {
+      // 앱 자체에서 알림 허용/거절 확인
+      await window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "REQ_AUTH_STATUS" }),
+      );
+    }
   };
   useEffect(fnEffect, [tradeStatus]);
 
