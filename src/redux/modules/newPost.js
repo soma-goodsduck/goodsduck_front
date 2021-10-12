@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 /* eslint-disable camelcase */
@@ -5,6 +6,8 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { postImgAction, putAction } from "../../shared/axios";
+import { actionCreators as userActions } from "./user";
+import { actionCreators as imgActions } from "./image";
 
 // actions
 const SET_POST = "SET_POST";
@@ -15,6 +18,7 @@ const SET_FILES = "SET_FILES";
 const SET_IMAGES = "SET_IMAGES";
 const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
+const SET_LOADING = "SET_LOADING";
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -27,6 +31,7 @@ const setFiles = createAction(SET_FILES, (files) => ({ files }));
 const setImages = createAction(SET_IMAGES, (images) => ({ images }));
 const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
+const setLoading = createAction(SET_LOADING, (loading) => ({ loading }));
 
 // initialState
 const initialState = {
@@ -36,6 +41,7 @@ const initialState = {
   content: "",
   images: [], // image url
   files: [], // image file data
+  loading: false,
 };
 
 // middleware actions
@@ -43,6 +49,8 @@ const initialState = {
 // 게시글 정보를 백으로 전송
 const addPostAction = (post, fileList) => {
   return async function (dispatch, getState, { history }) {
+    dispatch(setLoading(true));
+
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("multipartFiles", file);
@@ -50,12 +58,14 @@ const addPostAction = (post, fileList) => {
     const postDto = {
       postCategoryId: post._postType,
       content: post._content,
-      idolGroupId: post.idolId,
+      idolGroupId: localStorage.getItem("filter_idolGroup"),
     };
     formData.append("stringPostDto", JSON.stringify(postDto));
 
     const uploadItem = await postImgAction("v1/posts", formData);
-    console.log(uploadItem);
+    dispatch(setLoading(false));
+    dispatch(clear());
+    dispatch(imgActions.clearImgAction());
 
     if (uploadItem < 0) {
       history.push("/error");
@@ -63,8 +73,9 @@ const addPostAction = (post, fileList) => {
     }
 
     if (uploadItem !== -1) {
-      console.log("게시글 등록 완료");
       history.replace(`/post/${uploadItem}`);
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("게시글을 등록했습니다."));
     } else {
       window.alert("게시글 등록 실패");
       history.push("/community");
@@ -84,6 +95,8 @@ const setPostAction = (post) => {
 // 업데이트
 const updatePostAction = (post, id, fileList) => {
   return async function (dispatch, getState, { history }) {
+    dispatch(setLoading(true));
+
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("multipartFiles", file);
@@ -97,6 +110,9 @@ const updatePostAction = (post, id, fileList) => {
     formData.append("stringPostDto", JSON.stringify(postDto));
 
     const updatePost = await putAction(`v1/posts/${id}`, formData);
+    dispatch(setLoading(false));
+    dispatch(clear());
+    dispatch(imgActions.clearImgAction());
 
     if (updatePost < 0) {
       history.push("/error");
@@ -104,8 +120,9 @@ const updatePostAction = (post, id, fileList) => {
     }
 
     if (updatePost.response !== -1) {
-      console.log("게시글 수정 완료");
       history.replace(`/post/${updatePost.response}`);
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("게시글을 수정했습니다."));
     } else {
       window.alert("게시글 수정 실패");
       history.push("/community");
@@ -157,6 +174,10 @@ export default handleActions(
         draft.postType = "";
         draft.files = [];
         draft.images = [];
+      }),
+    [SET_LOADING]: (state, action) =>
+      produce(state, (draft) => {
+        draft.loading = action.payload.loading;
       }),
   },
   initialState,

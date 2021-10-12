@@ -7,6 +7,7 @@ import PostHeader from "./postHeader";
 import PostBody from "./postBody";
 import Comments from "./comments";
 import CommentForm from "./commentForm";
+import { Spinner } from "../../../elements/index";
 
 import { requestAuthData, deleteAction } from "../../../shared/axios";
 import { actionCreators as newPostActions } from "../../../redux/modules/newPost";
@@ -22,12 +23,15 @@ const postDetailPage = (props) => {
   const href = window.location.href.split("/");
   const postId = Number(href[href.length - 1]);
   const [postData, setPostData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestPostData = async () => {
     const result = await requestAuthData(`v1/posts/${postId}`);
     return result;
   };
   const fnEffect = async () => {
+    setIsLoading(true);
+
     const getPostDetail = await requestPostData();
 
     if (getPostDetail < 0) {
@@ -39,6 +43,7 @@ const postDetailPage = (props) => {
       return;
     }
 
+    setIsLoading(false);
     setPostData(getPostDetail);
     dispatch(postActions.setBcryptForReport(getPostDetail.postOwner.bcryptId));
   };
@@ -84,6 +89,7 @@ const postDetailPage = (props) => {
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
+      {isLoading && <Spinner />}
       <PostBox>{postData && <PostBody postData={postData} />}</PostBox>
       <Comments postId={postId} />
       {postData && <CommentForm postId={postId} isOwner={postData.isOwner} />}
