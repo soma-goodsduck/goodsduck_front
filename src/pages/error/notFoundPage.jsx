@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 import { Icon, Text } from "../../elements";
-import { yellow } from "../../shared/colors";
+import { yellow, blackBtn } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
@@ -47,6 +47,7 @@ const RefreshBtn = styled.button`
   height: 50px;
   border-radius: 8px;
   background-color: ${yellow};
+  color: ${blackBtn};
   font-weight: 500;
   margin-top: 40px;
 `;

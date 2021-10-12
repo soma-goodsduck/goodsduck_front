@@ -6,7 +6,11 @@ import styled from "styled-components";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import Nav from "../../components/nav/nav";
 import IdolForVote from "./idolForVote";
-import { DoubleCheckModal, DoubleCheckModal2 } from "../../elements";
+import {
+  DoubleCheckModal,
+  DoubleCheckModal2,
+  LoginPopUp,
+} from "../../elements";
 
 import {
   requestPublicData,
@@ -26,6 +30,7 @@ const VotePage = (props) => {
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showNoVoteModal, setShowNoVoteModal] = useState(false);
   const votedIdolId = useSelector((state) => state.user.votedIdolId); // 투표한 아이돌 그룹
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const reqUserData = async () => {
     const result = await requestAuthData("v1/users/vote");
@@ -38,9 +43,12 @@ const VotePage = (props) => {
   const fnEffect = async () => {
     const idolGroups = await reqIdolGroup();
     const userData = await reqUserData();
-    console.log(userData);
 
     if (idolGroups < 0 || userData < 0) {
+      if (userData === -201) {
+        setShowLoginPopup(true);
+        return;
+      }
       history.push("/error");
       return;
     }
@@ -86,6 +94,7 @@ const VotePage = (props) => {
 
   return (
     <>
+      {showLoginPopup && <LoginPopUp />}
       {showVoteModal && (
         <DoubleCheckModal
           text2={`${idolName} 투표`}

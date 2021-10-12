@@ -493,7 +493,7 @@ const Signup = () => {
           <Grid padding="16px 0px">
             <LabelText>좋아하는 아이돌</LabelText>
             <Text color={grayBtnBorder} size="15px" margin="0 0 5px 0">
-              회원가입 후 홈, 마이페이지에서 수정할 수 있습니다.
+              회원가입 후 홈, 마이페이지에서 선택할 수 있습니다.
             </Text>
             {/* <IdolGroups onUpdate={updateIdols} /> */}
             <IdolGroups onlyRead />

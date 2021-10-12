@@ -22,7 +22,7 @@ const IdolForVote = ({ idol, ranking, onVote, votedIdolId }) => {
               {idol.votedCount > 7 && (
                 <Gauge style={{ width: `${idol.votedCount}%` }} />
               )}
-              {idol.votedCount < 7 && idol.votedCount > 0 && (
+              {idol.votedCount <= 7 && idol.votedCount > 0 && (
                 <Gauge style={{ width: "7%" }} />
               )}
               <GaugePercent>{idol.votedCount}표</GaugePercent>

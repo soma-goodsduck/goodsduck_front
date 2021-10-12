@@ -129,6 +129,7 @@ const NOBtn = styled.button`
   font-weight: bold;
   padding: 15px;
   background-color: ${grayBtn};
+  color: ${blackBtn};
   border-radius: 0 0 0 5px;
 `;
 

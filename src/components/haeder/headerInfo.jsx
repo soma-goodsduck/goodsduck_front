@@ -55,6 +55,7 @@ const HeaderInfo = (props) => {
       history.push("/community");
     } else if (isCommunity) {
       dispatch(newPostActions.clear());
+      dispatch(imgActions.clearImgAction());
       history.push("/community");
     } else {
       history.goBack();

@@ -59,11 +59,11 @@ const CommunityHomePage = (props) => {
   return (
     <>
       {showPopup && <LoginPopUp />}
-      <>
-        <CommunityHome>
-          <HeaderCommunity text={menuText} />
-          <Line />
-          <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
+      <CommunityHome>
+        <HeaderCommunity text={menuText} />
+        <Line />
+        <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
+        {(communityMenu === "home" || communityMenu === "freeMarket") && (
           <AddPostBtn
             onClick={() => {
               if (isIdolFilter !== 0) {
@@ -78,9 +78,9 @@ const CommunityHomePage = (props) => {
               }
             }}
           />
-        </CommunityHome>
-        <Nav />
-      </>
+        )}
+      </CommunityHome>
+      <Nav />
     </>
   );
 };

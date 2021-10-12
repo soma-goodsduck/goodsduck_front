@@ -24,6 +24,7 @@ const PostBody = ({ postData }) => {
 
   const [isLike, setIsLike] = useState(postData.isLike);
   const [userPushUrl, setUserPushUrl] = useState("/my-profile");
+  const [descHeight, setDescHegiht] = useState(0);
 
   const { likeCount, commentCount } = useSelector((state) => ({
     likeCount: state.post.likeCount,
@@ -37,6 +38,27 @@ const PostBody = ({ postData }) => {
 
     dispatch(postActions.setLikeCnt(postData.likeCount));
     dispatch(postActions.setCommentCnt(postData.commentCount));
+
+    const findEnter = postData.content.match(/[\n]/g);
+    if (findEnter) {
+      let _descHeingt = 0;
+      const _desc = postData.content.split("\n");
+      const numOfEnter = findEnter.length;
+
+      for (let i = 0; i < numOfEnter + 1; i += 1) {
+        if (_desc[i].length / 20 > 1) {
+          _descHeingt += Math.ceil(_desc[i].length / 20);
+        }
+      }
+
+      _descHeingt += numOfEnter;
+      setDescHegiht(_descHeingt);
+    } else {
+      const countOfLetter = postData.content.length;
+      if (countOfLetter / 20 > 1) {
+        setDescHegiht(Math.floor(countOfLetter / 20));
+      }
+    }
   }, []);
 
   const reqLikePost = async () => {
@@ -113,7 +135,11 @@ const PostBody = ({ postData }) => {
         </UserInfo>
         {/* 게시글 내용 */}
         <Body>
-          <Text>{postData.content}</Text>
+          <DescBox
+            value={postData.content}
+            readOnly
+            style={{ height: `${30 + descHeight * 16}px` }}
+          />
           {postData.images.length !== 0 && (
             <Flex margin="20px 0 0 0">
               <PostImg images={postData.images} />
@@ -209,6 +235,12 @@ const LikeBtn = styled.button`
 const CommentBtn = styled.button`
   display: flex;
   align-items: center;
+`;
+
+const DescBox = styled.textarea`
+  width: 100%;
+  resize: none;
+  line-height: 1.5;
 `;
 
 export default PostBody;
