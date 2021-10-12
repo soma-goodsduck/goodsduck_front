@@ -13,6 +13,8 @@ import Nav from "../../components/nav/nav";
 import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { firebaseDatabase } from "../../shared/firebase";
 import { history } from "../../redux/configureStore";
+import WelcomeChatting from "./welcomeChatting";
+import { grayBorder } from "../../shared/colors";
 
 export class Chatting extends Component {
   state = {
@@ -92,13 +94,15 @@ export class Chatting extends Component {
         `chatRooms/${chatRoom.itemSimpleDto.itemId}/${chatRoom.chatId}`,
       );
       chatRef.get().then((snapshot) => {
-        chatRoomsArray.push(snapshot.val());
+        if (snapshot.val()) {
+          chatRoomsArray.push(snapshot.val());
 
-        const sortChatRoomsArray = chatRoomsArray.sort((a, b) => {
-          return new Date(b.timestamp) - new Date(a.timestamp);
-        });
+          const sortChatRoomsArray = chatRoomsArray.sort((a, b) => {
+            return new Date(b.timestamp) - new Date(a.timestamp);
+          });
 
-        this.setState({ chatRooms: sortChatRoomsArray });
+          this.setState({ chatRooms: sortChatRoomsArray });
+        }
       });
     });
 
@@ -121,10 +125,10 @@ export class Chatting extends Component {
     const existChatRooms = [];
     this.state.chatRooms.forEach((chatRoom) => {
       if (
-        (chatRoom.createdBy.id === this.state.userId &&
-          chatRoom.createdBy.isPresented === true) ||
-        (chatRoom.createdWith.id === this.state.userId &&
-          chatRoom.createdWith.isPresented === true)
+        (chatRoom?.createdBy.id === this.state.userId &&
+          chatRoom?.createdBy.isPresented === true) ||
+        (chatRoom?.createdWith.id === this.state.userId &&
+          chatRoom?.createdWith.isPresented === true)
       ) {
         existChatRooms.push(chatRoom);
       }
@@ -156,9 +160,9 @@ export class Chatting extends Component {
             </Text>
           </Header>
           {isLoading && <Spinner />}
-          {chatRooms !== [] && (
-            <div style={{ marginBottom: "80px" }}>{this.renderChatRooms()}</div>
-          )}
+          {chatRooms !== [] && <div>{this.renderChatRooms()}</div>}
+          <WelcomeChatting />
+          <Line />
           <Nav />
         </ChattingBox>
       </>
@@ -174,6 +178,13 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
+`;
+
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${grayBorder};
+  margin-bottom: 80px;
 `;
 
 export default Chatting;
