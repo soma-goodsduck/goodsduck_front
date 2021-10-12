@@ -101,7 +101,11 @@ const addItemAction = (item, fileList) => {
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
     const uploadItem = await axios.post(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/items`,
+      `${
+        process.env.REACT_APP_TYPE === "DEV"
+          ? process.env.REACT_APP_BACK_URL_DEV
+          : process.env.REACT_APP_BACK_URL_PROD
+      }/api/v1/items`,
       formData,
       {
         headers: { jwt: `${item.userJwt}` },
@@ -166,7 +170,11 @@ const updateItemAction = (item, id, fileList) => {
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
     const updateItem = await axios.put(
-      `${process.env.REACT_APP_BACK_URL}/api/v2/items/${id}`,
+      `${
+        process.env.REACT_APP_TYPE === "DEV"
+          ? process.env.REACT_APP_BACK_URL_DEV
+          : process.env.REACT_APP_BACK_URL_PROD
+      }/api/v2/items/${id}`,
       formData,
       {
         headers: { jwt: `${item.userJwt}` },
