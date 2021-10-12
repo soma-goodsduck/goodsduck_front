@@ -3,20 +3,30 @@ import styled from "styled-components";
 import styles from "../myProfilePage/myProfilePage.module.css";
 
 import { Flex, Text, Image } from "../../elements";
-import { yellow, blackBtn, gray } from "../../shared/colors";
+import {
+  yellow,
+  blackBtn,
+  gray,
+  white,
+  grayBtnText,
+} from "../../shared/colors";
+import { timeForToday } from "../../shared/functions";
 
 const UserProfile = ({ user }) => {
   return (
     <UserProfileBox>
-      <Image
-        shape="circle"
-        src={
-          user.imageUrl ||
-          "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
-        }
-        margin="0 20px 0 0"
-        size="70px"
-      />
+      <div style={{ position: "relative" }}>
+        <Image
+          shape="circle"
+          src={
+            user.imageUrl ||
+            "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+          }
+          margin="0 20px 0 0"
+          size="70px"
+        />
+      </div>
+      <TimeBox>{timeForToday(user.lastLoginAt)}</TimeBox>
       <Flex is_col align="flex-start">
         <Flex is_flex>
           <Image
@@ -62,6 +72,22 @@ const GaugePercent = styled.div`
   position: absolute;
   top: 0;
   left: 45%;
+`;
+
+const TimeBox = styled.div`
+  position: absolute;
+  top: 115px;
+  left: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75px;
+  height: 25px;
+  background-color: ${white};
+  color: ${grayBtnText};
+  border: 1px solid ${gray};
+  border-radius: 20px;
+  font-size: 13px;
 `;
 
 export default UserProfile;

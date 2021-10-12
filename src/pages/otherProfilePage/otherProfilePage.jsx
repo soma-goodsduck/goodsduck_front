@@ -52,7 +52,9 @@ const OtherProfilePage = (props) => {
       return;
     }
 
-    setUser(userData.user);
+    const newUserData = userData.user;
+    newUserData.lastLoginAt = userData.lastLoginAt;
+    setUser(newUserData);
     setBtnsData({
       itemCount: userData.itemCount,
       reviewCount: userData.reviewCount,
