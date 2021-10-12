@@ -125,6 +125,7 @@ const MessageForm = ({ onOpenAttachment }) => {
       setErrors([]);
       setContent("");
       setLoading(false);
+      document.querySelector("#messageInput").focus();
 
       // LS에 채팅방에 방문한 시각 업데이트
       localStorage.setItem(
@@ -194,6 +195,7 @@ const MessageForm = ({ onOpenAttachment }) => {
               onKeyDown={handleKeyDown}
               value={content}
               onChange={handleChange}
+              id="messageInput"
             />
             <Button
               type="submit"

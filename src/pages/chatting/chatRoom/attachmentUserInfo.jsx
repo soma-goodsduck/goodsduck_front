@@ -12,16 +12,10 @@ import { history } from "../../../redux/configureStore";
 const AttachmentUserInfo = (props) => {
   const { type, text, _onClickExit, _onClickSend } = props;
 
-  const [userId, setUserId] = useState("");
-  const [userNick, setUserNick] = useState("");
   const [addressInfo, setAddressInfo] = useState("");
   const [accountInfo, setAccountInfo] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
-  const reqUserId = async () => {
-    const result = await requestAuthData("v1/users/look-up-id");
-    return result;
-  };
   const reqAddress = async () => {
     const result = await requestAuthData("v1/users/address");
     return result;
@@ -33,17 +27,14 @@ const AttachmentUserInfo = (props) => {
   const fnEffect = async () => {
     const getAddress = await reqAddress();
     const getAccount = await reqAccount();
-    const getUserId = await reqUserId();
 
-    if (getAddress < 0 || getAccount < 0 || getUserId < 0) {
+    if (getAddress < 0 || getAccount < 0) {
       if (getAddress !== -101 && getAccount !== -101) {
         history.push("/error");
         return;
       }
     }
 
-    setUserId(getUserId.userId);
-    setUserNick(getUserId.nickName);
     if (getAddress === -101) {
       setAddressInfo("등록해주세요 :D");
     } else {
@@ -71,9 +62,9 @@ const AttachmentUserInfo = (props) => {
     _onClickExit();
 
     if (type === "address") {
-      _onClickSend(addressInfo, userId, userNick);
+      _onClickSend(addressInfo);
     } else if (type === "account") {
-      _onClickSend(accountInfo, userId, userNick);
+      _onClickSend(accountInfo);
     }
   };
 

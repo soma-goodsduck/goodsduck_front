@@ -1,16 +1,13 @@
 /* eslint-disable no-prototype-builtins */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "moment/locale/ko";
 import moment from "moment";
 import styled from "styled-components";
 import { Flex, Text, Image } from "../../../elements/index";
 
-import { requestPublicData } from "../../../shared/axios";
 import { gray, lightGray2, yellow } from "../../../shared/colors";
-import { history } from "../../../redux/configureStore";
 
-const Message = ({ message }) => {
-  const [isMessageMine, setIsMessageMine] = useState(true);
+const Message = ({ message, isMine }) => {
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
 
   const isImage = (_message) => {
@@ -19,28 +16,9 @@ const Message = ({ message }) => {
     );
   };
 
-  const reqUserId = async () => {
-    const result = await requestPublicData("v1/users/look-up-id");
-    return result;
-  };
-  const fnEffect = async () => {
-    const getUserId = await reqUserId();
-    if (getUserId < 0) {
-      history.push("/error");
-      return;
-    }
-
-    if (getUserId.userId === message.user.id) {
-      setIsMessageMine(true);
-    } else {
-      setIsMessageMine(false);
-    }
-  };
-  useEffect(fnEffect, []);
-
   return (
     <>
-      {isMessageMine ? (
+      {isMine ? (
         <Flex is_flex justify="flex-end" align="flex-end">
           <Text color={gray} size="14px" margin="0 0 14px 0">
             {timeFromNow(message.timestamp)}
@@ -50,7 +28,7 @@ const Message = ({ message }) => {
               shape="normal"
               src={message.image}
               width="200px"
-              margin="10px 20px 10px 10px;"
+              margin="10px 20px 10px 20px;"
               borderRadius="10px"
             />
           ) : (

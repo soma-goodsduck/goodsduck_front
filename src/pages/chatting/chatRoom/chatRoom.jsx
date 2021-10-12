@@ -50,8 +50,9 @@ export class ChatRoom extends Component {
       if (result < 0) {
         history.push("/error");
       }
+      this.setState({ userId: result.userId });
+      this.setState({ userNick: result.nickName });
     });
-
     const href = window.location.href.split("/");
     const _chatRoomId = href[href.length - 1];
     const _itemId = href[href.length - 2];
@@ -151,9 +152,15 @@ export class ChatRoom extends Component {
 
   renderMessages = (messages) =>
     messages.length > 0 &&
-    messages.map((message) => (
-      <Message key={message.timestamp} message={message} />
-    ));
+    messages.map((message) => {
+      return (
+        <Message
+          key={message.timestamp}
+          message={message}
+          isMine={this.state.userId === message.user.id}
+        />
+      );
+    });
 
   renderMessageSkeleton = (loading) =>
     loading && (
@@ -251,11 +258,9 @@ export class ChatRoom extends Component {
             _onClickExit={() => {
               this.setState({ showAttachmentAddressPopup: false });
             }}
-            _onClickSend={(_addressInfo, _userId, _userNick) => {
+            _onClickSend={(_addressInfo) => {
               this.setState({ showDoubleCheckPopup: true });
               this.setState({ addressInfo: _addressInfo });
-              this.setState({ userId: _userId });
-              this.setState({ userNick: _userNick });
               this.setState({ messageType: "address" });
             }}
           />
@@ -267,11 +272,9 @@ export class ChatRoom extends Component {
             _onClickExit={() => {
               this.setState({ showAttachmentAccountPopup: false });
             }}
-            _onClickSend={(_accountInfo, _userId, _userNick) => {
+            _onClickSend={(_accountInfo) => {
               this.setState({ showDoubleCheckPopup: true });
               this.setState({ accountInfo: _accountInfo });
-              this.setState({ userId: _userId });
-              this.setState({ userNick: _userNick });
               this.setState({ messageType: "account" });
             }}
           />
