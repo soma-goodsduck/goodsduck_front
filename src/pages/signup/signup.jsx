@@ -23,6 +23,7 @@ import {
 } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
+import NoticePopup from "../../elements/NoticeForSignupPopup"; // sms 인증 초과했을 때 공지사항
 
 const Signup = () => {
   localStorage.removeItem("likeIdolGroups");
@@ -64,8 +65,26 @@ const Signup = () => {
   // const id = useSelector((state) => state.user.id);
   const [nextOK, setNextOK] = useState(false);
 
+  // sms 인증 초과했을 때 공지사항
+  // const userAgent = window.navigator.userAgent;
+  // const isApp = userAgent.indexOf("APP");
+  // const [showNoticePopup, setShowNoticePopup] = useState(false);
+  // const showNoticeTimeLS = localStorage.getItem("showNoticeTime");
+
+  // useEffect(() => {
+  //   if (showNoticeTimeLS) {
+  //     // 하루에 한 번
+  //     if (new Date(showNoticeTimeLS).getDate() !== new Date().getDate()) {
+  //       setShowNoticePopup(true);
+  //     }
+  //   } else {
+  //     setShowNoticePopup(true);
+  //   }
+  // }, []);
+
   useEffect(() => {
     if (
+      isEmailOk &&
       !isUsedEmail &&
       pw !== "" &&
       pw2 !== "" &&
@@ -81,6 +100,7 @@ const Signup = () => {
       setNextOK(false);
     }
   }, [
+    isEmailOk,
     isUsedEmail,
     pw,
     pw2,
@@ -322,203 +342,213 @@ const Signup = () => {
   };
 
   return (
-    <SignUpBox>
-      <div>
-        <HeaderInfo text="회원가입" />
-        <Box>
-          <Grid padding="16px 0px">
-            <LabelText>이메일</LabelText>
-            <Flex is_col>
-              <Input
-                type="email"
-                placeholder="이메일을 입력해주세요."
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  emailCheck(e.target.value);
-                }}
-              />
-              {!isEmailOk && (
-                <Text color={red} bold height="2">
-                  이메일을 확인해주세요
-                </Text>
-              )}
-              {isUsedEmail && (
-                <Text color={red} bold height="2">
-                  이미 사용 중인 이메일입니다.
-                </Text>
-              )}
-            </Flex>
-          </Grid>
-          <Grid padding="16px 0px">
-            <LabelText>비밀번호</LabelText>
-            <Flex is_col>
-              <Input
-                type="password"
-                placeholder="비밀번호를 입력해주세요."
-                ref={pwRef}
-                value={pw}
-                onChange={(e) => {
-                  setPw(e.target.value);
-                  pwCheck(e.target.value);
-                }}
-              />
-              {!isPwOk && (
-                <Text color={red} bold height="2">
-                  숫자, 영문, 특수문자 조합으로 8~16자리인지 확인해주세요.
-                </Text>
-              )}
-            </Flex>
-          </Grid>
-          <Grid padding="16px 0px">
-            <LabelText>비밀번호 확인</LabelText>
-            <Flex is_col>
-              <Input
-                type="password"
-                placeholder="비밀번호를 한번 더 입력해주세요."
-                ref={pw2Ref}
-                value={pw2}
-                onChange={(e) => {
-                  setPw2(e.target.value);
-                  pwDoubleCheck(e.target.value);
-                }}
-              />
-              {!isPw2Ok && (
-                <Text color={red} bold height="2">
-                  비밀번호가 일치하지 않습니다.
-                </Text>
-              )}
-            </Flex>
-          </Grid>
-          <Grid padding="16px 0px">
-            <LabelText>핸드폰 번호</LabelText>
-            {/* 이전에 가입한 적 있는 핸드폰 번호인지 확인 */}
-            <Flex>
-              <Input
-                type="number"
-                placeholder="ex.01012345678"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                  phCheck(e.target.value);
-                  setShowSmsValidateBtn(false);
-                  setisValidated(false);
-                  setShowTimer(false);
-                }}
-              />
-              <button
-                className={isPhoneOk ? styles.nextSmsBtn : styles.smsBtn}
-                type="button"
-                onClick={() => {
-                  if (isPhoneOk) {
-                    sendSmsCode();
-                  }
-                }}
-              >
-                인증 요청
-              </button>
-            </Flex>
-            {phone !== "" && !isPhoneOk && !isUsedPhone && !showTimer && (
-              <Text color={red} bold height="1.5" margin="10px 0 0 0">
-                휴대폰 번호(- 없이)를 다시 한 번 확인해주세요.
-              </Text>
-            )}
-            {isUsedPhone && !isResignedUser && (
-              <Text color={red} bold height="1.5" margin="10px 0 0 0">
-                {/* {snsType}를 통해 이미 가입한 적 있는 번호입니다. */}
-                이미 가입된 번호입니다.
-              </Text>
-            )}
-            {isUsedPhone && isResignedUser && (
-              <Text color={red} bold height="1.5" margin="10px 0 0 0">
-                탈퇴한 유저의 번호입니다. 탈퇴한지 30일 후에 재가입 할 수
-                있습니다.
-              </Text>
-            )}
-            {/* 이전에 가입한 적이 없다면 SMS 인증 진행 */}
-            {!isValidated && showSmsValidateBtn && (
-              <Flex margin="10px 0 0 0">
+    <>
+      {/* sms 인증 초과했을 때 공지사항 */}
+      {/* {showNoticePopup && (
+        <NoticePopup
+          handleExitClick={() => {
+            setShowNoticePopup(false);
+          }}
+        />
+      )} */}
+      <SignUpBox>
+        <div>
+          <HeaderInfo text="회원가입" />
+          <Box>
+            <Grid padding="16px 0px">
+              <LabelText>이메일</LabelText>
+              <Flex is_col>
+                <Input
+                  type="email"
+                  placeholder="이메일을 입력해주세요."
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    emailCheck(e.target.value);
+                  }}
+                />
+                {!isEmailOk && (
+                  <Text color={red} bold height="2">
+                    이메일을 확인해주세요
+                  </Text>
+                )}
+                {isUsedEmail && (
+                  <Text color={red} bold height="2">
+                    이미 사용 중인 이메일입니다.
+                  </Text>
+                )}
+              </Flex>
+            </Grid>
+            <Grid padding="16px 0px">
+              <LabelText>비밀번호</LabelText>
+              <Flex is_col>
+                <Input
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요."
+                  ref={pwRef}
+                  value={pw}
+                  onChange={(e) => {
+                    setPw(e.target.value);
+                    pwCheck(e.target.value);
+                  }}
+                />
+                {!isPwOk && (
+                  <Text color={red} bold height="2">
+                    숫자, 영문, 특수문자 조합으로 8~16자리인지 확인해주세요.
+                  </Text>
+                )}
+              </Flex>
+            </Grid>
+            <Grid padding="16px 0px">
+              <LabelText>비밀번호 확인</LabelText>
+              <Flex is_col>
+                <Input
+                  type="password"
+                  placeholder="비밀번호를 한번 더 입력해주세요."
+                  ref={pw2Ref}
+                  value={pw2}
+                  onChange={(e) => {
+                    setPw2(e.target.value);
+                    pwDoubleCheck(e.target.value);
+                  }}
+                />
+                {!isPw2Ok && (
+                  <Text color={red} bold height="2">
+                    비밀번호가 일치하지 않습니다.
+                  </Text>
+                )}
+              </Flex>
+            </Grid>
+            <Grid padding="16px 0px">
+              <LabelText>핸드폰 번호</LabelText>
+              {/* 이전에 가입한 적 있는 핸드폰 번호인지 확인 */}
+              <Flex>
                 <Input
                   type="number"
-                  placeholder="인증 번호를 입력해주세요"
-                  value={smsCode}
+                  placeholder="ex.01012345678"
+                  value={phone}
                   onChange={(e) => {
-                    setSmsCode(e.target.value);
+                    setPhone(e.target.value);
+                    phCheck(e.target.value);
+                    setShowSmsValidateBtn(false);
+                    setisValidated(false);
+                    setShowTimer(false);
                   }}
                 />
                 <button
-                  className={styles.nextSmsBtn}
+                  className={isPhoneOk ? styles.nextSmsBtn : styles.smsBtn}
                   type="button"
                   onClick={() => {
-                    if (smsCode !== "") {
-                      checkSmsCode();
+                    if (isPhoneOk) {
+                      sendSmsCode();
                     }
                   }}
                 >
-                  인증 확인
+                  인증 요청
                 </button>
               </Flex>
-            )}
-            {!isValidated && showTimer && (
-              <Timer
-                onTimeOut={() => {
-                  handleTimeOut();
-                }}
-              />
-            )}
-            {isValidated && (
-              <Text color={green} bold height="1.5" margin="10px 0 0 0">
-                휴대폰 인증이 완료되었습니다.
-              </Text>
-            )}
-          </Grid>
-          <Grid padding="16px 0px">
-            <LabelText>닉네임</LabelText>
-            <Flex is_col>
-              <Input
-                placeholder="닉네임을 입력해주세요"
-                value={nick}
-                onChange={(e) => {
-                  setNick(e.target.value);
-                  nickCheck(e.target.value);
-                }}
-              />
-              {isUsedNick && (
-                <Text color={red} bold height="3">
-                  이미 존재하는 닉네임입니다.
+              {phone !== "" && !isPhoneOk && !isUsedPhone && !showTimer && (
+                <Text color={red} bold height="1.5" margin="10px 0 0 0">
+                  휴대폰 번호(- 없이)를 다시 한 번 확인해주세요.
                 </Text>
               )}
-            </Flex>
-          </Grid>
+              {isUsedPhone && !isResignedUser && (
+                <Text color={red} bold height="1.5" margin="10px 0 0 0">
+                  {/* {snsType}를 통해 이미 가입한 적 있는 번호입니다. */}
+                  이미 가입된 번호입니다.
+                </Text>
+              )}
+              {isUsedPhone && isResignedUser && (
+                <Text color={red} bold height="1.5" margin="10px 0 0 0">
+                  탈퇴한 유저의 번호입니다. 탈퇴한지 30일 후에 재가입 할 수
+                  있습니다.
+                </Text>
+              )}
+              {/* 이전에 가입한 적이 없다면 SMS 인증 진행 */}
+              {!isValidated && showSmsValidateBtn && (
+                <Flex margin="10px 0 0 0">
+                  <Input
+                    type="number"
+                    placeholder="인증 번호를 입력해주세요"
+                    value={smsCode}
+                    onChange={(e) => {
+                      setSmsCode(e.target.value);
+                    }}
+                  />
+                  <button
+                    className={styles.nextSmsBtn}
+                    type="button"
+                    onClick={() => {
+                      if (smsCode !== "") {
+                        checkSmsCode();
+                      }
+                    }}
+                  >
+                    인증 확인
+                  </button>
+                </Flex>
+              )}
+              {!isValidated && showTimer && (
+                <Timer
+                  onTimeOut={() => {
+                    handleTimeOut();
+                  }}
+                />
+              )}
+              {isValidated && (
+                <Text color={green} bold height="1.5" margin="10px 0 0 0">
+                  휴대폰 인증이 완료되었습니다.
+                </Text>
+              )}
+            </Grid>
+            <Grid padding="16px 0px">
+              <LabelText>닉네임</LabelText>
+              <Flex is_col>
+                <Input
+                  placeholder="닉네임을 입력해주세요"
+                  value={nick}
+                  onChange={(e) => {
+                    setNick(e.target.value);
+                    nickCheck(e.target.value);
+                  }}
+                />
+                {isUsedNick && (
+                  <Text color={red} bold height="3">
+                    이미 존재하는 닉네임입니다.
+                  </Text>
+                )}
+              </Flex>
+            </Grid>
+            <Grid padding="16px 0px">
+              <LabelText>좋아하는 아이돌</LabelText>
+              <Text color={grayBtnBorder} size="15px" margin="0 0 5px 0">
+                회원가입 후 홈, 마이페이지에서 선택할 수 있습니다.
+              </Text>
+              {/* <IdolGroups onUpdate={updateIdols} /> */}
+              <IdolGroups onlyRead />
+            </Grid>
+          </Box>
           <Grid padding="16px 0px">
-            <LabelText>좋아하는 아이돌</LabelText>
-            <Text color={grayBtnBorder} size="15px" margin="0 0 5px 0">
-              회원가입 후 홈, 마이페이지에서 선택할 수 있습니다.
-            </Text>
-            {/* <IdolGroups onUpdate={updateIdols} /> */}
-            <IdolGroups onlyRead />
+            <LabelText>GOODSDUCK 이용을 위한 약관 동의</LabelText>
+            <AgreementOfTerms
+              onAllClick={handleAgreeAllClick}
+              onServiceClick={handleAgreeServiceClick}
+              onPrivacyClick={handleAgreePrivacyClick}
+              onMarketingClick={handleAgreeMarketingClick}
+            />
           </Grid>
-        </Box>
-        <Grid padding="16px 0px">
-          <LabelText>GOODSDUCK 이용을 위한 약관 동의</LabelText>
-          <AgreementOfTerms
-            onAllClick={handleAgreeAllClick}
-            onServiceClick={handleAgreeServiceClick}
-            onPrivacyClick={handleAgreePrivacyClick}
-            onMarketingClick={handleAgreeMarketingClick}
-          />
-        </Grid>
-      </div>
-      <button
-        className={nextOK ? styles.nextOKBtn : styles.nextBtn}
-        type="button"
-        onClick={() => {
-          signup();
-        }}
-      >
-        다음
-      </button>
-    </SignUpBox>
+        </div>
+        <button
+          className={nextOK ? styles.nextOKBtn : styles.nextBtn}
+          type="button"
+          onClick={() => {
+            signup();
+          }}
+        >
+          다음
+        </button>
+      </SignUpBox>
+    </>
   );
 };
 

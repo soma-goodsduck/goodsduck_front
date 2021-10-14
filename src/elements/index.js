@@ -20,6 +20,7 @@ import FilteringModal from "./filteringModal";
 import Spinner from "./spinner";
 import AppDownloadPopup from "./appDownloadPopup";
 import EventPopup from "./eventPopup";
+import NoticeForSignupPopup from "./NoticeForSignupPopup";
 
 export {
   Grid,
@@ -42,4 +43,5 @@ export {
   FilteringModal,
   AppDownloadPopup,
   EventPopup,
+  NoticeForSignupPopup,
 };
