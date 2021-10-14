@@ -165,7 +165,7 @@ const PostList = ({ onIdolFilter, type }) => {
   return (
     <>
       {(type === "home" || type === "freeMarket") && (
-        <IdolGroupFiltering onClick={handleFiltering} />
+        <IdolGroupFiltering onClick={handleFiltering} type="community" />
       )}
 
       {!isLoading && posts.length === 0 && (

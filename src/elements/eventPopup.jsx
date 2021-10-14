@@ -16,9 +16,9 @@ const EventPopup = ({ handleExitClick }) => {
             }}
           />
           <Image
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/event.png"
-            shape="rectangle"
-            size="90vw"
+            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/event1.png"
+            shape="normal"
+            width="90vw"
           />
           <Btns>
             <VoteBtn
@@ -72,7 +72,7 @@ const ModalBox = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
-  bottom: 20%;
+  top: 10%;
 `;
 
 const Btns = styled.div`

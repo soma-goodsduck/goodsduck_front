@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { grayBtn } from "../../shared/colors";
 
 import { LoginPopUp } from "../../elements";
 import Nav from "../../components/nav/nav";
@@ -61,7 +60,7 @@ const CommunityHomePage = (props) => {
       {showPopup && <LoginPopUp />}
       <CommunityHome>
         <HeaderCommunity text={menuText} />
-        <Line />
+        <NoticeBox>투표하기는 오른쪽 상단 메뉴에 있습니다 😉</NoticeBox>
         <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
         {(communityMenu === "home" || communityMenu === "freeMarket") && (
           <AddPostBtn
@@ -119,10 +118,14 @@ const AddPostBtn = styled.button`
   }
 `;
 
-const Line = styled.div`
+const NoticeBox = styled.div`
   width: 100vw;
-  height: 10px;
-  background-color: ${grayBtn};
+  height: 35px;
+  margin-top: 60px;
+  padding: 10px 20px;
+  background-color: #f2f3f6;
+  font-size: 14px;
+  text-align: center;
 
   @media screen and (min-width: 415px) {
     width: 415px;

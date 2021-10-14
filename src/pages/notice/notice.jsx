@@ -69,7 +69,10 @@ const Notice = ({ notice, date }) => {
           />
         )}
         {isOpen && notice.content.includes("goodsduck-s3") && (
-          <NoticeImgBody src={notice.content} size={screen} />
+          <NoticeImgBody
+            src={notice.content}
+            width={screen > 415 ? "415px" : "100vw"}
+          />
         )}
       </NoticeBox>
     </>
@@ -98,17 +101,9 @@ const NoticeBody = styled.textarea`
   background-color: #ffffff;
 `;
 
-const NoticeImgBody = styled.div`
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
-
-  background-image: url("${(props) => props.src}");
-  background-size: cover;
-
-  @media screen and (min-width: 415px) {
-    width: 415px;
-    height: 415px;
-  }
+const NoticeImgBody = styled.img`
+  width: ${(props) => props.width};
+  src: ${(props) => props.src};
 `;
 
 export default Notice;

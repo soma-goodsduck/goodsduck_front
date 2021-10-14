@@ -16,6 +16,7 @@ import { formatDate } from "../../shared/functions";
 import { history } from "../../redux/configureStore";
 
 const Post = ({ postData, type }) => {
+  const screen = window.screen.width;
   const [descHeight, setDescHegiht] = useState(0);
   useEffect(() => {
     const findEnter = postData.content.match(/[\n]/g);
@@ -99,7 +100,7 @@ const Post = ({ postData, type }) => {
               <Image
                 shape="normal"
                 src={postData.images[0].url}
-                width="90vw"
+                width={screen >= 415 ? "375px" : "90vw"}
                 borderRadius="10px"
               />
             </Flex>

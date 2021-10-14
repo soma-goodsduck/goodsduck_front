@@ -11,7 +11,7 @@ import { actionCreators as filteringActions } from "../../redux/modules/filterin
 import { requestPublicData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const IdolGroupFiltering = ({ onClick }) => {
+const IdolGroupFiltering = ({ onClick, type }) => {
   const dispatch = useDispatch();
 
   // 아이돌 데이터 가져오기
@@ -100,7 +100,11 @@ const IdolGroupFiltering = ({ onClick }) => {
       )}
       <div
         aria-hidden
-        className={styles.categories}
+        className={
+          type === "community"
+            ? styles.categoriesWithCommunity
+            : styles.categories
+        }
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
