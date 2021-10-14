@@ -1,11 +1,16 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+
 import styled from "styled-components";
 import styles from "./votePage.module.css";
 
 import { Flex, Text } from "../../elements";
-import { lightGray2, blackBtn, orange, gray, red } from "../../shared/colors";
+import { lightGray2, blackBtn, orange, gray } from "../../shared/colors";
+import { actionCreators as voteActions } from "../../redux/modules/vote";
 
-const IdolForVote = ({ idol, ranking, onVote, votedIdolId }) => {
+const IdolForVote = ({ idol, ranking, onVote }) => {
+  const dispatch = useDispatch();
+
   return (
     <>
       <IdolBox>
@@ -20,7 +25,7 @@ const IdolForVote = ({ idol, ranking, onVote, votedIdolId }) => {
             </Flex>
             <GaugeBox>
               {idol.votedCount > 7 && (
-                <Gauge style={{ width: `${idol.votedCount}%` }} />
+                <Gauge style={{ width: `${idol.votedCount / 5 + 7}%` }} />
               )}
               {idol.votedCount <= 7 && idol.votedCount > 0 && (
                 <Gauge style={{ width: "7%" }} />
@@ -29,19 +34,15 @@ const IdolForVote = ({ idol, ranking, onVote, votedIdolId }) => {
             </GaugeBox>
           </VoteInfo>
         </Flex>
-        <HeartBtn onClick={() => onVote(idol.id, idol.name)}>
-          <button
-            type="button"
-            aria-label="vote"
-            className={
-              votedIdolId === idol.id ? styles.clickLikeBtn : styles.likeBtn
-            }
-          />
-          <Text
-            size="14px"
-            color={votedIdolId === idol.id ? red : gray}
-            margin="5px 0 0 0"
-          >
+        <HeartBtn
+          onClick={() => {
+            onVote();
+            dispatch(voteActions.setVotedIdolId(idol.id));
+            dispatch(voteActions.setVotedIdolName(idol.name));
+          }}
+        >
+          <button type="button" aria-label="vote" className={styles.likeBtn} />
+          <Text size="14px" color={gray} margin="5px 0 0 0">
             투표
           </Text>
         </HeartBtn>

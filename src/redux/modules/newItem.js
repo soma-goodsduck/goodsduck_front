@@ -8,6 +8,7 @@ import { produce } from "immer";
 import axios from "axios";
 import { actionCreators as userActions } from "./user";
 import { actionCreators as imgActions } from "./image";
+import { actionCreators as voteActions } from "./vote";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -123,8 +124,8 @@ const addItemAction = (item, fileList) => {
 
     if (uploadItem.data.response !== -1) {
       history.replace(`/item/${uploadItem.data.response}`);
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
+      dispatch(voteActions.setGettingVoteCount(2));
+      dispatch(voteActions.setShowVotePopup(true));
     } else {
       window.alert("굿즈 등록 실패");
       history.push("/");

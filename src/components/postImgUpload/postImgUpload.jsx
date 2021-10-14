@@ -15,10 +15,11 @@ import { actionCreators as newPostActions } from "../../redux/modules/newPost";
 const PostImgUpload = ({ community }) => {
   const dispatch = useDispatch();
 
-  const { postId, postImgUrls, addedImg } = useSelector((state) => ({
+  const { postId, postImgUrls, addedImg, isNotice } = useSelector((state) => ({
     postId: state.newPost.postId,
     postImgUrls: state.newPost.images,
     addedImg: state.image.fileList,
+    isNotice: state.image.isNotice,
   }));
 
   // 이미지 & 프리뷰 삭제 => 커뮤니티
@@ -145,6 +146,9 @@ const PostImgUpload = ({ community }) => {
             onChange={showPreview}
           />
         </form>
+        {isNotice && (
+          <div>⚠️ 도배성 글을 올리는 경우 투표에 불이익이 갈 수 있습니다.</div>
+        )}
         <div id="preview-container" className={styles.previewContainer} />
       </Flex>
     </>

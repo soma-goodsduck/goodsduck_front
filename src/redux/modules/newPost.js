@@ -8,6 +8,7 @@ import { produce } from "immer";
 import { postImgAction, putAction } from "../../shared/axios";
 import { actionCreators as userActions } from "./user";
 import { actionCreators as imgActions } from "./image";
+import { actionCreators as voteActions } from "./vote";
 
 // actions
 const SET_POST = "SET_POST";
@@ -74,8 +75,8 @@ const addPostAction = (post, fileList) => {
 
     if (uploadItem !== -1) {
       history.replace(`/post/${uploadItem}`);
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("게시글을 등록했습니다."));
+      dispatch(voteActions.setGettingVoteCount(1));
+      dispatch(voteActions.setShowVotePopup(true));
     } else {
       window.alert("게시글 등록 실패");
       history.push("/community");

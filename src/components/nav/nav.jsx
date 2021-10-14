@@ -161,7 +161,7 @@ const Nav = (props) => {
               isCommunity ? styles.isCommunityText : styles.isNotCommunityText
             }
           >
-            커뮤니티
+            커뮤/투표
           </span>
         </button>
         <button

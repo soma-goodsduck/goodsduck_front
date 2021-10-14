@@ -19,6 +19,7 @@ import Item from "./modules/item";
 import Community from "./modules/community";
 import NewPost from "./modules/newPost";
 import Post from "./modules/post";
+import Vote from "./modules/vote";
 
 export const history = createBrowserHistory();
 
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   community: Community,
   newPost: NewPost,
   post: Post,
+  vote: Vote,
   router: connectRouter(history),
 });
 

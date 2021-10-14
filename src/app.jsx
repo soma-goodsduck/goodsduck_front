@@ -23,6 +23,7 @@ import FilterItemStatus from "./pages/filtering/itemStatus";
 import FilterIdolMember from "./pages/filtering/idolMemberSelect";
 import Chatting from "./pages/chatting/chatting";
 import ChatRoom from "./pages/chatting/chatRoom/chatRoom";
+import WelcomeChatRoom from "./pages/chatting/chatRoom/welcomeChatRoom";
 import Setting from "./pages/myProfilePage/setting";
 import MyProfile from "./pages/myProfilePage/myProfilePage";
 import EditProfile from "./pages/myProfilePage/editProfilePage";
@@ -59,6 +60,7 @@ import postDetailPage from "./pages/community/postDetail/postDetailPage";
 import postUploadPage from "./pages/community/postUpload/postUploadPage";
 import PostReportPage from "./pages/report/postReportPage";
 import VotePage from "./pages/votePage/votePage";
+import VotePopUp from "./elements/VotePopup";
 
 import {
   Notification,
@@ -71,7 +73,6 @@ import { sendTokenAction } from "./shared/axios";
 
 import { actionCreators as userActions } from "./redux/modules/user";
 import { history } from "./redux/configureStore";
-import WelcomeChatRoom from "./pages/chatting/chatRoom/welcomeChatRoom";
 
 function App() {
   const dispatch = useDispatch();
@@ -87,6 +88,7 @@ function App() {
   const [showNoti, setShowNoti] = useState(false);
   const [notiInfo, setNotiInfo] = useState(null);
   const [notiUrl, setNotiUrl] = useState("");
+  const showVotePopup = useSelector((state) => state.vote.showVotePopup);
 
   const [showAppDownloadPopup, setShowAppDownloadPopup] = useState(false);
   const [downloadLink, setDownloadLink] = useState("");
@@ -108,7 +110,6 @@ function App() {
           setShowAppDownloadPopup(true);
         }
       }
-
       if (isIosWeb !== -1) {
         setDownloadLink("https://apps.apple.com/kr/app/goodsduck/id1586463391");
       } else if (isAndroidWeb !== -1) {
@@ -271,6 +272,7 @@ function App() {
           }}
         />
       )}
+      {showVotePopup && <VotePopUp />}
 
       <Flex is_col align="center" style={{ width: "400px", height: "700px" }}>
         <div className={styles.appImg} />
