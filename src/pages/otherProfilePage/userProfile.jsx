@@ -26,7 +26,7 @@ const UserProfile = ({ user }) => {
           size="70px"
         />
       </div>
-      <TimeBox>{timeForToday(user.lastLoginAt)}</TimeBox>
+      {/* <TimeBox>{timeForToday(user.lastLoginAt)}</TimeBox> */}
       <Flex is_col align="flex-start">
         <Flex is_flex>
           <Image
