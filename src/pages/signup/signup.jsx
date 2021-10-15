@@ -51,6 +51,7 @@ const Signup = () => {
   const [isResignedUser, setIsResignedUser] = useState(false); // 탈퇴한 유저인지 확인
 
   const [nick, setNick] = useState("");
+  const [isNickOk, setIsNickOk] = useState(false); // nick 유효성 체크
   const [isUsedNick, setIsUsedNick] = useState(false);
 
   // const idol = useSelector((state) => state.user.idolsForSignup);
@@ -89,6 +90,7 @@ const Signup = () => {
       pw !== "" &&
       pw2 !== "" &&
       nick !== "" &&
+      isNickOk &&
       !isUsedNick &&
       // isIdolSelected &&
       isValidated &&
@@ -105,6 +107,7 @@ const Signup = () => {
     pw,
     pw2,
     nick,
+    isNickOk,
     isUsedNick,
     // isIdolSelected,
     isValidated,
@@ -150,7 +153,7 @@ const Signup = () => {
   const _pwCheck = _.debounce(async (_pw) => {
     const regex1 = /[0-9]/;
     const regex2 = /[a-zA-Z]/;
-    const regex3 = /[~!@\#$%<>^&*_-]/;
+    const regex3 = /[~!@#$%<>^&*_-]/;
 
     if (
       !regex1.test(_pw) ||
@@ -290,6 +293,12 @@ const Signup = () => {
     return result;
   };
   const nickCheckPost = _.debounce(async (_nick) => {
+    if (_nick.split("").length > 20) {
+      setIsNickOk(false);
+    } else {
+      setIsNickOk(true);
+    }
+
     const _nickCheckPost = await reqNickCheckPost(_nick);
 
     if (_nickCheckPost < 0) {
@@ -394,7 +403,8 @@ const Signup = () => {
                 />
                 {!isPwOk && (
                   <Text color={red} bold height="2">
-                    숫자, 영문, 특수문자 조합으로 8~16자리인지 확인해주세요.
+                    숫자, 영문, 특수문자(~!@#$%^&*_-) 조합으로 8~20자리인지
+                    확인해주세요.
                   </Text>
                 )}
               </Flex>
@@ -515,6 +525,11 @@ const Signup = () => {
                 {isUsedNick && (
                   <Text color={red} bold height="3">
                     이미 존재하는 닉네임입니다.
+                  </Text>
+                )}
+                {nick !== "" && !isNickOk && (
+                  <Text color={red} bold height="3">
+                    닉네임은 최대 20자까지만 가능합니다.
                   </Text>
                 )}
               </Flex>
