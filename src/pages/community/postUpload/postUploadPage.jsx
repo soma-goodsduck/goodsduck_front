@@ -4,25 +4,34 @@ import styled from "styled-components";
 import styles from "./postUpload.module.css";
 
 import HeaderInfo from "../../../components/haeder/headerInfo";
-import { Flex, Spinner } from "../../../elements";
+import { DoubleCheckModal2, Flex, Spinner } from "../../../elements";
 import PostImgUpload from "../../../components/postImgUpload/postImgUpload";
 
 import { actionCreators as newPostActions } from "../../../redux/modules/newPost";
+import { history } from "../../../redux/configureStore";
 
 const postUploadPage = (props) => {
   const dispatch = useDispatch();
   const contentRef = useRef();
   const [nextOK, setNextOK] = useState(false);
 
-  const { _postType, _content, images, fileList, postId, isLoading } =
-    useSelector((state) => ({
-      _postType: state.newPost.postType,
-      _content: state.newPost.content,
-      images: state.newPost.images,
-      fileList: state.image.fileList,
-      postId: state.newPost.postId,
-      isLoading: state.newItem.loading,
-    }));
+  const {
+    _postType,
+    _content,
+    images,
+    fileList,
+    postId,
+    isLoading,
+    showImgBigPopup,
+  } = useSelector((state) => ({
+    _postType: state.newPost.postType,
+    _content: state.newPost.content,
+    images: state.newPost.images,
+    fileList: state.image.fileList,
+    postId: state.newPost.postId,
+    isLoading: state.newItem.loading,
+    showImgBigPopup: state.newPost.showImgBigPopup,
+  }));
 
   const clickPostType = (e) => {
     if (e.target.innerText === "일반글") {
@@ -63,6 +72,16 @@ const postUploadPage = (props) => {
   return (
     <>
       {isLoading && <Spinner />}
+      {showImgBigPopup && (
+        <DoubleCheckModal2
+          text="이미지가 너무 커서 등록할 수 없습니다 :("
+          height="80px"
+          onOkClick={() => {
+            dispatch(newPostActions.setShowImgBigPopup(false));
+            history.replace("/community");
+          }}
+        />
+      )}
       {!isLoading && (
         <>
           <HeaderInfo text="작성하기" isCommunity />

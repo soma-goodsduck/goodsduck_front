@@ -5,7 +5,7 @@
 
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import axios from "axios";
+import { postImgAction, putAction } from "../../shared/axios";
 import { actionCreators as userActions } from "./user";
 import { actionCreators as imgActions } from "./image";
 import { actionCreators as voteActions } from "./vote";
@@ -26,6 +26,7 @@ const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
 const CLEAR_SELECT_IDOL = "CLEAR_SELECT_IDOL";
 const SET_LOADING = "SET_LOADING";
+const SET_SHOW_IMG_BIG_POPUP = "SET_SHOW_IMG_BIG_POPUP";
 
 // action creators
 const setItem = createAction(SET_ITEM, (item) => ({ item }));
@@ -59,6 +60,10 @@ const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
 const clearSelectIdol = createAction(CLEAR_SELECT_IDOL, () => ({}));
 const setLoading = createAction(SET_LOADING, (loading) => ({ loading }));
+const setShowImgBigPopup = createAction(
+  SET_SHOW_IMG_BIG_POPUP,
+  (showImgBigPopup) => ({ showImgBigPopup }),
+);
 
 // initialState
 const initialState = {
@@ -77,6 +82,7 @@ const initialState = {
   idol_member_name: "",
   category: "",
   loading: false,
+  showImgBigPopup: false,
 };
 
 // middleware actions
@@ -86,10 +92,21 @@ const addItemAction = (item, fileList) => {
   return async function (dispatch, getState, { history }) {
     dispatch(setLoading(true));
 
+    let filesSize = 0;
     const formData = new FormData();
     fileList.forEach((file) => {
+      filesSize += file.size;
       formData.append("multipartFiles", file);
     });
+
+    if (filesSize > 10000000) {
+      dispatch(setShowImgBigPopup(true));
+      dispatch(setLoading(false));
+      dispatch(clear());
+      dispatch(imgActions.clearImgAction());
+      return;
+    }
+
     const itemDto = {
       name: item.dataName,
       price: item.dataPrice,
@@ -101,17 +118,7 @@ const addItemAction = (item, fileList) => {
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
-    const uploadItem = await axios.post(
-      `${
-        process.env.REACT_APP_TYPE === "DEV"
-          ? process.env.REACT_APP_BACK_URL_DEV
-          : process.env.REACT_APP_BACK_URL_PROD
-      }/api/v1/items`,
-      formData,
-      {
-        headers: { jwt: `${item.userJwt}` },
-      },
-    );
+    const uploadItem = await postImgAction("v1/items", formData);
 
     dispatch(setLoading(false));
     dispatch(clear());
@@ -122,8 +129,8 @@ const addItemAction = (item, fileList) => {
       return;
     }
 
-    if (uploadItem.data.response !== -1) {
-      history.replace(`/item/${uploadItem.data.response}`);
+    if (uploadItem !== -1) {
+      history.replace(`/item/${uploadItem}`);
       dispatch(voteActions.setGettingVoteCount(2));
       dispatch(voteActions.setShowVotePopup(true));
     } else {
@@ -153,10 +160,20 @@ const updateItemAction = (item, id, fileList) => {
   return async function (dispatch, getState, { history }) {
     dispatch(setLoading(true));
 
+    let filesSize = 0;
     const formData = new FormData();
     fileList.forEach((file) => {
+      filesSize += file.size;
       formData.append("multipartFiles", file);
     });
+
+    if (filesSize > 10000000) {
+      dispatch(setShowImgBigPopup(true));
+      dispatch(setLoading(false));
+      dispatch(clear());
+      dispatch(imgActions.clearImgAction());
+      return;
+    }
 
     const itemDto = {
       name: item.dataName,
@@ -170,17 +187,7 @@ const updateItemAction = (item, id, fileList) => {
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
-    const updateItem = await axios.put(
-      `${
-        process.env.REACT_APP_TYPE === "DEV"
-          ? process.env.REACT_APP_BACK_URL_DEV
-          : process.env.REACT_APP_BACK_URL_PROD
-      }/api/v2/items/${id}`,
-      formData,
-      {
-        headers: { jwt: `${item.userJwt}` },
-      },
-    );
+    const updateItem = await putAction(`v2/items/${id}`, formData);
 
     dispatch(setLoading(false));
     dispatch(clear());
@@ -191,8 +198,8 @@ const updateItemAction = (item, id, fileList) => {
       return;
     }
 
-    if (updateItem.data.success) {
-      history.replace(`/item/${id}`);
+    if (updateItem.response !== -1) {
+      history.replace(`/item/${updateItem.response}`);
       dispatch(userActions.setShowNotification(true));
       dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
     } else {
@@ -295,6 +302,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.loading = action.payload.loading;
       }),
+    [SET_SHOW_IMG_BIG_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showImgBigPopup = action.payload.showImgBigPopup;
+      }),
   },
   initialState,
 );
@@ -317,6 +328,7 @@ const actionCreators = {
   clearAction,
   clearSelectIdol,
   updateItemAction,
+  setShowImgBigPopup,
 };
 
 export { actionCreators };

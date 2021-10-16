@@ -20,6 +20,7 @@ const SET_IMAGES = "SET_IMAGES";
 const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
 const SET_LOADING = "SET_LOADING";
+const SET_SHOW_IMG_BIG_POPUP = "SET_SHOW_IMG_BIG_POPUP";
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -33,6 +34,10 @@ const setImages = createAction(SET_IMAGES, (images) => ({ images }));
 const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
 const setLoading = createAction(SET_LOADING, (loading) => ({ loading }));
+const setShowImgBigPopup = createAction(
+  SET_SHOW_IMG_BIG_POPUP,
+  (showImgBigPopup) => ({ showImgBigPopup }),
+);
 
 // initialState
 const initialState = {
@@ -43,6 +48,7 @@ const initialState = {
   images: [], // image url
   files: [], // image file data
   loading: false,
+  showImgBigPopup: false,
 };
 
 // middleware actions
@@ -52,10 +58,21 @@ const addPostAction = (post, fileList) => {
   return async function (dispatch, getState, { history }) {
     dispatch(setLoading(true));
 
+    let filesSize = 0;
     const formData = new FormData();
     fileList.forEach((file) => {
+      filesSize += file.size;
       formData.append("multipartFiles", file);
     });
+
+    if (filesSize > 10000000) {
+      dispatch(setShowImgBigPopup(true));
+      dispatch(setLoading(false));
+      dispatch(clear());
+      dispatch(imgActions.clearImgAction());
+      return;
+    }
+
     const postDto = {
       postCategoryId: post._postType,
       content: post._content,
@@ -98,10 +115,20 @@ const updatePostAction = (post, id, fileList) => {
   return async function (dispatch, getState, { history }) {
     dispatch(setLoading(true));
 
+    let filesSize = 0;
     const formData = new FormData();
     fileList.forEach((file) => {
+      filesSize += file.size;
       formData.append("multipartFiles", file);
     });
+
+    if (filesSize > 10000000) {
+      dispatch(setShowImgBigPopup(true));
+      dispatch(setLoading(false));
+      dispatch(clear());
+      dispatch(imgActions.clearImgAction());
+      return;
+    }
 
     const postDto = {
       postCategoryId: post._postType,
@@ -180,6 +207,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.loading = action.payload.loading;
       }),
+    [SET_SHOW_IMG_BIG_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showImgBigPopup = action.payload.showImgBigPopup;
+      }),
   },
   initialState,
 );
@@ -196,6 +227,7 @@ const actionCreators = {
   deleteImage,
   clear,
   updatePostAction,
+  setShowImgBigPopup,
 };
 
 export { actionCreators };

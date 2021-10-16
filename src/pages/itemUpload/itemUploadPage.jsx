@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex, LoginPopUp, Spinner } from "../../elements";
+import { DoubleCheckModal2, Flex, LoginPopUp, Spinner } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemImgUpload from "../../components/itemImgUpload/itemImgUpload";
 
@@ -58,6 +58,7 @@ const ItemUpload = (props) => {
     fileList,
     itemId,
     isLoading,
+    showImgBigPopup,
   } = useSelector((state) => ({
     dataName: state.newItem.name,
     dataPrice: state.newItem.price,
@@ -72,6 +73,7 @@ const ItemUpload = (props) => {
     fileList: state.image.fileList,
     itemId: state.newItem.item_id,
     isLoading: state.newItem.loading,
+    showImgBigPopup: state.newItem.showImgBigPopup,
   }));
 
   const item = {
@@ -144,6 +146,16 @@ const ItemUpload = (props) => {
     <>
       {isLoading && <Spinner />}
       {showPopup && <LoginPopUp />}
+      {showImgBigPopup && (
+        <DoubleCheckModal2
+          text="이미지가 너무 커서 등록할 수 없습니다 :("
+          height="80px"
+          onOkClick={() => {
+            dispatch(newItemActions.setShowImgBigPopup(false));
+            history.replace("/");
+          }}
+        />
+      )}
       {!isLoading && (
         <div>
           <HeaderInfo text="굿즈 등록" isClear />
