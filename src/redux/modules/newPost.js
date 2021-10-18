@@ -21,6 +21,7 @@ const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
 const SET_LOADING = "SET_LOADING";
 const SET_SHOW_IMG_BIG_POPUP = "SET_SHOW_IMG_BIG_POPUP";
+const SET_SHOW_MANY_POSTS_POPUP = "SET_SHOW_MANY_POSTS_POPUP";
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -38,6 +39,10 @@ const setShowImgBigPopup = createAction(
   SET_SHOW_IMG_BIG_POPUP,
   (showImgBigPopup) => ({ showImgBigPopup }),
 );
+const setShowManyPostsPopup = createAction(
+  SET_SHOW_MANY_POSTS_POPUP,
+  (showManyPostsPopup) => ({ showManyPostsPopup }),
+);
 
 // initialState
 const initialState = {
@@ -49,6 +54,7 @@ const initialState = {
   files: [], // image file data
   loading: false,
   showImgBigPopup: false,
+  showManyPostsPopup: false,
 };
 
 // middleware actions
@@ -86,18 +92,18 @@ const addPostAction = (post, fileList) => {
     dispatch(imgActions.clearImgAction());
 
     if (uploadItem < 0) {
+      // 단시간내에 글 많이 작성하면 -106
+      if (uploadItem === -106) {
+        dispatch(setShowManyPostsPopup(true));
+        return;
+      }
       history.push("/error");
       return;
     }
 
-    if (uploadItem !== -1) {
-      history.replace(`/post/${uploadItem}`);
-      dispatch(voteActions.setGettingVoteCount(1));
-      dispatch(voteActions.setShowVotePopup(true));
-    } else {
-      window.alert("게시글 등록 실패");
-      history.push("/community");
-    }
+    history.replace(`/post/${uploadItem}`);
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("게시글을 등록했습니다."));
   };
 };
 
@@ -147,14 +153,9 @@ const updatePostAction = (post, id, fileList) => {
       return;
     }
 
-    if (updatePost.response !== -1) {
-      history.replace(`/post/${updatePost.response}`);
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("게시글을 수정했습니다."));
-    } else {
-      window.alert("게시글 수정 실패");
-      history.push("/community");
-    }
+    history.replace(`/post/${updatePost.response}`);
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("게시글을 수정했습니다."));
   };
 };
 
@@ -211,6 +212,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.showImgBigPopup = action.payload.showImgBigPopup;
       }),
+    [SET_SHOW_MANY_POSTS_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showManyPostsPopup = action.payload.showManyPostsPopup;
+      }),
   },
   initialState,
 );
@@ -228,6 +233,7 @@ const actionCreators = {
   clear,
   updatePostAction,
   setShowImgBigPopup,
+  setShowManyPostsPopup,
 };
 
 export { actionCreators };

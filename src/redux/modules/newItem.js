@@ -27,6 +27,7 @@ const CLEAR = "CLEAR";
 const CLEAR_SELECT_IDOL = "CLEAR_SELECT_IDOL";
 const SET_LOADING = "SET_LOADING";
 const SET_SHOW_IMG_BIG_POPUP = "SET_SHOW_IMG_BIG_POPUP";
+const SET_SHOW_MANY_ITEMS_POPUP = "SET_SHOW_MANY_ITEMS_POPUP";
 
 // action creators
 const setItem = createAction(SET_ITEM, (item) => ({ item }));
@@ -64,6 +65,10 @@ const setShowImgBigPopup = createAction(
   SET_SHOW_IMG_BIG_POPUP,
   (showImgBigPopup) => ({ showImgBigPopup }),
 );
+const setShowManyItemsPopup = createAction(
+  SET_SHOW_MANY_ITEMS_POPUP,
+  (showManyItemsPopup) => ({ showManyItemsPopup }),
+);
 
 // initialState
 const initialState = {
@@ -83,6 +88,7 @@ const initialState = {
   category: "",
   loading: false,
   showImgBigPopup: false,
+  showManyItemsPopup: false,
 };
 
 // middleware actions
@@ -125,17 +131,21 @@ const addItemAction = (item, fileList) => {
     dispatch(imgActions.clearImgAction());
 
     if (uploadItem < 0) {
+      // 단시간내에 글 많이 작성하면 -106
+      if (uploadItem === -106) {
+        dispatch(setShowManyItemsPopup(true));
+        return;
+      }
       history.push("/error");
       return;
     }
 
-    if (uploadItem !== -1) {
-      history.replace(`/item/${uploadItem}`);
-      dispatch(voteActions.setGettingVoteCount(2));
+    history.replace(`/item/${uploadItem}`);
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
+    if (item.dataTradeType === "SELL") {
+      dispatch(voteActions.setGettingVoteCount(10));
       dispatch(voteActions.setShowVotePopup(true));
-    } else {
-      window.alert("굿즈 등록 실패");
-      history.push("/");
     }
   };
 };
@@ -198,14 +208,9 @@ const updateItemAction = (item, id, fileList) => {
       return;
     }
 
-    if (updateItem.response !== -1) {
-      history.replace(`/item/${updateItem.response}`);
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
-    } else {
-      window.alert("굿즈 수정 실패");
-      history.push("/");
-    }
+    history.replace(`/item/${updateItem.response}`);
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
   };
 };
 
@@ -306,6 +311,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.showImgBigPopup = action.payload.showImgBigPopup;
       }),
+    [SET_SHOW_MANY_ITEMS_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showManyItemsPopup = action.payload.showManyItemsPopup;
+      }),
   },
   initialState,
 );
@@ -329,6 +338,7 @@ const actionCreators = {
   clearSelectIdol,
   updateItemAction,
   setShowImgBigPopup,
+  setShowManyItemsPopup,
 };
 
 export { actionCreators };

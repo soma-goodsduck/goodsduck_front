@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
+
 import styled from "styled-components";
 import styles from "./postUpload.module.css";
 
@@ -13,6 +15,8 @@ import { history } from "../../../redux/configureStore";
 const postUploadPage = (props) => {
   const dispatch = useDispatch();
   const contentRef = useRef();
+  const idolGroupName = localStorage.getItem("filter_idolGroupName");
+  const [numOfLetters, setNumOfLetters] = useState(0);
   const [nextOK, setNextOK] = useState(false);
 
   const {
@@ -23,6 +27,7 @@ const postUploadPage = (props) => {
     postId,
     isLoading,
     showImgBigPopup,
+    showManyPostsPopup,
   } = useSelector((state) => ({
     _postType: state.newPost.postType,
     _content: state.newPost.content,
@@ -31,6 +36,7 @@ const postUploadPage = (props) => {
     postId: state.newPost.postId,
     isLoading: state.newItem.loading,
     showImgBigPopup: state.newPost.showImgBigPopup,
+    showManyPostsPopup: state.newPost.showManyPostsPopup,
   }));
 
   const clickPostType = (e) => {
@@ -49,12 +55,12 @@ const postUploadPage = (props) => {
   };
 
   useEffect(() => {
-    if (_postType && _content) {
+    if (_postType && _content && numOfLetters > 4) {
       setNextOK(true);
     } else {
       setNextOK(false);
     }
-  }, [_postType, _content]);
+  }, [_postType, _content, numOfLetters]);
 
   const uploadPost = () => {
     if (!nextOK) {
@@ -69,6 +75,12 @@ const postUploadPage = (props) => {
     }
   };
 
+  // 글자수 더블체크
+  const _checkLetters = _.debounce(async () => {
+    setNumOfLetters(contentRef.current.value.split("").length);
+  }, 300);
+  const checkLetters = useCallback(_checkLetters, []);
+
   return (
     <>
       {isLoading && <Spinner />}
@@ -82,9 +94,21 @@ const postUploadPage = (props) => {
           }}
         />
       )}
+      {showManyPostsPopup && (
+        <DoubleCheckModal2
+          text="단시간 내 너무 많은 글을 작성했습니다."
+          text2="잠시 후 시도해주세요 :("
+          height="80px"
+          onOkClick={() => {
+            dispatch(newPostActions.setShowManyPostsPopup(false));
+            history.replace("/community");
+          }}
+        />
+      )}
+
       {!isLoading && (
         <>
-          <HeaderInfo text="작성하기" isCommunity />
+          <HeaderInfo text={idolGroupName} isCommunity />
           <PostUploadBox>
             <div>
               <Flex is_flex justify="flex-start">
@@ -113,8 +137,9 @@ const postUploadPage = (props) => {
                   className={_content ? "" : styles.inputText}
                   ref={contentRef}
                   value={_content || ""}
-                  placeholder="내용"
+                  placeholder="내용 (최소 글자 수 5자 이상)"
                   onChange={() => {
+                    checkLetters(contentRef.current.value);
                     dispatch(
                       newPostActions.setContent(contentRef.current.value),
                     );

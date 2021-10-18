@@ -46,6 +46,12 @@ const verifyError = (error) => {
       // InvalidStateException
       case -104:
         return -104;
+      // 유효성 검사 실패 : 회원가입 등에서 각 입력값의 포맷이 틀린경우 (핸드폰 번호, 이메일 형식 등)
+      case -105:
+        return -105;
+      // Too many requests
+      case -106:
+        return -106;
       // InvalidJwtException
       case -201:
         return -201;
@@ -349,6 +355,7 @@ export const postImgAction = async (path, file) => {
     if (process.env.REACT_APP_TYPE === "DEV") {
       console.log(error);
     }
+    console.log(error.response);
     Sentry.captureException(error);
     return -999;
   }

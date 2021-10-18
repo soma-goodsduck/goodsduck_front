@@ -59,6 +59,7 @@ const ItemUpload = (props) => {
     itemId,
     isLoading,
     showImgBigPopup,
+    showManyItemsPopup,
   } = useSelector((state) => ({
     dataName: state.newItem.name,
     dataPrice: state.newItem.price,
@@ -74,6 +75,7 @@ const ItemUpload = (props) => {
     itemId: state.newItem.item_id,
     isLoading: state.newItem.loading,
     showImgBigPopup: state.newItem.showImgBigPopup,
+    showManyItemsPopup: state.newItem.showManyItemsPopup,
   }));
 
   const item = {
@@ -152,6 +154,16 @@ const ItemUpload = (props) => {
           height="80px"
           onOkClick={() => {
             dispatch(newItemActions.setShowImgBigPopup(false));
+            history.replace("/");
+          }}
+        />
+      )}
+      {showManyItemsPopup && (
+        <DoubleCheckModal2
+          text="단시간 내 너무 많은 글을 작성했습니다."
+          text2="잠시 후 시도해주세요 :("
+          onOkClick={() => {
+            dispatch(newItemActions.setShowManyItemsPopup(false));
             history.replace("/");
           }}
         />
@@ -313,6 +325,10 @@ const ItemUpload = (props) => {
                 </div>
               </Flex>
             </div>
+            <NoticeBox>
+              투표기간인 10월에는 굿즈 등록 후 삭제가 불가능합니다.{" "}
+              <strong>신중하게 등록해주세요.</strong>
+            </NoticeBox>
             <AddBtn
               className={nextOK ? styles.nextOKBtn : styles.nextBtn}
               onClick={() => {
@@ -359,6 +375,20 @@ const InputDescBox = styled.textarea`
 
 const AddBtn = styled.button`
   margin-top: 10px;
+`;
+
+const NoticeBox = styled.div`
+  width: 100vw;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #f2f3f6;
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.4;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 export default ItemUpload;
