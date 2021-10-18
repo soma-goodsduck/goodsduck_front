@@ -82,21 +82,27 @@ const Nav = (props) => {
 
     // 커뮤니티 메뉴 기본값 설정
     dispatch(communityActions.setCommunityMenu("home"));
+    window.dataLayer = window.dataLayer || [];
 
     switch (type) {
       case "home":
+        window.dataLayer.push({ type: "home" });
         history.push("/");
         break;
       case "chatting":
+        window.dataLayer.push({ type: "chatting" });
         history.push("/chatting");
         break;
       case "upload-item":
+        window.dataLayer.push({ type: "upload-item" });
         history.push("/upload-item");
         break;
       case "community":
+        window.dataLayer.push({ type: "community" });
         history.push("/community");
         break;
       case "my-profile":
+        window.dataLayer.push({ type: "my-profile" });
         history.push("/my-profile");
         break;
       default:

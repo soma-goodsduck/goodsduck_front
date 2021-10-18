@@ -64,6 +64,8 @@ const CommunityMenu = (props) => {
           onClick={() => {
             history.push("/vote");
             dispatch(communityActions.setCommunityMenu("home"));
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ type: "home" });
           }}
         >
           투표하기
