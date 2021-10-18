@@ -16,12 +16,14 @@ import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { actionCreators as voteActions } from "../../redux/modules/vote";
 import { history } from "../../redux/configureStore";
+import VoteNoticeModal from "./voteNoticeModal";
 
 const VotePage = (props) => {
   const dispatch = useDispatch();
 
   const [idols, setIdols] = useState([]);
   const [showVoteModal, setShowVoteModal] = useState(false);
+  const [showNoVoteModal, setShowNoVoteModal] = useState(false);
   const { votedIdolId, showVoteConfirmModal, ownedVoteCount } = useSelector(
     (state) => ({
       votedIdolId: state.vote.votedIdolId,
@@ -37,7 +39,7 @@ const VotePage = (props) => {
     return result;
   };
   const reqIdolGroup = async () => {
-    const result = await requestPublicData("v1/idol-groups/vote");
+    const result = await requestPublicData("v1/vote/idol-groups");
     return result;
   };
   const fnEffect = async () => {
@@ -84,10 +86,22 @@ const VotePage = (props) => {
           onNoClick={handleHideVoteModal}
         />
       )}
+      {showNoVoteModal && (
+        <VoteNoticeModal
+          onOkClick={() => {
+            setShowNoVoteModal(false);
+          }}
+        />
+      )}
       {showLoginPopup && <LoginPopUp />}
 
       <VoteBox>
         <HeaderInfo text="아이돌 투표" isVote />
+        <NoticeBox>
+          👉 앱에 접속하면 하루에 <strong>투표권 2개</strong>
+          <br />
+          👉 굿즈 판매 거래글을 올릴 때마다 <strong>투표권 10개</strong>
+        </NoticeBox>
         <Notice>
           내 투표권 : {numberWithCommas(Number(ownedVoteCount))}
           <Icon
@@ -104,6 +118,7 @@ const VotePage = (props) => {
               key={idol.id}
               onVote={() => {
                 setShowVoteModal(true);
+                // setShowNoVoteModal(true);
               }}
               votedIdolId={votedIdolId}
             />
@@ -129,6 +144,20 @@ const Notice = styled.div`
   color: ${blackBtn};
   padding-right: 20px;
   margin-bottom: 15px;
+`;
+
+const NoticeBox = styled.div`
+  width: 100vw;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #f2f3f6;
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.4;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 export default VotePage;

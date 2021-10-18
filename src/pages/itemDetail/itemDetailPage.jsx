@@ -24,6 +24,7 @@ import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { timeForToday } from "../../shared/functions";
 import { requestPublicData, deleteAction } from "../../shared/axios";
+import DeleteNotDoubleCheckModal from "./deleteNotDoubleCheckModal";
 
 const ItemDetailPage = ({ history }) => {
   const dispatch = useDispatch();
@@ -124,6 +125,7 @@ const ItemDetailPage = ({ history }) => {
   const hideDeleteCheckModal = () => {
     setShowDeleteCheckModal(false);
   };
+  const [showNotDeleteCheckModal, setShowDeleteNotCheckModal] = useState(null);
 
   const clickDots = () => {
     if (isOwner) {
@@ -200,6 +202,14 @@ const ItemDetailPage = ({ history }) => {
           onNoClick={hideDeleteCheckModal}
         />
       )}
+      {showNotDeleteCheckModal && (
+        <DeleteNotDoubleCheckModal
+          onOkClick={() => {
+            setShowDeleteNotCheckModal(false);
+            setShowWriterPopup(false);
+          }}
+        />
+      )}
       {showWriterPopup && (
         <PopUp2
           text1="수정하기"
@@ -209,6 +219,7 @@ const ItemDetailPage = ({ history }) => {
           }}
           _onClick2={() => {
             handleDelete();
+            // setShowDeleteNotCheckModal(true);
           }}
           _onClick3={() => {
             hideWriterPopup();

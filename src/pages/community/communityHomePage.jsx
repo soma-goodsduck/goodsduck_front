@@ -61,6 +61,26 @@ const CommunityHomePage = (props) => {
       <CommunityHome>
         <HeaderCommunity text={menuText} />
         <NoticeBox>투표하기는 오른쪽 상단 메뉴에 있습니다 😉</NoticeBox>
+        {/* <NoticeBox2>
+          ⚠️ 투표권을 얻기 위한 성의없는 글 및 배포성 글을 작성한 유저의 계정은
+          정지될 수 있으며, 투표에 불이익이 갈 수 있습니다.
+        </NoticeBox2> */}
+        <NoticeBox2>
+          <strong>투표 정산 작업 공지드립니다.</strong> <br />- 커뮤니티 활동을
+          투표권을 얻기 위한 도배성 글이 많아짐에 따라 일일 게시글 수 30개까지만
+          유효 투표수로 인정했습니다. <br />- 굿즈 등록과 커뮤니티 게시글 등록
+          후 바로 삭제하여 투표권만 얻은 개수도 모두 무효화했습니다. <br />-
+          사진 나눔의 경우는 `커뮤니티의 나눔 게시글`을 이용해주세요 :) <br />
+          <br />
+          <strong>10.17 22:00 기준으로 재조정된 투표수입니다.</strong> <br />
+          오마이걸 투표수 = 1214표 (기존 투표수 2372표 - 커뮤니티 도배글(758표)
+          - 비정상적인 굿즈 등록(400표)) <br />
+          스테이씨 투표수 : 1264개 (기존 투표수 2324표 - 커뮤니티 도배글(720표)
+          - 비정상적인 굿즈 등록(340표)) <br />
+          <br />
+          앞으로도 도배성 글, 글 등록과 삭제 반복 등과 같이 정책을 위반하는
+          경우에는 항상 투표에 불이익이 갈 수 있으므로 조심해주세요!
+        </NoticeBox2>
         <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
         {(communityMenu === "home" || communityMenu === "freeMarket") && (
           <AddPostBtn
@@ -126,6 +146,19 @@ const NoticeBox = styled.div`
   background-color: #f2f3f6;
   font-size: 14px;
   text-align: center;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
+`;
+
+const NoticeBox2 = styled.div`
+  width: 100vw;
+  padding: 10px 20px;
+  background-color: #f2f3f6;
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.4;
 
   @media screen and (min-width: 415px) {
     width: 415px;

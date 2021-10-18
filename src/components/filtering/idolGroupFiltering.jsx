@@ -198,6 +198,12 @@ const IdolGroupFiltering = ({ onClick, type }) => {
           </Flex>
         )}
       </div>
+      {type !== "community" && (
+        <NoticeBox>
+          ⚠️ 단순히 투표권을 얻기 위한 사진 판매/나눔 글 등록과 단시간 내에
+          삭제되는 글의 경우, 적발시 투표권이 30개 차감됩니다.
+        </NoticeBox>
+      )}
     </>
   );
 };
@@ -226,6 +232,20 @@ const Btn = styled.div`
   height: 60px;
   border-radius: 50%;
   background-color: #f8f8f8;
+`;
+
+const NoticeBox = styled.div`
+  width: 100vw;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #f2f3f6;
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.4;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 export default IdolGroupFiltering;
