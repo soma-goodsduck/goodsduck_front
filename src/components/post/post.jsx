@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import styled from "styled-components";
 
 import { Flex, Text, Image, Icon } from "../../elements/index";
@@ -15,7 +15,7 @@ import { formatDate } from "../../shared/functions";
 
 import { history } from "../../redux/configureStore";
 
-const Post = ({ postData, type }) => {
+const Post = memo(({ postData, type }) => {
   const screen = window.screen.width;
   const [descHeight, setDescHegiht] = useState(0);
   useEffect(() => {
@@ -137,7 +137,7 @@ const Post = ({ postData, type }) => {
       </PostBox>
     </PostContainer>
   );
-};
+});
 
 const PostContainer = styled.div`
   padding-bottom: 10px;

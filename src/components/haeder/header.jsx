@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React, { useRef } from "react";
+import React, { useRef, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -12,7 +12,7 @@ import { actionCreators as homeActions } from "../../redux/modules/home";
 import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const Header = () => {
+const Header = memo(() => {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const hasNewNoti = useSelector((state) => state.home.hasNewNoti);
@@ -98,7 +98,7 @@ const Header = () => {
       </HeaderBox>
     </div>
   );
-};
+});
 
 const HeaderBox = styled.div`
   background-color: #ffffff;

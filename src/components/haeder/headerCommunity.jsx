@@ -1,9 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { Text, Icon } from "../../elements";
 import { history } from "../../redux/configureStore";
 
-const HeaderCommunity = ({ text }) => {
+const HeaderCommunity = memo(({ text }) => {
   return (
     <Header>
       <Text bold size="18px">
@@ -20,7 +20,7 @@ const HeaderCommunity = ({ text }) => {
       />
     </Header>
   );
-};
+});
 
 const Header = styled.div`
   width: 100vw;

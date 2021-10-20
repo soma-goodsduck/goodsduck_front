@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -17,7 +17,7 @@ import { patchJsonAction } from "../../shared/axios";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
-const ItemRow = ({ item }) => {
+const ItemRow = memo(({ item }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.user.items);
 
@@ -154,7 +154,7 @@ const ItemRow = ({ item }) => {
       )}
     </>
   );
-};
+});
 
 const ItemBox = styled.div`
   margin: 20px 0;

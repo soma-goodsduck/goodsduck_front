@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import styled from "styled-components";
 import { Icon, Flex, Text } from "../../elements";
@@ -6,7 +6,7 @@ import { grayText } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
-const Btns = ({ myProfile }) => {
+const Btns = memo(({ myProfile }) => {
   return (
     <>
       {myProfile && (
@@ -102,7 +102,7 @@ const Btns = ({ myProfile }) => {
       )}
     </>
   );
-};
+});
 
 const BtnGrid = styled.div`
   display: grid;

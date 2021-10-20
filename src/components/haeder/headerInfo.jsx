@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -11,7 +11,7 @@ import { actionCreators as imgActions } from "../../redux/modules/image";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as newPostActions } from "../../redux/modules/newPost";
 
-const HeaderInfo = (props) => {
+const HeaderInfo = memo((props) => {
   const dispatch = useDispatch();
 
   const {
@@ -82,7 +82,7 @@ const HeaderInfo = (props) => {
       </Flex>
     </HeaderBox>
   );
-};
+});
 
 HeaderInfo.defaultProps = {
   margin: "",

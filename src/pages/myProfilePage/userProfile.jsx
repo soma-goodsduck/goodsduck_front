@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -9,12 +9,7 @@ import { yellow, blackBtn } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
-const UserProfile = ({ user }) => {
-  const { userNick, userImg } = useSelector((state) => ({
-    userNick: state.user.userNick,
-    userImg: state.user.userImg,
-  }));
-
+const UserProfile = memo(({ user, userNick, userImg }) => {
   return (
     <UserProfileBox
       onClick={() => {
@@ -51,7 +46,7 @@ const UserProfile = ({ user }) => {
       </Flex>
     </UserProfileBox>
   );
-};
+});
 
 const UserProfileBox = styled.div`
   display: flex;

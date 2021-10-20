@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import { Flex, Icon } from "../../elements";
 import { actionCreators as homeActions } from "../../redux/modules/home";
 import { history } from "../../redux/configureStore";
 
-const HeaderKeyword = ({ keyword }) => {
+const HeaderKeyword = memo(({ keyword }) => {
   const dispatch = useDispatch();
 
   const inputRef = useRef();
@@ -68,7 +68,7 @@ const HeaderKeyword = ({ keyword }) => {
       </div>
     </>
   );
-};
+});
 
 const HeaderBox = styled.div`
   background-color: #ffffff;

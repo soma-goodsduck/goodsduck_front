@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 
 import styled from "styled-components";
 import styles from "./item.module.css";
@@ -10,7 +10,7 @@ import { history } from "../../redux/configureStore";
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 import { postAction, deleteAction } from "../../shared/axios";
 
-const Item = ({ item, id }) => {
+const Item = memo(({ item, id }) => {
   let color;
   let tradeType;
 
@@ -126,7 +126,7 @@ const Item = ({ item, id }) => {
       </ItemBox>
     </>
   );
-};
+});
 
 const ItemBox = styled.div`
   position: relative;

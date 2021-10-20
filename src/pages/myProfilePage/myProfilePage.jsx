@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -13,7 +13,7 @@ import { requestAuthData } from "../../shared/axios";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 
-const MyProfilePage = () => {
+const MyProfilePage = memo(() => {
   const dispatch = useDispatch();
 
   // 해당 유저 데이터 받아오기
@@ -23,6 +23,10 @@ const MyProfilePage = () => {
   const [items, setItems] = useState(null);
   const tradeStatus = useSelector((state) => state.user.filteringType);
   const [isLoading, setIsLoading] = useState(false);
+  const { userNick, userImg } = useSelector((state) => ({
+    userNick: state.user.userNick,
+    userImg: state.user.userImg,
+  }));
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
@@ -86,7 +90,7 @@ const MyProfilePage = () => {
           {isLoading && <Spinner />}
           {user && myProfile && items && (
             <>
-              <UserProfile user={user} />
+              <UserProfile user={user} userNick={userNick} userImg={userImg} />
               <Btns myProfile={myProfile} />
               <ItemList items={items} />
             </>
@@ -96,7 +100,7 @@ const MyProfilePage = () => {
       </div>
     </>
   );
-};
+});
 
 const MyPageBox = styled.div`
   width: 100%;

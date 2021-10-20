@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useDispatch } from "react-redux";
 
 import styles from "./nav.module.css";
@@ -11,7 +11,7 @@ import { firebaseDatabase } from "../../shared/firebase";
 import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const Nav = (props) => {
+const Nav = memo((props) => {
   const dispatch = useDispatch();
 
   const href = window.location.href;
@@ -193,6 +193,6 @@ const Nav = (props) => {
       </Flex>
     </div>
   );
-};
+});
 
 export default Nav;

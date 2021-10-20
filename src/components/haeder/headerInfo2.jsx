@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
@@ -8,7 +8,7 @@ import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
 import { actionCreators as itemActions } from "../../redux/modules/item";
 import { history } from "../../redux/configureStore";
 
-const HeaderInfo2 = (props) => {
+const HeaderInfo2 = memo((props) => {
   const dispatch = useDispatch();
 
   const href = window.location.href;
@@ -153,7 +153,7 @@ const HeaderInfo2 = (props) => {
       )}
     </>
   );
-};
+});
 
 HeaderInfo2.defaultProps = {
   margin: "",
