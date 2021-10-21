@@ -1,0 +1,5 @@
+User-agent: *
+Allow:/
+
+Sitemap: https://www.goods-duck.com/sitemap.xml
+Host: https://www.goods-duck.com
