@@ -185,7 +185,7 @@ const MessageForm = ({ onOpenAttachment }) => {
           <Flex is_flex justify="space-between" padding="20px">
             <Icon
               width="28px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+              src="https://goods-duck.com/icon/icon_add.svg"
               _onClick={() => {
                 onOpenAttachment();
               }}
@@ -203,8 +203,8 @@ const MessageForm = ({ onOpenAttachment }) => {
               height="28px"
               src={
                 content
-                  ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send_ready.svg"
-                  : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+                  ? "https://goods-duck.com/icon/icon_send_ready.svg"
+                  : "https://goods-duck.com/icon/icon_send.svg"
               }
               disabled={loading}
               _onClick={() => {
@@ -216,16 +216,13 @@ const MessageForm = ({ onOpenAttachment }) => {
       ) : (
         <MessageFormBox>
           <Flex is_flex justify="space-between" padding="20px">
-            <Icon
-              width="28px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-            />
+            <Icon width="28px" src="https://goods-duck.com/icon/icon_add.svg" />
             <InputBoxNonUse value="채팅을 할 수 없습니다." readOnly />
             <Button
               type="submit"
               width="32px"
               height="28px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+              src="https://goods-duck.com/icon/icon_send.svg"
             />
           </Flex>
         </MessageFormBox>

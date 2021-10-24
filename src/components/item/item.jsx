@@ -109,7 +109,7 @@ const Item = memo(({ item, id }) => {
               <UserImg
                 src={
                   item.itemOwner.imageUrl ||
-                  "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  "https://goods-duck.com/sample_goodsduck.png"
                 }
               />
               <UserName>

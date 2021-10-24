@@ -277,6 +277,7 @@ const Img = styled.div`
 
   background-image: url("${(props) => props.src}");
   background-size: cover;
+  background-position: center center;
   cursor: pointer;
 
   @media screen and (min-width: 415px) {

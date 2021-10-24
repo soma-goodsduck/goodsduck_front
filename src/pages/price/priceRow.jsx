@@ -76,7 +76,7 @@ const PriceRow = ({ item }) => {
           shape="circle"
           src={
             item.proposer.imageUrl ||
-            "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+            "https://goods-duck.com/sample_goodsduck.png"
           }
           margin="0 10px 0 0"
           size="60px"
@@ -87,7 +87,7 @@ const PriceRow = ({ item }) => {
               shape="circle"
               size="15px"
               margin="0 5px 0 0"
-              src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${item.proposer.level}.png`}
+              src={`https://goods-duck.com/icon/icon_level${item.proposer.level}.png`}
             />
             <Text is_long>{item.proposer.nickName}</Text>
           </Flex>

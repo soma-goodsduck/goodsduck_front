@@ -117,7 +117,7 @@ const AgreementOfTerms = ({
           <Icon
             width="16px"
             margin="0 7px 0 0"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${allAgreeIconUrl}.svg`}
+            src={`https://goods-duck.com/icon/icon_${allAgreeIconUrl}.svg`}
           />
           <Text bold>약관에 모두 동의</Text>
         </TermBtn>
@@ -132,13 +132,13 @@ const AgreementOfTerms = ({
           <Icon
             width="16px"
             margin="0 7px 0 0"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${serviceAgreeIconUrl}.svg`}
+            src={`https://goods-duck.com/icon/icon_${serviceAgreeIconUrl}.svg`}
           />
           <Text>(필수) 이용약관 동의</Text>
         </TermBtn>
         <Icon
           width="12px"
-          src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${serviceIconUrl}.svg`}
+          src={`https://goods-duck.com/icon/icon_${serviceIconUrl}.svg`}
           _onClick={() => {
             handleServiceClick();
           }}
@@ -155,13 +155,13 @@ const AgreementOfTerms = ({
           <Icon
             width="16px"
             margin="0 7px 0 0"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${privacyAgreeIconUrl}.svg`}
+            src={`https://goods-duck.com/icon/icon_${privacyAgreeIconUrl}.svg`}
           />
           <Text>(필수) 개인정보 처리방침 동의</Text>
         </TermBtn>
         <Icon
           width="12px"
-          src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${privacyIconUrl}.svg`}
+          src={`https://goods-duck.com/icon/icon_${privacyIconUrl}.svg`}
           _onClick={() => {
             handlePrivacyClick();
           }}
@@ -178,13 +178,13 @@ const AgreementOfTerms = ({
           <Icon
             width="16px"
             margin="0 7px 0 0"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${marketingAgreeIconUrl}.svg`}
+            src={`https://goods-duck.com/icon/icon_${marketingAgreeIconUrl}.svg`}
           />
           <Text>(선택) 마케팅 정보 활용 동의</Text>
         </TermBtn>
         <Icon
           width="12px"
-          src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${marketingIconUrl}.svg`}
+          src={`https://goods-duck.com/icon/icon_${marketingIconUrl}.svg`}
           _onClick={() => {
             handleMarketingClick();
           }}

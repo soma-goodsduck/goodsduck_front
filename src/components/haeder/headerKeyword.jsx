@@ -38,7 +38,7 @@ const HeaderKeyword = memo(({ keyword }) => {
         <HeaderBox>
           <Icon
             width="12px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
+            src="https://goods-duck.com/icon/icon_back_b.svg"
             _onClick={() => {
               dispatch(homeActions.clearSearchFilter());
               history.push("/");
@@ -57,7 +57,7 @@ const HeaderKeyword = memo(({ keyword }) => {
           </form>
           <Flex>
             <Icon
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
+              src="https://goods-duck.com/icon/icon_search.svg"
               alt="search"
               _onClick={(event) => {
                 onSubmit(event);

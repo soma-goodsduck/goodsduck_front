@@ -121,7 +121,7 @@ const IdolGroupFiltering = ({ onClick, type }) => {
             >
               <Btn>
                 <Image
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+                  src="https://goods-duck.com/icon/icon_add.svg"
                   size="30px"
                 />
               </Btn>
@@ -136,7 +136,7 @@ const IdolGroupFiltering = ({ onClick, type }) => {
             >
               <Btn>
                 <Image
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  src="https://goods-duck.com/sample_goodsduck.png"
                   size="55px"
                 />
               </Btn>

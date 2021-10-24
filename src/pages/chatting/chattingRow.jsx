@@ -19,7 +19,7 @@ const ChattingRow = ({ chatRoom, userId }) => {
   const [lastMessage, setLastMessage] = useState("");
   const [lastSentAt, setLastSentAt] = useState("");
   const [profileImg, setProfileImg] = useState(
-    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
+    "https://goods-duck.com/sample_goodsduck.png",
   );
   const [chatCount, setChatCount] = useState(0);
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
@@ -101,10 +101,7 @@ const ChattingRow = ({ chatRoom, userId }) => {
         <UserBox>
           <Image
             shape="circle"
-            src={
-              profileImg ||
-              "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
-            }
+            src={profileImg || "https://goods-duck.com/sample_goodsduck.png"}
             margin="0 10px 0 0"
             size="55px"
           />

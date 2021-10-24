@@ -144,7 +144,7 @@ const LoginContainer = styled.div`
 const Logo = styled.div`
   width: 90vw;
   height: 250px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck_with_slogan.png");
+  background-image: url("https://goods-duck.com/icon/goodsduck_with_slogan.png");
   background-size: cover;
   background-repeat: no-repeat;
 

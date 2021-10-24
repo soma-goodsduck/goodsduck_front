@@ -19,8 +19,7 @@ const UserProfile = memo(({ user, userNick, userImg }) => {
       <Image
         shape="circle"
         src={
-          userImg ===
-          "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+          userImg === "https://goods-duck.com/sample_goodsduck.png"
             ? user.imageUrl
             : userImg
         }
@@ -31,7 +30,7 @@ const UserProfile = memo(({ user, userNick, userImg }) => {
         <Flex is_flex>
           <Image
             shape="circle"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${user.level}.png`}
+            src={`https://goods-duck.com/icon/icon_level${user.level}.png`}
             size="25px"
             margin="0 10px 0 0"
           />

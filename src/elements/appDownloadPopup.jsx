@@ -14,10 +14,7 @@ const AppDownloadPopup = ({ downloadLink, handleExitClick }) => {
               handleExitClick();
             }}
           />
-          <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png"
-            width="40px"
-          />
+          <Icon src="https://goods-duck.com/icon/goodsduck.png" width="40px" />
           <Text style={{ margin: "10px 0" }}>
             GOODSDUCK을 앱으로도 만나볼 수 있어요!
           </Text>
@@ -119,7 +116,7 @@ const ExitBtn = styled.button`
   right: 10px;
   width: 22px;
   height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg");
+  background-image: url("https://goods-duck.com/icon/icon_delete.svg");
   background-size: cover;
   cursor: pointer;
 `;

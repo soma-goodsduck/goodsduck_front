@@ -69,9 +69,7 @@ export class WelcomeChatRoom extends Component {
   };
 
   render() {
-    const { messages, messageLoading, chatRoomId, withChatBcrypt, screen } =
-      this.state;
-
+    const { messages, messageLoading, screen } = this.state;
     return (
       <>
         <HeaderInfo text={this.state.withChatNick} padding="0 16px" />

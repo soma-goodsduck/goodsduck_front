@@ -143,7 +143,7 @@ const WritingReviewPage = () => {
                       shape="circle"
                       src={
                         user.otherUser.imageUrl ||
-                        "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/logo.png"
+                        "https://goods-duck.com/image/logo.png"
                       }
                       margin="0 10px 0 0"
                       size="55px"

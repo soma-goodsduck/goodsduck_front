@@ -106,7 +106,7 @@ const VotePage = (props) => {
           내 투표권 : {numberWithCommas(Number(ownedVoteCount))}
           <Icon
             width="18px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg"
+            src="https://goods-duck.com/icon/icon_heart_click.svg"
             margin="0 0 0 2px"
           />
         </Notice>

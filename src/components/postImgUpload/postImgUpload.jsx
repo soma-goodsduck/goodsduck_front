@@ -129,7 +129,7 @@ const PostImgUpload = ({ community }) => {
           <label htmlFor="chooseFile">
             <CameraBox>
               <Image
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_camera.svg"
+                src="https://goods-duck.com/icon/icon_camera.svg"
                 alt="upload"
                 shape="rectangle"
                 size="30px"

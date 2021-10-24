@@ -256,7 +256,7 @@ const ItemDetailPage = ({ history }) => {
               <Flex>
                 <Icon
                   width="16px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_clock.svg"
+                  src="https://goods-duck.com/icon/icon_clock.svg"
                   alt="upload time"
                   margin="0 5px 0 0"
                 />
@@ -267,7 +267,7 @@ const ItemDetailPage = ({ history }) => {
               <Flex margin="0 20px">
                 <Icon
                   width="16px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_eye.svg"
+                  src="https://goods-duck.com/icon/icon_eye.svg"
                   alt="views item count"
                   margin="0 5px 0 0"
                 />
@@ -278,7 +278,7 @@ const ItemDetailPage = ({ history }) => {
               <Flex>
                 <Icon
                   width="18px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_like.svg"
+                  src="https://goods-duck.com/icon/icon_like.svg"
                   alt="likes item count"
                   margin="0 5px 0 0"
                 />
@@ -330,7 +330,7 @@ const ItemDetailPage = ({ history }) => {
                     shape="circle"
                     src={
                       itemData.itemOwner.imageUrl ||
-                      "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                      "https://goods-duck.com/sample_goodsduck.png"
                     }
                     margin="0 10px 0 0"
                     size="50px"
@@ -339,7 +339,7 @@ const ItemDetailPage = ({ history }) => {
                     <Image
                       shape="circle"
                       size="20px"
-                      src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${itemData.itemOwner.level}.png`}
+                      src={`https://goods-duck.com/icon/icon_level${itemData.itemOwner.level}.png`}
                     />
                     <UserName>
                       <Text size="16px">{itemData.itemOwner.nickName}</Text>

@@ -157,7 +157,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 >
                   <Icon
                     width="18px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    src="https://goods-duck.com/icon/icon_goChat.svg"
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
@@ -183,7 +183,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
               >
                 <Icon
                   width="18px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                  src="https://goods-duck.com/icon/icon_goChat.svg"
                   alt="go chat"
                   margin="0 5px 2px 0"
                 />
@@ -213,7 +213,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 >
                   <Icon
                     width="18px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    src="https://goods-duck.com/icon/icon_goChat.svg"
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
@@ -245,7 +245,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 >
                   <Icon
                     width="18px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    src="https://goods-duck.com/icon/icon_goChat.svg"
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
@@ -271,7 +271,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
               >
                 <Icon
                   width="18px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                  src="https://goods-duck.com/icon/icon_goChat.svg"
                   alt="go chat"
                   margin="0 5px 2px 0"
                 />
@@ -304,7 +304,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 >
                   <Icon
                     width="18px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    src="https://goods-duck.com/icon/icon_goChat.svg"
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
@@ -328,7 +328,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 >
                   <Icon
                     width="18px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    src="https://goods-duck.com/icon/icon_goChat.svg"
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />
@@ -353,7 +353,7 @@ const ItemNav = ({ item, id, isOwner, tradeType }) => {
                 >
                   <Icon
                     width="18px"
-                    src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_goChat.svg"
+                    src="https://goods-duck.com/icon/icon_goChat.svg"
                     alt="go chat"
                     margin="0 5px 2px 0"
                   />

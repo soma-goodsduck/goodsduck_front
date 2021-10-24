@@ -19,7 +19,7 @@ const CommunityMenu = (props) => {
         </Text>
         <Icon
           width="18px"
-          src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_exit.svg"
+          src="https://goods-duck.com/icon/icon_exit.svg"
           alt="menu"
           margin="0 5px 0 0"
           _onClick={() => {

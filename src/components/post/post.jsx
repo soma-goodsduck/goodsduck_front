@@ -56,7 +56,7 @@ const Post = memo(({ postData, type }) => {
                 shape="circle"
                 src={
                   postData.postOwner.imageUrl ||
-                  "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  "https://goods-duck.com/sample_goodsduck.png"
                 }
                 margin="0 10px 0 0"
                 size="50px"
@@ -67,7 +67,7 @@ const Post = memo(({ postData, type }) => {
                     shape="circle"
                     size="18px"
                     margin="0 5px 0 0"
-                    src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${postData.postOwner.level}.png`}
+                    src={`https://goods-duck.com/icon/icon_level${postData.postOwner.level}.png`}
                   />
                   <UserName>
                     <Text size="16px">{postData.postOwner.nickName}</Text>
@@ -79,9 +79,7 @@ const Post = memo(({ postData, type }) => {
               </Flex>
             </Flex>
             <Flex is_col align="flex-end">
-              {type !== "home" && type !== "freeMarket" && (
-                <IdolBadge>{postData.idolGroupName}</IdolBadge>
-              )}
+              <IdolBadge>{postData.idolGroupName}</IdolBadge>
               {postData.postCategory.postCategoryId === 26 && (
                 <TypeBadge>나눔글</TypeBadge>
               )}
@@ -113,8 +111,8 @@ const Post = memo(({ postData, type }) => {
               width="18px"
               src={
                 postData.isLike
-                  ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg"
-                  : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_empty.svg"
+                  ? "https://goods-duck.com/icon/icon_heart_click.svg"
+                  : "https://goods-duck.com/icon/icon_heart_empty.svg"
               }
               alt="likes item count"
               margin="0 5px 0 0"
@@ -126,7 +124,7 @@ const Post = memo(({ postData, type }) => {
           <CommentBtn>
             <Icon
               width="18px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_comment.svg"
+              src="https://goods-duck.com/icon/icon_comment.svg"
               alt="likes item count"
               margin="0 5px 0 0"
             />

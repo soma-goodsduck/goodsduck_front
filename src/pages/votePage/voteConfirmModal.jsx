@@ -22,8 +22,7 @@ const VoteConfirmModal = () => {
       content: {
         title: "GOODSDUCK",
         description: "굿즈덕에서 투표하고 내 아이돌에게 광고 선물하자!",
-        imageUrl:
-          "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/event.png",
+        imageUrl: "https://goods-duck.com/image/event.png",
         link: {
           mobileWebUrl: window.location.href,
           webUrl: window.location.href,
@@ -59,7 +58,7 @@ const VoteConfirmModal = () => {
               height="50px"
               borderRadius="50%"
               margin="0 10px 0 0"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_kakao.svg"
+              src="https://goods-duck.com/icon/icon_kakao.svg"
               _onClick={() => {
                 handleShareByKakao();
               }}
@@ -68,7 +67,7 @@ const VoteConfirmModal = () => {
               width="50px"
               height="50px"
               borderRadius="50%"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_twitter.svg"
+              src="https://goods-duck.com/icon/icon_twitter.svg"
               _onClick={() => {
                 handleShareByTwitter();
               }}
@@ -78,23 +77,16 @@ const VoteConfirmModal = () => {
             <Flex is_flex>
               <Icon
                 width="15px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_checkbox.svg"
+                src="https://goods-duck.com/icon/icon_checkbox.svg"
               />
-              <Notice>출석체크 투표권은 하루에 1개 지급됩니다.</Notice>
+              <Notice>출석체크 투표권은 하루에 2개 지급됩니다.</Notice>
             </Flex>
             <Flex is_flex margin="5px 0">
               <Icon
                 width="15px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_checkbox.svg"
+                src="https://goods-duck.com/icon/icon_checkbox.svg"
               />
-              <Notice>굿즈 등록시 투표권 2개가 지급됩니다.</Notice>
-            </Flex>
-            <Flex is_flex>
-              <Icon
-                width="15px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_checkbox.svg"
-              />
-              <Notice>커뮤니티 글 작성시 투표권 1개가 지급됩니다.</Notice>
+              <Notice>판매 굿즈 등록시 투표권 10개가 지급됩니다.</Notice>
             </Flex>
           </Flex>
         </Info>

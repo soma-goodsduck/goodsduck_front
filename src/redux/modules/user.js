@@ -128,8 +128,7 @@ const initialState = {
   review: "",
   numOfStar: 0,
   userNick: "",
-  userImg:
-    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
+  userImg: "https://goods-duck.com/sample_goodsduck.png",
   items: [],
   address: "",
   name: "",

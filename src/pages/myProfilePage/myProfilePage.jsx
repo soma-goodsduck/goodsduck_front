@@ -81,7 +81,7 @@ const MyProfilePage = memo(() => {
             <Button
               width="25px"
               height="25px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_setting.svg"
+              src="https://goods-duck.com/icon/icon_setting.svg"
               _onClick={() => {
                 history.push("/setting");
               }}

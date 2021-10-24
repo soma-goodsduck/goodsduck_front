@@ -79,7 +79,7 @@ const VoteModal = ({ onOkClick, onNoClick }) => {
               {numberWithCommas(Number(ownedVoteCount))}
               <Icon
                 width="20px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg"
+                src="https://goods-duck.com/icon/icon_heart_click.svg"
               />
             </VotingRightsCount>
           </VotingRightsBox>
@@ -90,7 +90,7 @@ const VoteModal = ({ onOkClick, onNoClick }) => {
                 {numberWithCommas(Number(usingVoteCount))}
                 <Icon
                   width="20px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg"
+                  src="https://goods-duck.com/icon/icon_heart_click.svg"
                 />
               </VotingRightsCount>
             </VotingCountBox>
@@ -114,7 +114,7 @@ const VoteModal = ({ onOkClick, onNoClick }) => {
           <Flex is_flex>
             <Icon
               width="15px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_alert_gray.png"
+              src="https://goods-duck.com/icon/icon_alert_gray.png"
             />
             <Warning>투표는 수정이 불가능합니다.</Warning>
           </Flex>
@@ -247,6 +247,7 @@ const VoitingPlusBtn = styled.button`
   padding: 20px;
   font-weight: 500;
   font-size: 18px;
+  color: #080908;
   letter-spacing: -1.3px;
 
   &:first-child {

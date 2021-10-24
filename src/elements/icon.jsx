@@ -16,7 +16,7 @@ const Icon = (props) => {
 };
 
 Icon.defaultProps = {
-  src: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level.svg",
+  src: "https://goods-duck.com/icon/icon_level.svg",
   alt: "",
   width: "28px",
   _onClick: () => {},

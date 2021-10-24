@@ -74,7 +74,7 @@ const Btns = memo(({ myProfile }) => {
               <Icon
                 width="35px"
                 margin="0 auto"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notice.svg"
+                src="https://goods-duck.com/icon/icon_notice.svg"
               />
               <Text size="14px" color={grayText}>
                 공지
@@ -91,7 +91,7 @@ const Btns = memo(({ myProfile }) => {
               <Icon
                 width="35px"
                 margin="0 auto"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
+                src="https://goods-duck.com/icon/icon_customer.png"
               />
               <Text size="14px" color={grayText}>
                 고객센터

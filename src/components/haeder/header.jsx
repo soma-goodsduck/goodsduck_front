@@ -69,14 +69,14 @@ const Header = memo(() => {
         </form>
         <Flex>
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
+            src="https://goods-duck.com/icon/icon_search.svg"
             alt="search"
             _onClick={(event) => {
               onSubmit(event);
             }}
           />
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart2.svg"
+            src="https://goods-duck.com/icon/icon_heart2.svg"
             alt="heart"
             margin="0 15px"
             _onClick={() => {
@@ -85,7 +85,7 @@ const Header = memo(() => {
           />
           <NotiBox>
             <Icon
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notification.svg"
+              src="https://goods-duck.com/icon/icon_notification.svg"
               alt="notice"
               width="20px"
               _onClick={() => {

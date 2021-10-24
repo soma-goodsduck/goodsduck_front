@@ -9,10 +9,7 @@ import { history } from "../../redux/configureStore";
 const ErrorPage = (props) => {
   return (
     <ErrorBox>
-      <Icon
-        width="50px"
-        src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_error.svg"
-      />
+      <Icon width="50px" src="https://goods-duck.com/icon/icon_error.svg" />
       <Text size="22px" bold margin="20px 0">
         오류
       </Text>

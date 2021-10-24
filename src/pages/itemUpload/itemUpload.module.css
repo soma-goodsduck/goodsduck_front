@@ -46,14 +46,14 @@ input::-webkit-inner-spin-button {
 .moreIcon {
   width: 12px;
   height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg");
+  background-image: url("https://goods-duck.com/icon/icon_more.svg");
   background-size: cover;
   cursor: pointer;
 }
 .moreIconClick {
   width: 12px;
   height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more_black.svg");
+  background-image: url("https://goods-duck.com/icon/icon_more_black.svg");
   background-size: cover;
   cursor: pointer;
 }

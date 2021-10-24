@@ -65,7 +65,7 @@ const postDetailPage = (props) => {
   };
 
   const reqDeletePost = async () => {
-    const result = await deleteAction(`v1/posts/${postId}`);
+    const result = await deleteAction(`v2/posts/${postId}`);
     return result;
   };
   const handleDelete = async () => {

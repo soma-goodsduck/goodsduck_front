@@ -62,7 +62,7 @@ const PostHeader = ({ postData, onEdit, onDelete }) => {
           <Column1>
             <Icon
               width="12px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
+              src="https://goods-duck.com/icon/icon_back_b.svg"
               _onClick={() => {
                 history.push("/community");
                 dispatch(postActions.clearCommentInfo());
@@ -83,7 +83,7 @@ const PostHeader = ({ postData, onEdit, onDelete }) => {
           >
             <Icon
               width="12px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg"
+              src="https://goods-duck.com/icon/icon_hamburger.svg"
             />
           </Column3>
         </Flex>

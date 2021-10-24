@@ -122,8 +122,8 @@ const CommentForm = ({ postId, isOwner }) => {
         <LockBtn
           src={
             isSecretComment
-              ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_lock1_yellow.png"
-              : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_lock2.png"
+              ? "https://goods-duck.com/icon/icon_lock1_yellow.png"
+              : "https://goods-duck.com/icon/icon_lock2.png"
           }
           onClick={() => {
             handleSecretComment();
@@ -242,7 +242,7 @@ const ExitBtn = styled.button`
   right: 10px;
   width: 18px;
   height: 18px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg");
+  background-image: url("https://goods-duck.com/icon/icon_delete.svg");
   background-size: cover;
   cursor: pointer;
 `;

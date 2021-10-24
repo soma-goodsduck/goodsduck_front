@@ -27,9 +27,7 @@ const EditProfilePage = (props) => {
   const [isNickOk, setIsNickOk] = useState(true); // nick 글자수 체크
   const [canUpdateNick, setCanUpdateNick] = useState(true);
   const [isNickUpdated, setIsNickUpdated] = useState(false);
-  const [img, setImg] = useState(
-    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
-  );
+  const [img, setImg] = useState("https://goods-duck.com/sample_goodsduck.png");
   const [imgFile, setImgFile] = useState();
   const idols = useSelector((state) => state.user.favIdolGroups);
   const [nextOK, setNextOK] = useState(false);
@@ -299,7 +297,7 @@ const CameraBtn = styled.div`
   z-index: 3;
   width: 45px;
   height: 45px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_camera2.svg");
+  background-image: url("https://goods-duck.com/icon/icon_camera2.svg");
   background-size: cover;
 `;
 

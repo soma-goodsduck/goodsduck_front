@@ -65,7 +65,7 @@ div {
     width: 350px;
     height: 600px;
 
-    background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/appPromotion.png");
+    background-image: url("https://goods-duck.com/image/appPromotion.png");
     background-size: cover;
   }
 
@@ -83,14 +83,14 @@ div {
     margin-right: 5px;
     cursor: pointer;
 
-    background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/app_download_iOS.svg");
+    background-image: url("https://goods-duck.com/icon/app_download_iOS.svg");
     background-size: cover;
   }
   .appDownloadForAndroid {
     width: 140px;
     height: 58px;
 
-    background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/app_download_android.png");
+    background-image: url("https://goods-duck.com/icon/app_download_android.png");
     background-size: cover;
   }
 }

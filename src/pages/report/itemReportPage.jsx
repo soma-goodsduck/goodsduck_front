@@ -125,7 +125,7 @@ const ItemReportPage = (props) => {
               <label htmlFor={report.categoryId}>{report.categoryName}</label>
               <Icon
                 width="12px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                src="https://goods-duck.com/icon/icon_more.svg"
               />
             </ReportBox>
           ))}

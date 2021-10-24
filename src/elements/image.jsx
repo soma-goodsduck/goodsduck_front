@@ -46,7 +46,7 @@ const Image = (props) => {
 
 Image.defaultProps = {
   shape: "circle",
-  src: "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level.svg",
+  src: "https://goods-duck.com/icon/icon_level.svg",
   size: "24px",
   width: "",
   height: "",

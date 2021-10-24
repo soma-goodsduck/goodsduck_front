@@ -198,7 +198,7 @@ const FindEmailOrPwPage = (props) => {
           <Icon
             width="24px"
             margin="0 5px 0 0"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg"
+            src="https://goods-duck.com/icon/icon_delete.svg"
           />
         </BackBtn>
       )}
@@ -392,7 +392,7 @@ const Logo = styled.div`
   width: 80%;
   height: 50px;
   margin-bottom: 20px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/logo.svg");
+  background-image: url("https://goods-duck.com/icon/logo.svg");
   background-size: contain;
   background-repeat: no-repeat;
 `;

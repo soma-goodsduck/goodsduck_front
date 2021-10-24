@@ -18,10 +18,7 @@ const UserProfile = ({ user }) => {
       <div style={{ position: "relative" }}>
         <Image
           shape="circle"
-          src={
-            user.imageUrl ||
-            "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
-          }
+          src={user.imageUrl || "https://goods-duck.com/sample_goodsduck.png"}
           margin="0 20px 0 0"
           size="70px"
         />
@@ -31,7 +28,7 @@ const UserProfile = ({ user }) => {
         <Flex is_flex>
           <Image
             shape="circle"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${user.level}.png`}
+            src={`https://goods-duck.com/icon/icon_level${user.level}.png`}
             size="25px"
             margin="0 10px 0 0"
           />

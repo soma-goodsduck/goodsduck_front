@@ -16,10 +16,7 @@ const VotePopUp = () => {
     <Screen>
       <ModalBox>
         <Info>
-          <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png"
-            width="50px"
-          />
+          <Icon src="https://goods-duck.com/icon/goodsduck.png" width="50px" />
           <Text>투표권 {voteCount}개 획득</Text>
           <Btns>
             <OKBtn

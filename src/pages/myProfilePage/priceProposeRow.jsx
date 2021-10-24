@@ -21,7 +21,7 @@ const PriceProposeRow = ({ item }) => {
             shape="circle"
             src={
               item.proposer.imageUrl ||
-              "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+              "https://goods-duck.com/sample_goodsduck.png"
             }
             margin="0 10px 0 0"
             size="50px"

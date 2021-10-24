@@ -69,7 +69,7 @@ const NotificationPage = () => {
             <Icon
               width="16px"
               margin="0 7px 0 0"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_uncheckbox.svg"
+              src="https://goods-duck.com/icon/icon_uncheckbox.svg"
             />
             <Text color={grayBtnText}>전체 알림 삭제</Text>
           </DeleteBtn>

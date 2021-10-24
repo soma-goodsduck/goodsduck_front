@@ -106,7 +106,7 @@ const PostBody = ({ postData }) => {
                 shape="circle"
                 src={
                   postData.postOwner.imageUrl ||
-                  "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  "https://goods-duck.com/sample_goodsduck.png"
                 }
                 margin="0 10px 0 0"
                 size="50px"
@@ -117,7 +117,7 @@ const PostBody = ({ postData }) => {
                     shape="circle"
                     size="18px"
                     margin="0 5px 0 0"
-                    src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${postData.postOwner.level}.png`}
+                    src={`https://goods-duck.com/icon/icon_level${postData.postOwner.level}.png`}
                   />
                   <UserName>
                     <Text size="16px">{postData.postOwner.nickName}</Text>
@@ -138,7 +138,7 @@ const PostBody = ({ postData }) => {
           <DescBox
             value={postData.content}
             readOnly
-            style={{ height: `${30 + descHeight * 16}px` }}
+            style={{ height: `${30 + descHeight * 30}px` }}
           />
           {postData.images.length !== 0 && (
             <Flex margin="20px 0 0 0">
@@ -157,8 +157,8 @@ const PostBody = ({ postData }) => {
               width="18px"
               src={
                 isLike
-                  ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg"
-                  : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_empty.svg"
+                  ? "https://goods-duck.com/icon/icon_heart_click.svg"
+                  : "https://goods-duck.com/icon/icon_heart_empty.svg"
               }
               alt="likes item count"
               margin="0 5px 0 0"
@@ -168,7 +168,7 @@ const PostBody = ({ postData }) => {
           <CommentBtn>
             <Icon
               width="18px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_comment.svg"
+              src="https://goods-duck.com/icon/icon_comment.svg"
               alt="likes item count"
               margin="0 5px 0 0"
             />

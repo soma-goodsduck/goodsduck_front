@@ -47,7 +47,7 @@ const Comment = ({ comment, onClick }) => {
               shape="circle"
               src={
                 comment.writer.imageUrl ||
-                "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                "https://goods-duck.com/sample_goodsduck.png"
               }
               margin="0 10px 0 0"
               size="50px"
@@ -64,7 +64,7 @@ const Comment = ({ comment, onClick }) => {
                   shape="circle"
                   size="18px"
                   margin="0 5px 0 0"
-                  src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${comment.writer.level}.png`}
+                  src={`https://goods-duck.com/icon/icon_level${comment.writer.level}.png`}
                 />
                 <UserName>
                   <Text size="16px">{comment.writer.nickName}</Text>
@@ -101,7 +101,7 @@ const Comment = ({ comment, onClick }) => {
           {comment.content !== "삭제된 댓글입니다." && (
             <Icon
               width="10px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger_gray.svg"
+              src="https://goods-duck.com/icon/icon_hamburger_gray.svg"
               _onClick={() => {
                 clickDots();
               }}
@@ -150,7 +150,7 @@ const LockBtn = styled.button`
   width: 14px;
   height: 14px;
   margin-right: 5px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_lock1.png");
+  background-image: url("https://goods-duck.com/icon/icon_lock1.png");
   background-size: cover;
 `;
 
