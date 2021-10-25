@@ -24,7 +24,6 @@ const HeaderInfo = memo((props) => {
     isFiltering,
     isUploading,
     isSetting,
-    isVote,
     isCommunity,
   } = props;
 
@@ -51,8 +50,6 @@ const HeaderInfo = memo((props) => {
     } else if (isSetting) {
       dispatch(userActions.clearSettingInfo());
       history.goBack();
-    } else if (isVote) {
-      history.push("/community");
     } else if (isCommunity) {
       dispatch(newPostActions.clear());
       dispatch(imgActions.clearImgAction());

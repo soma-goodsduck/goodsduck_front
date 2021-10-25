@@ -1,11 +1,12 @@
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
 import { blackBtn } from "../../shared/colors";
-import { Icon, LoginPopUp, Spinner } from "../../elements";
-import HeaderInfo from "../../components/haeder/headerInfo";
+import { Icon, LoginPopUp, Spinner, PopUp2 } from "../../elements";
+import Header from "./header";
 import Nav from "../../components/nav/nav";
 import IdolForVote from "./idolForVote";
 import VoteModal from "./voteModal";
@@ -72,9 +73,49 @@ const VotePage = (props) => {
     setShowVoteModal(false);
   };
 
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  // 공유하기
+  const handleShareByKakao = () => {
+    Kakao.Link.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "GOODSDUCK",
+        description: "굿즈덕에서 투표하고 내 아이돌에게 광고 선물하자!",
+        imageUrl: "https://goods-duck.com/image/event.png",
+        link: {
+          mobileWebUrl: window.location.href,
+          webUrl: window.location.href,
+        },
+      },
+    });
+  };
+
+  const handleShareByTwitter = () => {
+    const sendText = "GOODSDUCK";
+    const sendUrl = window.location.href;
+    window.open(
+      `https://twitter.com/intent/tweet?text=${sendText}&url=${sendUrl}`,
+    );
+  };
+
   return (
     <>
       {isLoading && <Spinner />}
+      {showSharePopup && (
+        <PopUp2
+          text1="카카오톡으로 공유하기"
+          text2="트위터로 공유하기"
+          _onClick1={() => {
+            handleShareByKakao();
+            setShowSharePopup(false);
+          }}
+          _onClick2={() => {
+            handleShareByTwitter();
+            setShowSharePopup(false);
+          }}
+          _onClick3={() => setShowSharePopup(false)}
+        />
+      )}
       {showVoteConfirmModal && (
         <VoteConfirmModal onExitClick={handleHideVoteModal} />
       )}
@@ -96,7 +137,11 @@ const VotePage = (props) => {
       {showLoginPopup && <LoginPopUp />}
 
       <VoteBox>
-        <HeaderInfo text="아이돌 투표" isVote />
+        <Header
+          onShareClick={() => {
+            setShowSharePopup(true);
+          }}
+        />
         <NoticeBox>
           👉 앱에 접속하면 하루에 <strong>투표권 2개</strong>
           <br />
