@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import React, { useEffect, useState, memo } from "react";
 import { useDispatch } from "react-redux";
+import mixpanel from "mixpanel-browser";
 
 import styles from "./nav.module.css";
 import { Flex } from "../../elements";
@@ -12,6 +13,11 @@ import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const Nav = memo((props) => {
+  const option = process.env.REACT_APP_TYPE === "DEV" && {
+    debug: true,
+  };
+  mixpanel.init(process.env.REACT_APP_MIXPANEL, option);
+
   const dispatch = useDispatch();
 
   const href = window.location.href;
@@ -86,24 +92,29 @@ const Nav = memo((props) => {
 
     switch (type) {
       case "home":
-        window.dataLayer.push({ type: "home" });
         history.push("/");
+        window.dataLayer.push({ type: "home" });
+        mixpanel.track("click Home");
         break;
       case "chatting":
-        window.dataLayer.push({ type: "chatting" });
         history.push("/chatting");
+        window.dataLayer.push({ type: "chatting" });
+        mixpanel.track("click Chatting");
         break;
       case "upload-item":
-        window.dataLayer.push({ type: "upload-item" });
         history.push("/upload-item");
+        window.dataLayer.push({ type: "upload-item" });
+        mixpanel.track("click Upload-item");
         break;
       case "community":
-        window.dataLayer.push({ type: "community" });
         history.push("/community");
+        window.dataLayer.push({ type: "community" });
+        mixpanel.track("click Community");
         break;
       case "my-profile":
-        window.dataLayer.push({ type: "my-profile" });
         history.push("/my-profile");
+        window.dataLayer.push({ type: "my-profile" });
+        mixpanel.track("click My-profile");
         break;
       default:
         history.push("/");

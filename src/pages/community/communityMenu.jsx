@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import mixpanel from "mixpanel-browser";
 
 import styled from "styled-components";
 import { Text, Icon } from "../../elements";
@@ -9,6 +10,11 @@ import { actionCreators as communityActions } from "../../redux/modules/communit
 import { history } from "../../redux/configureStore";
 
 const CommunityMenu = (props) => {
+  const option = process.env.REACT_APP_TYPE === "DEV" && {
+    debug: true,
+  };
+  mixpanel.init(process.env.REACT_APP_MIXPANEL, option);
+
   const dispatch = useDispatch();
 
   return (
@@ -65,7 +71,8 @@ const CommunityMenu = (props) => {
             history.push("/vote");
             dispatch(communityActions.setCommunityMenu("home"));
             window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ type: "home" });
+            window.dataLayer.push({ type: "vote" });
+            mixpanel.track("click Vote");
           }}
         >
           투표하기
