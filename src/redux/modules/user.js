@@ -6,6 +6,8 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 
+import { firebaseDatabase } from "../../shared/firebase";
+
 import { notification } from "../../shared/notification";
 import { setLS, deleteLS } from "../../shared/localStorage";
 import { postActionForNonUser } from "../../shared/axios";
@@ -16,8 +18,6 @@ const SET_IDOLS_FOR_SIGNUP = "SET_IDOLS_FOR_SIGNUP";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
-const SHOW_POPUP = "SHOW_POPUP";
-const NO_SHOW_POPUP = "NO_SHOW_POPUP";
 const UPDATE_JWT = "UPDATE_JWT";
 const SET_FAV_IDOL_GROUPS = "SET_FAV_IDOL_GROUPS";
 const SET_FILTERING_TYPE = "SET_FILTERING_TYPE";
@@ -38,6 +38,8 @@ const SET_SHOW_NOTIFICATION = "SET_SHOW_NOTIFICATION";
 const SET_NOTIFICATION_BODY = "SET_NOTIFICATION_BODY";
 const SET_NOTIFICATION_LIST = "SET_NOTIFICATION_LIST";
 const SET_EMAIL = "SET_EMAIL";
+const SET_TODAY_VOTED_IDOL = "SET_TODAY_VOTED_IDOL";
+const SET_AUTH_STATE = "SET_AUTH_STATE";
 
 // action creators
 const socialSignUp = createAction(SOCIAL_SIGN_UP, (id, type) => ({ id, type }));
@@ -50,8 +52,6 @@ const setIdolsForSignup = createAction(
 const logIn = createAction(LOG_IN, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
-const showPopup = createAction(SHOW_POPUP, () => ({}));
-const noShowPopup = createAction(NO_SHOW_POPUP, () => ({}));
 const updateJwt = createAction(UPDATE_JWT, () => ({}));
 const setFavIdolGroups = createAction(SET_FAV_IDOL_GROUPS, (favIdolGroups) => ({
   favIdolGroups,
@@ -108,6 +108,12 @@ const setNotificationList = createAction(
   (notifications) => ({ notifications }),
 );
 const setEmail = createAction(SET_EMAIL, (email) => ({ email }));
+const setTodayVotedIdol = createAction(SET_TODAY_VOTED_IDOL, (votedIdolId) => ({
+  votedIdolId,
+}));
+const setAuthState = createAction(SET_AUTH_STATE, (authState) => ({
+  authState,
+}));
 
 // initialState
 const initialState = {
@@ -116,15 +122,13 @@ const initialState = {
   id: null,
   email: "",
   idolsForSignup: 0,
-  showPopup: false,
   favIdolGroups: [],
   filteringType: "SELLING",
   userForReview: "",
   review: "",
   numOfStar: 0,
   userNick: "",
-  userImg:
-    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
+  userImg: "https://goods-duck.com/sample_goodsduck.png",
   items: [],
   address: "",
   name: "",
@@ -135,6 +139,8 @@ const initialState = {
   showNotification: false,
   notificationBody: "",
   notifications: [],
+  votedIdolId: 0,
+  authState: "",
 };
 
 // middleware actions
@@ -171,18 +177,26 @@ const signupAction = (user) => {
     nickName: user.nick,
     phoneNumber: user.phone,
     likeIdolGroupsId: user.idols,
+    marketingAgree: user.isMarketingAgree,
   };
+
   return async function (dispatch, getState, { history }) {
     const signup = await postActionForNonUser("v2/users/sign-up", json);
 
-    console.log(signup);
     if (signup < 0) {
-      history.replace("/login");
+      history.replace("/sign-up");
       window.alert("회원가입에 실패했습니다.");
       return;
     }
 
     dispatch(logIn(signup.response.jwt));
+    setLS("likeIdolGroups", user.idols);
+
+    // chat badge 정보 저장
+    firebaseDatabase
+      .ref("users")
+      .child(signup.response.userId)
+      .update({ hasNewChat: false });
 
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(
@@ -218,6 +232,7 @@ const socialSignupAction = (user) => {
     }
 
     dispatch(logIn(signup.data.response.jwt));
+    setLS("likeIdolGroups", user.idols);
 
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(
@@ -227,11 +242,11 @@ const socialSignupAction = (user) => {
       notification();
     }
 
-    history.push("/");
-
     dispatch(setShowNotification(true));
     dispatch(setNotificationBody("회원가입에 성공했습니다."));
+
     history.push("/");
+    // window.location.reload();
   };
 };
 
@@ -242,7 +257,6 @@ export default handleActions(
       produce(state, (draft) => {
         draft.id = action.payload.id;
         draft.type = action.payload.type;
-        draft.show_popup = false;
       }),
     [SET_IDOLS_FOR_SIGNUP]: (state, action) =>
       produce(state, (draft) => {
@@ -252,7 +266,6 @@ export default handleActions(
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-        draft.show_popup = false;
         setLS("jwt", draft.user);
       }),
     [LOG_OUT]: (state, action) =>
@@ -266,14 +279,6 @@ export default handleActions(
     [GET_USER]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
-      }),
-    [SHOW_POPUP]: (state, action) =>
-      produce(state, (draft) => {
-        draft.showPopup = true;
-      }),
-    [NO_SHOW_POPUP]: (state, action) =>
-      produce(state, (draft) => {
-        draft.showPopup = false;
       }),
     [UPDATE_JWT]: (state, action) =>
       produce(state, (draft) => {
@@ -363,6 +368,14 @@ export default handleActions(
       produce(state, (draft) => {
         draft.email = action.payload.email;
       }),
+    [SET_TODAY_VOTED_IDOL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.votedIdolId = action.payload.votedIdolId;
+      }),
+    [SET_AUTH_STATE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.authState = action.payload.authState;
+      }),
   },
   initialState,
 );
@@ -376,8 +389,6 @@ const actionCreators = {
   logoutAction,
   getUser,
   nonUserAction,
-  showPopup,
-  noShowPopup,
   updateJwt,
   setFavIdolGroups,
   setFilteringType,
@@ -398,6 +409,8 @@ const actionCreators = {
   setNotificationBody,
   setNotificationList,
   setEmail,
+  setTodayVotedIdol,
+  setAuthState,
 };
 
 export { actionCreators };

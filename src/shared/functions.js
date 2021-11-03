@@ -29,9 +29,14 @@ export const numberWithCommas = (x) => {
 
 export const formatDate = (x) => {
   const currentDatetime = new Date(x);
+  let currentMin = currentDatetime.getMinutes();
+  if (currentDatetime.getMinutes() < 10) {
+    currentMin = `0${currentMin}`;
+  }
+
   const formattedDate = `${currentDatetime.getFullYear()}.${
     currentDatetime.getMonth() + 1
-  }.${currentDatetime.getDate()} ${currentDatetime.getHours()}:${currentDatetime.getMinutes()}`;
+  }.${currentDatetime.getDate()} ${currentDatetime.getHours()}:${currentMin}`;
   return formattedDate;
 };
 

@@ -6,6 +6,7 @@ import styles from "./pricePropose.module.css";
 
 import ItemRow from "../../components/itemRow/itemRow";
 import { Input, Flex, LoginPopUp } from "../../elements";
+import { blackBtn } from "../../shared/colors";
 
 import { actionCreators as itemActions } from "../../redux/modules/item";
 import { actionCreators as userActions } from "../../redux/modules/user";
@@ -47,8 +48,45 @@ const PriceProposeModal = ({ _onClick }) => {
   };
   const handleClcik = async () => {
     if (price <= 0) {
-      window.alert("최소한 0원 이상의 금액을 입력하세요!");
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody(
+          "최소한 0원 이상의 금액을 입력해야 합니다.",
+        ),
+      );
       return;
+    }
+
+    if (price % 500 !== 0) {
+      dispatch(userActions.setShowNotification(true));
+      dispatch(
+        userActions.setNotificationBody(
+          "가격제시 금액은 500원 단위로만 가능합니다.",
+        ),
+      );
+      return;
+    }
+
+    if (itemData.tradeType === "구매") {
+      if (price < itemData.price) {
+        dispatch(userActions.setShowNotification(true));
+        dispatch(
+          userActions.setNotificationBody(
+            "굿즈의 가격보다 더 높은 가격만 제시할 수 있습니다.",
+          ),
+        );
+        return;
+      }
+    } else if (itemData.tradeType === "판매") {
+      if (price > itemData.price) {
+        dispatch(userActions.setShowNotification(true));
+        dispatch(
+          userActions.setNotificationBody(
+            "굿즈의 가격보다 더 낮은 가격만 제시할 수 있습니다.",
+          ),
+        );
+        return;
+      }
     }
 
     const postPrice = await reqPricePropose();
@@ -157,6 +195,7 @@ const ProposeBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
@@ -165,7 +204,7 @@ const ExitBtn = styled.button`
   right: 10px;
   width: 22px;
   height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg");
+  background-image: url("https://goods-duck.com/icon/icon_delete.svg");
   background-size: cover;
   margin-bottom: 10px;
   cursor: pointer;

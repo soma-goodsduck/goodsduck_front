@@ -89,8 +89,8 @@ const Info = styled.div`
 `;
 
 const Text = styled.button`
-  font-family: "Do Hyeon", sans-serif;
   font-size: 18px;
+  color: ${blackBtn};
 `;
 
 const Btns = styled.div`
@@ -115,6 +115,7 @@ const NOBtn = styled.button`
   font-weight: bold;
   padding: 15px;
   background-color: ${grayBtn};
+  color: ${blackBtn};
   border-radius: 0 0 0 5px;
 `;
 

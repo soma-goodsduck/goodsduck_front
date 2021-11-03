@@ -52,7 +52,9 @@ const OtherProfilePage = (props) => {
       return;
     }
 
-    setUser(userData.user);
+    const newUserData = userData.user;
+    newUserData.lastLoginAt = userData.lastLoginAt;
+    setUser(newUserData);
     setBtnsData({
       itemCount: userData.itemCount,
       reviewCount: userData.reviewCount,
@@ -71,7 +73,7 @@ const OtherProfilePage = (props) => {
           {user && (
             <ProfilePageBox>
               <HeaderInfo2
-                text1="신고하기"
+                text1="이 사용자의 글 보지 않기"
                 text2="프로필 정보"
                 popup1
                 userIdForReport={bcrypt}

@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import { green } from "../shared/colors";
+import { blackBtn } from "../shared/colors";
 
 import { history } from "../redux/configureStore";
 
@@ -97,15 +97,12 @@ const Text = styled.button`
   ${(props) => (props.isBold ? "font-weight: bold; " : "")}
   margin: 20px 0;
   transition: transform 100ms ease-in;
-
-  &:hover {
-    color: ${green};
-    transform: scale(1.1);
-  }
+  color: ${blackBtn};
 `;
 
 const ExitText = styled.button`
   font-size: 14px;
+  color: ${blackBtn};
 `;
 
 export default PopUp;

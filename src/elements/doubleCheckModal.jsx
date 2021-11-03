@@ -1,10 +1,10 @@
 import React from "react";
 
 import styled from "styled-components";
-import { grayBtn, blackBtn, white } from "../shared/colors";
+import { grayBtn, blackBtn, white, grayBtnText } from "../shared/colors";
 
 const DoubleCheckModal = (props) => {
-  const { text1, text2, onOkClick, onNoClick, height } = props;
+  const { text1, text2, text3, onOkClick, onNoClick, height, warning } = props;
 
   const styles = {
     height,
@@ -24,6 +24,7 @@ const DoubleCheckModal = (props) => {
         <Info {...styles}>
           <Text1>{text1}</Text1>
           <Text2 style={{ margin: "10px 0" }}>{text2}</Text2>
+          {warning && <Warning style={{ margin: "10px 0" }}>{text3}</Warning>}
         </Info>
         <Btns>
           <NOBtn
@@ -59,7 +60,7 @@ const Screen = styled.div`
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  color: #222222;
+  color: ${blackBtn};
 
   @media screen and (min-width: 415px) {
     width: 415px;
@@ -96,6 +97,12 @@ const Text2 = styled.div`
   text-align: center;
 `;
 
+const Warning = styled.div`
+  font-size: 14px;
+  text-align: center;
+  color: ${grayBtnText};
+`;
+
 const Btns = styled.div`
   width: 100%;
   display: flex;
@@ -119,6 +126,7 @@ const NOBtn = styled.button`
   padding: 15px;
   background-color: ${grayBtn};
   border-radius: 0 0 0 5px;
+  color: ${blackBtn};
 `;
 
 export default DoubleCheckModal;

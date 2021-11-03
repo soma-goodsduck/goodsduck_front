@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-no-duplicate-props */
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./myProfilePage.module.css";
@@ -20,6 +20,7 @@ import {
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { history } from "../../redux/configureStore";
 import DeleteAccountModal from "./deleteAccountModal";
+import ShowSettingModal from "./showSettingModal";
 
 const Setting = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,8 @@ const Setting = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [isNotificationOn, setIsNotificationOn] = useState(true);
   const [showDoubleCheckModal, setDoubleCheckModal] = useState(false);
+  const authStatus = useSelector((state) => state.user.authState);
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   const requestUserData = async () => {
     const result = await requestAuthData("v1/users/look-up");
@@ -42,20 +45,39 @@ const Setting = () => {
       history.push("/error");
       return;
     }
+
+    if (window.ReactNativeWebView) {
+      // 설정에서 알림 허용 여부 체크
+      if (getUserData.isAgreeToNotification && authStatus === "true") {
+        setIsNotificationOn(true);
+      } else {
+        setIsNotificationOn(false);
+      }
+      return;
+    }
+
     setIsNotificationOn(getUserData.isAgreeToNotification);
   };
   useEffect(fnEffect, []);
 
-  const notificationOn = () => {
+  const notificationOn = async () => {
     setIsNotificationOn(true);
 
     if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({ type: "REQ_FCM_TOKEN" }),
-      );
-    } else {
-      notification();
+      // 알림이 허용되어 있는 상태라면 FCM TOKEN 전송
+      if (authStatus === "true") {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+        );
+      } else {
+        // 알림이 거절되어 있는 상태라면 알림 허용 설정 안내창 보여주기
+        setShowAlertModal(true);
+        setIsNotificationOn(false);
+      }
+      return;
     }
+
+    notification();
   };
 
   const reqNotificationOff = async () => {
@@ -78,7 +100,7 @@ const Setting = () => {
     setIsNotificationOn(false);
   };
 
-  const handleDleteAccount = () => {
+  const handleDeleteAccount = () => {
     setDoubleCheckModal(true);
   };
 
@@ -109,6 +131,16 @@ const Setting = () => {
 
   return (
     <>
+      {window.ReactNativeWebView && showAlertModal && (
+        <ShowSettingModal
+          onOkClick={() => {
+            window.ReactNativeWebView.postMessage(
+              JSON.stringify({ type: "REQ_SHOW_SETTING" }),
+            );
+          }}
+          onNoClick={() => setShowAlertModal(false)}
+        />
+      )}
       {showDoubleCheckModal && (
         <DeleteAccountModal
           onOkClick={(pw) => {
@@ -154,7 +186,7 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  src="https://goods-duck.com/icon/icon_more.svg"
                 />
               </BtnBox>
               <BtnBox
@@ -167,7 +199,7 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  src="https://goods-duck.com/icon/icon_more.svg"
                 />
               </BtnBox>
             </SettingBtn>
@@ -186,7 +218,7 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  src="https://goods-duck.com/icon/icon_more.svg"
                 />
               </BtnBox>
               <BtnBox
@@ -199,7 +231,7 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  src="https://goods-duck.com/icon/icon_more.svg"
                 />
               </BtnBox>
               <BtnBox
@@ -212,7 +244,7 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  src="https://goods-duck.com/icon/icon_more.svg"
                 />
               </BtnBox>
             </SettingBtn>
@@ -228,12 +260,12 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more.svg"
+                  src="https://goods-duck.com/icon/icon_more.svg"
                 />
               </BtnBox>
               <BtnBox
                 onClick={() => {
-                  handleDleteAccount();
+                  handleDeleteAccount();
                 }}
               >
                 <Text color={blackBtn} size="18px" medium color={darkRed}>
@@ -241,7 +273,7 @@ const Setting = () => {
                 </Text>
                 <Icon
                   width="12px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_more_red.svg"
+                  src="https://goods-duck.com/icon/icon_more_red.svg"
                 />
               </BtnBox>
             </SettingBtn>

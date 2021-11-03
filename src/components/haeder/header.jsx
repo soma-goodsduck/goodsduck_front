@@ -1,15 +1,19 @@
-import React, { useRef } from "react";
-import { useSelector } from "react-redux";
+/* eslint-disable indent */
+import React, { useRef, memo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
 
 import { Flex, Icon } from "../../elements";
-
-import { history } from "../../redux/configureStore";
 import { green } from "../../shared/colors";
 
-const Header = () => {
+import { actionCreators as homeActions } from "../../redux/modules/home";
+import { requestAuthData } from "../../shared/axios";
+import { history } from "../../redux/configureStore";
+
+const Header = memo(() => {
+  const dispatch = useDispatch();
   const inputRef = useRef();
   const hasNewNoti = useSelector((state) => state.home.hasNewNoti);
 
@@ -26,6 +30,33 @@ const Header = () => {
     inputRef.current.value = "";
   };
 
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up");
+    return result;
+  };
+  const clickIcon = async (type) => {
+    const getUserData = await reqUserData();
+    if (getUserData < 0) {
+      if (getUserData === -201) {
+        dispatch(homeActions.setLoginPopup(true));
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
+    switch (type) {
+      case "favorites":
+        history.push("/favorites");
+        break;
+      case "notification":
+        history.push("/notification");
+        break;
+      default:
+        history.push("/");
+    }
+  };
+
   return (
     <div className={styles.header}>
       <HeaderBox>
@@ -38,27 +69,27 @@ const Header = () => {
         </form>
         <Flex>
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
+            src="https://goods-duck.com/icon/icon_search.svg"
             alt="search"
             _onClick={(event) => {
               onSubmit(event);
             }}
           />
           <Icon
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart2.svg"
+            src="https://goods-duck.com/icon/icon_heart2.svg"
             alt="heart"
             margin="0 15px"
             _onClick={() => {
-              history.push("/favorites");
+              clickIcon("favorites");
             }}
           />
           <NotiBox>
             <Icon
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notification.svg"
+              src="https://goods-duck.com/icon/icon_notification.svg"
               alt="notice"
               width="20px"
               _onClick={() => {
-                history.push("/notification");
+                clickIcon("notification");
               }}
             />
             {hasNewNoti && <NewBadge />}
@@ -67,7 +98,7 @@ const Header = () => {
       </HeaderBox>
     </div>
   );
-};
+});
 
 const HeaderBox = styled.div`
   background-color: #ffffff;

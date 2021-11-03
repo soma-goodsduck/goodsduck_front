@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -9,12 +9,7 @@ import { yellow, blackBtn } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
-const UserProfile = ({ user }) => {
-  const { userNick, userImg } = useSelector((state) => ({
-    userNick: state.user.userNick,
-    userImg: state.user.userImg,
-  }));
-
+const UserProfile = memo(({ user, userNick, userImg }) => {
   return (
     <UserProfileBox
       onClick={() => {
@@ -24,8 +19,7 @@ const UserProfile = ({ user }) => {
       <Image
         shape="circle"
         src={
-          userImg ===
-          "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+          userImg === "https://goods-duck.com/sample_goodsduck.png"
             ? user.imageUrl
             : userImg
         }
@@ -36,7 +30,7 @@ const UserProfile = ({ user }) => {
         <Flex is_flex>
           <Image
             shape="circle"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${user.level}.png`}
+            src={`https://goods-duck.com/icon/icon_level${user.level}.png`}
             size="25px"
             margin="0 10px 0 0"
           />
@@ -51,7 +45,7 @@ const UserProfile = ({ user }) => {
       </Flex>
     </UserProfileBox>
   );
-};
+});
 
 const UserProfileBox = styled.div`
   display: flex;

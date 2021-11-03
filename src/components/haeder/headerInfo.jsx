@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -9,8 +9,9 @@ import { Flex, Text, Icon } from "../../elements/index";
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { actionCreators as imgActions } from "../../redux/modules/image";
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
+import { actionCreators as newPostActions } from "../../redux/modules/newPost";
 
-const HeaderInfo = (props) => {
+const HeaderInfo = memo((props) => {
   const dispatch = useDispatch();
 
   const {
@@ -23,6 +24,7 @@ const HeaderInfo = (props) => {
     isFiltering,
     isUploading,
     isSetting,
+    isCommunity,
   } = props;
 
   const styleProps = {
@@ -48,6 +50,10 @@ const HeaderInfo = (props) => {
     } else if (isSetting) {
       dispatch(userActions.clearSettingInfo());
       history.goBack();
+    } else if (isCommunity) {
+      dispatch(newPostActions.clear());
+      dispatch(imgActions.clearImgAction());
+      history.push("/community");
     } else {
       history.goBack();
     }
@@ -59,7 +65,7 @@ const HeaderInfo = (props) => {
         <Column1>
           <Icon
             width="12px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
+            src="https://goods-duck.com/icon/icon_back_b.svg"
             _onClick={() => {
               goBack();
             }}
@@ -73,7 +79,7 @@ const HeaderInfo = (props) => {
       </Flex>
     </HeaderBox>
   );
-};
+});
 
 HeaderInfo.defaultProps = {
   margin: "",

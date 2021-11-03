@@ -22,6 +22,7 @@ const CLEAR_SEARCH_FILTER = "CLEAR_SEARCH_FILTER";
 const SET_NEW_NOTI = "SET_NEW_NOTI";
 const SET_SEARCH_ORDER_TYPE = "SET_SEARCH_ORDER_TYPE";
 const SET_SEARCH_COMPLETE_TYPE = "SET_SEARCH_COMPLETE_TYPE";
+const SET_LOGIN_POPUP = "SET_LOGIN_POPUP";
 
 // action creators
 const setHomeItems = createAction(
@@ -65,6 +66,9 @@ const setSearchCompleteType = createAction(
     searchCompleteType,
   }),
 );
+const setLoginPopup = createAction(SET_LOGIN_POPUP, (showLoginPopup) => ({
+  showLoginPopup,
+}));
 
 // initialState
 const initialState = {
@@ -76,6 +80,7 @@ const initialState = {
   hasNewNoti: false,
   searchOrderType: "latest",
   searchCompleteType: true,
+  showLoginPopup: false,
 };
 
 // middleware actions
@@ -299,6 +304,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.searchCompleteType = action.payload.searchCompleteType;
       }),
+    [SET_LOGIN_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showLoginPopup = action.payload.showLoginPopup;
+      }),
   },
   initialState,
 );
@@ -316,6 +325,7 @@ const actionCreators = {
   getItemsDataBySearch,
   setSearchOrderType,
   setSearchCompleteType,
+  setLoginPopup,
 };
 
 export { actionCreators };

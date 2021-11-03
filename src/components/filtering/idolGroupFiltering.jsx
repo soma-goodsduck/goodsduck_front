@@ -4,31 +4,29 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import styles from "./filtering.module.css";
 import { Flex, Text, Image } from "../../elements";
-import { grayText } from "../../shared/colors";
+import { blackBtn, grayText } from "../../shared/colors";
 import IdolEdit from "./idolEdit";
 
 import { actionCreators as filteringActions } from "../../redux/modules/filtering";
 import { requestPublicData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const IdolGroupFiltering = ({ onClick }) => {
+const IdolGroupFiltering = ({ onClick, type }) => {
   const dispatch = useDispatch();
 
   // 아이돌 데이터 가져오기
   const [idols, setIdols] = useState([]);
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
-  const [groupId, setGroupId] = useState(0);
+  const idolIdLS = Number(localStorage.getItem("filter_idolGroup"));
 
   const checkAllItems = () => {
     localStorage.removeItem("filter_idolGroup");
     localStorage.removeItem("filter_idolGroupName");
     dispatch(filteringActions.clearFiltering());
-    setGroupId(0);
     onClick(0);
   };
 
   const checkGroupHandler = (id, name) => {
-    setGroupId(id);
     onClick(id);
     localStorage.setItem("filter_idolGroup", `${id}`);
     localStorage.setItem("filter_idolGroupName", `${name}`);
@@ -61,7 +59,6 @@ const IdolGroupFiltering = ({ onClick }) => {
     }
 
     setIdols(idolGroups);
-    setGroupId(localStorage.getItem("filter_idolGroup"));
   };
   useEffect(fnEffect, []);
 
@@ -103,7 +100,11 @@ const IdolGroupFiltering = ({ onClick }) => {
       )}
       <div
         aria-hidden
-        className={styles.categories}
+        className={
+          type === "community"
+            ? styles.categoriesWithCommunity
+            : styles.categories
+        }
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
@@ -114,16 +115,41 @@ const IdolGroupFiltering = ({ onClick }) => {
           <Flex justify="flex-start">
             <BtnBox
               onClick={() => {
+                dispatch(filteringActions.clearFiltering());
+                setShowEditModal(true);
+              }}
+            >
+              <Btn>
+                <Image
+                  src="https://goods-duck.com/icon/icon_add.svg"
+                  size="30px"
+                />
+              </Btn>
+              <Text size="13px" margin="10px 0 0 0" color={grayText}>
+                그룹 편집
+              </Text>
+            </BtnBox>
+            <BtnBox
+              onClick={() => {
                 checkAllItems();
               }}
             >
               <Btn>
                 <Image
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  src="https://goods-duck.com/sample_goodsduck.png"
                   size="55px"
                 />
               </Btn>
-              <Text size="13px" margin="10px 0 0 0" color={grayText}>
+              <Text
+                size="13px"
+                margin="10px 0 0 0"
+                color={idolIdLS === 0 ? blackBtn : grayText}
+                _className={
+                  idolIdLS === 0
+                    ? styles.clickIdolGroupBtn
+                    : styles.idolGroupBtn
+                }
+              >
                 전체
               </Text>
             </BtnBox>
@@ -137,20 +163,20 @@ const IdolGroupFiltering = ({ onClick }) => {
                 <IdolInput
                   id={idol.id}
                   type="radio"
-                  checked={groupId === idol.id}
+                  checked={idolIdLS === idol.id}
                   onChange={() => checkGroupHandler(idol.id, idol.name)}
                 />
                 <label
                   htmlFor={idol.id}
                   className={
-                    groupId === idol.id
+                    idolIdLS === idol.id
                       ? styles.clickIdolGroupBtn
                       : styles.idolGroupBtn
                   }
                 >
                   <img
                     className={
-                      groupId === idol.id
+                      idolIdLS === idol.id
                         ? styles.clickIdolGroupImg
                         : styles.idolGroupImg
                     }
@@ -158,32 +184,26 @@ const IdolGroupFiltering = ({ onClick }) => {
                     alt="Idol Group"
                   />
                   <div
-                    className={idol.id === 10 ? styles.idolGroupLongName : ""}
+                    className={
+                      idol.id === 10 || idol.id === 14 || idol.id === 20
+                        ? styles.idolGroupLongName
+                        : ""
+                    }
                   >
                     {idol.name}
                   </div>
                 </label>
               </IdolBox>
             ))}
-            <BtnBox
-              onClick={() => {
-                dispatch(filteringActions.clearFiltering());
-                setShowEditModal(true);
-              }}
-            >
-              <Btn>
-                <Image
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-                  size="30px"
-                />
-              </Btn>
-              <Text size="13px" margin="10px 0 0 0" color={grayText}>
-                그룹 편집
-              </Text>
-            </BtnBox>
           </Flex>
         )}
       </div>
+      {/* {type !== "community" && (
+        <NoticeBox>
+          ⚠️ 단순히 투표권을 얻기 위한 사진 판매/나눔 글 등록과 단시간 내에
+          삭제되는 글의 경우, 적발시 투표권이 30개 차감됩니다.
+        </NoticeBox>
+      )} */}
     </>
   );
 };
@@ -212,6 +232,20 @@ const Btn = styled.div`
   height: 60px;
   border-radius: 50%;
   background-color: #f8f8f8;
+`;
+
+const NoticeBox = styled.div`
+  width: 100vw;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #f2f3f6;
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.4;
+
+  @media screen and (min-width: 415px) {
+    width: 415px;
+  }
 `;
 
 export default IdolGroupFiltering;

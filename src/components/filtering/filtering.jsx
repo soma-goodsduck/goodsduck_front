@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, memo } from "react";
 import styled from "styled-components";
 import styles from "./filtering.module.css";
 
@@ -6,7 +6,7 @@ import { Flex } from "../../elements";
 import { grayBorder } from "../../shared/colors";
 import { history } from "../../redux/configureStore";
 
-const Filtering = () => {
+const Filtering = memo(() => {
   const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
   const filteringIdolGroup = localStorage.getItem("filter_idolGroupName");
 
@@ -115,7 +115,7 @@ const Filtering = () => {
       <Line />
     </>
   );
-};
+});
 
 const Line = styled.div`
   width: 100%;

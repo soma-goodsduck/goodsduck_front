@@ -5,18 +5,19 @@ import styled from "styled-components";
 import { blackBtn, grayBtn, white, yellow } from "../shared/colors";
 
 import { history } from "../redux/configureStore";
-import { actionCreators as userActions } from "../redux/modules/user";
+import { actionCreators as homeActions } from "../redux/modules/home";
 
 const LoginPopUp = (props) => {
   const dispatch = useDispatch();
 
   const handleOkClcik = () => {
     history.replace("/login");
-    dispatch(userActions.noShowPopup());
+    dispatch(homeActions.setLoginPopup(false));
   };
 
   const handleNoClcik = () => {
     history.replace("/");
+    dispatch(homeActions.setLoginPopup(false));
   };
 
   return (

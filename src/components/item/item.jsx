@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 
 import styled from "styled-components";
 import styles from "./item.module.css";
@@ -10,7 +10,7 @@ import { history } from "../../redux/configureStore";
 import { timeForToday, numberWithCommas } from "../../shared/functions";
 import { postAction, deleteAction } from "../../shared/axios";
 
-const Item = ({ item, id }) => {
+const Item = memo(({ item, id }) => {
   let color;
   let tradeType;
 
@@ -109,7 +109,7 @@ const Item = ({ item, id }) => {
               <UserImg
                 src={
                   item.itemOwner.imageUrl ||
-                  "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                  "https://goods-duck.com/sample_goodsduck.png"
                 }
               />
               <UserName>
@@ -126,7 +126,7 @@ const Item = ({ item, id }) => {
       </ItemBox>
     </>
   );
-};
+});
 
 const ItemBox = styled.div`
   position: relative;
@@ -188,6 +188,7 @@ const ItemImg = styled.div`
 
   background-image: url("${(props) => props.src}");
   background-size: cover;
+  background-position: center center;
 
   @media screen and (min-width: 415px) {
     width: 185px;

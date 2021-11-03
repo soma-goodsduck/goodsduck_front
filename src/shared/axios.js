@@ -2,6 +2,11 @@
 import axios from "axios";
 import * as Sentry from "@sentry/react";
 
+const REACT_APP_BACK_URL =
+  process.env.REACT_APP_TYPE === "DEV"
+    ? process.env.REACT_APP_BACK_URL_DEV
+    : process.env.REACT_APP_BACK_URL_PROD;
+
 const verifyJwt = () => {
   const jwt = localStorage.getItem("jwt");
 
@@ -24,6 +29,10 @@ const verifyError = (error) => {
   if (error !== null) {
     const statusCode = error.status;
 
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
+
     switch (statusCode) {
       // NotFoundDataException
       case -101:
@@ -37,6 +46,12 @@ const verifyError = (error) => {
       // InvalidStateException
       case -104:
         return -104;
+      // 유효성 검사 실패 : 회원가입 등에서 각 입력값의 포맷이 틀린경우 (핸드폰 번호, 이메일 형식 등)
+      case -105:
+        return -105;
+      // Too many requests
+      case -106:
+        return -106;
       // InvalidJwtException
       case -201:
         return -201;
@@ -69,7 +84,7 @@ const verifyError = (error) => {
 export const getItems = async (path, itemId) => {
   const jwt = verifyJwt();
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`;
+  const url = `${REACT_APP_BACK_URL}/api/v3/${path}?itemId=${itemId}`;
   const options = { headers: { jwt } };
 
   try {
@@ -81,6 +96,9 @@ export const getItems = async (path, itemId) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -90,7 +108,7 @@ export const getItems = async (path, itemId) => {
 export const getItemsByIdol = async (itemId, idolGroupId) => {
   const jwt = verifyJwt();
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/v3/items/filter?idolGroup=${idolGroupId}&itemId=${itemId}`;
+  const url = `${REACT_APP_BACK_URL}/api/v3/items/filter?idolGroup=${idolGroupId}&itemId=${itemId}`;
   const options = { headers: { jwt } };
 
   try {
@@ -102,6 +120,9 @@ export const getItemsByIdol = async (itemId, idolGroupId) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -111,7 +132,7 @@ export const getItemsByIdol = async (itemId, idolGroupId) => {
 export const getItemsByFilter = async (path) => {
   const jwt = verifyJwt();
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/v3/items/filters?${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/v3/items/filters?${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -123,6 +144,9 @@ export const getItemsByFilter = async (path) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -138,7 +162,7 @@ export const getItemsBySearch = async (
 ) => {
   const jwt = verifyJwt();
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}&complete=${complete}&order=${order}&price=${price}`;
+  const url = `${REACT_APP_BACK_URL}/api/v1/items/search?itemId=${itemId}&keyword=${keyword}&complete=${complete}&order=${order}&price=${price}`;
   const options = { headers: { jwt } };
 
   try {
@@ -150,6 +174,9 @@ export const getItemsBySearch = async (
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -157,7 +184,7 @@ export const getItemsBySearch = async (
 
 // 자체 로그인
 export const requestLogin = async (path, json) => {
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { "Content-Type": "application/json" } };
 
   try {
@@ -169,6 +196,9 @@ export const requestLogin = async (path, json) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -178,7 +208,7 @@ export const requestLogin = async (path, json) => {
 export const requestPublicData = async (path) => {
   const jwt = verifyJwt();
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -190,10 +220,11 @@ export const requestPublicData = async (path) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
-    // 삭제된 아이템 에러 수정될때까지
-    // return verifyError(error.response.data.error);
   }
 };
 
@@ -204,7 +235,7 @@ export const requestAuthData = async (path) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -217,6 +248,9 @@ export const requestAuthData = async (path) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -229,7 +263,7 @@ export const deleteAction = async (path) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -242,6 +276,9 @@ export const deleteAction = async (path) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -254,7 +291,7 @@ export const postAction = async (path, json) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt, "Content-Type": "application/json" } };
 
   try {
@@ -266,6 +303,9 @@ export const postAction = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -273,7 +313,7 @@ export const postAction = async (path, json) => {
 
 // post 요청 (비회원)
 export const postActionForNonUser = async (path, json) => {
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { "Content-Type": "application/json" } };
 
   try {
@@ -284,6 +324,9 @@ export const postActionForNonUser = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -296,7 +339,7 @@ export const postImgAction = async (path, file) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -309,6 +352,10 @@ export const postImgAction = async (path, file) => {
 
     return result.data.response;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
+    console.log(error.response);
     Sentry.captureException(error);
     return -999;
   }
@@ -321,7 +368,7 @@ export const putAction = async (path, data) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -334,6 +381,9 @@ export const putAction = async (path, data) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -346,7 +396,7 @@ export const putJsonAction = async (path, json) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt, "Content-Type": "application/json" } };
 
   try {
@@ -359,6 +409,9 @@ export const putJsonAction = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -371,7 +424,7 @@ export const patchAction = async (path) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt } };
 
   try {
@@ -384,6 +437,9 @@ export const patchAction = async (path) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -396,7 +452,7 @@ export const patchJsonAction = async (path, json) => {
     return -201;
   }
 
-  const url = `${process.env.REACT_APP_BACK_URL}/api/${path}`;
+  const url = `${REACT_APP_BACK_URL}/api/${path}`;
   const options = { headers: { jwt, "Content-Type": "application/json" } };
 
   try {
@@ -409,6 +465,9 @@ export const patchJsonAction = async (path, json) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }
@@ -424,7 +483,7 @@ export const sendTokenAction = async (token) => {
   const json = {
     body: token,
   };
-  const url = `${process.env.REACT_APP_BACK_URL}/api/v1/users/device`;
+  const url = `${REACT_APP_BACK_URL}/api/v1/users/device`;
   const options = {
     headers: {
       jwt,
@@ -443,6 +502,9 @@ export const sendTokenAction = async (token) => {
 
     return result.data;
   } catch (error) {
+    if (process.env.REACT_APP_TYPE === "DEV") {
+      console.log(error);
+    }
     Sentry.captureException(error);
     return -999;
   }

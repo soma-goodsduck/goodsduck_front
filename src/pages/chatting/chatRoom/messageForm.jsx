@@ -23,6 +23,7 @@ const MessageForm = ({ onOpenAttachment }) => {
 
   const [userId, setUserId] = useState("");
   const [userNick, setUserNick] = useState("");
+  const [patnerId, setPatnerId] = useState("");
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,20 +33,31 @@ const MessageForm = ({ onOpenAttachment }) => {
     readyToSendMessage: state.chat.readyToSendMessage,
   }));
   const messagesRef = firebaseDatabase.ref("messages");
+  const usersRef = firebaseDatabase.ref("users");
 
+  const reqUsersFromChat = async () => {
+    const result = await requestAuthData(`v1/chat/${chatRoomId}`);
+    return result;
+  };
   const reqUserId = async () => {
     const result = await requestAuthData("v1/users/look-up-id");
     return result;
   };
   const fnEffect = async () => {
     const getUserId = await reqUserId();
-    if (getUserId < 0) {
+    const getUsersFromChat = await reqUsersFromChat();
+    if (getUserId < 0 || getUsersFromChat < 0) {
       history.push("/error");
       return;
     }
 
     setUserId(getUserId.userId);
     setUserNick(getUserId.nickName);
+    if (getUsersFromChat.users[0].userId === getUserId.userId) {
+      setPatnerId(getUsersFromChat.users[1].userId);
+    } else {
+      setPatnerId(getUsersFromChat.users[0].userId);
+    }
   };
   useEffect(fnEffect, []);
 
@@ -108,10 +120,12 @@ const MessageForm = ({ onOpenAttachment }) => {
     try {
       const key = messagesRef.child(chatRoomId).push().key;
       await messagesRef.child(chatRoomId).child(key).update(createMessage());
+      await usersRef.child(patnerId).update({ hasNewChat: true });
 
       setErrors([]);
       setContent("");
       setLoading(false);
+      document.querySelector("#messageInput").focus();
 
       // LS에 채팅방에 방문한 시각 업데이트
       localStorage.setItem(
@@ -135,7 +149,9 @@ const MessageForm = ({ onOpenAttachment }) => {
         timestamp: firebase.database.ServerValue.TIMESTAMP,
       });
     } catch (error) {
-      console.error(error.message);
+      if (process.env.REACT_APP_TYPE === "DEV") {
+        console.log(error.message);
+      }
       setErrors((prev) => prev.concat(error.message));
       setLoading(false);
     }
@@ -169,7 +185,7 @@ const MessageForm = ({ onOpenAttachment }) => {
           <Flex is_flex justify="space-between" padding="20px">
             <Icon
               width="28px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
+              src="https://goods-duck.com/icon/icon_add.svg"
               _onClick={() => {
                 onOpenAttachment();
               }}
@@ -179,6 +195,7 @@ const MessageForm = ({ onOpenAttachment }) => {
               onKeyDown={handleKeyDown}
               value={content}
               onChange={handleChange}
+              id="messageInput"
             />
             <Button
               type="submit"
@@ -186,8 +203,8 @@ const MessageForm = ({ onOpenAttachment }) => {
               height="28px"
               src={
                 content
-                  ? "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send_ready.svg"
-                  : "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+                  ? "https://goods-duck.com/icon/icon_send_ready.svg"
+                  : "https://goods-duck.com/icon/icon_send.svg"
               }
               disabled={loading}
               _onClick={() => {
@@ -199,16 +216,13 @@ const MessageForm = ({ onOpenAttachment }) => {
       ) : (
         <MessageFormBox>
           <Flex is_flex justify="space-between" padding="20px">
-            <Icon
-              width="28px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_add.svg"
-            />
+            <Icon width="28px" src="https://goods-duck.com/icon/icon_add.svg" />
             <InputBoxNonUse value="채팅을 할 수 없습니다." readOnly />
             <Button
               type="submit"
               width="32px"
               height="28px"
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_send.svg"
+              src="https://goods-duck.com/icon/icon_send.svg"
             />
           </Flex>
         </MessageFormBox>

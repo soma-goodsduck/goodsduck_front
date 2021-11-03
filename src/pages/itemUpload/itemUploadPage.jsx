@@ -5,13 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex, LoginPopUp } from "../../elements";
+import { DoubleCheckModal2, Flex, LoginPopUp, Spinner } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 import ItemImgUpload from "../../components/itemImgUpload/itemImgUpload";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
-import { actionCreators as imgActions } from "../../redux/modules/image";
-import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
@@ -59,6 +57,9 @@ const ItemUpload = (props) => {
     images,
     fileList,
     itemId,
+    isLoading,
+    showImgBigPopup,
+    showManyItemsPopup,
   } = useSelector((state) => ({
     dataName: state.newItem.name,
     dataPrice: state.newItem.price,
@@ -72,6 +73,9 @@ const ItemUpload = (props) => {
     images: state.newItem.images,
     fileList: state.image.fileList,
     itemId: state.newItem.item_id,
+    isLoading: state.newItem.loading,
+    showImgBigPopup: state.newItem.showImgBigPopup,
+    showManyItemsPopup: state.newItem.showManyItemsPopup,
   }));
 
   const item = {
@@ -135,23 +139,36 @@ const ItemUpload = (props) => {
     // 굿즈 등록 또는 업데이트
     if (itemId !== 0) {
       dispatch(newItemActions.updateItemAction(item, itemId, fileList));
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
     } else {
       dispatch(newItemActions.addItemAction(item, fileList));
-      dispatch(userActions.setShowNotification(true));
-      dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
     }
-
-    // 저장된 상태값 모두 삭제
-    dispatch(newItemActions.clearAction());
-    dispatch(imgActions.clearImgAction());
   };
 
   return (
     <>
+      {isLoading && <Spinner />}
       {showPopup && <LoginPopUp />}
-      {!showPopup && (
+      {showImgBigPopup && (
+        <DoubleCheckModal2
+          text="이미지가 너무 커서 등록할 수 없습니다 :("
+          height="80px"
+          onOkClick={() => {
+            dispatch(newItemActions.setShowImgBigPopup(false));
+            history.replace("/");
+          }}
+        />
+      )}
+      {showManyItemsPopup && (
+        <DoubleCheckModal2
+          text="단시간 내 너무 많은 글을 작성했습니다."
+          text2="잠시 후 시도해주세요 :("
+          onOkClick={() => {
+            dispatch(newItemActions.setShowManyItemsPopup(false));
+            history.replace("/");
+          }}
+        />
+      )}
+      {!isLoading && (
         <div>
           <HeaderInfo text="굿즈 등록" isClear />
           <ItemUploadBox>
@@ -201,6 +218,7 @@ const ItemUpload = (props) => {
                 <div
                   className={styles.selectBtn}
                   onClick={() => {
+                    dispatch(newItemActions.clearSelectIdol());
                     history.replace("/select-idol");
                   }}
                 >

@@ -14,7 +14,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/soma-goodsduck/goodsduck_front">
-    <img src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/logo.svg" alt="Logo" width="400" height="80">
+    <img src="https://goods-duck.com/icon/logo.svg" alt="Logo" width="400" height="80">
   </a>
 
   <p align="center">
@@ -51,7 +51,7 @@
 
 ## About The Project
 
-<img src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/goodsduck_readme.png" alt="Logo" width="800" height="400">
+<img src="https://goods-duck.com/image/goodsduck_readme.png" alt="Logo" width="800" height="400">
 
 최근 국내에는 중고거래 시장이 활성화 되었으며, 좋은 서비스를 제공하는 플랫폼들이 다수 존재합니다. 하지만, 아이돌을 덕질을 하는 팬(덕후)들을 위한 거래 플랫폼은 많지 않습니다. 이에 저희 덕스(Ducks) 팀은 덕후들을 만족시키기 위한 플랫폼을 기획하였습니다.
 

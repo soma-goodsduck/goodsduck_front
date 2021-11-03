@@ -2,15 +2,22 @@
 import React from "react";
 
 import styled from "styled-components";
+import { blackBtn } from "../shared/colors";
 
 const PopUp3 = (props) => {
-  const { text, _onClick1, _onClick2 } = props;
+  const { text, _onClick1, _onClick2, comment } = props;
+
+  const styles = { comment };
 
   return (
-    <PopUpBox>
+    <PopUpBox {...styles}>
       <BtnBox>
-        <Button onClick={_onClick1}>{text}</Button>
-        <ExitBtn onClick={_onClick2}>닫기</ExitBtn>
+        <Button onClick={_onClick1} {...styles}>
+          {text}
+        </Button>
+        <ExitBtn onClick={_onClick2} {...styles}>
+          닫기
+        </ExitBtn>
       </BtnBox>
     </PopUpBox>
   );
@@ -35,6 +42,8 @@ const PopUpBox = styled.div`
   @media screen and (min-width: 415px) {
     width: 415px;
   }
+
+  ${(props) => (props.comment ? "background-color: rgba(0, 0, 0, 0);" : "")}
 `;
 
 const BtnBox = styled.div`
@@ -52,18 +61,23 @@ const Button = styled.button`
   border-radius: 10px;
   margin-bottom: 10px;
   color: #e33e3e;
-  &:hover {
-    font-weight: bold;
-  }
+
+  ${(props) =>
+    props.comment
+      ? "background-color: #222222; color: #ffe200; font-weight:bold;"
+      : ""}
 `;
 
 const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
+
+  ${(props) =>
+    props.comment
+      ? "background-color: #222222; color: #ffffff; font-weight:bold;"
+      : ""}
 `;
 
 export default PopUp3;

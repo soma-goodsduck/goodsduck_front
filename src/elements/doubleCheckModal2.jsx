@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { blackBtn, white } from "../shared/colors";
 
 const DoubleCheckModal2 = (props) => {
-  const { text, onOkClick, height } = props;
+  const { text, text2, onOkClick, height } = props;
 
   const styles = {
     height,
@@ -19,6 +19,7 @@ const DoubleCheckModal2 = (props) => {
       <ModalBox>
         <Info {...styles}>
           <Text>{text}</Text>
+          <Text>{text2}</Text>
         </Info>
         <OKBtn
           onClick={() => {
@@ -34,6 +35,7 @@ const DoubleCheckModal2 = (props) => {
 
 DoubleCheckModal2.defaultProps = {
   height: "100px",
+  text2: "",
 };
 
 const Screen = styled.div`

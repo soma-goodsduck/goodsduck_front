@@ -4,6 +4,7 @@ import { Icon, Text, Flex } from "../../elements";
 import { grayBorder, grayText } from "../../shared/colors";
 
 const Notice = ({ notice, date }) => {
+  const screen = window.screen.width;
   const [iconUrl, setIconUrl] = useState("noticeDown");
   const [isOpen, setIsOpen] = useState(false);
   const [descHeight, setDescHegiht] = useState(0);
@@ -57,14 +58,20 @@ const Notice = ({ notice, date }) => {
           </Flex>
           <Icon
             width="18px"
-            src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_${iconUrl}.svg`}
+            src={`https://goods-duck.com/icon/icon_${iconUrl}.svg`}
           />
         </NoticeTitle>
-        {isOpen && (
+        {isOpen && !notice.content.includes("goodsduck-s3") && (
           <NoticeBody
             value={notice.content}
             readOnly
-            style={{ height: `${30 + descHeight * 25}px` }}
+            style={{ height: `${30 + descHeight * 15}px` }}
+          />
+        )}
+        {isOpen && notice.content.includes("goodsduck-s3") && (
+          <NoticeImgBody
+            src={notice.content}
+            width={screen > 415 ? "415px" : "100vw"}
           />
         )}
       </NoticeBox>
@@ -92,6 +99,11 @@ const NoticeBody = styled.textarea`
   line-height: 1.5;
   padding: 0 15px;
   background-color: #ffffff;
+`;
+
+const NoticeImgBody = styled.img`
+  width: ${(props) => props.width};
+  src: ${(props) => props.src};
 `;
 
 export default Notice;

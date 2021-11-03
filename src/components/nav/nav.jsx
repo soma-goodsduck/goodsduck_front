@@ -1,36 +1,125 @@
 /* eslint-disable indent */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
+import { useDispatch } from "react-redux";
+import mixpanel from "mixpanel-browser";
 
 import styles from "./nav.module.css";
 import { Flex } from "../../elements";
 
+import { actionCreators as homeActions } from "../../redux/modules/home";
+import { actionCreators as communityActions } from "../../redux/modules/community";
+import { firebaseDatabase } from "../../shared/firebase";
+import { requestAuthData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const Nav = (props) => {
-  const href = window.location.href;
+const Nav = memo((props) => {
+  const option = process.env.REACT_APP_TYPE === "DEV" && {
+    debug: true,
+  };
+  mixpanel.init(process.env.REACT_APP_MIXPANEL, option);
 
+  const dispatch = useDispatch();
+
+  const href = window.location.href;
   const [isHome, setIsHome] = useState(false);
   const [isChat, setIsChat] = useState(false);
   const [isCommunity, setIsCommunity] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
   const [hasNewChat, setHasNewChat] = useState(false);
+  const [userId, setUserId] = useState(0);
 
   useEffect(() => {
     if (href.includes("/chatting")) {
       setIsChat(true);
-    } else if (href.includes("/community")) {
+    } else if (href.includes("/community") || href.includes("/vote")) {
       setIsCommunity(true);
     } else if (href.includes("/my-profile")) {
       setIsProfile(true);
     } else {
       setIsHome(true);
     }
+  }, []);
 
-    const newChat = localStorage.getItem("hasNewChat");
-    if (newChat) {
-      setHasNewChat(newChat);
+  const reqUserId = async () => {
+    const result = await requestAuthData("v1/users/look-up-id");
+    return result;
+  };
+  const fnEffect = async () => {
+    const getUserId = await reqUserId();
+    if (getUserId < 0) {
+      if (getUserId === -201) {
+        return;
+      }
+      history.push("/error");
+      return;
     }
-  });
+    setUserId(getUserId.userId);
+
+    const usersRef = firebaseDatabase.ref(`users/${getUserId.userId}`);
+    usersRef.on("value", (snapshot) => {
+      setHasNewChat(snapshot.val().hasNewChat);
+    });
+
+    if (href.includes("/chatting")) {
+      usersRef.update({ hasNewChat: false });
+    }
+  };
+  useEffect(() => {
+    fnEffect();
+
+    const usersRef = firebaseDatabase.ref(`users/${userId}`);
+    return () => usersRef.off();
+  }, []);
+
+  const reqUserData = async () => {
+    const result = await requestAuthData("v1/users/look-up");
+    return result;
+  };
+  const clickIcon = async (type) => {
+    const getUserData = await reqUserData();
+    if (getUserData < 0) {
+      if (getUserData === -201) {
+        dispatch(homeActions.setLoginPopup(true));
+        return;
+      }
+      history.push("/error");
+      return;
+    }
+
+    // 커뮤니티 메뉴 기본값 설정
+    dispatch(communityActions.setCommunityMenu("home"));
+    window.dataLayer = window.dataLayer || [];
+
+    switch (type) {
+      case "home":
+        history.push("/");
+        window.dataLayer.push({ type: "home" });
+        mixpanel.track("click Home");
+        break;
+      case "chatting":
+        history.push("/chatting");
+        window.dataLayer.push({ type: "chatting" });
+        mixpanel.track("click Chatting");
+        break;
+      case "upload-item":
+        history.push("/upload-item");
+        window.dataLayer.push({ type: "upload-item" });
+        mixpanel.track("click Upload-item");
+        break;
+      case "community":
+        history.push("/community");
+        window.dataLayer.push({ type: "community" });
+        mixpanel.track("click Community");
+        break;
+      case "my-profile":
+        history.push("/my-profile");
+        window.dataLayer.push({ type: "my-profile" });
+        mixpanel.track("click My-profile");
+        break;
+      default:
+        history.push("/");
+    }
+  };
 
   return (
     <div className={styles.nav}>
@@ -39,7 +128,7 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/");
+            clickIcon("home");
           }}
         >
           <div className={isHome ? styles.isHomeIcon : styles.isNotHomeIcon} />
@@ -51,14 +140,10 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/chatting");
+            clickIcon("chatting");
           }}
         >
-          <div
-            className={
-              hasNewChat === "true" ? styles.chatBadge : styles.chatBadgeZero
-            }
-          >
+          <div className={hasNewChat ? styles.chatBadge : styles.chatBadgeZero}>
             N
           </div>
           <div className={isChat ? styles.isChatIcon : styles.isNotChatIcon} />
@@ -70,17 +155,17 @@ const Nav = (props) => {
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/upload-item");
+            clickIcon("upload-item");
           }}
         >
           <div className={styles.isNotNewIcon} />
           <span className={styles.isNotNewText}>등록</span>
         </button>
-        {/* <button
+        <button
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/community");
+            clickIcon("community");
           }}
         >
           <div
@@ -93,14 +178,14 @@ const Nav = (props) => {
               isCommunity ? styles.isCommunityText : styles.isNotCommunityText
             }
           >
-            커뮤니티
+            커뮤/투표
           </span>
-        </button> */}
+        </button>
         <button
           type="button"
           className={styles.iconBtn}
           onClick={() => {
-            history.push("/my-profile");
+            clickIcon("my-profile");
           }}
         >
           <div
@@ -119,6 +204,6 @@ const Nav = (props) => {
       </Flex>
     </div>
   );
-};
+});
 
 export default Nav;

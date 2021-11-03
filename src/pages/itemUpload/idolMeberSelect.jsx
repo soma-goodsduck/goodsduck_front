@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./itemUpload.module.css";
-import { Flex } from "../../elements";
+import { Flex, Spinner } from "../../elements";
 import HeaderInfo from "../../components/haeder/headerInfo";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
@@ -15,6 +15,7 @@ import { requestPublicData } from "../../shared/axios";
 const IdolMemberSelect = ({ history }) => {
   const dispatch = useDispatch();
   const idolValue = useSelector((state) => state.newItem.idol_member_id);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 아이돌 멤버 데이터 가져오기
   const groupId = useSelector((state) => state.newItem.idol_group_id);
@@ -27,7 +28,12 @@ const IdolMemberSelect = ({ history }) => {
     return result;
   };
   const fnEffect = async () => {
+    if (groupId === null) {
+      history.push("/upload-item");
+      return;
+    }
     const getIdolMember = await reqIdolMemeber();
+    setIsLoading(false);
     if (getIdolMember < 0) {
       history.push("/error");
       return;
@@ -51,38 +57,41 @@ const IdolMemberSelect = ({ history }) => {
 
   return (
     <>
-      <HeaderInfo text="아이돌 그룹" padding="0 16px" isUploading />
-      <IdolContainer>
-        <div>
-          <Flex is_flex is_wrap>
-            {members.map((member) => (
-              <IdolMemberBox key={member.id}>
-                <IdolMemberInput
-                  id={member.id}
-                  type="radio"
-                  checked={idolValue === member.id}
-                  onChange={() => checkMemberHandler(member.id, member.name)}
-                />
-                <label
-                  htmlFor={member.id}
-                  className={
-                    memberId === member.id
-                      ? styles.clickIdolGroupBtn
-                      : styles.idolGroupBtn
-                  }
-                >
-                  <img
-                    className={styles.idolGroupImg}
-                    src={member.imageUrl}
-                    alt="Idol Member"
+      {isLoading && <Spinner />}
+      {!isLoading && (
+        <>
+          <HeaderInfo text="아이돌 그룹" padding="0 16px" isUploading />
+          <IdolContainer>
+            <Flex is_flex is_wrap>
+              {members.map((member) => (
+                <IdolMemberBox key={member.id}>
+                  <IdolMemberInput
+                    id={member.id}
+                    type="radio"
+                    checked={idolValue === member.id}
+                    onChange={() => checkMemberHandler(member.id, member.name)}
                   />
-                  {member.name}
-                </label>
-              </IdolMemberBox>
-            ))}
-          </Flex>
-        </div>
-      </IdolContainer>
+                  <label
+                    htmlFor={member.id}
+                    className={
+                      memberId === member.id
+                        ? styles.clickIdolGroupBtn
+                        : styles.idolGroupBtn
+                    }
+                  >
+                    <img
+                      className={styles.idolGroupImg}
+                      src={member.imageUrl}
+                      alt="Idol Member"
+                    />
+                    {member.name}
+                  </label>
+                </IdolMemberBox>
+              ))}
+            </Flex>
+          </IdolContainer>
+        </>
+      )}
     </>
   );
 };
@@ -104,10 +113,6 @@ const IdolMemberBox = styled.div`
 `;
 const IdolMemberInput = styled.input`
   display: none;
-`;
-const ButtonBox = styled.div`
-  width: 100%;
-  padding: 0 16px;
 `;
 
 export default IdolMemberSelect;

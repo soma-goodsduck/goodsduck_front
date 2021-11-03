@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import Header from "../../components/haeder/header";
 import ItemList from "../../components/itemList/itemList";
-import { Grid, Notification } from "../../elements";
+import { Grid, LoginPopUp } from "../../elements";
 import Nav from "../../components/nav/nav";
 
 import { requestPublicData } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
 const Home = (props) => {
-  const isApp = localStorage.getItem("isApp");
   const likeIdolGroupsLS = localStorage.getItem("likeIdolGroups");
+  const showPopup = useSelector((state) => state.home.showLoginPopup);
 
   const reqUserData = async () => {
     const result = await requestPublicData("v1/users/look-up");
@@ -42,10 +43,11 @@ const Home = (props) => {
 
   return (
     <>
+      {showPopup && <LoginPopUp />}
       <Grid>
         <Header />
         <ItemList />
-        {!isApp && <Nav />}
+        <Nav />
       </Grid>
     </>
   );

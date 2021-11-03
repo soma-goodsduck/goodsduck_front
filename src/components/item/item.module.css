@@ -22,7 +22,7 @@
   z-index: 2;
   width: 28px;
   height: 28px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart.svg");
+  background-image: url("https://goods-duck.com/icon/icon_heart.svg");
   background-size: cover;
   cursor: pointer;
 }
@@ -31,7 +31,7 @@
   z-index: 2;
   width: 30px;
   height: 30px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
+  background-image: url("https://goods-duck.com/icon/icon_heart_click.svg");
   background-size: cover;
   cursor: pointer;
 }

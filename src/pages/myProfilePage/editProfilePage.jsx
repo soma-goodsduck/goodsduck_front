@@ -24,11 +24,10 @@ const EditProfilePage = (props) => {
   const nickRef = useRef();
   const [nick, setNick] = useState("");
   const [isUsedNick, setIsUsedNick] = useState(false);
+  const [isNickOk, setIsNickOk] = useState(true); // nick 글자수 체크
   const [canUpdateNick, setCanUpdateNick] = useState(true);
   const [isNickUpdated, setIsNickUpdated] = useState(false);
-  const [img, setImg] = useState(
-    "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png",
-  );
+  const [img, setImg] = useState("https://goods-duck.com/sample_goodsduck.png");
   const [imgFile, setImgFile] = useState();
   const idols = useSelector((state) => state.user.favIdolGroups);
   const [nextOK, setNextOK] = useState(false);
@@ -60,12 +59,12 @@ const EditProfilePage = (props) => {
   useEffect(fnEffect, []);
 
   useEffect(() => {
-    if (nick !== "" && !isUsedNick && canUpdateNick) {
+    if (nick !== "" && isNickOk && !isUsedNick && canUpdateNick) {
       setNextOK(true);
     } else {
       setNextOK(false);
     }
-  }, [nick, isUsedNick, canUpdateNick]);
+  }, [nick, isNickOk, isUsedNick, canUpdateNick]);
 
   const updateImg = (e) => {
     const reader = new FileReader();
@@ -88,6 +87,12 @@ const EditProfilePage = (props) => {
     return result;
   };
   const nickCheckPost = _.debounce(async (_nick) => {
+    if (_nick.split("").length > 20) {
+      setIsNickOk(false);
+    } else {
+      setIsNickOk(true);
+    }
+
     const _nickCheckPost = await reqNickCheckPost(_nick);
 
     if (_nickCheckPost < 0) {
@@ -239,6 +244,11 @@ const EditProfilePage = (props) => {
                   한 달 이내에 닉네임을 변경한 적이 있습니다.
                 </Text>
               )}
+              {nick !== "" && !isNickOk && (
+                <Text color={red} bold height="3">
+                  닉네임은 최대 20자까지만 가능합니다.
+                </Text>
+              )}
             </NicknameBox>
             <IdolBox>
               <LabelText>좋아하는 아이돌</LabelText>
@@ -265,7 +275,6 @@ const EditProfilePage = (props) => {
 };
 
 const MyProfileBox = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -288,7 +297,7 @@ const CameraBtn = styled.div`
   z-index: 3;
   width: 45px;
   height: 45px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_camera2.svg");
+  background-image: url("https://goods-duck.com/icon/icon_camera2.svg");
   background-size: cover;
 `;
 
@@ -315,7 +324,7 @@ const InputBox = styled.input`
 `;
 
 const IdolBox = styled.div`
-  margin-top: 40px;
+  margin: 40px 0;
 `;
 
 export default EditProfilePage;

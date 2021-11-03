@@ -76,14 +76,14 @@ const KeywordSearch = (props) => {
               <Icon
                 width="16px"
                 margin="0 7px 0 0"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_uncheckbox.svg"
+                src="https://goods-duck.com/icon/icon_uncheckbox.svg"
               />
             )}
             {!showCompletedItem && (
               <Icon
                 width="16px"
                 margin="0 7px 0 0"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_checkbox.svg"
+                src="https://goods-duck.com/icon/icon_checkbox.svg"
               />
             )}
             <CompletedItemBtn>거래완료 안보기</CompletedItemBtn>
@@ -118,7 +118,7 @@ const Filtering = styled.div`
 const Dropdown = styled.div`
   width: 17px;
   height: 10px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_dropmenu.svg");
+  background-image: url("https://goods-duck.com/icon/icon_dropmenu.svg");
   background-size: cover;
   object-fit: cover;
   margin-right: 5px;

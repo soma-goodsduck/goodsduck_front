@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import { Flex, Icon } from "../../elements";
 import { actionCreators as homeActions } from "../../redux/modules/home";
 import { history } from "../../redux/configureStore";
 
-const HeaderKeyword = ({ keyword }) => {
+const HeaderKeyword = memo(({ keyword }) => {
   const dispatch = useDispatch();
 
   const inputRef = useRef();
@@ -38,7 +38,7 @@ const HeaderKeyword = ({ keyword }) => {
         <HeaderBox>
           <Icon
             width="12px"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
+            src="https://goods-duck.com/icon/icon_back_b.svg"
             _onClick={() => {
               dispatch(homeActions.clearSearchFilter());
               history.push("/");
@@ -57,7 +57,7 @@ const HeaderKeyword = ({ keyword }) => {
           </form>
           <Flex>
             <Icon
-              src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_search.svg"
+              src="https://goods-duck.com/icon/icon_search.svg"
               alt="search"
               _onClick={(event) => {
                 onSubmit(event);
@@ -68,7 +68,7 @@ const HeaderKeyword = ({ keyword }) => {
       </div>
     </>
   );
-};
+});
 
 const HeaderBox = styled.div`
   background-color: #ffffff;

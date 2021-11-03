@@ -6,7 +6,6 @@ importScripts("https://www.gstatic.com/firebasejs/8.7.1/firebase-messaging.js");
 firebase.initializeApp({
   apiKey: "AIzaSyAtd44sxSNaCXW6slx20XE8aTVGm2eTrq0",
   authDomain: "goodsduck-chat-5659e.firebaseapp.com",
-  databaseURL: "https://goodsduck-chat-5659e-default-rtdb.firebaseio.com",
   projectId: "goodsduck-chat-5659e",
   storageBucket: "goodsduck-chat-5659e.appspot.com",
   messagingSenderId: "303740582336",

@@ -7,12 +7,14 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 import ChattingRow from "./chattingRow";
-import { Text, LoginPopUp } from "../../elements";
+import { Text, LoginPopUp, Spinner } from "../../elements";
 import Nav from "../../components/nav/nav";
 
 import { requestPublicData, requestAuthData } from "../../shared/axios";
 import { firebaseDatabase } from "../../shared/firebase";
 import { history } from "../../redux/configureStore";
+import WelcomeChatting from "./welcomeChatting";
+import { grayBorder } from "../../shared/colors";
 
 export class Chatting extends Component {
   state = {
@@ -21,6 +23,7 @@ export class Chatting extends Component {
     itemList: [], // from DB
     userId: "",
     showPopup: false,
+    isLoading: true,
   };
 
   componentDidMount() {
@@ -38,6 +41,9 @@ export class Chatting extends Component {
       }
 
       this.setState({ userId: result.userId });
+
+      const usersRef = firebaseDatabase.ref("users");
+      usersRef.child(result.userId).update({ hasNewChat: false });
     });
 
     const getChatroomList = requestAuthData("v2/users/chat-rooms");
@@ -57,6 +63,8 @@ export class Chatting extends Component {
 
     const getMyItemList = requestAuthData("v1/users/items/not-complete");
     getMyItemList.then((result) => {
+      this.setState({ isLoading: false });
+
       if (result < 0) {
         if (result === -201) {
           this.setState({ showPopup: true });
@@ -86,13 +94,15 @@ export class Chatting extends Component {
         `chatRooms/${chatRoom.itemSimpleDto.itemId}/${chatRoom.chatId}`,
       );
       chatRef.get().then((snapshot) => {
-        chatRoomsArray.push(snapshot.val());
+        if (snapshot.val()) {
+          chatRoomsArray.push(snapshot.val());
 
-        const sortChatRoomsArray = chatRoomsArray.sort((a, b) => {
-          return new Date(b.timestamp) - new Date(a.timestamp);
-        });
+          const sortChatRoomsArray = chatRoomsArray.sort((a, b) => {
+            return new Date(b.timestamp) - new Date(a.timestamp);
+          });
 
-        this.setState({ chatRooms: sortChatRoomsArray });
+          this.setState({ chatRooms: sortChatRoomsArray });
+        }
       });
     });
 
@@ -115,10 +125,10 @@ export class Chatting extends Component {
     const existChatRooms = [];
     this.state.chatRooms.forEach((chatRoom) => {
       if (
-        (chatRoom.createdBy.id === this.state.userId &&
-          chatRoom.createdBy.isPresented === true) ||
-        (chatRoom.createdWith.id === this.state.userId &&
-          chatRoom.createdWith.isPresented === true)
+        (chatRoom?.createdBy.id === this.state.userId &&
+          chatRoom?.createdBy.isPresented === true) ||
+        (chatRoom?.createdWith.id === this.state.userId &&
+          chatRoom?.createdWith.isPresented === true)
       ) {
         existChatRooms.push(chatRoom);
       }
@@ -138,26 +148,23 @@ export class Chatting extends Component {
   };
 
   render() {
-    const { userId, chatRooms, showPopup } = this.state;
+    const { chatRooms, showPopup, isLoading } = this.state;
 
     return (
       <>
         {showPopup && <LoginPopUp />}
-        {!showPopup && (
-          <ChattingBox>
-            <Header>
-              <Text bold size="18px">
-                채팅
-              </Text>
-            </Header>
-            {chatRooms !== [] && (
-              <div style={{ marginBottom: "80px" }}>
-                {this.renderChatRooms()}
-              </div>
-            )}
-            <Nav />
-          </ChattingBox>
-        )}
+        <ChattingBox>
+          <Header>
+            <Text bold size="18px">
+              채팅
+            </Text>
+          </Header>
+          {isLoading && <Spinner />}
+          {chatRooms !== [] && <div>{this.renderChatRooms()}</div>}
+          <WelcomeChatting />
+          <Line />
+          <Nav />
+        </ChattingBox>
       </>
     );
   }
@@ -171,6 +178,13 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
+`;
+
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${grayBorder};
+  margin-bottom: 80px;
 `;
 
 export default Chatting;

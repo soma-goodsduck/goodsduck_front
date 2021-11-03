@@ -168,7 +168,7 @@ const Filtering = styled.div`
 const Dropdown = styled.div`
   width: 17px;
   height: 10px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_dropmenu.svg");
+  background-image: url("https://goods-duck.com/icon/icon_dropmenu.svg");
   background-size: cover;
   object-fit: cover;
   margin-left: 5px;

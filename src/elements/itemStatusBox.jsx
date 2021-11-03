@@ -65,7 +65,7 @@ const GoodsduckIcon = styled.div`
   width: 24px;
   height: 24px;
 
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png");
+  background-image: url("https://goods-duck.com/icon/goodsduck.png");
   background-size: cover;
 
   @media screen and (min-width: 415px) {

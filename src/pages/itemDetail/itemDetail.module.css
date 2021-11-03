@@ -107,7 +107,7 @@
   z-index: 2;
   width: 40px;
   height: 40px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_previous.png");
+  background-image: url("https://goods-duck.com/icon/icon_previous.png");
   background-size: cover;
   cursor: pointer;
 }
@@ -118,7 +118,7 @@
   z-index: 2;
   width: 40px;
   height: 40px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_next.png");
+  background-image: url("https://goods-duck.com/icon/icon_next.png");
   background-size: cover;
   cursor: pointer;
 }
@@ -127,7 +127,7 @@
   z-index: 2;
   width: 16px;
   height: 28px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_w.svg");
+  background-image: url("https://goods-duck.com/icon/icon_back_w.svg");
   background-size: cover;
   cursor: pointer;
 }
@@ -135,7 +135,18 @@
   z-index: 2;
   width: 16px;
   height: 28px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg");
+  background-image: url("https://goods-duck.com/icon/icon_back_b.svg");
+  background-size: cover;
+  cursor: pointer;
+}
+
+.shareBtnBlack {
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  margin: 0 10px;
+
+  background-image: url("https://goods-duck.com/icon/icon_share_black.png");
   background-size: cover;
   cursor: pointer;
 }
@@ -144,8 +155,8 @@
   z-index: 2;
   width: 15px;
   height: 30px;
-  margin-left: 10px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg");
+  margin-left: 5px;
+  background-image: url("https://goods-duck.com/icon/icon_hamburger.svg");
   background-size: cover;
   cursor: pointer;
 }
@@ -155,7 +166,7 @@
   z-index: 2;
   width: 32px;
   height: 32px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart.svg");
+  background-image: url("https://goods-duck.com/icon/icon_heart.svg");
   background-size: cover;
   cursor: pointer;
 }
@@ -164,13 +175,13 @@
   z-index: 2;
   width: 32px;
   height: 32px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_heart_click.svg");
+  background-image: url("https://goods-duck.com/icon/icon_heart_click.svg");
   background-size: cover;
   cursor: pointer;
 }
 
 .filteringBtn {
-  font-size: 14px;
+  font-size: 12px;
   height: 100%;
   padding: 5px 10px;
   color: var(--grayBtnText);
@@ -178,7 +189,6 @@
   border: 1px solid var(--blackBtn);
   border-radius: 15px;
   margin-right: 5px;
-  margin-bottom: 10px;
 }
 
 /* 워터마크 */
@@ -188,10 +198,12 @@
 .watermark {
   position: absolute;
   top: 93vw;
-  left: 10px;
+  left: 5px;
   z-index: 2;
   color: gray;
   opacity: 0.5;
+  font-weight: 500;
+  letter-spacing: -1px;
 }
 
 @media screen and (min-width: 415px) {

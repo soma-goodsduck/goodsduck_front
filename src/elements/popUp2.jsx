@@ -1,12 +1,13 @@
 /* eslint-disable import/no-cycle */
 import React from "react";
-
 import styled from "styled-components";
+import { blackBtn } from "../shared/colors";
 
 const PopUp2 = (props) => {
-  const { text1, text2, _onClick1, _onClick2, _onClick3, isRed } = props;
+  const { text1, text2, _onClick1, _onClick2, _onClick3, isRed, comment } =
+    props;
 
-  const styles = { isRed };
+  const styles = { isRed, comment };
 
   return (
     <PopUpBox {...styles}>
@@ -19,7 +20,9 @@ const PopUp2 = (props) => {
             {text2}
           </Button2>
         </Btns>
-        <ExitBtn onClick={_onClick3}>닫기</ExitBtn>
+        <ExitBtn {...styles} onClick={_onClick3}>
+          닫기
+        </ExitBtn>
       </BtnBox>
     </PopUpBox>
   );
@@ -37,7 +40,7 @@ const PopUpBox = styled.div`
   display: flex;
   justify-content: center;
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   width: 100%;
   height: 150%;
   background-color: rgba(0, 0, 0, 0.3);
@@ -46,6 +49,7 @@ const PopUpBox = styled.div`
   @media screen and (min-width: 415px) {
     width: 415px;
   }
+  ${(props) => (props.comment ? "background-color: rgba(0, 0, 0, 0);" : "")}
 `;
 
 const BtnBox = styled.div`
@@ -68,28 +72,32 @@ const Btns = styled.div`
 const Button1 = styled.button`
   padding: 15px;
   border-bottom: 1px solid #dddddd;
-  &:hover {
-    font-weight: bold;
-  }
+  border-radius: 10px 10px 0 0;
+  color: ${blackBtn};
+
+  ${(props) =>
+    props.comment ? "background-color: #222222; color: #ffffff; " : ""}
 `;
 
 const Button2 = styled.button`
   padding: 15px;
-  ${(props) => (props.isRed ? "color: #e33e3e;" : "")};
+  border-radius: 0 0 10px 10px;
+  ${(props) => (props.isRed ? "color: #e33e3e;" : "color: #222222;")};
 
-  &:hover {
-    color: #e33e3e;
-    font-weight: bold;
-  }
+  ${(props) =>
+    props.comment ? "background-color: #222222; color: #ffffff; " : ""}
 `;
 
 const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
+
+  ${(props) =>
+    props.comment
+      ? "background-color: #222222; color: #ffffff; font-weight:bold;"
+      : ""}
 `;
 
 export default PopUp2;

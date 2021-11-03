@@ -1,10 +1,14 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 /* eslint-disable camelcase */
 
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import axios from "axios";
+import { postImgAction, putAction } from "../../shared/axios";
+import { actionCreators as userActions } from "./user";
+import { actionCreators as imgActions } from "./image";
+import { actionCreators as voteActions } from "./vote";
 
 // actions
 const SET_ITEM = "SET_ITEM";
@@ -20,6 +24,10 @@ const SET_FILES = "SET_FILES";
 const SET_IMAGES = "SET_IMAGES";
 const DELETE_IMAGE = "DELETE_IMAGE";
 const CLEAR = "CLEAR";
+const CLEAR_SELECT_IDOL = "CLEAR_SELECT_IDOL";
+const SET_LOADING = "SET_LOADING";
+const SET_SHOW_IMG_BIG_POPUP = "SET_SHOW_IMG_BIG_POPUP";
+const SET_SHOW_MANY_ITEMS_POPUP = "SET_SHOW_MANY_ITEMS_POPUP";
 
 // action creators
 const setItem = createAction(SET_ITEM, (item) => ({ item }));
@@ -51,6 +59,16 @@ const setFiles = createAction(SET_FILES, (files) => ({ files }));
 const setImages = createAction(SET_IMAGES, (images) => ({ images }));
 const deleteImage = createAction(DELETE_IMAGE, (image) => ({ image }));
 const clear = createAction(CLEAR, () => ({}));
+const clearSelectIdol = createAction(CLEAR_SELECT_IDOL, () => ({}));
+const setLoading = createAction(SET_LOADING, (loading) => ({ loading }));
+const setShowImgBigPopup = createAction(
+  SET_SHOW_IMG_BIG_POPUP,
+  (showImgBigPopup) => ({ showImgBigPopup }),
+);
+const setShowManyItemsPopup = createAction(
+  SET_SHOW_MANY_ITEMS_POPUP,
+  (showManyItemsPopup) => ({ showManyItemsPopup }),
+);
 
 // initialState
 const initialState = {
@@ -68,6 +86,9 @@ const initialState = {
   idol_group_name: "",
   idol_member_name: "",
   category: "",
+  loading: false,
+  showImgBigPopup: false,
+  showManyItemsPopup: false,
 };
 
 // middleware actions
@@ -75,10 +96,23 @@ const initialState = {
 // 아이템 정보를 백으로 전송
 const addItemAction = (item, fileList) => {
   return async function (dispatch, getState, { history }) {
+    dispatch(setLoading(true));
+
+    let filesSize = 0;
     const formData = new FormData();
     fileList.forEach((file) => {
+      filesSize += file.size;
       formData.append("multipartFiles", file);
     });
+
+    if (filesSize > 10000000) {
+      dispatch(setShowImgBigPopup(true));
+      dispatch(setLoading(false));
+      dispatch(clear());
+      dispatch(imgActions.clearImgAction());
+      return;
+    }
+
     const itemDto = {
       name: item.dataName,
       price: item.dataPrice,
@@ -90,26 +124,29 @@ const addItemAction = (item, fileList) => {
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
-    const uploadItem = await axios.post(
-      `${process.env.REACT_APP_BACK_URL}/api/v1/items`,
-      formData,
-      {
-        headers: { jwt: `${item.userJwt}` },
-      },
-    );
+    const uploadItem = await postImgAction("v1/items", formData);
+
+    dispatch(setLoading(false));
+    dispatch(clear());
+    dispatch(imgActions.clearImgAction());
 
     if (uploadItem < 0) {
+      // 단시간내에 글 많이 작성하면 -106
+      if (uploadItem === -106) {
+        dispatch(setShowManyItemsPopup(true));
+        return;
+      }
       history.push("/error");
       return;
     }
 
-    if (uploadItem.data.response !== -1) {
-      console.log("굿즈 등록 완료");
-      history.replace(`/item/${uploadItem.data.response}`);
-    } else {
-      window.alert("굿즈 등록 실패");
-      history.push("/");
-    }
+    history.replace(`/item/${uploadItem}`);
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
+    // if (item.dataTradeType === "SELL") {
+    //   dispatch(voteActions.setGettingVoteCount(10));
+    //   dispatch(voteActions.setShowVotePopup(true));
+    // }
   };
 };
 
@@ -131,10 +168,22 @@ const clearAction = () => {
 // 업데이트
 const updateItemAction = (item, id, fileList) => {
   return async function (dispatch, getState, { history }) {
+    dispatch(setLoading(true));
+
+    let filesSize = 0;
     const formData = new FormData();
     fileList.forEach((file) => {
+      filesSize += file.size;
       formData.append("multipartFiles", file);
     });
+
+    if (filesSize > 10000000) {
+      dispatch(setShowImgBigPopup(true));
+      dispatch(setLoading(false));
+      dispatch(clear());
+      dispatch(imgActions.clearImgAction());
+      return;
+    }
 
     const itemDto = {
       name: item.dataName,
@@ -148,25 +197,20 @@ const updateItemAction = (item, id, fileList) => {
     };
     formData.append("stringItemDto", JSON.stringify(itemDto));
 
-    const updateItem = await axios.put(
-      `${process.env.REACT_APP_BACK_URL}/api/v2/items/${id}`,
-      formData,
-      {
-        headers: { jwt: `${item.userJwt}` },
-      },
-    );
+    const updateItem = await putAction(`v2/items/${id}`, formData);
+
+    dispatch(setLoading(false));
+    dispatch(clear());
+    dispatch(imgActions.clearImgAction());
 
     if (updateItem < 0) {
       history.push("/error");
       return;
     }
 
-    if (updateItem.data.success) {
-      console.log("굿즈 수정 완료");
-      history.replace(`/item/${id}`);
-    } else {
-      console.log("굿즈 수정 실패");
-    }
+    history.replace(`/item/${updateItem.response}`);
+    dispatch(userActions.setShowNotification(true));
+    dispatch(userActions.setNotificationBody("굿즈를 수정했습니다."));
   };
 };
 
@@ -175,7 +219,6 @@ export default handleActions(
   {
     [SET_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.item);
         draft.item_id = action.payload.item.id;
         draft.images = action.payload.item.images;
         draft.idol_group_id = action.payload.item.groupId;
@@ -253,6 +296,25 @@ export default handleActions(
         draft.images = [];
         draft.item_id = 0;
       }),
+    [CLEAR_SELECT_IDOL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.idol_group_id = null;
+        draft.idol_member_id = null;
+        draft.idol_group_name = "";
+        draft.idol_member_name = "";
+      }),
+    [SET_LOADING]: (state, action) =>
+      produce(state, (draft) => {
+        draft.loading = action.payload.loading;
+      }),
+    [SET_SHOW_IMG_BIG_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showImgBigPopup = action.payload.showImgBigPopup;
+      }),
+    [SET_SHOW_MANY_ITEMS_POPUP]: (state, action) =>
+      produce(state, (draft) => {
+        draft.showManyItemsPopup = action.payload.showManyItemsPopup;
+      }),
   },
   initialState,
 );
@@ -273,7 +335,10 @@ const actionCreators = {
   setImages,
   deleteImage,
   clearAction,
+  clearSelectIdol,
   updateItemAction,
+  setShowImgBigPopup,
+  setShowManyItemsPopup,
 };
 
 export { actionCreators };

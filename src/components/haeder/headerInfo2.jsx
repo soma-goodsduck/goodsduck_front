@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import styles from "./header.module.css";
-import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../elements/index";
+import { Flex, Text, Icon, PopUp2 } from "../../elements/index";
 
 import { actionCreators as itemActions } from "../../redux/modules/item";
+import { actionCreators as userActions } from "../../redux/modules/user";
+import { postAction } from "../../shared/axios";
 import { history } from "../../redux/configureStore";
 
-const HeaderInfo2 = (props) => {
+const HeaderInfo2 = memo((props) => {
   const dispatch = useDispatch();
 
   const href = window.location.href;
@@ -85,17 +87,40 @@ const HeaderInfo2 = (props) => {
     }
   };
 
+  const reqBlockUser = async (bcryptId) => {
+    const result = await postAction(`v1/users/blocked-users/${bcryptId}`);
+    return result;
+  };
+
+  const handleBlockUser = async (bcryptId) => {
+    const blockUser = await reqBlockUser(bcryptId);
+    if (blockUser < 0) {
+      history.push("/error");
+      return;
+    }
+
+    dispatch(userActions.setShowNotification(true));
+    dispatch(
+      userActions.setNotificationBody(
+        "해당 유저의 글이 더 이상 보이지 않아요.",
+      ),
+    );
+  };
+
   return (
     <>
       {showPopup1 && (
-        <PopUp3
-          text="신고하기"
+        <PopUp2
+          text1="신고하기"
+          text2={text1}
           _onClick1={() => {
             history.push(`/report/${userIdForReport}`);
           }}
           _onClick2={() => {
+            handleBlockUser(userIdForReport);
             hidePopup1();
           }}
+          _onClick3={() => hidePopup1()}
         />
       )}
       {showPopup2 && (
@@ -123,7 +148,7 @@ const HeaderInfo2 = (props) => {
             >
               <Icon
                 width="12px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_back_b.svg"
+                src="https://goods-duck.com/icon/icon_back_b.svg"
               />
             </Column1>
             <Column2
@@ -145,7 +170,7 @@ const HeaderInfo2 = (props) => {
             >
               <Icon
                 width="12px"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_hamburger.svg"
+                src="https://goods-duck.com/icon/icon_hamburger.svg"
               />
             </Column3>
           </Flex>
@@ -153,7 +178,7 @@ const HeaderInfo2 = (props) => {
       )}
     </>
   );
-};
+});
 
 HeaderInfo2.defaultProps = {
   margin: "",

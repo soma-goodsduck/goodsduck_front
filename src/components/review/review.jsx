@@ -23,7 +23,7 @@ const ReviewRow = ({ review }) => {
           shape="circle"
           src={
             review.writerImageUrl ||
-            "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+            "https://goods-duck.com/sample_goodsduck.png"
           }
           margin="0 10px 0 0"
           size="55px"

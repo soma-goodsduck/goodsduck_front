@@ -37,7 +37,7 @@ const Login = () => {
           >
             <LoginBtn color="#3FC800">
               <LoginInfo>
-                <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_naver.svg" />
+                <LoginIcon src="https://goods-duck.com/icon/icon_naver.svg" />
                 <LoginText color="white">네이버로 로그인</LoginText>
               </LoginInfo>
             </LoginBtn>
@@ -45,7 +45,7 @@ const Login = () => {
           <a href={KAKAO_AUTH_URL}>
             <LoginBtn color="#FFDF00">
               <LoginInfo>
-                <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_kakao.svg" />
+                <LoginIcon src="https://goods-duck.com/icon/icon_kakao.svg" />
                 <LoginText color="black">카카오로 로그인</LoginText>
               </LoginInfo>
             </LoginBtn>
@@ -54,7 +54,7 @@ const Login = () => {
             <a href={APPLE_AUTH_URL}>
               <LoginBtn color="#040404">
                 <LoginInfo>
-                  <LoginIcon src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_apple.png" />
+                  <LoginIcon src="https://goods-duck.com/icon/icon_apple.png" />
                   <LoginText color="white">APPLE로 로그인</LoginText>
                 </LoginInfo>
               </LoginBtn>
@@ -92,7 +92,7 @@ const LoginBox = styled.div`
 const Logo = styled.div`
   width: 350px;
   height: 250px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck_with_slogan.png");
+  background-image: url("https://goods-duck.com/icon/goodsduck_with_slogan.png");
   background-size: contain;
   background-repeat: no-repeat;
 

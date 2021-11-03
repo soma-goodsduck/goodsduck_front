@@ -5,6 +5,7 @@ import styled from "styled-components";
 import LoginPopUp from "../../elements/loginPopUp";
 import IdolGroups from "../idolSelect/idolGroupSelect";
 import { putAction } from "../../shared/axios";
+import { blackBtn } from "../../shared/colors";
 
 const IdolEdit = ({ _onClick }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -76,7 +77,7 @@ const Screen = styled.div`
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  color: #222222;
+  color: ${blackBtn};
 
   @media screen and (min-width: 415px) {
     width: 415px;
@@ -84,17 +85,24 @@ const Screen = styled.div`
 `;
 
 const IdolEditBox = styled.div`
-  width: 350px;
+  width: 360px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: fixed;
-  bottom: 30%;
+  bottom: 25%;
+
+  @media screen and (max-width: 320px) {
+    width: 240px;
+  }
+  @media screen and (max-width: 360px) {
+    width: 320px;
+  }
 `;
 
 const Info = styled.div`
   position: relative;
-  height: 400px;
+  height: 320px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -102,6 +110,9 @@ const Info = styled.div`
   padding: 5px;
   padding-top: 35px;
   border-radius: 10px;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const EditBtn = styled.button`
@@ -110,11 +121,7 @@ const EditBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  transition: transform 200ms ease-in;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
@@ -123,7 +130,7 @@ const ExitBtn = styled.button`
   right: 10px;
   width: 22px;
   height: 22px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_delete.svg");
+  background-image: url("https://goods-duck.com/icon/icon_delete.svg");
   background-size: cover;
   cursor: pointer;
 `;

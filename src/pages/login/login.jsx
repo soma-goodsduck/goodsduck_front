@@ -7,6 +7,7 @@ import { blackNav, grayBorder, grayBtnBorder } from "../../shared/colors";
 
 import { actionCreators as userActions } from "../../redux/modules/user";
 import { requestLogin } from "../../shared/axios";
+import { notification } from "../../shared/notification";
 import { history } from "../../redux/configureStore";
 
 const Login = () => {
@@ -55,6 +56,13 @@ const Login = () => {
       return;
     }
 
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "REQ_FCM_TOKEN" }),
+      );
+    } else {
+      notification();
+    }
     dispatch(userActions.setShowNotification(true));
     dispatch(userActions.setNotificationBody("로그인에 성공했습니다."));
     history.replace("/");
@@ -94,7 +102,7 @@ const Login = () => {
           </Flex>
           <SignupBtn
             onClick={() => {
-              history.replace("/signup");
+              history.push("/signup");
             }}
           >
             회원가입
@@ -136,7 +144,7 @@ const LoginContainer = styled.div`
 const Logo = styled.div`
   width: 90vw;
   height: 250px;
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck_with_slogan.png");
+  background-image: url("https://goods-duck.com/icon/goodsduck_with_slogan.png");
   background-size: cover;
   background-repeat: no-repeat;
 

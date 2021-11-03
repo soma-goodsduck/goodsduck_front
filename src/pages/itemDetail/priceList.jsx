@@ -29,7 +29,7 @@ const PriceList = ({ data }) => {
           {_priceList.map((item) => (
             <ItemBox key={item.priceProposeId}>
               <Text color={grayText}>{formatDate(item.createdAt)}</Text>
-              <Text bold size="18px">
+              <Text bold size="17px">
                 {numberWithCommas(item.proposedPrice)}원
               </Text>
             </ItemBox>

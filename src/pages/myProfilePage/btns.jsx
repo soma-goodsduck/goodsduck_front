@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import styled from "styled-components";
 import { Icon, Flex, Text } from "../../elements";
@@ -6,7 +6,7 @@ import { grayText } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
-const Btns = ({ myProfile }) => {
+const Btns = memo(({ myProfile }) => {
   return (
     <>
       {myProfile && (
@@ -20,12 +20,12 @@ const Btns = ({ myProfile }) => {
                 history.push("/favorites");
               }}
             >
-              <Text bold size="22px" margin="10px 0 0 0">
+              <Text bold size="22px" margin="5px 0 0 0">
                 {myProfile.countOfLikes > 9999
                   ? "9999+"
                   : myProfile.countOfLikes}
               </Text>
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+              <Text size="14px" margin="10px 0 0 0" color={grayText}>
                 찜한 굿즈
               </Text>
             </Flex>
@@ -37,13 +37,13 @@ const Btns = ({ myProfile }) => {
                 history.push("/reviews");
               }}
             >
-              <Text bold size="22px" margin="10px 0 0 0">
+              <Text bold size="22px" margin="5px 0 0 0">
                 {myProfile.countOfReceivedReviews > 9999
                   ? "9999+"
                   : myProfile.countOfReceivedReviews}
               </Text>
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                후기
+              <Text size="14px" margin="10px 0 0 0" color={grayText}>
+                리뷰
               </Text>
             </Flex>
             <Flex
@@ -54,12 +54,12 @@ const Btns = ({ myProfile }) => {
                 history.push("/price-proposes");
               }}
             >
-              <Text bold size="22px" margin="10px 0 0 0">
+              <Text bold size="22px" margin="5px 0 0 0">
                 {myProfile.countOfReceievedPriceProposes > 9999
                   ? "9999+"
                   : myProfile.countOfReceievedPriceProposes}
               </Text>
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+              <Text size="14px" margin="10px 0 0 0" color={grayText}>
                 가격제시
               </Text>
             </Flex>
@@ -72,12 +72,12 @@ const Btns = ({ myProfile }) => {
               }}
             >
               <Icon
-                width="40px"
+                width="35px"
                 margin="0 auto"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_notice.svg"
+                src="https://goods-duck.com/icon/icon_notice.svg"
               />
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
-                공지사항
+              <Text size="14px" color={grayText}>
+                공지
               </Text>
             </Flex>
             <Flex
@@ -89,11 +89,11 @@ const Btns = ({ myProfile }) => {
               }}
             >
               <Icon
-                width="40px"
+                width="35px"
                 margin="0 auto"
-                src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_customer.png"
+                src="https://goods-duck.com/icon/icon_customer.png"
               />
-              <Text size="15px" margin="10px 0 0 0" color={grayText}>
+              <Text size="14px" color={grayText}>
                 고객센터
               </Text>
             </Flex>
@@ -102,12 +102,12 @@ const Btns = ({ myProfile }) => {
       )}
     </>
   );
-};
+});
 
 const BtnGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 70px);
-  grid-auto-rows: 70px;
+  grid-auto-rows: 60px;
   margin-top: 20px;
 
   @media screen and (min-width: 415px) {

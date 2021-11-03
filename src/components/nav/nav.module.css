@@ -7,7 +7,7 @@
   width: 100%;
   padding: 0 10px;
   background-color: var(--white);
-  z-index: 3;
+  z-index: 20;
 }
 
 .iconBtn {
@@ -15,6 +15,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 70px;
 }
 
 .chatBadge {
@@ -56,31 +57,31 @@
 }
 
 .isHomeIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_home_click.svg");
+  background-image: url("https://goods-duck.com/icon/icon_home_click.svg");
 }
 .isNotHomeIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_home.svg");
+  background-image: url("https://goods-duck.com/icon/icon_home.svg");
 }
 .isChatIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_chatting_click.svg");
+  background-image: url("https://goods-duck.com/icon/icon_chatting_click.svg");
 }
 .isNotChatIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_chatting.svg");
+  background-image: url("https://goods-duck.com/icon/icon_chatting.svg");
 }
 .isNotNewIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_upload.svg");
+  background-image: url("https://goods-duck.com/icon/icon_upload.svg");
 }
 .isCommunityIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_newCommunity_click.svg");
+  background-image: url("https://goods-duck.com/icon/icon_newCommunity_click.svg");
 }
 .isNotCommunityIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_newCommunity.svg");
+  background-image: url("https://goods-duck.com/icon/icon_newCommunity.svg");
 }
 .isProfileIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_profile_click.svg");
+  background-image: url("https://goods-duck.com/icon/icon_profile_click.svg");
 }
 .isNotProfileIcon {
-  background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_profile.svg");
+  background-image: url("https://goods-duck.com/icon/icon_profile.svg");
 }
 
 .isHomeText,

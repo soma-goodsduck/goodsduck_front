@@ -18,7 +18,7 @@ const Notification = ({ data, clickUrl }) => {
         <UserBox>
           <Image
             shape="circle"
-            src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/goodsduck.png"
+            src="https://goods-duck.com/icon/goodsduck.png"
             margin="0 10px 0 0"
             size="35px"
           />

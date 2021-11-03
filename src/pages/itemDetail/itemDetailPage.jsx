@@ -8,13 +8,19 @@ import ItemImg from "./itemImg";
 import ItemNav from "./itemNav";
 import PriceList from "./priceList";
 import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
-import { Flex, Text, Image, Icon, PopUp2, PopUp3 } from "../../elements/index";
+import { Flex, Text, Image, Icon, PopUp2, Spinner } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as homeActions } from "../../redux/modules/home";
+import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { timeForToday } from "../../shared/functions";
-import { requestPublicData, deleteAction } from "../../shared/axios";
+import {
+  requestPublicData,
+  deleteAction,
+  postAction,
+} from "../../shared/axios";
+import DeleteNotDoubleCheckModal from "./deleteNotDoubleCheckModal";
 
 const ItemDetailPage = ({ history }) => {
   const dispatch = useDispatch();
@@ -32,12 +38,14 @@ const ItemDetailPage = ({ history }) => {
   const [korTradeType, setKorTradeType] = useState("");
   const [descData, setDescData] = useState("");
   const [descHeight, setDescHegiht] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestItemData = async () => {
     const result = await requestPublicData(`v1/items/${itemId}`);
     return result;
   };
   const fnEffect = async () => {
+    setIsLoading(true);
     const getItemDetail = await requestItemData();
 
     if (getItemDetail < 0) {
@@ -49,6 +57,7 @@ const ItemDetailPage = ({ history }) => {
       return;
     }
 
+    setIsLoading(false);
     setItemData(getItemDetail);
     setItemOwnerId(getItemDetail.itemOwner.bcryptId);
     setDescData(getItemDetail.description);
@@ -112,6 +121,7 @@ const ItemDetailPage = ({ history }) => {
   const hideDeleteCheckModal = () => {
     setShowDeleteCheckModal(false);
   };
+  const [showNotDeleteCheckModal, setShowDeleteNotCheckModal] = useState(null);
 
   const clickDots = () => {
     if (isOwner) {
@@ -162,8 +172,10 @@ const ItemDetailPage = ({ history }) => {
     }
 
     if (_deleteItem.response) {
-      dispatch(homeActions.deleteItem(itemId));
       history.replace("/");
+      dispatch(homeActions.deleteItem(itemId));
+      dispatch(userActions.setShowNotification(true));
+      dispatch(userActions.setNotificationBody("굿즈를 삭제했습니다."));
     } else {
       window.alert("굿즈 삭제에 실패했습니다.");
     }
@@ -178,14 +190,38 @@ const ItemDetailPage = ({ history }) => {
     }
   };
 
+  const reqBlockItem = async () => {
+    const result = await postAction(`v1/items/blocked-items/${itemId}`);
+    return result;
+  };
+
+  const handleBlockItem = async () => {
+    const blockItem = await reqBlockItem();
+    if (blockItem < 0) {
+      history.push("/error");
+      return;
+    }
+
+    dispatch(userActions.setShowNotification(true));
+    dispatch(
+      userActions.setNotificationBody("해당 굿즈가 더 이상 보이지 않아요."),
+    );
+  };
+
   return (
     <>
       {showDeleteCheckModal && (
         <DeleteDoubleCheckModal
-          text1="굿즈 삭제 후에는 관련 채팅방, 가격제시 정보 등이 모두 삭제됩니다."
-          text2="진짜로 삭제하시겠습니까?"
           onOkClick={deleteItem}
           onNoClick={hideDeleteCheckModal}
+        />
+      )}
+      {showNotDeleteCheckModal && (
+        <DeleteNotDoubleCheckModal
+          onOkClick={() => {
+            setShowDeleteNotCheckModal(false);
+            setShowWriterPopup(false);
+          }}
         />
       )}
       {showWriterPopup && (
@@ -197,6 +233,7 @@ const ItemDetailPage = ({ history }) => {
           }}
           _onClick2={() => {
             handleDelete();
+            // setShowDeleteNotCheckModal(true);
           }}
           _onClick3={() => {
             hideWriterPopup();
@@ -204,57 +241,63 @@ const ItemDetailPage = ({ history }) => {
         />
       )}
       {showUserPopup && (
-        <PopUp3
-          text="신고하기"
+        <PopUp2
+          text1="신고하기"
+          text2="해당 굿즈 더 이상 보지 않기"
           _onClick1={() => {
             history.push(`/report/item/${itemId}/${itemOwnerId}`);
           }}
           _onClick2={() => {
+            handleBlockItem();
+            hidePopup();
+          }}
+          _onClick3={() => {
             hidePopup();
           }}
         />
       )}
+      {isLoading && <Spinner />}
       {itemData && (
         <>
           <ItemImg id={itemId} item={itemData} onClick={() => clickDots()} />
           <InfoBox>
             {/* 타입, 제목 */}
-            <Flex justify="flex-start" margin="0 0 10px 0">
-              <Text size="22px" bold color={color}>
-                {tradeType}
+            <Text size="19px" bold color={color}>
+              {tradeType}
+            </Text>
+            <Title>
+              <Text size="19px" medium>
+                {itemData.name}
               </Text>
-              <Title>
-                <Text size="22px">{itemData.name}</Text>
-              </Title>
-            </Flex>
+            </Title>
             {/* 시간, 조회수, 좋아요 */}
             <Flex justify="flex-start">
               <Flex>
                 <Icon
-                  width="18px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_clock.svg"
+                  width="16px"
+                  src="https://goods-duck.com/icon/icon_clock.svg"
                   alt="upload time"
                   margin="0 5px 0 0"
                 />
-                <Text size="18px" color="#bbbbbb">
+                <Text size="16px" color="#bbbbbb">
                   {timeForToday(itemData.itemCreatedAt)}
                 </Text>
               </Flex>
               <Flex margin="0 20px">
                 <Icon
-                  width="18px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_eye.svg"
+                  width="16px"
+                  src="https://goods-duck.com/icon/icon_eye.svg"
                   alt="views item count"
                   margin="0 5px 0 0"
                 />
-                <Text size="18px" color="#bbbbbb">
+                <Text size="16px" color="#bbbbbb">
                   {itemData.views}
                 </Text>
               </Flex>
               <Flex>
                 <Icon
                   width="18px"
-                  src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_like.svg"
+                  src="https://goods-duck.com/icon/icon_like.svg"
                   alt="likes item count"
                   margin="0 5px 0 0"
                 />
@@ -288,7 +331,7 @@ const ItemDetailPage = ({ history }) => {
             </Flex>
             <div className={styles.line} />
             {/* 가격 제시 목록 */}
-            <Text bold size="18px" margin="0 0 20px 0">
+            <Text bold size="17px" margin="0 0 20px 0">
               가격 제시 목록
             </Text>
             <PriceList data={itemData.proposedList} />
@@ -306,7 +349,7 @@ const ItemDetailPage = ({ history }) => {
                     shape="circle"
                     src={
                       itemData.itemOwner.imageUrl ||
-                      "https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/sample_goodsduck.png"
+                      "https://goods-duck.com/sample_goodsduck.png"
                     }
                     margin="0 10px 0 0"
                     size="50px"
@@ -315,10 +358,10 @@ const ItemDetailPage = ({ history }) => {
                     <Image
                       shape="circle"
                       size="20px"
-                      src={`https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_level${itemData.itemOwner.level}.png`}
+                      src={`https://goods-duck.com/icon/icon_level${itemData.itemOwner.level}.png`}
                     />
                     <UserName>
-                      <Text size="18px">{itemData.itemOwner.nickName}</Text>
+                      <Text size="16px">{itemData.itemOwner.nickName}</Text>
                     </UserName>
                   </Flex>
                 </Flex>
@@ -341,8 +384,9 @@ const ItemDetailPage = ({ history }) => {
 };
 
 const Title = styled.div`
-  width: 70%;
-  margin-left: 10px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
 `;
 
 const UserName = styled.div`

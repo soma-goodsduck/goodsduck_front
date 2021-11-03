@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { blackBtn, grayBtn, white } from "../../shared/colors";
 import { actionCreators as userActions } from "../../redux/modules/user";
 
-const DeleteDoubleCheckModal = ({ text1, text2, onOkClick, onNoClick }) => {
+const DeleteDoubleCheckModal = ({ onOkClick, onNoClick }) => {
   const dispatch = useDispatch();
 
   const handleOkClcik = () => {
@@ -24,8 +24,10 @@ const DeleteDoubleCheckModal = ({ text1, text2, onOkClick, onNoClick }) => {
       <ModalBox>
         <Info>
           <Text1 style={{ marginBottom: "10px" }}>⚠️</Text1>
-          <Text1>{text1}</Text1>
-          <Text2 style={{ margin: "10px 0" }}>{text2}</Text2>
+          <Text1>
+            굿즈 삭제 후에는 관련 채팅방에서 더 이상 채팅을 진행할 수 없습니다.
+          </Text1>
+          <Text2 style={{ margin: "10px 0" }}>진짜로 삭제하시겠습니까?</Text2>
         </Info>
         <Btns>
           <NOBtn
@@ -127,6 +129,7 @@ const NOBtn = styled.button`
   font-weight: bold;
   padding: 15px;
   background-color: ${grayBtn};
+  color: ${blackBtn};
   border-radius: 0 0 0 5px;
 `;
 

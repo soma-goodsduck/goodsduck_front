@@ -3,6 +3,7 @@ body,
   font-family: "Noto Sans KR", sans-serif;
   width: 100vw;
   height: 100vh;
+  color: black;
 }
 
 body {
@@ -28,6 +29,12 @@ body {
   display: none;
 }
 
+a,
+img,
+div {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @media screen and (min-width: 415px) {
   .app {
     position: absolute;
@@ -48,6 +55,7 @@ body {
   .app {
     left: 50%;
   }
+
   .appImg {
     position: absolute;
     top: 0;
@@ -55,9 +63,34 @@ body {
 
     display: block;
     width: 350px;
-    height: 700px;
+    height: 600px;
 
-    background-image: url("https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/image/appPromotion.png");
+    background-image: url("https://goods-duck.com/image/appPromotion.png");
+    background-size: cover;
+  }
+
+  .appDownloadBtns {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 620px;
+    left: 14%;
+  }
+
+  .appDownloadForIos {
+    width: 120px;
+    height: 40px;
+    margin-right: 5px;
+    cursor: pointer;
+
+    background-image: url("https://goods-duck.com/icon/app_download_iOS.svg");
+    background-size: cover;
+  }
+  .appDownloadForAndroid {
+    width: 140px;
+    height: 58px;
+
+    background-image: url("https://goods-duck.com/icon/app_download_android.png");
     background-size: cover;
   }
 }
@@ -66,10 +99,16 @@ body {
   .appImg {
     left: 20%;
   }
+  .appDownloadBtns {
+    left: 23%;
+  }
 }
 
 @media screen and (min-width: 1900px) {
   .appImg {
     left: 30%;
+  }
+  .appDownloadBtns {
+    left: 32%;
   }
 }

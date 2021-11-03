@@ -2,17 +2,14 @@ import React from "react";
 
 import styled from "styled-components";
 import { Icon, Text } from "../../elements";
-import { yellow } from "../../shared/colors";
+import { blackBtn, yellow } from "../../shared/colors";
 
 import { history } from "../../redux/configureStore";
 
 const ErrorPage = (props) => {
   return (
     <ErrorBox>
-      <Icon
-        width="50px"
-        src="https://goodsduck-s3.s3.ap-northeast-2.amazonaws.com/icon/icon_error.svg"
-      />
+      <Icon width="50px" src="https://goods-duck.com/icon/icon_error.svg" />
       <Text size="22px" bold margin="20px 0">
         오류
       </Text>
@@ -44,6 +41,7 @@ const RefreshBtn = styled.button`
   height: 50px;
   border-radius: 8px;
   background-color: ${yellow};
+  color: ${blackBtn};
   font-weight: 500;
   margin-top: 40px;
 `;

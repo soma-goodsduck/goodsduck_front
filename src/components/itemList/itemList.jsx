@@ -7,6 +7,7 @@ import Item from "../item/item";
 import FilteringIdol from "../filtering/idolGroupFiltering";
 import DetailFiltering from "../filtering/filtering";
 import InfinityScroll from "./infinityScroll";
+import { pullToRefresh } from "../../shared/pullToRefresh";
 
 import { actionCreators as homeActions } from "../../redux/modules/home";
 
@@ -34,6 +35,11 @@ const ItemList = ({ keyword }) => {
   const [idolFilter, setIdolFilter] = useState(0);
   const filteringInfo = JSON.parse(localStorage.getItem("filtering"));
 
+  // 모바일에서 위로 당기면 새로고침
+  useEffect(() => {
+    pullToRefresh();
+  }, []);
+
   const getFilteringQuery = (num, _filteringInfo) => {
     const idolGroupId = localStorage.getItem("filter_idolGroup");
     let query = `itemId=${num}&idolGroup=${idolGroupId}`;
@@ -60,15 +66,7 @@ const ItemList = ({ keyword }) => {
     return query;
   };
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("filter_idolGroup") &&
-      localStorage.getItem("filtering")
-    ) {
-      setIsIdolFilter(true);
-      setIsDetailFilter(true);
-    }
-
+  const getNewItems = () => {
     dispatch(homeActions.clearItems());
     if (keyword) {
       dispatch(
@@ -95,6 +93,18 @@ const ItemList = ({ keyword }) => {
     } else {
       dispatch(homeActions.getItemsData(0));
     }
+  };
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("filter_idolGroup") &&
+      localStorage.getItem("filtering")
+    ) {
+      setIsIdolFilter(true);
+      setIsDetailFilter(true);
+    }
+
+    getNewItems();
   }, [keyword, searchOrderType, searchCompleteType]);
 
   const handleCallNext = (_type) => {
@@ -143,6 +153,13 @@ const ItemList = ({ keyword }) => {
       {!keyword && <FilteringIdol onClick={handleFiltering} />}
       {!keyword && isDetailFilter && <DetailFiltering idolId={idolFilter} />}
 
+      {!isLoading && items.length === 0 && (
+        <Notice>
+          <Text>아직 등록된 굿즈가 없습니다😢</Text>
+          <Text>제일 먼저 굿즈를 등록해보세요!</Text>
+        </Notice>
+      )}
+
       <InfinityScroll
         callNext={(_type) => {
           handleCallNext(_type);
@@ -178,6 +195,17 @@ const ItemListBox = styled.div`
     grid-auto-rows: 300px;
     grid-column-gap: 0;
   }
+`;
+
+const Notice = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+`;
+const Text = styled.div`
+  padding: 7px 0;
+  font-weight: 500;
 `;
 
 export default ItemList;

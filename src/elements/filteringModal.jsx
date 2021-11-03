@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
 import React from "react";
 import styled from "styled-components";
+import { blackBtn } from "../shared/colors";
 
 const FilteringModal = ({
   sortingNew,
@@ -30,7 +31,6 @@ const PopUpBox = styled.div`
   width: 100%;
   height: 150%;
   background-color: rgba(0, 0, 0, 0.3);
-  color: #222222;
 
   @media screen and (min-width: 415px) {
     width: 415px;
@@ -57,25 +57,19 @@ const Btns = styled.div`
 const Button1 = styled.button`
   padding: 15px;
   border-bottom: 1px solid #dddddd;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
 `;
 
 const Button2 = styled.button`
   padding: 15px;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
   padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  &:hover {
-    font-weight: bold;
-  }
+  color: ${blackBtn};
 `;
 
 export default FilteringModal;
