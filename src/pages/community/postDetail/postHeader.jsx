@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import { Flex, Text, Icon, PopUp2, PopUp3 } from "../../../elements/index";
+import { Flex, Text, Icon, PopUp2 } from "../../../elements/index";
 import { white } from "../../../shared/colors";
 
 import { actionCreators as postActions } from "../../../redux/modules/post";
+import { actionCreators as userActions } from "../../../redux/modules/user";
+import { postAction } from "../../../shared/axios";
 import { history } from "../../../redux/configureStore";
 
 const PostHeader = ({ postData, onEdit, onDelete }) => {
@@ -29,15 +31,40 @@ const PostHeader = ({ postData, onEdit, onDelete }) => {
     }
   };
 
+  const reqBlockPost = async () => {
+    const result = await postAction(
+      `v1/posts/blocked-posts/${postData.postId}`,
+    );
+    return result;
+  };
+
+  const handleBlockPost = async () => {
+    const blockPost = await reqBlockPost();
+    if (blockPost < 0) {
+      history.push("/error");
+      return;
+    }
+
+    dispatch(userActions.setShowNotification(true));
+    dispatch(
+      userActions.setNotificationBody("해당 게시글이 더 이상 보이지 않아요."),
+    );
+  };
+
   return (
     <>
       {showPopup1 && (
-        <PopUp3
-          text="신고하기"
+        <PopUp2
+          text1="신고하기"
+          text2="해당 게시글 더 이상 보지 않기"
           _onClick1={() => {
             history.push(`/report/posts/${postData.postId}`);
           }}
           _onClick2={() => {
+            handleBlockPost();
+            hidePopup1();
+          }}
+          _onClick3={() => {
             hidePopup1();
           }}
         />

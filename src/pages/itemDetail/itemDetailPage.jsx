@@ -8,22 +8,18 @@ import ItemImg from "./itemImg";
 import ItemNav from "./itemNav";
 import PriceList from "./priceList";
 import DeleteDoubleCheckModal from "./deleteDoubleCheckModal";
-import {
-  Flex,
-  Text,
-  Image,
-  Icon,
-  PopUp2,
-  PopUp3,
-  Spinner,
-} from "../../elements/index";
+import { Flex, Text, Image, Icon, PopUp2, Spinner } from "../../elements/index";
 
 import { actionCreators as newItemActions } from "../../redux/modules/newItem";
 import { actionCreators as homeActions } from "../../redux/modules/home";
 import { actionCreators as userActions } from "../../redux/modules/user";
 
 import { timeForToday } from "../../shared/functions";
-import { requestPublicData, deleteAction } from "../../shared/axios";
+import {
+  requestPublicData,
+  deleteAction,
+  postAction,
+} from "../../shared/axios";
 import DeleteNotDoubleCheckModal from "./deleteNotDoubleCheckModal";
 
 const ItemDetailPage = ({ history }) => {
@@ -194,6 +190,24 @@ const ItemDetailPage = ({ history }) => {
     }
   };
 
+  const reqBlockItem = async () => {
+    const result = await postAction(`v1/items/blocked-items/${itemId}`);
+    return result;
+  };
+
+  const handleBlockItem = async () => {
+    const blockItem = await reqBlockItem();
+    if (blockItem < 0) {
+      history.push("/error");
+      return;
+    }
+
+    dispatch(userActions.setShowNotification(true));
+    dispatch(
+      userActions.setNotificationBody("해당 굿즈가 더 이상 보이지 않아요."),
+    );
+  };
+
   return (
     <>
       {showDeleteCheckModal && (
@@ -227,12 +241,17 @@ const ItemDetailPage = ({ history }) => {
         />
       )}
       {showUserPopup && (
-        <PopUp3
-          text="신고하기"
+        <PopUp2
+          text1="신고하기"
+          text2="해당 굿즈 더 이상 보지 않기"
           _onClick1={() => {
             history.push(`/report/item/${itemId}/${itemOwnerId}`);
           }}
           _onClick2={() => {
+            handleBlockItem();
+            hidePopup();
+          }}
+          _onClick3={() => {
             hidePopup();
           }}
         />
