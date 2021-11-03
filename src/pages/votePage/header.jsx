@@ -2,26 +2,26 @@
 import React, { memo, useState } from "react";
 
 import styled from "styled-components";
-import { Flex, Text, Icon } from "../../elements/index";
+import { Flex, Icon, Text } from "../../elements/index";
 
-import { black, gray, grayBtnBorder, green, orange } from "../../shared/colors";
+import { black } from "../../shared/colors";
 import { history } from "../../redux/configureStore";
 
 const Header = memo(({ onShareClick }) => {
-  const dday = new Date("October 31, 2021, 00:00:00").getTime();
-  const [day, setDay] = useState();
-  const [hour, setHour] = useState();
-  const [min, setMin] = useState();
-  const [sec, setSec] = useState();
+  // const dday = new Date("November 1, 2021, 00:00:00").getTime();
+  // const [day, setDay] = useState();
+  // const [hour, setHour] = useState();
+  // const [min, setMin] = useState();
+  // const [sec, setSec] = useState();
 
-  setInterval(() => {
-    const today = new Date().getTime();
-    const gap = dday - today;
-    setDay(Math.ceil(gap / (1000 * 60 * 60 * 24)));
-    setHour(Math.ceil((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-    setMin(Math.ceil((gap % (1000 * 60 * 60)) / (1000 * 60)));
-    setSec(Math.ceil((gap % (1000 * 60)) / 1000));
-  }, 1000);
+  // setInterval(() => {
+  //   const today = new Date().getTime();
+  //   const gap = dday - today;
+  //   setDay(Math.ceil(gap / (1000 * 60 * 60 * 24) - 1));
+  //   setHour(Math.ceil((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) - 1));
+  //   setMin(Math.ceil((gap % (1000 * 60 * 60)) / (1000 * 60)));
+  //   setSec(Math.ceil((gap % (1000 * 60)) / 1000));
+  // }, 1000);
 
   return (
     <HeaderBox>
@@ -37,13 +37,14 @@ const Header = memo(({ onShareClick }) => {
           />
         </Column1>
         <Column2>
-          <Flex margin="0 0 10px 0">
+          <Text bold>투표 종료</Text>
+          {/* <Flex margin="0 0 10px 0">
             <Day>투표 D-{day}</Day>
             <Time>
               {hour < 10 ? `0${hour}` : hour}:{min < 10 ? `0${min}` : min}:
               {sec < 10 ? `0${sec}` : sec}
             </Time>
-          </Flex>
+          </Flex> */}
         </Column2>
         <Column3
           onClick={() => {

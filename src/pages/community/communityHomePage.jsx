@@ -60,7 +60,7 @@ const CommunityHomePage = (props) => {
       {showPopup && <LoginPopUp />}
       <CommunityHome>
         <HeaderCommunity text={menuText} />
-        <NoticeBox>투표하기는 오른쪽 상단 메뉴에 있습니다 😉</NoticeBox>
+        <NoticeBox>투표 결과는 오른쪽 상단 메뉴에 있습니다 😉</NoticeBox>
         <PostList onIdolFilter={handleIdolFilter} type={communityMenu} />
         {(communityMenu === "home" || communityMenu === "freeMarket") && (
           <AddPostBtn

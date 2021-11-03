@@ -77,6 +77,17 @@ const CommunityMenu = (props) => {
         >
           투표하기
         </MenuBtn>
+        <MenuBtn
+          onClick={() => {
+            history.push("/vote-result");
+            dispatch(communityActions.setCommunityMenu("home"));
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ type: "voteResult" });
+            mixpanel.track("click Vote Result");
+          }}
+        >
+          투표 결과
+        </MenuBtn>
       </MenuBtns>
     </>
   );

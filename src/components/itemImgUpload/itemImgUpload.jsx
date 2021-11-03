@@ -145,9 +145,7 @@ const ItemImgUpload = (props) => {
             onChange={showPreview}
           />
         </form>
-        {isNotice && (
-          <div>⚠️ 허위매물을 올리는 경우 투표에 불이익이 갈 수 있습니다.</div>
-        )}
+        {isNotice && <div>⚠️ 사진은 정사각형 사이즈로 업로드됩니다.</div>}
         <div id="preview-container" className={styles.previewContainer} />
       </Flex>
     </>

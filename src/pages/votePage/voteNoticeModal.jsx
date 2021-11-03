@@ -2,27 +2,35 @@
 import React from "react";
 
 import styled from "styled-components";
-import { blackBtn, white } from "../../shared/colors";
+import { blackBtn, white, grayBtn } from "../../shared/colors";
+import { history } from "../../redux/configureStore";
 
-const VoteNoticeModal = ({ onOkClick }) => {
-  const handleOkClcik = () => {
-    onOkClick();
+const VoteNoticeModal = ({ onNoClick }) => {
+  const handleNoClcik = () => {
+    onNoClick();
   };
 
   return (
     <Screen>
       <ModalBox>
         <Info>
-          <Text1 style={{ marginBottom: "10px" }}>⚠️</Text1>
-          <Text2>10월 17일 하루동안 투표가 불가능합니다.</Text2>
+          <Text1 style={{ marginBottom: "10px" }}>📢</Text1>
+          <Text2>투표가 종료되었습니다.</Text2>
         </Info>
         <Btns>
-          <OKBtn
+          <NOBtn
             onClick={() => {
-              handleOkClcik();
+              handleNoClcik();
             }}
           >
-            확인
+            닫기
+          </NOBtn>
+          <OKBtn
+            onClick={() => {
+              history.push("/vote-result");
+            }}
+          >
+            결과 확인하기
           </OKBtn>
         </Btns>
       </ModalBox>
@@ -73,7 +81,7 @@ const Text1 = styled.div`
 const Text2 = styled.div`
   font-size: 17px;
   font-weight: bold;
-  text-align: left;
+  text-align: center;
 `;
 
 const Btns = styled.div`
@@ -83,13 +91,23 @@ const Btns = styled.div`
 `;
 
 const OKBtn = styled.button`
-  width: 100%;
+  width: 50%;
   font-size: 16px;
   font-weight: bold;
   padding: 15px;
   background-color: ${blackBtn};
   color: ${white};
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 0;
+`;
+
+const NOBtn = styled.button`
+  width: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px;
+  background-color: ${grayBtn};
+  border-radius: 0 0 0 5px;
+  color: ${blackBtn};
 `;
 
 export default VoteNoticeModal;

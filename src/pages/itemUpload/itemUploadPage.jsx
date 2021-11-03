@@ -325,10 +325,6 @@ const ItemUpload = (props) => {
                 </div>
               </Flex>
             </div>
-            <NoticeBox>
-              투표기간인 10월에는 굿즈 등록 후 삭제가 불가능합니다.{" "}
-              <strong>신중하게 등록해주세요.</strong>
-            </NoticeBox>
             <AddBtn
               className={nextOK ? styles.nextOKBtn : styles.nextBtn}
               onClick={() => {
@@ -375,20 +371,6 @@ const InputDescBox = styled.textarea`
 
 const AddBtn = styled.button`
   margin-top: 10px;
-`;
-
-const NoticeBox = styled.div`
-  width: 100vw;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #f2f3f6;
-  font-size: 14px;
-  text-align: left;
-  line-height: 1.4;
-
-  @media screen and (min-width: 415px) {
-    width: 415px;
-  }
 `;
 
 export default ItemUpload;

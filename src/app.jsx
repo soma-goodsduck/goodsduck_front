@@ -60,7 +60,9 @@ import postDetailPage from "./pages/community/postDetail/postDetailPage";
 import postUploadPage from "./pages/community/postUpload/postUploadPage";
 import PostReportPage from "./pages/report/postReportPage";
 import VotePage from "./pages/votePage/votePage";
+import VoteResult from "./pages/votePage/voteResult";
 import VotePopUp from "./elements/VotePopup";
+import VoteResultPopup from "./pages/votePage/voteResultPopup";
 
 import {
   Notification,
@@ -265,13 +267,18 @@ function App() {
           }}
         />
       )}
-      {showEventPopup && (
-        <EventPopup
+      {/* {showEventPopup && (
+        // <EventPopup
+        //   handleExitClick={() => {
+        //     setShowEventPopup(false);
+        //   }}
+        // />
+        <VoteResultPopup
           handleExitClick={() => {
             setShowEventPopup(false);
           }}
         />
-      )}
+      )} */}
       {showVotePopup && <VotePopUp />}
 
       <Flex is_col align="center" style={{ width: "400px", height: "700px" }}>
@@ -409,7 +416,7 @@ function App() {
               component={CommentReportPage}
             />
             <Route path="/vote" exact component={VotePage} />
-
+            <Route path="/vote-result" exact component={VoteResult} />
             {/* 에러 페이지 */}
             <Route path="/error" exact component={ErrorPage} />
             <Route path="/*" component={NotFoundPage} />

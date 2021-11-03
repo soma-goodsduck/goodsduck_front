@@ -146,9 +146,9 @@ const PostImgUpload = ({ community }) => {
             onChange={showPreview}
           />
         </form>
-        {isNotice && (
+        {/* {isNotice && (
           <div>⚠️ 도배성 글을 올리는 경우 투표에 불이익이 갈 수 있습니다.</div>
-        )}
+        )} */}
         <div id="preview-container" className={styles.previewContainer} />
       </Flex>
     </>

@@ -198,12 +198,12 @@ const IdolGroupFiltering = ({ onClick, type }) => {
           </Flex>
         )}
       </div>
-      {type !== "community" && (
+      {/* {type !== "community" && (
         <NoticeBox>
           ⚠️ 단순히 투표권을 얻기 위한 사진 판매/나눔 글 등록과 단시간 내에
           삭제되는 글의 경우, 적발시 투표권이 30개 차감됩니다.
         </NoticeBox>
-      )}
+      )} */}
     </>
   );
 };

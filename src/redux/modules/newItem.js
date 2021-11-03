@@ -143,10 +143,10 @@ const addItemAction = (item, fileList) => {
     history.replace(`/item/${uploadItem}`);
     dispatch(userActions.setShowNotification(true));
     dispatch(userActions.setNotificationBody("굿즈를 등록했습니다."));
-    if (item.dataTradeType === "SELL") {
-      dispatch(voteActions.setGettingVoteCount(10));
-      dispatch(voteActions.setShowVotePopup(true));
-    }
+    // if (item.dataTradeType === "SELL") {
+    //   dispatch(voteActions.setGettingVoteCount(10));
+    //   dispatch(voteActions.setShowVotePopup(true));
+    // }
   };
 };
 
