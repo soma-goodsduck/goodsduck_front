@@ -28,6 +28,10 @@ const IdolMemberSelect = ({ history }) => {
     return result;
   };
   const fnEffect = async () => {
+    if (groupId === null) {
+      history.push("/upload-item");
+      return;
+    }
     const getIdolMember = await reqIdolMemeber();
     setIsLoading(false);
     if (getIdolMember < 0) {

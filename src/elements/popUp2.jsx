@@ -40,7 +40,7 @@ const PopUpBox = styled.div`
   display: flex;
   justify-content: center;
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   width: 100%;
   height: 150%;
   background-color: rgba(0, 0, 0, 0.3);

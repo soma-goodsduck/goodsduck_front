@@ -43,7 +43,7 @@
 .categories,
 .categoriesWithCommunity {
   margin: 10px;
-
+  /* margin-top: 60px; */
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;

@@ -25,7 +25,7 @@ const IdolForVote = ({ idol, ranking, onVote }) => {
             </Flex>
             <GaugeBox>
               {idol.votedCount > 7 && (
-                <Gauge style={{ width: `${idol.votedCount / 5 + 7}%` }} />
+                <Gauge style={{ width: `${idol.votedCount / 20 + 7}%` }} />
               )}
               {idol.votedCount <= 7 && idol.votedCount > 0 && (
                 <Gauge style={{ width: "7%" }} />
@@ -110,7 +110,7 @@ const GaugePercent = styled.div`
   padding-right: 10px;
   position: absolute;
   top: 0;
-  left: 45%;
+  left: 42%;
 `;
 
 const HeartBtn = styled.div`
