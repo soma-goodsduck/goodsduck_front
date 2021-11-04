@@ -39,8 +39,8 @@ const UserProfile = ({ user }) => {
           </Text>
         </Flex>
         <div className={styles.gaugeBox}>
-          <Gauge style={{ width: `${user.exp}%` }} />
-          <GaugePercent>{user.exp}%</GaugePercent>
+          <Gauge style={{ width: `${user.exp < 100 ? user.exp : 100}%` }} />
+          <GaugePercent>{user.exp < 100 ? user.exp : 100}%</GaugePercent>
         </div>
       </Flex>
     </UserProfileBox>
