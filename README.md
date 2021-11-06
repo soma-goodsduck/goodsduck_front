@@ -118,14 +118,13 @@ SKIP_PREFLIGHT_CHECK=true
 REACT_APP_TYPE = PROD
 
 REACT_APP_FRONT_URL_PROD = https://www.goods-duck.com
-REACT_APP_FRONT_URL_DEV = https://cb626ae1d11c95.lhr.domains
-
+REACT_APP_FRONT_URL_DEV =
 REACT_APP_BACK_URL_PROD = https://api.goods-duck.com
-REACT_APP_BACK_URL_DEV = https://api.goods-duck.com
+REACT_APP_BACK_URL_DEV =
 
 
 # You need to get KAKAO JavaScript Key from https://developers.kakao.com/
-REACT_APP_KAKAO_JS_API_KEY = 5ecb03b8e7bda32c7f9dd0a1ca746333
+REACT_APP_KAKAO_JS_API_KEY =
 
 # Firebase Project Environment
 # You have to use Realtime DataBase
