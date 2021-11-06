@@ -14,7 +14,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/soma-goodsduck/goodsduck_front">
-    <img src="https://goods-duck.com/icon/logo.svg" alt="Logo" width="400" height="80">
+    <img src="./public/img/goodsduck.png" alt="Logo" width="400">
   </a>
 
   <p align="center">
@@ -51,17 +51,31 @@
 
 ## About The Project
 
-<img src="https://goods-duck.com/image/goodsduck_readme.png" alt="Logo" width="800" height="400">
+<a href="https://www.youtube.com/watch?v=CF4kLo6neUs">
+  <img src="./public/img/goodsduck_readme.png" alt="Logo">
+</a>
 
-최근 국내에는 중고거래 시장이 활성화 되었으며, 좋은 서비스를 제공하는 플랫폼들이 다수 존재합니다. 하지만, 아이돌을 덕질을 하는 팬(덕후)들을 위한 거래 플랫폼은 많지 않습니다. 이에 저희 덕스(Ducks) 팀은 덕후들을 만족시키기 위한 플랫폼을 기획하였습니다.
+<div align="center">
+  <sup><a href="https://www.youtube.com/watch?v=CF4kLo6neUs">Click for Demo Video</a> </sup>
+</div>
 
-검증 가설은 다음과 같습니다:
+</br>
+
+최근 국내에는 중고거래 시장이 활성화 되었으며, 좋은 서비스를 제공하는 플랫폼들이 다수 존재합니다. 하지만, 아이돌을 덕질을 하는 팬(덕후)들을 위한 거래 플랫폼은 많지 않습니다. 이에 저희 덕스(Ducks) 팀은 팬들이 아이돌 굿즈를 모으는 과정에서 겪는 어려움과 불편함을 개선해 굿즈를 모으는 즐거움을 제공하는 플랫폼인 GOODSDUCK을 기획했습니다.
+
+GOODSDUCK의 검증 가설은 다음과 같습니다:
 
 - 필터링 기능을 제공하면 편한 거래 플랫폼이 될 것이고, 가격제안으로 채팅이 이어지면 시간이 줄어들 것이다.
 - 투표 기능을 제공하면 유저들의 유입방안이 되고, 커뮤니티가 있으면 재밌어서 유저가 오래 머물 것이다.
 - 개인화 추천 기능을 제공하면 사용자들이 우리 플랫폼을 선호하는 이유가 될 것이다.
 
-현재 지속적으로 애자일(Agile) 방법론을 기반으로 개발을 진행하고 있습니다. 제공하는 서비스의 중심이 거래이기 때문에, 거래 기능 사이클의 완성을 1차 목표(~8월 중순)로 하고 있습니다. 추가적인 투표 및 커뮤니티 기능은 2차 목표(~9월 말), 추천 시스템 적용은 3차 목표(~10월 중순)로 계획하고 있습니다.
+현재 2021년 11월 6일 기준으로 Web, Android, iOS 모두 배포되었습니다. 유저는 약 750명이며, Android 다운로드 수 600 이상, iOS 다운로드 수 400 이상입니다.
+
+- Web : https://www.goods-duck.com/
+- Android : https://play.google.com/store/apps/details?id=com.goodsduck_app&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1
+- iOS : https://apps.apple.com/kr/app/goodsduck/id1586463391
+
+</br>
 
 ### Built With
 
@@ -97,18 +111,25 @@ $ yarn start
 
 ```sh
 # .env
-# You need to set environment varialbes
-REACT_APP_FRONT_URL = https://www.goods-duck.com
-REACT_APP_BACK_URL = https://api.goods-duck.com
+SKIP_PREFLIGHT_CHECK=true
 
-# You need to get KAKAO client ID from https://developers.kakao.com/product/kakaoLogin
-# You need to get NAVER client ID & state from https://developers.naver.com/products/login/api/api.md
-REACT_APP_KAKAO_CLIENT_ID =
-REACT_APP_NAVER_CLIENT_ID =
-REACT_APP_NAVER_STATE =
+
+# You need to set environment varialbes
+REACT_APP_TYPE = PROD
+
+REACT_APP_FRONT_URL_PROD = https://www.goods-duck.com
+REACT_APP_FRONT_URL_DEV = https://cb626ae1d11c95.lhr.domains
+
+REACT_APP_BACK_URL_PROD = https://api.goods-duck.com
+REACT_APP_BACK_URL_DEV = https://api.goods-duck.com
+
+
+# You need to get KAKAO JavaScript Key from https://developers.kakao.com/
+REACT_APP_KAKAO_JS_API_KEY = 5ecb03b8e7bda32c7f9dd0a1ca746333
 
 # Firebase Project Environment
 # You have to use Realtime DataBase
+REACT_APP_FIREBASE_SERVER_KEY =
 REACT_APP_FIREBASE_API_KEY =
 REACT_APP_FIREBASE_AUTH_DOMAIN =
 REACT_APP_FIREBASE_DATABASE_URL =
@@ -117,6 +138,12 @@ REACT_APP_FIREBASE_STORAGE_BUCKET =
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID =
 REACT_APP_FIREBASE_APP_ID =
 REACT_APP_FIREBASE_MEASUREMENT_ID =
+
+# Set Sentry for Monitoring Project
+REACT_APP_SENTRY =
+
+# Set Mixpanel for getting user activity data
+REACT_APP_MIXPANEL =
 ```
 
 <!-- CONTRIBUTING -->
@@ -149,6 +176,8 @@ Consider starting the commit message with an applicable emoji:
 
 - ✨ `:sparkles:` : with `[feat]` prefix.
   - when create new feature.
+- 🎨 `:art:` : with `[chore]` prefix.
+  - when update code or format of the code.
 - ♻️ `:recycle:` : with `[refactor]` prefix.
   - when refactor code.
 - 🐛 `:bug:` : with `[fix]` prefix.
