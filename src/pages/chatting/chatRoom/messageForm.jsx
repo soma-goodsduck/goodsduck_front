@@ -28,10 +28,13 @@ const MessageForm = ({ onOpenAttachment }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
-  const { isItemExist, readyToSendMessage } = useSelector((state) => ({
-    isItemExist: state.chat.isItemExist,
-    readyToSendMessage: state.chat.readyToSendMessage,
-  }));
+  const { isItemExist, readyToSendMessage, showRiskPopup } = useSelector(
+    (state) => ({
+      isItemExist: state.chat.isItemExist,
+      readyToSendMessage: state.chat.readyToSendMessage,
+      showRiskPopup: state.chat.showRiskPopup,
+    }),
+  );
   const messagesRef = firebaseDatabase.ref("messages");
   const usersRef = firebaseDatabase.ref("users");
 
@@ -170,6 +173,14 @@ const MessageForm = ({ onOpenAttachment }) => {
           text="상대방이 존재하지 않거나 굿즈가 삭제되어 메세지를 보낼 수 없습니다."
           onOkClick={() => {
             setShowNotice(false);
+          }}
+        />
+      )}
+      {showRiskPopup && (
+        <DoubleCheckModal2
+          text="카카오톡ID, 전화번호 등으로 대화를 유도하는 경우, 피해가 있을 수 있으니 주의하세요!"
+          onOkClick={() => {
+            dispatch(chatActions.setShowRiskPopup(false));
           }}
         />
       )}

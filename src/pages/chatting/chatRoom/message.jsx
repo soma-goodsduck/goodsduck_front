@@ -1,13 +1,18 @@
 /* eslint-disable no-prototype-builtins */
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
 import "moment/locale/ko";
 import moment from "moment";
 import styled from "styled-components";
 import { Flex, Text, Image } from "../../../elements/index";
-
 import { gray, lightGray2, yellow } from "../../../shared/colors";
 
+import { actionCreators as chatActions } from "../../../redux/modules/chat";
+
 const Message = ({ message, isMine }) => {
+  const dispatch = useDispatch();
+
   const timeFromNow = (timestamp) => moment(timestamp).fromNow();
 
   const isImage = (_message) => {
@@ -15,6 +20,15 @@ const Message = ({ message, isMine }) => {
       _message.hasOwnProperty("image") && !_message.hasOwnProperty("content")
     );
   };
+
+  const riskWords = ["카카오톡", "카톡", "전화번호"];
+  useEffect(() => {
+    riskWords.forEach((word) => {
+      if (message.content.indexOf(word) !== -1) {
+        dispatch(chatActions.setShowRiskPopup(true));
+      }
+    });
+  }, []);
 
   return (
     <>
