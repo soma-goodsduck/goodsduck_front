@@ -31,8 +31,7 @@ const VoteResult = (props) => {
           <Text bold margin="10px 0">
             🎉 STAYC 축하합니다! 🎉{" "}
           </Text>
-          투표 1등으로 선정된 STAYC의 홍대입구역 지하철 광고를 진행하고
-          있습니다.
+          <br />
           <Text bold margin="10px 0">
             광고 안내
           </Text>
