@@ -56,7 +56,7 @@
 </a>
 
 <div align="center">
-  <sup><a href="https://www.youtube.com/watch?v=CF4kLo6neUs">Click for Demo Video</a> </sup>
+  <sup><a href="https://www.youtube.com/watch?v=CPJONwdI1OA">Click for Demo Video</a> </sup>
 </div>
 
 </br>
