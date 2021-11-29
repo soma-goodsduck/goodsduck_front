@@ -267,19 +267,19 @@ function App() {
           }}
         />
       )}
-      {/* {showEventPopup && (
-        // <EventPopup
-        //   handleExitClick={() => {
-        //     setShowEventPopup(false);
-        //   }}
-        // />
-        <VoteResultPopup
+      {showEventPopup && (
+        <EventPopup
           handleExitClick={() => {
             setShowEventPopup(false);
           }}
         />
-      )} */}
-      {showVotePopup && <VotePopUp />}
+        // <VoteResultPopup
+        //   handleExitClick={() => {
+        //     setShowEventPopup(false);
+        //   }}
+        // />
+      )}
+      {/* {showVotePopup && <VotePopUp />} */}
 
       <Flex is_col align="center" style={{ width: "400px", height: "700px" }}>
         <div className={styles.appImg} />

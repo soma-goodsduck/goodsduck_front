@@ -16,35 +16,35 @@ const EventPopup = ({ handleExitClick }) => {
             }}
           />
           <Image
-            src="https://goods-duck.com/image/event1.png"
+            src="https://goods-duck.com/image/endOfService.png"
             shape="normal"
             width="90vw"
           />
           <Btns>
-            <VoteBtn
+            {/* {/* <VoteBtn
               onClick={() => {
                 handleExitClick();
                 history.push("/vote");
               }}
             >
               바로 투표하러가기
-            </VoteBtn>
+            </VoteBtn> */}
             <OKBtn
               onClick={() => {
                 handleExitClick();
                 history.push("/notice");
               }}
             >
-              더 많은 이벤트 보러가기
+              공지사항 확인하기
             </OKBtn>
-            <NOBtn
+            {/* <NOBtn
               onClick={() => {
                 handleExitClick();
                 localStorage.setItem("showEventPopupTime", new Date());
               }}
             >
               오늘 하루 더 이상 안보기
-            </NOBtn>
+            </NOBtn> */}
           </Btns>
         </ModalBox>
       </Screen>
@@ -64,7 +64,7 @@ const Screen = styled.div`
 
 const ModalBox = styled.div`
   width: 90vw;
-  background-color: #4d4d4d;
+  background-color: #ffe200;
   padding: 25px 0;
 
   display: flex;
@@ -112,7 +112,7 @@ const OKBtn = styled.button`
 const NOBtn = styled.button`
   font-size: 16px;
   padding-top: 25px;
-  color: ${grayBtn};
+  color: ${blackBtn};
 `;
 
 const ExitBtn = styled.button`
